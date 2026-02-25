@@ -95,6 +95,46 @@ const { title, description = 'The complete registry of OpenClaw clones, forks, a
         </div>
       </div>
     </footer>
+    <!-- Lobster Facts Toast -->
+    <div id="lobster-toast" class="fixed bottom-6 right-6 max-w-xs bg-ocean-card border border-white/10 rounded-xl p-4 shadow-2xl shadow-black/40 transform translate-y-32 opacity-0 transition-all duration-500 z-50" style="pointer-events: none;">
+      <div class="flex items-start gap-3">
+        <span class="text-xl flex-shrink-0">🦞</span>
+        <div>
+          <p class="text-xs text-gray-500 font-mono uppercase tracking-wider mb-1">Lobster Fact</p>
+          <p id="lobster-fact" class="text-sm text-gray-300 leading-relaxed"></p>
+        </div>
+      </div>
+    </div>
+
+    <script is:inline>
+      (function() {
+        const facts = [
+          "Lobsters pee from their faces. This has nothing to do with AI agents.",
+          "A lobster's brain is roughly the size of a grasshopper's. Still shipped 228k stars.",
+          "Lobsters can live to 100+. Most OpenClaw forks will not.",
+          "Lobsters taste with their feet. Engineers taste with their opinions.",
+          "A lobster's teeth are in its stomach. Its code reviews are similarly internal.",
+          "Lobsters were once considered poverty food. OpenClaw was once called Clawdbot.",
+          "Lobsters are biologically immortal. Their GitHub repos are not.",
+          "Baby lobsters float for weeks before settling down. Much like early-stage startups.",
+        ];
+        const toast = document.getElementById('lobster-toast');
+        const factEl = document.getElementById('lobster-fact');
+        if (!toast || !factEl) return;
+        const delay = 3000 + Math.random() * 4000;
+        setTimeout(function() {
+          factEl.textContent = facts[Math.floor(Math.random() * facts.length)];
+          toast.style.transform = 'translateY(0)';
+          toast.style.opacity = '1';
+          toast.style.pointerEvents = 'auto';
+          setTimeout(function() {
+            toast.style.transform = 'translateY(32px)';
+            toast.style.opacity = '0';
+            toast.style.pointerEvents = 'none';
+          }, 6000);
+        }, delay);
+      })();
+    </script>
   </body>
 </html>
 
