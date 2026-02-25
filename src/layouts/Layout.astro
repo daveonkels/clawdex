@@ -76,7 +76,17 @@ const { title, description = 'The complete registry of OpenClaw clones, forks, a
         </div>
         <div class="border-t border-white/5 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p class="text-xs text-gray-600">Built with Astro, Tailwind, and crustacean energy. Not affiliated with actual lobsters.</p>
-          <p class="text-xs text-gray-600">Two name changes in three days. The lobster molts fast. 🦞</p>
+          <p class="text-xs text-gray-600">
+            It has been <span id="rebrand-days" class="text-biolum font-mono">?</span> days since OpenClaw's last identity crisis.
+          </p>
+          <script is:inline>
+            (function() {
+              const lastRebrand = new Date('2026-01-29');
+              const days = Math.floor((Date.now() - lastRebrand.getTime()) / 86400000);
+              const el = document.getElementById('rebrand-days');
+              if (el) el.textContent = days;
+            })();
+          </script>
         </div>
         <div class="border-t border-white/5 mt-6 pt-6 text-center">
           <p class="text-xs text-gray-600">
