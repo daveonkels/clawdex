@@ -4,7 +4,7 @@ tagline: "AI agents on a $10 board"
 description: "Runs on $10 RISC-V boards with less than 10MB of RAM. One-second boot time. The tiniest claw in the sea."
 language: go
 category: [iot, embedded, lightweight]
-github: picoclaw/picoclaw
+github: sipeed/picoclaw
 status: active
 tier: 1
 highlight: "Runs on $10 RISC-V boards, <10MB RAM, 1s boot"
