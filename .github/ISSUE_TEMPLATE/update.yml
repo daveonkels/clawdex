@@ -1,0 +1,18 @@
+name: 📝 Update a Project
+description: Request a correction or update to an existing entry
+labels: ["update"]
+body:
+  - type: input
+    id: project
+    attributes:
+      label: Project Name
+      placeholder: Which project needs updating?
+    validations:
+      required: true
+  - type: textarea
+    id: changes
+    attributes:
+      label: What needs to change?
+      placeholder: "GitHub URL changed, project renamed, status should be archived, etc."
+    validations:
+      required: true

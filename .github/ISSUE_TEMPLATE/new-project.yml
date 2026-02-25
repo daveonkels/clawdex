@@ -1,0 +1,67 @@
+name: 🦞 Submit a Project
+description: Suggest a project for the directory
+title: "[Project] "
+labels: ["submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a project! If you can, we'd prefer you submit a PR with the YAML file directly — but this form works too.
+  - type: input
+    id: name
+    attributes:
+      label: Project Name
+      placeholder: ZeroClaw
+    validations:
+      required: true
+  - type: input
+    id: github
+    attributes:
+      label: GitHub URL
+      placeholder: https://github.com/owner/repo
+    validations:
+      required: true
+  - type: input
+    id: website
+    attributes:
+      label: Website (optional)
+      placeholder: https://zeroclaw.dev
+  - type: dropdown
+    id: language
+    attributes:
+      label: Primary Language
+      options:
+        - TypeScript
+        - Rust
+        - Python
+        - Go
+        - C
+        - Multi / Other
+    validations:
+      required: true
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Tier
+      description: How closely related to OpenClaw?
+      options:
+        - "1 — Direct clone or reimplementation"
+        - "2 — Ecosystem tool (built for/around OpenClaw)"
+        - "3 — Inspired by (independent but similar vision)"
+    validations:
+      required: true
+  - type: input
+    id: tagline
+    attributes:
+      label: Tagline
+      description: One short catchy line
+      placeholder: "Zero overhead, zero compromise"
+    validations:
+      required: true
+  - type: textarea
+    id: highlight
+    attributes:
+      label: What makes it unique?
+      placeholder: "Sub-10ms startup, 3.4MB binary, runs on a Raspberry Pi"
+    validations:
+      required: true
