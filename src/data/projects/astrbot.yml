@@ -1,0 +1,14 @@
+name: AstrBot
+slug: astrbot
+tagline: "Agentic IM chatbot infrastructure"
+description: "Multi-platform chatbot infra integrating LLMs, plugins, and AI features across messaging platforms"
+language: python
+category:
+  - messaging
+  - multi-platform
+github: AstrBotDevs/AstrBot
+status: active
+tier: 1
+highlight: "Self-described OpenClaw alternative with deep IM platform integration"
+emoji: ⭐
+added: 2026-02-25

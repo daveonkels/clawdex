@@ -1,0 +1,14 @@
+name: ClawGo
+slug: clawgo
+tagline: "Headless OpenClaw client in Go"
+description: "Minimal headless node client for Raspberry Pi and Linux — connects to the gateway bridge for voice and chat"
+language: go
+category:
+  - lightweight
+  - iot
+github: openclaw/clawgo
+status: active
+tier: 1
+highlight: "Official Go client for RPi/Linux — voice transcript streaming and local TTS"
+emoji: 🍓
+added: 2026-02-25

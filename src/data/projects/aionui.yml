@@ -1,0 +1,14 @@
+name: AionUi
+slug: aionui
+tagline: "24/7 cowork app for coding agents"
+description: "Free, local, open-source cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, and more"
+language: typescript
+category:
+  - coding
+  - productivity
+github: iOfficeAI/AionUi
+status: active
+tier: 1
+highlight: "Universal agent UI — supports Gemini CLI, Claude Code, Codex, and more in one interface"
+emoji: 🖥️
+added: 2026-02-25

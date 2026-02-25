@@ -1,0 +1,14 @@
+name: Archestra
+slug: archestra
+tagline: "Cloud-native MCP gateway for agents"
+description: "Secure cloud-native MCP registry, gateway, and orchestrator with RBAC and SAML for enterprise agent deployments"
+language: typescript
+category:
+  - enterprise
+  - security
+github: archestra-ai/archestra
+status: active
+tier: 1
+highlight: "Enterprise agent orchestration with RBAC, SAML auth, and MCP registry"
+emoji: 🏛️
+added: 2026-02-25

@@ -1,0 +1,14 @@
+name: ClawWork
+slug: clawwork
+tagline: "OpenClaw as your AI coworker"
+description: "Task-focused agent framework from the HKUDS team (creators of Nanobot)"
+language: python
+category:
+  - productivity
+  - automation
+github: HKUDS/ClawWork
+status: active
+tier: 1
+highlight: "Earned $10K in 7 hours as a demo — task-oriented agent design"
+emoji: 💼
+added: 2026-02-25

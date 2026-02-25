@@ -1,0 +1,14 @@
+name: LangBot
+slug: langbot
+tagline: "Production-grade agentic IM bots"
+description: "Multi-platform agent for Discord, Telegram, Slack, WeChat, LINE, QQ, and more with plugin system and knowledge base"
+language: python
+category:
+  - messaging
+  - multi-platform
+github: langbot-app/LangBot
+status: active
+tier: 1
+highlight: "Supports 10+ IM platforms with agent capabilities, knowledge base, and plugin system"
+emoji: 🤖
+added: 2026-02-25

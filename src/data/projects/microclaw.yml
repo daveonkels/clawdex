@@ -1,0 +1,14 @@
+name: MicroClaw
+slug: microclaw
+tagline: "Rust agent inspired by NanoClaw"
+description: "An agentic AI assistant that lives in your chats, inspired by NanoClaw and incorporating some of its design ideas"
+language: rust
+category:
+  - lightweight
+  - security
+github: microclaw/microclaw
+status: active
+tier: 1
+highlight: "Rust-native chat agent with NanoClaw-inspired security model"
+emoji: 🦀
+added: 2026-02-25
