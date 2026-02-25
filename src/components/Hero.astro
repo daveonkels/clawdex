@@ -26,10 +26,25 @@ const { projectCount } = Astro.props;
       Every <span class="text-transparent bg-clip-text bg-gradient-to-r from-lobster to-coral">shell</span> in the sea
     </h1>
 
-    <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+    <p id="hero-tagline" class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
       The complete registry of <span class="text-biolum font-medium">OpenClaw</span> clones, forks, derivatives, and inspired projects.
       Discover the crustacean ecosystem.
     </p>
+
+    <script is:inline>
+      (function() {
+        const taglines = [
+          'The complete registry of <span class="text-biolum font-medium">OpenClaw</span> clones, forks, derivatives, and inspired projects. Discover the crustacean ecosystem.',
+          'Two name changes. Forty-three thousand forks. One crustacean.',
+          'A directory of projects that exist because one lobster couldn\'t sit still.',
+          'Cataloging the ecosystem before it molts again.',
+          'None of these are affiliated with actual lobsters. Probably.',
+          'Somebody had to keep track. We drew the short claw.',
+        ];
+        const el = document.getElementById('hero-tagline');
+        if (el) el.innerHTML = taglines[Math.floor(Math.random() * taglines.length)];
+      })();
+    </script>
 
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
       <a href="#directory" class="group inline-flex items-center gap-2 px-6 py-3 bg-biolum text-ocean font-semibold rounded-lg hover:bg-biolum-light transition-all duration-200 shadow-lg shadow-biolum/20">
