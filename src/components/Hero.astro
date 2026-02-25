@@ -19,7 +19,8 @@ const { projectCount } = Astro.props;
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-biolum/10 border border-biolum/20 mb-8">
       <span class="w-2 h-2 rounded-full bg-biolum animate-glow-pulse"></span>
-      <span class="text-sm font-medium text-biolum">{projectCount} projects cataloged · 43,800 forks · 3 that actually work</span>
+      <span class="text-sm font-medium text-biolum sm:hidden">{projectCount} projects cataloged</span>
+      <span class="text-sm font-medium text-biolum hidden sm:inline">{projectCount} projects cataloged · 43,800 forks · 3 that actually work</span>
     </div>
 
     <h1 class="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight">
@@ -46,7 +47,7 @@ const { projectCount } = Astro.props;
       })();
     </script>
 
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+    <div class="flex flex-row items-center justify-center gap-3 sm:gap-4">
       <a href="#directory" class="group inline-flex items-center gap-2 px-6 py-3 bg-biolum text-ocean font-semibold rounded-lg hover:bg-biolum-light transition-all duration-200 shadow-lg shadow-biolum/20">
         Browse Directory
         <svg class="w-4 h-4 group-hover:translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
