@@ -118,7 +118,7 @@ const { title, description = 'The complete directory of OpenClaw clones, forks, 
       </div>
     </footer>
     <!-- Lobster Facts Toast -->
-    <div id="lobster-toast" class="fixed bottom-6 right-6 max-w-xs bg-ocean-card border border-white/10 rounded-xl p-4 shadow-2xl shadow-black/40 transform translate-y-32 opacity-0 transition-all duration-500 z-50" style="pointer-events: none;">
+    <div id="lobster-toast" class="fixed bottom-6 right-6 max-w-xs bg-ocean-card border border-white/10 rounded-xl p-4 shadow-2xl shadow-black/40 transform translate-x-[120%] opacity-0 z-50" style="pointer-events: none; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease;">
       <div class="flex items-start gap-3">
         <span class="text-xl flex-shrink-0">🦞</span>
         <div>
@@ -143,17 +143,38 @@ const { title, description = 'The complete directory of OpenClaw clones, forks, 
         const toast = document.getElementById('lobster-toast');
         const factEl = document.getElementById('lobster-fact');
         if (!toast || !factEl) return;
+
+        var dismissTimer;
+        function dismiss() {
+          clearTimeout(dismissTimer);
+          toast.style.transform = 'translateX(120%)';
+          toast.style.opacity = '0';
+          toast.style.pointerEvents = 'none';
+        }
+
+        // Touch swipe-right to dismiss
+        var startX = 0;
+        toast.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, { passive: true });
+        toast.addEventListener('touchmove', function(e) {
+          var dx = e.touches[0].clientX - startX;
+          if (dx > 0) toast.style.transform = 'translateX(' + dx + 'px)';
+        }, { passive: true });
+        toast.addEventListener('touchend', function(e) {
+          var dx = e.changedTouches[0].clientX - startX;
+          if (dx > 60) { dismiss(); } else { toast.style.transform = 'translateX(0)'; }
+        });
+
+        // Click to dismiss too
+        toast.addEventListener('click', dismiss);
+        toast.style.cursor = 'pointer';
+
         const delay = 3000 + Math.random() * 4000;
         setTimeout(function() {
           factEl.textContent = facts[Math.floor(Math.random() * facts.length)];
-          toast.style.transform = 'translateY(0)';
+          toast.style.transform = 'translateX(0)';
           toast.style.opacity = '1';
           toast.style.pointerEvents = 'auto';
-          setTimeout(function() {
-            toast.style.transform = 'translateY(32px)';
-            toast.style.opacity = '0';
-            toast.style.pointerEvents = 'none';
-          }, 6000);
+          dismissTimer = setTimeout(dismiss, 8000);
         }, delay);
       })();
     </script>
