@@ -4,7 +4,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = 'The complete registry of OpenClaw clones, forks, and derivatives. Every shell in the sea.' } = Astro.props;
+const { title, description = 'The complete directory of OpenClaw clones, forks, and alternatives. Compare ZeroClaw, NanoClaw, PicoClaw, IronClaw, and more.' } = Astro.props;
 ---
 
 <!doctype html>
@@ -15,6 +15,24 @@ const { title, description = 'The complete registry of OpenClaw clones, forks, a
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={`https://theclawdex.com${Astro.url.pathname}`} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={`https://theclawdex.com${Astro.url.pathname}`} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="Clawdex" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- SEO -->
+    <meta name="keywords" content="openclaw alternatives, openclaw clones, openclaw forks, zeroclaw, nanoclaw, picoclaw, ironclaw, moltis, nanobot, openclaw directory, clawdbot alternatives, moltbot alternatives, self-hosted ai agent, open source ai assistant" />
+    <meta name="robots" content="index, follow" />
+
     <title>{title}</title>
     <script src="https://metrics.dv.nu/api/script.js" data-site-id="044ff383a31e" defer></script>
   </head>

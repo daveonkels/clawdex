@@ -13,6 +13,18 @@ const categories = [...new Set(projects.flatMap(p => p.category))].sort();
 ---
 
 <Layout title="Clawdex — Every Shell in the Sea">
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Clawdex",
+    "url": "https://theclawdex.com",
+    "description": "The complete directory of OpenClaw clones, forks, and alternatives",
+    "creator": {
+      "@type": "Person",
+      "name": "Dave Onkels",
+      "url": "https://onk.io"
+    }
+  })} />
   <Hero projectCount={projects.length} />
 
   <section id="directory" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
