@@ -59,4 +59,34 @@
   .filter-btn-active {
     @apply border-biolum bg-biolum/10 text-biolum;
   }
+
+  /* Easter egg: The Original Lobster */
+  .og-lobster {
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    position: relative;
+  }
+
+  .card-glow:hover .og-lobster {
+    transform: rotate(360deg) scale(1.2);
+  }
+
+  .og-lobster::after {
+    content: 'The Original Lobster';
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(212, 67, 43, 0.7);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .card-glow:hover .og-lobster::after {
+    opacity: 1;
+  }
 }
