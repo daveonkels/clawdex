@@ -16,15 +16,23 @@ const tierLabels: Record<number, string> = {
 ---
 
 <div class="space-y-4 mb-10" id="filter-bar">
-  <!-- Search -->
-  <div class="relative max-w-md">
-    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-    <input
-      type="text"
-      id="search-input"
-      placeholder="Search projects..."
-      class="w-full pl-10 pr-4 py-2.5 bg-ocean-light border border-white/10 rounded-lg text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-biolum/40 focus:ring-1 focus:ring-biolum/20 transition-all"
-    />
+  <!-- Search + Sort -->
+  <div class="flex flex-col sm:flex-row gap-3">
+    <div class="relative flex-1 max-w-md">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Search projects..."
+        class="w-full pl-10 pr-4 py-2.5 bg-ocean-light border border-white/10 rounded-lg text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-biolum/40 focus:ring-1 focus:ring-biolum/20 transition-all"
+      />
+    </div>
+    <select id="sort-select" class="bg-ocean-light border border-white/10 rounded-lg text-sm text-gray-300 px-3 py-2.5 focus:outline-none focus:border-biolum/40 cursor-pointer">
+      <option value="default">Sort: Tier + Stars</option>
+      <option value="stars">Sort: Most Stars</option>
+      <option value="name">Sort: Name A→Z</option>
+      <option value="recent">Sort: Recently Added</option>
+    </select>
   </div>
 
   <!-- Filter groups -->

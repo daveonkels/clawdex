@@ -18,18 +18,7 @@ const categories = [...new Set(projects.flatMap(p => p.category))].sort();
   <section id="directory" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
     <div class="flex items-center justify-between mb-6">
       <h2 class="font-display text-2xl font-bold text-white">Directory</h2>
-      <div class="flex items-center gap-4">
-        <div class="flex items-center gap-2">
-          <span class="text-xs text-gray-600 uppercase tracking-wider">Sort</span>
-          <select id="sort-select" class="bg-ocean-light border border-white/10 rounded-lg text-sm text-gray-300 px-3 py-1.5 focus:outline-none focus:border-biolum/40 cursor-pointer">
-            <option value="default">Tier + Stars</option>
-            <option value="stars">Most Stars</option>
-            <option value="name">Name A→Z</option>
-            <option value="recent">Recently Added</option>
-          </select>
-        </div>
-        <span id="results-count" class="text-sm text-gray-500">{projects.length} projects</span>
-      </div>
+      <span id="results-count" class="text-sm text-gray-500">{projects.length} projects</span>
     </div>
 
     <FilterBar
