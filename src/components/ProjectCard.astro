@@ -1,4 +1,6 @@
 ---
+import { formatStars } from '../lib/projects';
+
 interface Props {
   name: string;
   slug: string;
@@ -11,9 +13,11 @@ interface Props {
   tier: number;
   highlight: string;
   emoji: string;
+  stars?: number;
+  added?: string;
 }
 
-const { name, tagline, language, category, github, status, tier, highlight, emoji } = Astro.props;
+const { name, tagline, language, category, github, status, tier, highlight, emoji, stars, added } = Astro.props;
 
 const languageColors: Record<string, { bg: string; text: string; border: string }> = {
   typescript: { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/20' },
@@ -45,6 +49,9 @@ const tierLabels: Record<number, string> = {
   data-category={category.join(',')}
   data-tier={tier}
   data-status={status}
+  data-stars={stars ?? 0}
+  data-name={name}
+  data-added={added ?? ''}
 >
   <div class="flex items-start justify-between mb-4">
     <div class="flex items-center gap-3">
@@ -54,6 +61,12 @@ const tierLabels: Record<number, string> = {
         <p class="text-sm text-gray-500 mt-0.5">{tagline}</p>
       </div>
     </div>
+    {stars !== undefined && stars > 0 && (
+      <div class="flex items-center gap-1 text-sm text-yellow-500/80 flex-shrink-0 ml-2">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 19.896l-7.416 3.517 1.48-8.279L0 9.306l8.332-1.151z"/></svg>
+        <span class="font-mono text-xs">{formatStars(stars)}</span>
+      </div>
+    )}
   </div>
 
   <p class="text-sm text-gray-400 leading-relaxed mb-4 flex-1">{highlight}</p>

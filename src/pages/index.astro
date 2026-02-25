@@ -5,7 +5,7 @@ import FilterBar from '../components/FilterBar.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { loadProjects, getUniqueLanguages, getUniqueTiers, getUniqueStatuses } from '../lib/projects';
 
-const projects = loadProjects();
+const projects = await loadProjects();
 const languages = getUniqueLanguages(projects);
 const tiers = getUniqueTiers(projects);
 const statuses = getUniqueStatuses(projects);
@@ -18,7 +18,18 @@ const categories = [...new Set(projects.flatMap(p => p.category))].sort();
   <section id="directory" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
     <div class="flex items-center justify-between mb-6">
       <h2 class="font-display text-2xl font-bold text-white">Directory</h2>
-      <span id="results-count" class="text-sm text-gray-500">{projects.length} projects</span>
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-600 uppercase tracking-wider">Sort</span>
+          <select id="sort-select" class="bg-ocean-light border border-white/10 rounded-lg text-sm text-gray-300 px-3 py-1.5 focus:outline-none focus:border-biolum/40 cursor-pointer">
+            <option value="default">Tier + Stars</option>
+            <option value="stars">Most Stars</option>
+            <option value="name">Name A→Z</option>
+            <option value="recent">Recently Added</option>
+          </select>
+        </div>
+        <span id="results-count" class="text-sm text-gray-500">{projects.length} projects</span>
+      </div>
     </div>
 
     <FilterBar
@@ -28,7 +39,7 @@ const categories = [...new Set(projects.flatMap(p => p.category))].sort();
       statuses={statuses}
     />
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       {projects.map(project => (
         <ProjectCard
           name={project.name}
@@ -42,8 +53,38 @@ const categories = [...new Set(projects.flatMap(p => p.category))].sort();
           tier={project.tier}
           highlight={project.highlight}
           emoji={project.emoji}
+          stars={project.stars}
+          added={project.added}
         />
       ))}
     </div>
   </section>
 </Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
+    const grid = document.getElementById('project-grid')!;
+
+    sortSelect?.addEventListener('change', () => {
+      const cards = Array.from(grid.children) as HTMLElement[];
+
+      cards.sort((a, b) => {
+        switch (sortSelect.value) {
+          case 'stars':
+            return (parseInt(b.dataset.stars || '0')) - (parseInt(a.dataset.stars || '0'));
+          case 'name':
+            return (a.dataset.name || '').localeCompare(b.dataset.name || '');
+          case 'recent':
+            return (b.dataset.added || '').localeCompare(a.dataset.added || '');
+          default: // tier + stars
+            const tierDiff = parseInt(a.dataset.tier || '3') - parseInt(b.dataset.tier || '3');
+            if (tierDiff !== 0) return tierDiff;
+            return (parseInt(b.dataset.stars || '0')) - (parseInt(a.dataset.stars || '0'));
+        }
+      });
+
+      cards.forEach(card => grid.appendChild(card));
+    });
+  });
+</script>

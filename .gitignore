@@ -13,6 +13,9 @@ yarn-error.log*
 pnpm-debug.log*
 
 
+# stars cache (rebuilt at build time)
+.stars-cache.json
+
 # environment variables
 .env
 .env.production
