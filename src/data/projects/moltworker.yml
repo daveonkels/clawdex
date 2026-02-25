@@ -1,0 +1,12 @@
+name: Moltworker
+slug: moltworker
+tagline: "AI agents on the edge"
+description: "Cloudflare's official adaptation of OpenClaw. Runs on Workers for edge-deployed AI agents."
+language: typescript
+category: [cloud, serverless]
+github: cloudflare/moltworker
+status: active
+tier: 2
+highlight: "Cloudflare's official adaptation. Runs on Workers"
+emoji: "\u2601\uFE0F"
+added: 2026-02-25

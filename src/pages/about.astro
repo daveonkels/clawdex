@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About — Clawdex">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="font-display text-4xl font-bold text-white mb-8">About Clawdex</h1>
+
+    <div class="prose prose-invert prose-gray max-w-none space-y-6 text-gray-300 leading-relaxed">
+      <p class="text-lg">
+        <strong class="text-white">Clawdex</strong> is a community-maintained directory of every project in the OpenClaw ecosystem — clones, forks, reimplementations, and inspired projects.
+      </p>
+
+      <p>
+        What started as one project has become an entire species. Rust rewrites, Go ports, bare-metal C on $5 chips, social networks for AI agents, and managed cloud platforms — the crustacean family tree is getting complicated. Clawdex exists to map it all.
+      </p>
+
+      <h2 class="font-display text-2xl font-bold text-white mt-12 mb-6">The Naming Timeline</h2>
+
+      <div class="relative border-l-2 border-biolum/30 ml-4 space-y-8 pl-8">
+        <div class="relative">
+          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-biolum/20 border-2 border-biolum"></div>
+          <p class="text-sm text-biolum font-mono mb-1">Late 2025</p>
+          <h3 class="font-display text-lg font-bold text-white">🥚 Clawdbot</h3>
+          <p class="text-gray-400 text-sm">The original name. Peter Steinberger releases a self-hosted AI assistant. It catches fire on GitHub.</p>
+        </div>
+
+        <div class="relative">
+          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-biolum/20 border-2 border-biolum"></div>
+          <p class="text-sm text-biolum font-mono mb-1">January 27, 2026</p>
+          <h3 class="font-display text-lg font-bold text-white">🐣 Moltbot</h3>
+          <p class="text-gray-400 text-sm">Anthropic has words about "Clawd" being too close to "Claude." The lobster molts for the first time.</p>
+        </div>
+
+        <div class="relative">
+          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-lobster/20 border-2 border-lobster"></div>
+          <p class="text-sm text-lobster font-mono mb-1">January 29, 2026</p>
+          <h3 class="font-display text-lg font-bold text-white">🦞 OpenClaw</h3>
+          <p class="text-gray-400 text-sm">Two days later, another molt. This time voluntary — embracing the open-source identity. 180k+ stars and counting.</p>
+        </div>
+
+        <div class="relative">
+          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-coral/20 border-2 border-coral"></div>
+          <p class="text-sm text-coral font-mono mb-1">February 2026</p>
+          <h3 class="font-display text-lg font-bold text-white">🌊 The Ecosystem Explodes</h3>
+          <p class="text-gray-400 text-sm">NanoClaw, ZeroClaw, PicoClaw, IronClaw, MimicLaw, Moltis, TinyClaw... the clones arrive. Clawdex is born to track them all.</p>
+        </div>
+      </div>
+
+      <blockquote class="border-l-4 border-lobster/40 pl-4 mt-8 italic text-gray-400">
+        "Two name changes in three days. The lobster molts fast."
+      </blockquote>
+
+      <h2 class="font-display text-2xl font-bold text-white mt-12 mb-4">How It Works</h2>
+      <p>
+        Every project in the directory is a YAML file in our <a href="https://github.com/openclaw/clawdex" class="text-biolum hover:text-biolum-light">GitHub repo</a>. Want to add a project? Open a PR. A human reviews it, merges it, and the site rebuilds automatically.
+      </p>
+      <p>
+        No forms, no accounts, no approval committees. Just git.
+      </p>
+
+      <h2 class="font-display text-2xl font-bold text-white mt-12 mb-4">Tiers</h2>
+      <ul class="space-y-2">
+        <li><strong class="text-lobster">Tier 1 — Clones:</strong> Direct reimplementations or forks of OpenClaw</li>
+        <li><strong class="text-biolum">Tier 2 — Ecosystem:</strong> Tools, platforms, and services built around OpenClaw</li>
+        <li><strong class="text-coral">Tier 3 — Inspired:</strong> Independent projects inspired by the same vision</li>
+      </ul>
+    </div>
+  </div>
+</Layout>

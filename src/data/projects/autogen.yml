@@ -1,0 +1,12 @@
+name: AutoGen
+slug: autogen
+tagline: "Multi-agent conversations by Microsoft"
+description: "Microsoft Research's framework for multi-agent conversations. Agents that talk to each other to solve problems."
+language: python
+category: [multi-agent, research]
+github: microsoft/autogen
+status: active
+tier: 3
+highlight: "Microsoft Research's multi-agent conversation framework"
+emoji: "\U0001F4AC"
+added: 2026-02-25

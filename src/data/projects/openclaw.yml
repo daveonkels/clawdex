@@ -1,0 +1,12 @@
+name: OpenClaw
+slug: openclaw
+tagline: "The OG self-hosted AI super-agent"
+description: "The original. Self-hosted AI super-agent platform. Formerly Clawdbot, then Moltbot. The project that started it all."
+language: typescript
+category: [reference, self-hosted]
+github: openclaw/openclaw
+status: active
+tier: 1
+highlight: "180k+ stars. The one that started the molt."
+emoji: "\U0001F99E"
+added: 2026-02-25

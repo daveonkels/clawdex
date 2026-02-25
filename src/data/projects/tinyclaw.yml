@@ -1,0 +1,12 @@
+name: TinyClaw
+slug: tinyclaw
+tagline: "Your self-improving AI companion"
+description: "Self-improving AI companion with a personality system called Heartware. The friendliest claw in the sea."
+language: typescript
+category: [companion, social]
+github: warengonzaga/tinyclaw
+status: active
+tier: 1
+highlight: "Personality system (Heartware) for self-improving AI"
+emoji: "\U0001F496"
+added: 2026-02-25

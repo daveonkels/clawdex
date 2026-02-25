@@ -1,0 +1,12 @@
+name: AnythingLLM
+slug: anythingllm
+tagline: "All your documents, any LLM"
+description: "Self-hosted LLM platform for document ingestion and RAG. Supports multiple models and vector databases."
+language: typescript
+category: [rag, multi-model]
+github: Mintplex-Labs/anything-llm
+status: active
+tier: 3
+highlight: "Self-hosted LLM platform for document ingestion"
+emoji: "\U0001F4DA"
+added: 2026-02-25

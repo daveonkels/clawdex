@@ -1,0 +1,12 @@
+name: ZeroClaw
+slug: zeroclaw
+tagline: "Zero overhead, zero compromise"
+description: "Rust-based AI agent runtime built for speed and efficiency. Sub-10ms startup in a 3.4MB binary."
+language: rust
+category: [performance, lightweight]
+github: zeroclaw-labs/zeroclaw
+status: active
+tier: 1
+highlight: "Sub-10ms startup, 3.4MB binary, <5MB RAM"
+emoji: "\U0001F980"
+added: 2026-02-25

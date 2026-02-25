@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@layer base {
+  body {
+    @apply bg-ocean text-gray-200 font-body antialiased;
+  }
+
+  ::selection {
+    @apply bg-lobster/30 text-white;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-ocean;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-ocean-lighter rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-biolum/30;
+  }
+}
+
+@layer components {
+  .card-glow {
+    box-shadow: 0 0 0 1px rgba(0, 212, 170, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-glow:hover {
+    box-shadow:
+      0 0 0 1px rgba(0, 212, 170, 0.2),
+      0 0 20px rgba(0, 212, 170, 0.08),
+      0 8px 32px rgba(0, 0, 0, 0.4);
+    transform: translateY(-4px);
+  }
+
+  .badge-language {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-medium;
+  }
+
+  .filter-btn {
+    @apply px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border;
+  }
+
+  .filter-btn-inactive {
+    @apply border-ocean-lighter text-gray-400 hover:border-biolum/40 hover:text-biolum;
+  }
+
+  .filter-btn-active {
+    @apply border-biolum bg-biolum/10 text-biolum;
+  }
+}

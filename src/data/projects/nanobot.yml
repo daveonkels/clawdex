@@ -1,0 +1,12 @@
+name: Nanobot
+slug: nanobot
+tagline: "4,000 lines of pure research"
+description: "Ultra-minimal Python implementation designed for research and experimentation. When you need to understand, not just use."
+language: python
+category: [research, lightweight]
+github: HKUDS/nanobot
+status: active
+tier: 1
+highlight: "4,000 lines of Python. Research-friendly, ultra-minimal"
+emoji: "\U0001F52C"
+added: 2026-02-25

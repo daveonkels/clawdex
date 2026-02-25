@@ -1,0 +1,12 @@
+name: Moltis
+slug: moltis
+tagline: "Zero unsafe, full audit trail"
+description: "Zero unsafe Rust with built-in voice I/O and MCP support. Every action logged, every permission earned."
+language: rust
+category: [security, audit]
+github: moltis-org/moltis
+status: active
+tier: 1
+highlight: "Zero unsafe Rust, built-in voice I/O, MCP support"
+emoji: "\U0001F50D"
+added: 2026-02-25

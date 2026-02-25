@@ -1,0 +1,12 @@
+name: NanoClaw
+slug: nanoclaw
+tagline: "Security-first, radically minimal"
+description: "Five files, one process, OS-level container isolation. NanoClaw strips the agent down to its secure essentials."
+language: typescript
+category: [security, lightweight]
+github: nanoclaw-ai/nanoclaw
+status: active
+tier: 1
+highlight: "5 files, one process, OS-level container isolation"
+emoji: "\U0001F510"
+added: 2026-02-25

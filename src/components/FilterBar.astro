@@ -1,0 +1,126 @@
+---
+interface Props {
+  languages: string[];
+  categories: string[];
+  tiers: number[];
+  statuses: string[];
+}
+
+const { languages, categories, tiers, statuses } = Astro.props;
+
+const tierLabels: Record<number, string> = {
+  1: 'Clones',
+  2: 'Ecosystem',
+  3: 'Inspired',
+};
+---
+
+<div class="space-y-4 mb-10" id="filter-bar">
+  <!-- Search -->
+  <div class="relative max-w-md">
+    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <input
+      type="text"
+      id="search-input"
+      placeholder="Search projects..."
+      class="w-full pl-10 pr-4 py-2.5 bg-ocean-light border border-white/10 rounded-lg text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-biolum/40 focus:ring-1 focus:ring-biolum/20 transition-all"
+    />
+  </div>
+
+  <!-- Filter groups -->
+  <div class="flex flex-wrap gap-6">
+    <!-- Language -->
+    <div>
+      <span class="text-xs font-medium text-gray-600 uppercase tracking-wider mb-2 block">Language</span>
+      <div class="flex flex-wrap gap-1.5" data-filter-group="language">
+        <button class="filter-btn filter-btn-active" data-filter-value="all">All</button>
+        {languages.map(lang => (
+          <button class="filter-btn filter-btn-inactive" data-filter-value={lang}>{lang}</button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Tier -->
+    <div>
+      <span class="text-xs font-medium text-gray-600 uppercase tracking-wider mb-2 block">Tier</span>
+      <div class="flex flex-wrap gap-1.5" data-filter-group="tier">
+        <button class="filter-btn filter-btn-active" data-filter-value="all">All</button>
+        {tiers.map(tier => (
+          <button class="filter-btn filter-btn-inactive" data-filter-value={String(tier)}>{tierLabels[tier]}</button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div>
+      <span class="text-xs font-medium text-gray-600 uppercase tracking-wider mb-2 block">Status</span>
+      <div class="flex flex-wrap gap-1.5" data-filter-group="status">
+        <button class="filter-btn filter-btn-active" data-filter-value="all">All</button>
+        {statuses.map(s => (
+          <button class="filter-btn filter-btn-inactive" data-filter-value={s}>{s}</button>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-input') as HTMLInputElement;
+    const cards = document.querySelectorAll<HTMLElement>('[data-language]');
+    const filterGroups = document.querySelectorAll<HTMLElement>('[data-filter-group]');
+
+    const activeFilters: Record<string, string> = {
+      language: 'all',
+      tier: 'all',
+      status: 'all',
+    };
+
+    let searchQuery = '';
+
+    function applyFilters() {
+      cards.forEach(card => {
+        const lang = card.dataset.language || '';
+        const tier = card.dataset.tier || '';
+        const status = card.dataset.status || '';
+        const text = card.textContent?.toLowerCase() || '';
+
+        const matchLang = activeFilters.language === 'all' || lang === activeFilters.language;
+        const matchTier = activeFilters.tier === 'all' || tier === activeFilters.tier;
+        const matchStatus = activeFilters.status === 'all' || status === activeFilters.status;
+        const matchSearch = !searchQuery || text.includes(searchQuery.toLowerCase());
+
+        card.style.display = matchLang && matchTier && matchStatus && matchSearch ? '' : 'none';
+      });
+
+      // Update count
+      const visible = document.querySelectorAll('[data-language]:not([style*="display: none"])').length;
+      const counter = document.getElementById('results-count');
+      if (counter) counter.textContent = `${visible} project${visible !== 1 ? 's' : ''}`;
+    }
+
+    filterGroups.forEach(group => {
+      const groupName = group.dataset.filterGroup!;
+      const buttons = group.querySelectorAll<HTMLButtonElement>('button');
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => {
+            b.classList.remove('filter-btn-active');
+            b.classList.add('filter-btn-inactive');
+          });
+          btn.classList.remove('filter-btn-inactive');
+          btn.classList.add('filter-btn-active');
+
+          activeFilters[groupName] = btn.dataset.filterValue!;
+          applyFilters();
+        });
+      });
+    });
+
+    searchInput?.addEventListener('input', () => {
+      searchQuery = searchInput.value;
+      applyFilters();
+    });
+  });
+</script>

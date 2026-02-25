@@ -1,0 +1,12 @@
+name: IronClaw
+slug: ironclaw
+tagline: "Rust-hardened privacy fortress"
+description: "Rust implementation focused on privacy and security. When your agent needs armor plating."
+language: rust
+category: [privacy, security]
+github: nearai/ironclaw
+status: active
+tier: 1
+highlight: "Rust implementation focused on privacy and security"
+emoji: "\U0001F6E1\uFE0F"
+added: 2026-02-25

@@ -1,0 +1,49 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import FilterBar from '../components/FilterBar.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { loadProjects, getUniqueLanguages, getUniqueTiers, getUniqueStatuses } from '../lib/projects';
+
+const projects = loadProjects();
+const languages = getUniqueLanguages(projects);
+const tiers = getUniqueTiers(projects);
+const statuses = getUniqueStatuses(projects);
+const categories = [...new Set(projects.flatMap(p => p.category))].sort();
+---
+
+<Layout title="Clawdex — Every Shell in the Sea">
+  <Hero projectCount={projects.length} />
+
+  <section id="directory" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="font-display text-2xl font-bold text-white">Directory</h2>
+      <span id="results-count" class="text-sm text-gray-500">{projects.length} projects</span>
+    </div>
+
+    <FilterBar
+      languages={languages}
+      categories={categories}
+      tiers={tiers}
+      statuses={statuses}
+    />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {projects.map(project => (
+        <ProjectCard
+          name={project.name}
+          slug={project.slug}
+          tagline={project.tagline}
+          description={project.description}
+          language={project.language}
+          category={project.category}
+          github={project.github}
+          status={project.status}
+          tier={project.tier}
+          highlight={project.highlight}
+          emoji={project.emoji}
+        />
+      ))}
+    </div>
+  </section>
+</Layout>
