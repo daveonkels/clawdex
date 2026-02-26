@@ -1,0 +1,15 @@
+name: memU
+slug: memu
+tagline: Memory-first proactive agent
+description: "Long-term memory infrastructure for 24/7 AI agents. Proactive, cost-efficient, runs locally."
+language: python
+category:
+  - memory
+  - proactive
+  - self-hosted
+github: NevaMind-AI/memU
+status: active
+tier: 1
+highlight: "10k+ stars. Memory-first architecture with proactive agent behavior, local-first privacy, reduced LLM token costs."
+emoji: "🧠"
+added: "2025-02-25"
