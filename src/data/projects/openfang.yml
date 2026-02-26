@@ -1,0 +1,15 @@
+name: OpenFang
+slug: openfang
+tagline: The Agent Operating System
+description: "Production-grade agent OS built in Rust. 137K LOC, 1,767+ tests, single 32MB binary. Autonomous agents that work for you 24/7."
+language: rust
+category:
+  - agent-os
+  - self-hosted
+  - autonomous
+github: RightNow-AI/openfang
+status: active
+tier: 1
+highlight: "Built in Rust from scratch — 137K LOC, 1,767+ tests. One binary, one command, agents live. Not a chatbot wrapper. An actual OS for autonomous agents."
+emoji: "⚙️"
+added: "2026-02-25"
