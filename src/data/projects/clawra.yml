@@ -1,0 +1,15 @@
+name: Clawra
+slug: clawra
+tagline: OpenClaw as your companion
+description: "OpenClaw reimagined as a persistent AI companion with personality, memory, and relationship context."
+language: typescript
+category:
+  - companion
+  - persona
+  - self-hosted
+github: SumeLabs/clawra
+status: active
+tier: 1
+highlight: "1.7k stars. Same claw, new vibe — a companion-first agent with persistent memory and personality layered on top of OpenClaw."
+emoji: "💝"
+added: "2026-02-25"
