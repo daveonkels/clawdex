@@ -1,0 +1,15 @@
+name: Clelp MCP Server
+slug: clelp-mcp-server
+tagline: "Search 2,000+ AI tools and skills via MCP"
+description: "An MCP server that connects AI assistants to the Clelp.ai directory — search, discover, and explore over 2,000 AI tools, skills, and MCP servers by name, category, or keyword. Install via npx, works with any MCP-compatible client."
+language: typescript
+category:
+  - ecosystem
+  - mcp
+github: oscarsterling/clelp-mcp-server
+website: https://clelp.ai
+status: active
+tier: 2
+highlight: "Brings the entire Clelp.ai skill directory into any MCP-compatible AI assistant with a single npx command"
+emoji: 🦞
+added: 2026-02-26
