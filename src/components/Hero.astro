@@ -73,7 +73,7 @@ const { projectCount } = Astro.props;
     // Spawn a soft bioluminescent orb at a random position, fade it in then out
     function spawnFlash() {
       var el = document.createElement('div');
-      var size = 80 + Math.random() * 180; // 80–260px
+      var size = 100 + Math.random() * 225; // 100–325px
       var x = 5 + Math.random() * 90;      // 5–95% from left
       var y = 5 + Math.random() * 90;      // 5–95% from top
       // Alternate between teal and a very faint coral
@@ -112,7 +112,7 @@ const { projectCount } = Astro.props;
 
     // Stagger the initial bursts so the page doesn't light up all at once
     function scheduleNext() {
-      var delay = 1800 + Math.random() * 3000; // every 1.8–4.8s
+      var delay = 1350 + Math.random() * 2250; // every 1.35–3.6s
       setTimeout(function () {
         spawnFlash();
         scheduleNext();
