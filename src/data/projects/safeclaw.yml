@@ -1,0 +1,12 @@
+name: SafeClaw
+slug: safeclaw
+tagline: "Zero-LLM OpenClaw alternative"
+description: "Rule-based and local-first assistant positioned as an OpenClaw alternative with no required LLM API spend."
+language: python
+category: [security, lightweight]
+github: princezuda/safeclaw
+status: active
+tier: 1
+highlight: "Alternative to OpenClaw focused on deterministic behavior and zero token costs"
+emoji: "🧯"
+added: 2026-02-27

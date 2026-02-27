@@ -1,0 +1,12 @@
+name: FreeClaw
+slug: freeclaw
+tagline: "Minimal OpenClaw-like Python agent"
+description: "Python implementation of the OpenClaw concept with multi-agent profiles and lightweight CLI operation."
+language: python
+category: [minimal, lightweight]
+github: openconstruct/freeclaw
+status: active
+tier: 1
+highlight: "Described by the authors as a minimal OpenClaw-like CLI"
+emoji: "🆓"
+added: 2026-02-27

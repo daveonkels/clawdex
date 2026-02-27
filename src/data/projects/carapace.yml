@@ -1,0 +1,12 @@
+name: Carapace
+slug: carapace
+tagline: "Hardened Rust shell for autonomous agents"
+description: "Security-first Rust alternative to OpenClaw/Clawdbot with signed WASM plugins and strict local-first defaults."
+language: rust
+category: [security, privacy]
+github: puremachinery/carapace
+status: experimental
+tier: 1
+highlight: "Explicitly positions itself as a hardened alternative to OpenClaw"
+emoji: "🛡️"
+added: 2026-02-27

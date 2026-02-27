@@ -1,0 +1,12 @@
+name: Grip AI
+slug: grip-ai
+tagline: "OpenClaw-style multi-channel agent platform"
+description: "Self-hostable Python platform marketed as a lightweight OpenClaw alternative with multi-channel routing and task orchestration."
+language: python
+category: [autonomous, messaging]
+github: 5unnykum4r/grip-ai
+status: active
+tier: 1
+highlight: "Explicitly labeled as a lightweight OpenClaw alternative"
+emoji: "🧠"
+added: 2026-02-27
