@@ -1,0 +1,15 @@
+name: NullClaw
+slug: nullclaw
+tagline: "Fastest, smallest, and fully autonomous AI assistant infrastructure written in Zig"
+description: "The smallest fully autonomous AI assistant infrastructure — a static Zig binary that fits on any $5 board, boots in milliseconds, and requires nothing but libc. 678 KB binary, <2 ms startup, 22+ providers, 17 channels, fully pluggable architecture."
+language: zig
+category:
+  - performance
+  - lightweight
+  - zig
+github: nullclaw/nullclaw
+status: active
+tier: 1
+highlight: "678 KB Zig binary — runs on $5 hardware, 22+ providers, 17 channels, fully pluggable everything"
+emoji: 🦞
+added: 2026-02-26

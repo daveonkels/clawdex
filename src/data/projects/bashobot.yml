@@ -1,0 +1,15 @@
+name: BashoBot
+slug: bashobot
+tagline: "An OpenClaw inspired personal assistant in 100% Bash 🦞"
+description: "Personal AI assistant built entirely in bash (compatible with bash 3.2+). Uses only standard Unix utilities (curl, jq, base64, etc.) with no Node.js or other runtimes. Modular architecture using named pipes."
+language: bash
+category:
+  - minimal
+  - lightweight
+  - bash
+github: uraimo/bashobot
+status: active
+tier: 1
+highlight: "Bash-only personal assistant — runs on minimal systems, no Node.js or runtimes needed"
+emoji: 🐚
+added: 2026-02-26
