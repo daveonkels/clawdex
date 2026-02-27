@@ -4,7 +4,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = 'The complete directory of OpenClaw clones, forks, and alternatives. Compare ZeroClaw, NanoClaw, PicoClaw, IronClaw, and more.' } = Astro.props;
+const { title, description = 'The OpenClaw ecosystem tracker — compare frameworks, forks, and alternatives by GitHub stars, language, and activity. A framework directory, not a workflow gallery.' } = Astro.props;
 ---
 
 <!doctype html>
@@ -22,7 +22,7 @@ const { title, description = 'The complete directory of OpenClaw clones, forks, 
     <meta property="og:url" content={`https://theclawdex.com${Astro.url.pathname}`} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:site_name" content="Clawdex" />
+    <meta property="og:site_name" content="Clawdex — OpenClaw Ecosystem Tracker" />
     <meta property="og:image" content="https://theclawdex.com/images/og-default.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -34,7 +34,7 @@ const { title, description = 'The complete directory of OpenClaw clones, forks, 
     <meta name="twitter:image" content="https://theclawdex.com/images/og-default.png" />
 
     <!-- SEO -->
-    <meta name="keywords" content="openclaw alternatives, openclaw clones, openclaw forks, zeroclaw, nanoclaw, picoclaw, ironclaw, moltis, nanobot, openclaw directory, clawdbot alternatives, moltbot alternatives, self-hosted ai agent, open source ai assistant" />
+    <meta name="keywords" content="openclaw alternatives, openclaw clones, openclaw forks, zeroclaw, nanoclaw, picoclaw, ironclaw, moltis, nanobot, openclaw directory, openclaw ecosystem, openclaw comparison, best openclaw alternative, openclaw vs zeroclaw, openclaw github stars, openclaw framework directory, clawdbot alternatives, moltbot alternatives, self-hosted ai agent comparison, open source ai assistant framework" />
     <meta name="robots" content="index, follow" />
 
     <title>{title}</title>

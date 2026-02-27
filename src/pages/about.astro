@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="About — Clawdex">
+<Layout title="About — Clawdex | OpenClaw Ecosystem Tracker" description="Clawdex is an OpenClaw framework and ecosystem tracker — not a workflow gallery. We track forks, clones, and alternatives by stars, language, and activity.">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <h1 class="font-display text-4xl font-bold text-white mb-8">About Clawdex</h1>
 
@@ -78,6 +78,43 @@ import Layout from '../layouts/Layout.astro';
       </p>
       <p>
         No forms, no accounts, no approval committees. Just git.
+      </p>
+
+      <h2 class="font-display text-2xl font-bold text-white mt-12 mb-4">What Clawdex Is (and Isn't)</h2>
+      <p>
+        The OpenClaw ecosystem has spawned a lot of adjacent projects. Here's how Clawdex fits relative to a few you may have seen:
+      </p>
+      <div class="mt-6 space-y-4">
+        <div class="rounded-lg border border-white/8 bg-white/3 p-4">
+          <div class="flex items-start gap-3">
+            <span class="text-xl mt-0.5">🦞</span>
+            <div>
+              <p class="font-semibold text-white">Clawdex <span class="text-gray-500 font-normal text-sm">(theclawdex.com — you are here)</span></p>
+              <p class="text-sm text-gray-400 mt-1">A <strong class="text-white">framework and ecosystem tracker</strong>. Tracks OpenClaw forks, clones, rewrites, and inspired projects — comparing them by GitHub stars, language, tier, and activity status. Think of it as the Pokédex for the crustacean species tree.</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-lg border border-white/8 bg-white/3 p-4">
+          <div class="flex items-start gap-3">
+            <span class="text-xl mt-0.5">📋</span>
+            <div>
+              <p class="font-semibold text-white">Workflow galleries <span class="text-gray-500 font-normal text-sm">(e.g. clawdex.io)</span></p>
+              <p class="text-sm text-gray-400 mt-1">Sites that catalog <strong class="text-white">what you can do</strong> with OpenClaw — use case recipes, automation examples, workflow templates. Useful, but a different thing entirely. We track what the frameworks <em>are</em>, not what users do with them.</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-lg border border-white/8 bg-white/3 p-4">
+          <div class="flex items-start gap-3">
+            <span class="text-xl mt-0.5">🔒</span>
+            <div>
+              <p class="font-semibold text-white">Security scanners <span class="text-gray-500 font-normal text-sm">(e.g. clawdex.koi.security)</span></p>
+              <p class="text-sm text-gray-400 mt-1">Tools that scan OpenClaw skills for malicious content before installation. Entirely separate from this directory — we track frameworks, not skill safety verdicts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mt-6 text-sm text-gray-500 italic">
+        Yes, there's some naming overlap out there. The lobster ecosystem is a little chaotic. Welcome to the molt.
       </p>
 
       <h2 class="font-display text-2xl font-bold text-white mt-12 mb-4">Tiers</h2>

@@ -12,13 +12,19 @@ const statuses = getUniqueStatuses(projects);
 const categories = [...new Set(projects.flatMap(p => p.category))].sort();
 ---
 
-<Layout title="Clawdex — Every Shell in the Sea">
+<Layout title="Clawdex — OpenClaw Ecosystem Tracker | Framework Directory">
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Clawdex",
+    "name": "Clawdex — OpenClaw Ecosystem Tracker",
     "url": "https://theclawdex.com",
-    "description": "The complete directory of OpenClaw clones, forks, and alternatives",
+    "description": "The OpenClaw ecosystem tracker. Compare frameworks, forks, and alternatives by GitHub stars, language, and activity. A framework directory, not a workflow gallery.",
+    "about": {
+      "@type": "SoftwareApplication",
+      "name": "OpenClaw",
+      "url": "https://github.com/openclaw/openclaw"
+    },
+    "keywords": "openclaw alternatives, openclaw forks, openclaw ecosystem, openclaw comparison, self-hosted AI agent comparison",
     "creator": {
       "@type": "Person",
       "name": "Dave Onkels",
