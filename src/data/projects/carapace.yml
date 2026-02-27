@@ -7,6 +7,6 @@ category: [security, privacy]
 github: puremachinery/carapace
 status: experimental
 tier: 1
-highlight: "Explicitly positions itself as a hardened alternative to OpenClaw"
+highlight: "Hardened Rust core, signed WASM plugins, strict local-first defaults"
 emoji: "🛡️"
 added: 2026-02-27

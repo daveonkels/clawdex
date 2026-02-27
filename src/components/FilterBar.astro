@@ -2,17 +2,10 @@
 interface Props {
   languages: string[];
   categories: string[];
-  tiers: number[];
   statuses: string[];
 }
 
-const { languages, categories, tiers, statuses } = Astro.props;
-
-const tierLabels: Record<number, string> = {
-  1: 'Clones',
-  2: 'Ecosystem',
-  3: 'Inspired',
-};
+const { languages, categories, statuses } = Astro.props;
 ---
 
 <div class="space-y-4 mb-10" id="filter-bar">
@@ -28,7 +21,6 @@ const tierLabels: Record<number, string> = {
       />
     </div>
     <select id="sort-select" class="bg-ocean-light border border-white/10 rounded-lg text-sm text-gray-300 px-3 py-2.5 focus:outline-none focus:border-biolum/40 cursor-pointer">
-      <option value="default">Sort: Tier + Stars</option>
       <option value="stars">Sort: Most Stars</option>
       <option value="name">Sort: Name A→Z</option>
       <option value="recent">Sort: Recently Added</option>
@@ -44,17 +36,6 @@ const tierLabels: Record<number, string> = {
         <button class="filter-btn filter-btn-active" data-filter-value="all">All</button>
         {languages.map(lang => (
           <button class="filter-btn filter-btn-inactive" data-filter-value={lang}>{lang}</button>
-        ))}
-      </div>
-    </div>
-
-    <!-- Tier -->
-    <div>
-      <span class="text-xs font-medium text-gray-600 uppercase tracking-wider mb-2 block">Tier</span>
-      <div class="flex flex-wrap gap-1.5" data-filter-group="tier">
-        <button class="filter-btn filter-btn-active" data-filter-value="all">All</button>
-        {tiers.map(tier => (
-          <button class="filter-btn filter-btn-inactive" data-filter-value={String(tier)}>{tierLabels[tier]}</button>
         ))}
       </div>
     </div>
@@ -80,7 +61,6 @@ const tierLabels: Record<number, string> = {
 
     const activeFilters: Record<string, string> = {
       language: 'all',
-      tier: 'all',
       status: 'all',
     };
 
@@ -89,16 +69,14 @@ const tierLabels: Record<number, string> = {
     function applyFilters() {
       cards.forEach(card => {
         const lang = card.dataset.language || '';
-        const tier = card.dataset.tier || '';
         const status = card.dataset.status || '';
         const text = card.textContent?.toLowerCase() || '';
 
         const matchLang = activeFilters.language === 'all' || lang === activeFilters.language;
-        const matchTier = activeFilters.tier === 'all' || tier === activeFilters.tier;
         const matchStatus = activeFilters.status === 'all' || status === activeFilters.status;
         const matchSearch = !searchQuery || text.includes(searchQuery.toLowerCase());
 
-        card.style.display = matchLang && matchTier && matchStatus && matchSearch ? '' : 'none';
+        card.style.display = matchLang && matchStatus && matchSearch ? '' : 'none';
       });
 
       // Update count

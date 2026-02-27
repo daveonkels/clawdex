@@ -2,10 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 
-const REQUIRED_FIELDS = ['name', 'slug', 'tagline', 'description', 'language', 'category', 'status', 'tier', 'highlight', 'emoji', 'added'];
-const VALID_LANGUAGES = ['typescript', 'rust', 'python', 'go', 'c', 'multi'];
+const REQUIRED_FIELDS = ['name', 'slug', 'tagline', 'description', 'language', 'category', 'status', 'highlight', 'emoji', 'added'];
+const VALID_LANGUAGES = ['typescript', 'rust', 'python', 'go', 'c', 'bash', 'zig', 'multi'];
 const VALID_STATUSES = ['active', 'experimental', 'archived'];
-const VALID_TIERS = [1, 2, 3];
 
 const dir = path.join(process.cwd(), 'src', 'data', 'projects');
 const files = fs.readdirSync(dir).filter(f => f.endsWith('.yml') || f.endsWith('.yaml'));
@@ -38,11 +37,6 @@ for (const file of files) {
 
   if (data.status && !VALID_STATUSES.includes(data.status)) {
     console.error(`❌ ${file}: Invalid status "${data.status}" (must be: ${VALID_STATUSES.join(', ')})`);
-    errors++;
-  }
-
-  if (data.tier && !VALID_TIERS.includes(data.tier)) {
-    console.error(`❌ ${file}: Invalid tier "${data.tier}" (must be: ${VALID_TIERS.join(', ')})`);
     errors++;
   }
 

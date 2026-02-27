@@ -3,10 +3,10 @@ slug: moltworker
 tagline: "OpenClaw in Cloudflare Workers"
 description: "Experimental derivative that runs OpenClaw (formerly Moltbot/Clawdbot) in Cloudflare Sandbox containers."
 language: typescript
-category: [infrastructure, self-hosted]
+category: [infrastructure, lightweight]
 github: cloudflare/moltworker
 status: experimental
 tier: 1
-highlight: "Cloudflare-hosted runtime derivative for OpenClaw"
+highlight: "OpenClaw running serverless on Cloudflare Workers — no persistent infra needed"
 emoji: "☁️"
 added: 2026-02-27

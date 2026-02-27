@@ -10,14 +10,13 @@ interface Props {
   category: string[];
   github?: string;
   status: string;
-  tier: number;
   highlight: string;
   emoji: string;
   stars?: number;
   added?: string;
 }
 
-const { name, tagline, language, category, github, status, tier, highlight, emoji, stars, added } = Astro.props;
+const { name, tagline, language, category, github, status, highlight, emoji, stars, added } = Astro.props;
 
 const languageColors: Record<string, { bg: string; text: string; border: string }> = {
   typescript: { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/20' },
@@ -25,6 +24,8 @@ const languageColors: Record<string, { bg: string; text: string; border: string 
   python: { bg: 'bg-yellow-500/10', text: 'text-yellow-400', border: 'border-yellow-500/20' },
   go: { bg: 'bg-cyan-500/10', text: 'text-cyan-400', border: 'border-cyan-500/20' },
   c: { bg: 'bg-gray-500/10', text: 'text-gray-400', border: 'border-gray-500/20' },
+  bash: { bg: 'bg-green-500/10', text: 'text-green-400', border: 'border-green-500/20' },
+  zig: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20' },
   multi: { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/20' },
 };
 
@@ -36,18 +37,12 @@ const statusColors: Record<string, string> = {
   archived: 'text-gray-500',
 };
 
-const tierLabels: Record<number, string> = {
-  1: 'Clone',
-  2: 'Ecosystem',
-  3: 'Inspired',
-};
 ---
 
 <article
   class="card-glow rounded-xl bg-ocean-card border border-white/5 p-6 flex flex-col h-full"
   data-language={language}
   data-category={category.join(',')}
-  data-tier={tier}
   data-status={status}
   data-stars={stars ?? 0}
   data-name={name}
@@ -79,9 +74,6 @@ const tierLabels: Record<number, string> = {
     )}
     <span class={`badge-language border border-white/10 bg-white/5 ${statusColors[status]}`}>
       {status}
-    </span>
-    <span class="badge-language border border-white/10 bg-white/5 text-gray-500">
-      Tier {tier}: {tierLabels[tier]}
     </span>
   </div>
 

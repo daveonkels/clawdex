@@ -12,7 +12,6 @@ export interface Project {
   github?: string;
   website?: string;
   status: 'active' | 'experimental' | 'archived';
-  tier: 1 | 2 | 3;
   highlight: string;
   emoji: string;
   added: string;
@@ -82,10 +81,7 @@ export async function loadProjects(): Promise<Project[]> {
 
   saveStarsCache(cache);
 
-  return projects.sort((a, b) => {
-    if (a.tier !== b.tier) return a.tier - b.tier;
-    return (b.stars ?? 0) - (a.stars ?? 0);
-  });
+  return projects.sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0));
 }
 
 export function getUniqueLanguages(projects: Project[]): string[] {
@@ -94,10 +90,6 @@ export function getUniqueLanguages(projects: Project[]): string[] {
 
 export function getUniqueCategories(projects: Project[]): string[] {
   return [...new Set(projects.flatMap(p => p.category))].sort();
-}
-
-export function getUniqueTiers(projects: Project[]): number[] {
-  return [...new Set(projects.map(p => p.tier))].sort();
 }
 
 export function getUniqueStatuses(projects: Project[]): string[] {
