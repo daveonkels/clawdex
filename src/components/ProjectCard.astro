@@ -16,7 +16,7 @@ interface Props {
   added?: string;
 }
 
-const { name, tagline, language, category, github, status, highlight, emoji, stars, added } = Astro.props;
+const { name, slug, tagline, language, category, github, status, highlight, emoji, stars, added } = Astro.props;
 
 const languageColors: Record<string, { bg: string; text: string; border: string }> = {
   typescript: { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/20' },
@@ -52,7 +52,7 @@ const statusColors: Record<string, string> = {
     <div class="flex items-center gap-3">
       <span class={`text-3xl ${name === 'OpenClaw' ? 'og-lobster' : ''}`}>{emoji}</span>
       <div>
-        <h3 class="font-display font-bold text-white text-lg leading-tight">{name}</h3>
+        <a href={`/projects/${slug}`} class="font-display font-bold text-white text-lg leading-tight hover:text-biolum transition-colors">{name}</a>
         <p class="text-sm text-gray-500 mt-0.5">{tagline}</p>
       </div>
     </div>

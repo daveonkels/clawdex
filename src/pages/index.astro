@@ -30,6 +30,20 @@ const categories = [...new Set(projects.flatMap(p => p.category))].sort();
       "url": "https://onk.io"
     }
   })} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "OpenClaw Ecosystem Projects",
+    "description": "Directory of OpenClaw-inspired agentic projects — clones, forks, reimplementations, and alternatives.",
+    "numberOfItems": projects.length,
+    "itemListElement": projects.map((p, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "name": p.name,
+      "description": p.tagline,
+      "url": `https://theclawdex.com/projects/${p.slug}`,
+    })),
+  })} />
   <Hero projectCount={projects.length} />
 
   <section id="directory" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
