@@ -6,71 +6,8 @@ const { projectCount } = Astro.props;
 ---
 
 <section class="relative overflow-hidden py-20 sm:py-28">
-  <!-- Lobster claw peeking in from right -->
-  <div class="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none select-none animate-claw-sway z-10"
-       style="transform-origin: right center;" aria-hidden="true">
-    <svg width="220" height="380" viewBox="0 0 280 480" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="clawGlow" cx="40%" cy="50%" r="60%">
-          <stop offset="0%" stop-color="#00d4aa" stop-opacity="0.15"/>
-          <stop offset="100%" stop-color="#00d4aa" stop-opacity="0"/>
-        </radialGradient>
-        <radialGradient id="clawBody" cx="30%" cy="30%" r="70%">
-          <stop offset="0%" stop-color="#e05a3a"/>
-          <stop offset="100%" stop-color="#b83520"/>
-        </radialGradient>
-        <filter id="clawDropShadow">
-          <feDropShadow dx="-4" dy="0" stdDeviation="10" flood-color="#00d4aa" flood-opacity="0.2"/>
-        </filter>
-      </defs>
-
-      <!-- Bioluminescent glow halo -->
-      <ellipse cx="160" cy="240" rx="160" ry="200" fill="url(#clawGlow)"/>
-
-      <!-- ARM — extends off the right edge -->
-      <path d="M 280 420 Q 265 390 248 365 Q 235 342 232 318 L 262 310 Q 268 337 282 364 Q 290 390 280 418 Z"
-            fill="url(#clawBody)" stroke="#8a2010" stroke-width="2" filter="url(#clawDropShadow)"/>
-
-      <!-- WRIST JOINT -->
-      <ellipse cx="244" cy="312" rx="22" ry="18" fill="#c04030" stroke="#7a1808" stroke-width="2"/>
-
-      <!-- PALM — thick stroke trick for the meaty bit -->
-      <path d="M 238 298 Q 220 268 204 238 Q 190 210 186 192" stroke="#d04535" stroke-width="52" stroke-linecap="round" fill="none"/>
-      <path d="M 238 326 Q 220 354 204 380 Q 190 402 186 420" stroke="#c03e2e" stroke-width="52" stroke-linecap="round" fill="none"/>
-
-      <!-- UPPER FINGER (dactyl) -->
-      <path d="M 186 178 Q 164 156 138 134 Q 114 114 88 103 Q 60 92 38 98 Q 18 104 18 120 Q 18 137 42 138 Q 68 140 96 146 Q 124 154 150 170 Q 168 182 182 198 L 186 178 Z"
-            fill="url(#clawBody)" stroke="#8a2010" stroke-width="2" filter="url(#clawDropShadow)"/>
-
-      <!-- Upper finger highlight -->
-      <path d="M 38 98 Q 22 106 22 120 Q 22 135 42 136 Q 28 134 26 120 Q 26 106 38 98 Z"
-            fill="#a83018"/>
-
-      <!-- LOWER FINGER (pollex) -->
-      <path d="M 186 434 Q 162 452 136 462 Q 110 470 84 467 Q 56 463 38 450 Q 20 436 22 420 Q 24 405 48 404 Q 74 403 102 412 Q 130 422 158 428 Q 176 432 186 430 L 186 434 Z"
-            fill="url(#clawBody)" stroke="#8a2010" stroke-width="2" filter="url(#clawDropShadow)"/>
-
-      <!-- Lower finger tip shade -->
-      <path d="M 48 404 Q 26 406 22 420 Q 20 434 38 448 Q 24 436 24 420 Q 26 406 48 404 Z"
-            fill="#a83018"/>
-
-      <!-- Palm highlight stripe -->
-      <path d="M 238 292 Q 222 264 206 236 Q 195 215 188 198"
-            stroke="#e8744a" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.4"/>
-
-      <!-- Segment lines on arm -->
-      <path d="M 255 350 Q 243 338 258 332" stroke="#922010" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.8"/>
-      <path d="M 262 372 Q 250 360 266 355" stroke="#922010" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.8"/>
-      <path d="M 268 395 Q 258 384 272 378" stroke="#922010" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.7"/>
-
-      <!-- Spines on fingers -->
-      <circle cx="100" cy="148" r="3.5" fill="#922010" opacity="0.7"/>
-      <circle cx="128" cy="158" r="3" fill="#922010" opacity="0.6"/>
-      <circle cx="158" cy="172" r="3" fill="#922010" opacity="0.6"/>
-      <circle cx="100" cy="410" r="3.5" fill="#922010" opacity="0.7"/>
-      <circle cx="130" cy="422" r="3" fill="#922010" opacity="0.6"/>
-    </svg>
-  </div>
+  <!-- Periodic bioluminescent flashes — injected by script below -->
+  <div id="bio-flashes" class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true"></div>
 
   <!-- Background gradient orbs -->
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -127,3 +64,62 @@ const { projectCount } = Astro.props;
     </div>
   </div>
 </section>
+
+<script is:inline>
+  (function () {
+    var container = document.getElementById('bio-flashes');
+    if (!container) return;
+
+    // Spawn a soft bioluminescent orb at a random position, fade it in then out
+    function spawnFlash() {
+      var el = document.createElement('div');
+      var size = 80 + Math.random() * 180; // 80–260px
+      var x = 5 + Math.random() * 90;      // 5–95% from left
+      var y = 5 + Math.random() * 90;      // 5–95% from top
+      // Alternate between teal and a very faint coral
+      var teal = Math.random() > 0.25;
+      var color = teal ? '0,212,170' : '212,100,67';
+      var peak = teal ? (0.12 + Math.random() * 0.10) : (0.06 + Math.random() * 0.05);
+
+      el.style.cssText = [
+        'position:absolute',
+        'border-radius:50%',
+        'pointer-events:none',
+        'width:' + size + 'px',
+        'height:' + size + 'px',
+        'left:' + x + '%',
+        'top:' + y + '%',
+        'transform:translate(-50%,-50%)',
+        'background:radial-gradient(circle, rgba(' + color + ',' + peak + ') 0%, transparent 70%)',
+        'opacity:0',
+        'transition:opacity 1.8s ease-in-out',
+      ].join(';');
+
+      container.appendChild(el);
+
+      // Fade in
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { el.style.opacity = '1'; });
+      });
+
+      // Fade out after a hold
+      var hold = 1200 + Math.random() * 1800;
+      setTimeout(function () {
+        el.style.opacity = '0';
+        setTimeout(function () { el.parentNode && el.parentNode.removeChild(el); }, 1900);
+      }, hold);
+    }
+
+    // Stagger the initial bursts so the page doesn't light up all at once
+    function scheduleNext() {
+      var delay = 1800 + Math.random() * 3000; // every 1.8–4.8s
+      setTimeout(function () {
+        spawnFlash();
+        scheduleNext();
+      }, delay);
+    }
+
+    // First flash after a short settle
+    setTimeout(function () { spawnFlash(); scheduleNext(); }, 800);
+  })();
+</script>

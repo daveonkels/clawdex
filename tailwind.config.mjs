@@ -30,7 +30,6 @@ export default {
       animation: {
         'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
         'float': 'float 3s ease-in-out infinite',
-        'claw-sway': 'claw-sway 7s ease-in-out infinite',
         'bio-drift': 'bio-drift 8s ease-in-out infinite',
         'bio-drift-slow': 'bio-drift 12s ease-in-out infinite reverse',
       },
@@ -42,10 +41,6 @@ export default {
         'float': {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-6px)' },
-        },
-        'claw-sway': {
-          '0%, 100%': { transform: 'translateY(0px) rotate(-3deg)' },
-          '50%': { transform: 'translateY(-12px) rotate(3deg)' },
         },
         'bio-drift': {
           '0%, 100%': { opacity: '0.5', transform: 'scale(1)' },

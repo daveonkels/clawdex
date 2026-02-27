@@ -3,7 +3,20 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="About — Shelldex | OpenClaw Ecosystem Tracker" description="Shelldex catalogs the OpenClaw ecosystem — inspired agentic projects, not workflows or tutorials. Compare projects by stars, language, and activity." ogImage="https://shelldex.com/images/og-about.jpg">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <!-- Hero image -->
+  <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-4">
+    <div class="relative rounded-2xl overflow-hidden h-64 sm:h-80">
+      <img
+        src="/images/og-about.jpg"
+        alt="Cross-sectioned nautilus shell with bioluminescent teal glow — the ancestor shell"
+        class="w-full h-full object-cover object-center"
+        loading="eager"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-ocean via-ocean/20 to-transparent"></div>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <h1 class="font-display text-4xl font-bold text-white mb-8">About Shelldex</h1>
 
     <div class="prose prose-invert prose-gray max-w-none space-y-6 text-gray-300 leading-relaxed">
@@ -120,9 +133,6 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
       </div>
-      <p class="mt-6 text-sm text-gray-500 italic">
-        Yes, there's some naming overlap out there. The lobster ecosystem is a little chaotic. Welcome to the molt.
-      </p>
 
     </div>
   </div>
