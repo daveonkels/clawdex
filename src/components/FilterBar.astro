@@ -20,7 +20,7 @@ const { languages, categories, statuses } = Astro.props;
         class="w-full pl-10 pr-4 py-2.5 bg-ocean-light border border-white/10 rounded-lg text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-biolum/40 focus:ring-1 focus:ring-biolum/20 transition-all"
       />
     </div>
-    <select id="sort-select" class="bg-ocean-light border border-white/10 rounded-lg text-sm text-gray-300 px-3 py-2.5 focus:outline-none focus:border-biolum/40 cursor-pointer">
+    <select id="sort-select" aria-label="Sort projects" class="bg-ocean-light border border-white/10 rounded-lg text-sm text-gray-300 px-3 py-2.5 focus:outline-none focus:border-biolum/40 cursor-pointer">
       <option value="stars">Sort: Most Stars</option>
       <option value="name">Sort: Name A→Z</option>
       <option value="recent">Sort: Recently Added</option>
