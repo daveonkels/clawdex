@@ -2,9 +2,14 @@
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
 }
 
-const { title, description = 'The personal agent universe — OpenClaw-inspired agentic projects, clones, forks, and alternatives. Compare by stars, language, and activity. Not workflows. Not tutorials. Just the projects.' } = Astro.props;
+const {
+  title,
+  description = 'The OpenClaw ecosystem, cataloged — clones, forks, derivatives, and alternatives. Compare by GitHub stars, language, and activity. Not workflows. Not tutorials. Just the projects.',
+  ogImage = 'https://shelldex.com/images/og-default.jpg',
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -23,7 +28,7 @@ const { title, description = 'The personal agent universe — OpenClaw-inspired 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:site_name" content="Shelldex — The OpenClaw Ecosystem" />
-    <meta property="og:image" content="https://shelldex.com/images/og-default.png" />
+    <meta property="og:image" content="{ogImage}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
@@ -31,7 +36,7 @@ const { title, description = 'The personal agent universe — OpenClaw-inspired 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://shelldex.com/images/og-default.png" />
+    <meta name="twitter:image" content="{ogImage}" />
 
     <!-- SEO -->
     <meta name="keywords" content="shelldex, openclaw alternatives, openclaw clones, openclaw forks, openclaw comparison, zeroclaw, nanoclaw, picoclaw, ironclaw, moltis, nanobot, bashobot, nullclaw, openclaw-inspired projects, personal ai agent, agentic projects, self-hosted ai agent, open source ai assistant, clawdbot alternatives" />
