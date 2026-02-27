@@ -6,4 +6,7 @@ export default defineConfig({
   site: 'https://shelldex.com',
   integrations: [tailwind(), sitemap()],
   output: 'static',
+  build: {
+    inlineStylesheets: 'always',
+  },
 });
