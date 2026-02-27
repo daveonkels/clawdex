@@ -48,7 +48,7 @@ const softwareJsonLd = {
   "@type": "SoftwareApplication",
   "name": name,
   "description": description,
-  "url": `https://theclawdex.com/projects/${slug}`,
+  "url": `https://shelldex.com/projects/${slug}`,
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Linux, macOS, Windows",
   ...(language !== 'multi' ? { "programmingLanguage": languageLabel[language] ?? language } : {}),
@@ -67,8 +67,8 @@ const breadcrumbJsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Clawdex", "item": "https://theclawdex.com" },
-    { "@type": "ListItem", "position": 2, "name": name, "item": `https://theclawdex.com/projects/${slug}` },
+    { "@type": "ListItem", "position": 1, "name": "Shelldex", "item": "https://shelldex.com" },
+    { "@type": "ListItem", "position": 2, "name": name, "item": `https://shelldex.com/projects/${slug}` },
   ],
 };
 
@@ -86,7 +86,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
 
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 text-sm text-gray-600 mb-10" aria-label="Breadcrumb">
-      <a href="/" class="hover:text-biolum transition-colors">Clawdex</a>
+      <a href="/" class="hover:text-biolum transition-colors">Shelldex</a>
       <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
       <span class="text-gray-400">{name}</span>
     </nav>

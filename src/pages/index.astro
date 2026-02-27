@@ -11,13 +11,13 @@ const statuses = getUniqueStatuses(projects);
 const categories = [...new Set(projects.flatMap(p => p.category))].sort();
 ---
 
-<Layout title="Clawdex — The Personal Agent Universe">
+<Layout title="Shelldex — The OpenClaw Ecosystem">
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Clawdex — The Personal Agent Universe",
-    "url": "https://theclawdex.com",
-    "description": "The personal agent universe — OpenClaw-inspired agentic projects, clones, forks, and alternatives. Compare by GitHub stars, language, and activity. Not workflows. Not tutorials. Just the projects.",
+    "name": "Shelldex — The OpenClaw Ecosystem",
+    "url": "https://shelldex.com",
+    "description": "The OpenClaw ecosystem, cataloged — clones, forks, derivatives, and alternatives. Compare by GitHub stars, language, and activity. Not workflows. Not tutorials. Just the projects.",
     "about": {
       "@type": "SoftwareApplication",
       "name": "OpenClaw",
