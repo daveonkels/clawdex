@@ -7,10 +7,13 @@ import Layout from '../layouts/Layout.astro';
   <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-4">
     <div class="relative rounded-2xl overflow-hidden h-64 sm:h-80">
       <img
-        src="/images/og-about.jpg"
+        src="/images/og-about.webp"
         alt="Cross-sectioned nautilus shell with bioluminescent teal glow — the ancestor shell"
         class="w-full h-full object-cover object-center"
+        width="1200"
+        height="630"
         loading="eager"
+        fetchpriority="high"
       />
       <div class="absolute inset-0 bg-gradient-to-t from-ocean via-ocean/20 to-transparent"></div>
     </div>
