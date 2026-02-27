@@ -47,7 +47,16 @@ const {
     <meta name="robots" content="index, follow" />
 
     <title>{title}</title>
-    <script src="https://metrics.dv.nu/api/script.js" data-site-id="044ff383a31e" defer></script>
+    <script is:inline>
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          var s = document.createElement('script');
+          s.src = 'https://metrics.dv.nu/api/script.js';
+          s.setAttribute('data-site-id', '044ff383a31e');
+          document.head.appendChild(s);
+        }, 2000);
+      });
+    </script>
   </head>
   <body class="min-h-screen flex flex-col overflow-x-hidden">
     <!-- Bioluminescent background ambience -->
