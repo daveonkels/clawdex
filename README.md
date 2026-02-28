@@ -1,4 +1,4 @@
-# 🦞 Clawdex
+# 🦞 Shelldex
 
 **Every shell in the sea.** The complete directory of OpenClaw clones, forks, derivatives, and inspired projects.
 
