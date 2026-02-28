@@ -1,12 +1,31 @@
 name: MimicLaw
 slug: mimiclaw
-tagline: "Bare metal AI on a $5 chip"
-description: "Pure C running directly on an ESP32-S3 chip. No operating system needed. The most primal claw."
+tagline: Bare metal AI on a $5 chip
+description: Pure C running directly on an ESP32-S3 chip. No operating system needed. The most primal claw.
 language: c
-category: [embedded, bare-metal]
+category:
+  - embedded
+  - bare-metal
 github: memovai/mimiclaw
 status: experimental
 tier: 1
-highlight: "Pure C on ESP32-S3 ($5). No OS needed"
-emoji: "\U0001F9BE"
-added: 2026-02-25
+highlight: Pure C on ESP32-S3 ($5). No OS needed
+emoji: 🦾
+added: 2026-02-25T00:00:00.000Z
+github_data:
+  stars: 3577
+  forks: 475
+  open_issues: 61
+  license: MIT
+  topics:
+    - ai
+    - assistant
+    - clawdbot
+    - edge-ai-agents
+    - memory
+    - openclaw
+  last_commit: "2026-02-28T01:51:47Z"
+  latest_release: v0.1.0
+  latest_release_date: "2026-02-09T14:11:23Z"
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:44.051Z"

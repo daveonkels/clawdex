@@ -2,6 +2,8 @@
 import Layout from '../../layouts/Layout.astro';
 import { loadProjects, formatStars } from '../../lib/projects';
 import type { Project } from '../../lib/projects';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export async function getStaticPaths() {
   const projects = await loadProjects();
@@ -16,7 +18,29 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { name, slug, tagline, description, language, category, github, status, highlight, emoji, stars, added } = project;
+const { name, slug, tagline, description, language, category, github, status, highlight, emoji, stars, added, github_data } = project;
+
+// Load leaderboard to get this project's rank
+let leaderboardRank: number | null = null;
+let leaderboardTotal: number | null = null;
+try {
+  const lbPath = path.join(process.cwd(), 'src', 'data', 'generated', 'leaderboard.json');
+  const lb = JSON.parse(fs.readFileSync(lbPath, 'utf-8'));
+  leaderboardTotal = lb.count;
+  const entry = lb.entries.find((e: any) => e.slug === slug);
+  if (entry) leaderboardRank = entry.rank;
+} catch {}
+
+function daysSince(dateStr: string | null | undefined): number | null {
+  if (!dateStr) return null;
+  return Math.floor((Date.now() - new Date(dateStr).getTime()) / (24 * 60 * 60 * 1000));
+}
+
+function formatCount(n: number): string {
+  if (n >= 10000) return `${Math.round(n / 1000)}k`;
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
+  return String(n);
+}
 
 const languageLabel: Record<string, string> = {
   typescript: 'TypeScript', rust: 'Rust', python: 'Python',
@@ -138,6 +162,53 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
     <section class="mb-8 rounded-xl bg-biolum/5 border border-biolum/15 px-6 py-5">
       <p class="text-biolum font-medium leading-relaxed">{highlight}</p>
     </section>
+
+    <!-- GitHub Stats -->
+    {github_data && (
+      <section class="mb-8">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider">GitHub Stats</h2>
+          {leaderboardRank && (
+            <a href="/leaderboard" class="text-sm text-gray-500 hover:text-biolum transition-colors">
+              #{leaderboardRank} of {leaderboardTotal} on the leaderboard →
+            </a>
+          )}
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
+            <p class="text-xs text-gray-500 mb-1">Stars</p>
+            <p class="text-lg font-mono text-yellow-300">★ {formatCount(github_data.stars)}</p>
+            {github_data.star_growth_7d !== null && github_data.star_growth_7d !== 0 && (
+              <p class={`text-xs font-mono mt-0.5 ${github_data.star_growth_7d > 0 ? 'text-biolum' : 'text-red-400'}`}>
+                {github_data.star_growth_7d > 0 ? '+' : ''}{formatCount(github_data.star_growth_7d)} this week
+              </p>
+            )}
+          </div>
+          <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
+            <p class="text-xs text-gray-500 mb-1">Forks</p>
+            <p class="text-lg font-mono text-gray-300">{formatCount(github_data.forks)}</p>
+          </div>
+          <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
+            <p class="text-xs text-gray-500 mb-1">Open Issues</p>
+            <p class="text-lg font-mono text-gray-300">{formatCount(github_data.open_issues)}</p>
+          </div>
+          <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
+            <p class="text-xs text-gray-500 mb-1">Last Commit</p>
+            <p class={`text-lg font-mono ${(daysSince(github_data.last_commit) ?? 999) <= 7 ? 'text-biolum' : (daysSince(github_data.last_commit) ?? 999) <= 30 ? 'text-gray-300' : 'text-gray-600'}`}>
+              {daysSince(github_data.last_commit) !== null ? `${daysSince(github_data.last_commit)}d ago` : '—'}
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-x-6 gap-y-1 mt-3 text-xs text-gray-500">
+          {github_data.license && (
+            <span>License: <span class="text-gray-400">{github_data.license}</span></span>
+          )}
+          {github_data.latest_release && (
+            <span>Latest release: <span class="text-gray-400 font-mono">{github_data.latest_release}</span></span>
+          )}
+        </div>
+      </section>
+    )}
 
     <!-- Relation to OpenClaw -->
     {isDerivative && (

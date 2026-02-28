@@ -1,7 +1,7 @@
 name: NullClaw
 slug: nullclaw
-tagline: "Fastest, smallest, and fully autonomous AI assistant infrastructure written in Zig"
-description: "The smallest fully autonomous AI assistant infrastructure — a static Zig binary that fits on any $5 board, boots in milliseconds, and requires nothing but libc. 678 KB binary, <2 ms startup, 22+ providers, 17 channels, fully pluggable architecture."
+tagline: Fastest, smallest, and fully autonomous AI assistant infrastructure written in Zig
+description: The smallest fully autonomous AI assistant infrastructure — a static Zig binary that fits on any $5 board, boots in milliseconds, and requires nothing but libc. 678 KB binary, <2 ms startup, 22+ providers, 17 channels, fully pluggable architecture.
 language: zig
 category:
   - performance
@@ -10,6 +10,21 @@ category:
 github: nullclaw/nullclaw
 status: active
 tier: 1
-highlight: "678 KB Zig binary — runs on $5 hardware, 22+ providers, 17 channels, fully pluggable everything"
+highlight: 678 KB Zig binary — runs on $5 hardware, 22+ providers, 17 channels, fully pluggable everything
 emoji: 🦞
-added: 2026-02-26
+added: 2026-02-26T00:00:00.000Z
+github_data:
+  stars: 2752
+  forks: 346
+  open_issues: 20
+  license: MIT
+  topics:
+    - ai
+    - assistant
+    - personal
+    - zig
+  last_commit: "2026-02-28T18:57:37Z"
+  latest_release: v2026.2.26
+  latest_release_date: "2026-02-27T01:43:08Z"
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:46.155Z"

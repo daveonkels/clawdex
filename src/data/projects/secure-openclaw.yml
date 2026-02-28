@@ -1,7 +1,7 @@
 name: Secure-OpenClaw
 slug: secure-openclaw
-tagline: "Security-hardened OpenClaw by Composio"
-description: "24/7 AI assistant on WhatsApp, Telegram, Signal, iMessage with full tool access, persistent memory, and 500+ app integrations"
+tagline: Security-hardened OpenClaw by Composio
+description: 24/7 AI assistant on WhatsApp, Telegram, Signal, iMessage with full tool access, persistent memory, and 500+ app integrations
 language: typescript
 category:
   - security
@@ -9,6 +9,26 @@ category:
 github: ComposioHQ/secure-openclaw
 status: active
 tier: 1
-highlight: "Composio's hardened fork with 500+ app integrations out of the box"
+highlight: Composio's hardened fork with 500+ app integrations out of the box
 emoji: 🔒
-added: 2026-02-25
+added: 2026-02-25T00:00:00.000Z
+github_data:
+  stars: 1394
+  forks: 225
+  open_issues: 2
+  license: MIT
+  topics:
+    - clawdbot
+    - clawdbot-security
+    - moltbot
+    - moltbot-skills
+    - openclaw
+    - openclaw-plugin
+    - openclaw-security
+    - openclaw-skills
+    - openclawd
+  last_commit: "2026-02-11T03:33:36Z"
+  latest_release: null
+  latest_release_date: null
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:48.078Z"

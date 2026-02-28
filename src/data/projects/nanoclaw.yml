@@ -1,12 +1,30 @@
 name: NanoClaw
 slug: nanoclaw
-tagline: "Security-first, radically minimal"
-description: "Five files, one process, OS-level container isolation. NanoClaw strips the agent down to its secure essentials."
+tagline: Security-first, radically minimal
+description: Five files, one process, OS-level container isolation. NanoClaw strips the agent down to its secure essentials.
 language: typescript
-category: [security, lightweight]
+category:
+  - security
+  - lightweight
 github: qwibitai/nanoclaw
 status: active
 tier: 1
-highlight: "5 files, one process, OS-level container isolation"
-emoji: "\U0001F510"
-added: 2026-02-25
+highlight: 5 files, one process, OS-level container isolation
+emoji: 🔐
+added: 2026-02-25T00:00:00.000Z
+github_data:
+  stars: 16503
+  forks: 2597
+  open_issues: 226
+  license: MIT
+  topics:
+    - ai-agents
+    - ai-assistant
+    - claude-code
+    - claude-skills
+    - clawdbot
+  last_commit: "2026-02-28T15:48:20Z"
+  latest_release: null
+  latest_release_date: null
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:45.760Z"

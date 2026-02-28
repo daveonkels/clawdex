@@ -1,7 +1,7 @@
 name: LangBot
 slug: langbot
-tagline: "Production-grade agentic IM bots"
-description: "Multi-platform agent for Discord, Telegram, Slack, WeChat, LINE, QQ, and more with plugin system and knowledge base"
+tagline: Production-grade agentic IM bots
+description: Multi-platform agent for Discord, Telegram, Slack, WeChat, LINE, QQ, and more with plugin system and knowledge base
 language: python
 category:
   - messaging
@@ -9,6 +9,37 @@ category:
 github: langbot-app/LangBot
 status: active
 tier: 1
-highlight: "Supports 10+ IM platforms with agent capabilities, knowledge base, and plugin system"
+highlight: Supports 10+ IM platforms with agent capabilities, knowledge base, and plugin system
 emoji: 🤖
-added: 2026-02-25
+added: 2026-02-25T00:00:00.000Z
+github_data:
+  stars: 15406
+  forks: 1322
+  open_issues: 118
+  license: Apache-2.0
+  topics:
+    - agent
+    - coze
+    - deepseek
+    - dify
+    - dingtalk
+    - discord
+    - feishu
+    - kook
+    - langbot
+    - lark
+    - line
+    - llm
+    - n8n
+    - ollama
+    - openai
+    - plugins
+    - qq
+    - rag
+    - telegram
+    - wechat
+  last_commit: "2026-02-28T11:26:55Z"
+  latest_release: v4.8.6
+  latest_release_date: "2026-02-26T14:59:37Z"
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:42.563Z"

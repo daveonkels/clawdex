@@ -1,7 +1,7 @@
 name: BashoBot
 slug: bashobot
-tagline: "An OpenClaw inspired personal assistant in 100% Bash 🦞"
-description: "Personal AI assistant built entirely in bash (compatible with bash 3.2+). Uses only standard Unix utilities (curl, jq, base64, etc.) with no Node.js or other runtimes. Modular architecture using named pipes."
+tagline: An OpenClaw inspired personal assistant in 100% Bash 🦞
+description: Personal AI assistant built entirely in bash (compatible with bash 3.2+). Uses only standard Unix utilities (curl, jq, base64, etc.) with no Node.js or other runtimes. Modular architecture using named pipes.
 language: bash
 category:
   - minimal
@@ -10,6 +10,26 @@ category:
 github: uraimo/bashobot
 status: active
 tier: 1
-highlight: "Bash-only personal assistant — runs on minimal systems, no Node.js or runtimes needed"
+highlight: Bash-only personal assistant — runs on minimal systems, no Node.js or runtimes needed
 emoji: 🐚
-added: 2026-02-26
+added: 2026-02-26T00:00:00.000Z
+github_data:
+  stars: 4
+  forks: 0
+  open_issues: 4
+  license: MIT
+  topics:
+    - ai
+    - clawdbot
+    - cooking-ingredients
+    - crustacean
+    - nanoclaw
+    - openclaw
+    - personal-assistant
+    - picoclaw
+    - quantumclaw
+  last_commit: "2026-02-20T15:57:36Z"
+  latest_release: 0.9.0
+  latest_release_date: "2026-02-12T17:15:49Z"
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:39.387Z"

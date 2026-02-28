@@ -1,12 +1,32 @@
 name: OpenClaw
 slug: openclaw
-tagline: "The OG self-hosted AI super-agent"
-description: "The original. Self-hosted AI super-agent platform. Formerly Clawdbot, then Moltbot. The project that started it all."
+tagline: The OG self-hosted AI super-agent
+description: The original. Self-hosted AI super-agent platform. Formerly Clawdbot, then Moltbot. The project that started it all.
 language: typescript
-category: [reference, self-hosted]
+category:
+  - reference
+  - self-hosted
 github: openclaw/openclaw
 status: active
 tier: 1
-highlight: "On a rocket ship full of stars. The one that started the molt."
-emoji: "\U0001F99E"
-added: 2026-02-25
+highlight: On a rocket ship full of stars. The one that started the molt.
+emoji: 🦞
+added: 2026-02-25T00:00:00.000Z
+github_data:
+  stars: 240066
+  forks: 46311
+  open_issues: 9377
+  license: MIT
+  topics:
+    - ai
+    - assistant
+    - crustacean
+    - molty
+    - openclaw
+    - own-your-data
+    - personal
+  last_commit: "2026-02-28T18:16:34Z"
+  latest_release: v2026.2.26
+  latest_release_date: "2026-02-27T00:01:43Z"
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:46.555Z"

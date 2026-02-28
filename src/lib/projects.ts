@@ -2,6 +2,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 
+export interface GitHubData {
+  stars: number;
+  forks: number;
+  open_issues: number;
+  license: string | null;
+  topics: string[];
+  last_commit: string;
+  latest_release: string | null;
+  latest_release_date: string | null;
+  star_growth_7d: number | null;
+  last_enriched: string;
+}
+
 export interface Project {
   name: string;
   slug: string;
@@ -16,6 +29,7 @@ export interface Project {
   emoji: string;
   added: string;
   stars?: number;
+  github_data?: GitHubData;
 }
 
 const STARS_CACHE_PATH = path.join(process.cwd(), '.stars-cache.json');

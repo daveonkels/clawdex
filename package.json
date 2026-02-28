@@ -4,10 +4,14 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "tsx scripts/enrich-github-data.ts && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "validate": "node scripts/validate-yaml.mjs"
+    "validate": "node scripts/validate-yaml.mjs",
+    "enrich": "tsx scripts/enrich-github-data.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",

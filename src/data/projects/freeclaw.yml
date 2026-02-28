@@ -1,12 +1,25 @@
 name: FreeClaw
 slug: freeclaw
-tagline: "Minimal OpenClaw-like Python agent"
-description: "Python implementation of the OpenClaw concept with multi-agent profiles and lightweight CLI operation."
+tagline: Minimal OpenClaw-like Python agent
+description: Python implementation of the OpenClaw concept with multi-agent profiles and lightweight CLI operation.
 language: python
-category: [minimal, lightweight]
+category:
+  - minimal
+  - lightweight
 github: openconstruct/freeclaw
 status: active
 tier: 1
-highlight: "Multi-agent profiles, minimal footprint — no framework bloat"
-emoji: "🆓"
-added: 2026-02-27
+highlight: Multi-agent profiles, minimal footprint — no framework bloat
+emoji: 🆓
+added: 2026-02-27T00:00:00.000Z
+github_data:
+  stars: 30
+  forks: 6
+  open_issues: 0
+  license: null
+  topics: []
+  last_commit: "2026-02-22T17:20:21Z"
+  latest_release: 0.1.0
+  latest_release_date: "2026-02-22T17:20:21Z"
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:41.397Z"

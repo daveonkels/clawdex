@@ -1,7 +1,7 @@
 name: OpenFang
 slug: openfang
 tagline: The Agent Operating System
-description: "Production-grade agent OS built in Rust. 137K LOC, 1,767+ tests, single 32MB binary. Autonomous agents that work for you 24/7."
+description: Production-grade agent OS built in Rust. 137K LOC, 1,767+ tests, single 32MB binary. Autonomous agents that work for you 24/7.
 language: rust
 category:
   - agent-os
@@ -10,6 +10,25 @@ category:
 github: RightNow-AI/openfang
 status: active
 tier: 1
-highlight: "Built in Rust from scratch — 137K LOC, 1,767+ tests. One binary, one command, agents live. Not a chatbot wrapper. An actual OS for autonomous agents."
-emoji: "⚙️"
+highlight: Built in Rust from scratch — 137K LOC, 1,767+ tests. One binary, one command, agents live. Not a chatbot wrapper. An actual OS for autonomous agents.
+emoji: ⚙️
 added: "2026-02-25"
+github_data:
+  stars: 5251
+  forks: 557
+  open_issues: 59
+  license: Apache-2.0
+  topics:
+    - agent-framework
+    - ai-agents
+    - llm
+    - mcp
+    - open-source
+    - openclaw
+    - operating-system
+    - rust
+  last_commit: "2026-02-28T18:21:15Z"
+  latest_release: v0.2.1
+  latest_release_date: "2026-02-28T18:21:26Z"
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:46.990Z"

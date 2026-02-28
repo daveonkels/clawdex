@@ -1,7 +1,7 @@
 name: Clawra
 slug: clawra
 tagline: OpenClaw as your companion
-description: "OpenClaw reimagined as a persistent AI companion with personality, memory, and relationship context."
+description: OpenClaw reimagined as a persistent AI companion with personality, memory, and relationship context.
 language: typescript
 category:
   - companion
@@ -10,6 +10,17 @@ category:
 github: SumeLabs/clawra
 status: active
 tier: 1
-highlight: "1.7k stars. Same claw, new vibe — a companion-first agent with persistent memory and personality layered on top of OpenClaw."
-emoji: "💝"
+highlight: 1.7k stars. Same claw, new vibe — a companion-first agent with persistent memory and personality layered on top of OpenClaw.
+emoji: 💝
 added: "2026-02-25"
+github_data:
+  stars: 1780
+  forks: 299
+  open_issues: 10
+  license: null
+  topics: []
+  last_commit: "2026-02-10T10:29:19Z"
+  latest_release: null
+  latest_release_date: null
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:40.625Z"

@@ -1,7 +1,7 @@
 name: memU
 slug: memu
 tagline: Memory-first proactive agent
-description: "Long-term memory infrastructure for 24/7 AI agents. Proactive, cost-efficient, runs locally."
+description: Long-term memory infrastructure for 24/7 AI agents. Proactive, cost-efficient, runs locally.
 language: python
 category:
   - memory
@@ -10,6 +10,29 @@ category:
 github: NevaMind-AI/memU
 status: active
 tier: 1
-highlight: "10k+ stars. Memory-first architecture with proactive agent behavior, local-first privacy, reduced LLM token costs."
-emoji: "🧠"
+highlight: 10k+ stars. Memory-first architecture with proactive agent behavior, local-first privacy, reduced LLM token costs.
+emoji: 🧠
 added: "2025-02-25"
+github_data:
+  stars: 11633
+  forks: 858
+  open_issues: 74
+  license: NOASSERTION
+  topics:
+    - agent-memory
+    - agentic-workflow
+    - claude
+    - claude-skills
+    - clawdbot
+    - clawdbot-skill
+    - mcp
+    - memory
+    - proactive
+    - proactive-ai
+    - sandbox
+    - skills
+  last_commit: "2026-02-24T13:40:05Z"
+  latest_release: v1.4.0
+  latest_release_date: "2026-02-06T00:55:10Z"
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:43.303Z"

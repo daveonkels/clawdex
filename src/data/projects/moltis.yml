@@ -1,12 +1,37 @@
 name: Moltis
 slug: moltis
-tagline: "Zero unsafe, full audit trail"
-description: "Zero unsafe Rust with built-in voice I/O and MCP support. Every action logged, every permission earned."
+tagline: Zero unsafe, full audit trail
+description: Zero unsafe Rust with built-in voice I/O and MCP support. Every action logged, every permission earned.
 language: rust
-category: [security, audit]
+category:
+  - security
+  - audit
 github: moltis-org/moltis
 status: active
 tier: 1
-highlight: "Zero unsafe Rust, built-in voice I/O, MCP support"
-emoji: "\U0001F50D"
-added: 2026-02-25
+highlight: Zero unsafe Rust, built-in voice I/O, MCP support
+emoji: 🔍
+added: 2026-02-25T00:00:00.000Z
+github_data:
+  stars: 1661
+  forks: 161
+  open_issues: 83
+  license: MIT
+  topics:
+    - ai-agent
+    - ai-assistant
+    - clawdbot
+    - llm
+    - mcp
+    - openclaw
+    - rust
+    - sandbox
+    - self-hosted
+    - single-binary
+    - telegram-bot
+    - voice-assistant
+  last_commit: "2026-02-28T18:33:03Z"
+  latest_release: v0.9.10
+  latest_release_date: "2026-02-21T05:08:49Z"
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:44.508Z"

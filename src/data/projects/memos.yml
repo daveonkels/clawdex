@@ -1,7 +1,7 @@
 name: MemOS
 slug: memos
-tagline: "AI memory OS for agent systems"
-description: "Persistent skill memory for cross-task reuse and evolution — built for OpenClaw and similar agent frameworks"
+tagline: AI memory OS for agent systems
+description: Persistent skill memory for cross-task reuse and evolution — built for OpenClaw and similar agent frameworks
 language: python
 category:
   - memory
@@ -9,6 +9,35 @@ category:
 github: MemTensor/MemOS
 status: active
 tier: 1
-highlight: "Persistent skill memory that lets agents learn and reuse across tasks"
+highlight: Persistent skill memory that lets agents learn and reuse across tasks
 emoji: 🧠
-added: 2026-02-25
+added: 2026-02-25T00:00:00.000Z
+github_data:
+  stars: 5975
+  forks: 542
+  open_issues: 21
+  license: Apache-2.0
+  topics:
+    - agent
+    - agent-memory
+    - clawdbot
+    - llm
+    - llm-memory
+    - long-term-memory
+    - memory
+    - memory-agent
+    - memory-management
+    - memory-operating-system
+    - memory-retrieval
+    - memory-scheduling
+    - moltbot
+    - openclaw
+    - rag
+    - retrieval-augmented-generation
+    - skill-memory
+    - skills
+  last_commit: "2026-02-28T09:30:38Z"
+  latest_release: v2.0.7
+  latest_release_date: "2026-02-28T09:31:47Z"
+  star_growth_7d: 0
+  last_enriched: "2026-02-28T19:00:42.925Z"
