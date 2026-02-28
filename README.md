@@ -2,7 +2,7 @@
 
 **Every shell in the sea.** The complete directory of OpenClaw clones, forks, derivatives, and inspired projects.
 
-🌐 **[theclawdex.com](https://theclawdex.com)**
+🌐 **[shelldex.com](https://shelldex.com)**
 
 ## What Is This?
 
