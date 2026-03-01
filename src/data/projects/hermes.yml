@@ -1,0 +1,15 @@
+name: Hermes Agent
+slug: hermes
+tagline: The agent that grows with you
+description: Persistent personal AI agent by Nous Research with multi-level growing memory, self-authored skills, and multi-platform messaging. Learns your projects and builds reusable knowledge over time.
+language: python
+category:
+  - memory
+  - self-hosted
+  - multi-platform
+github: NousResearch/hermes-agent
+status: active
+tier: 1
+highlight: Self-improving skill system — agent writes reusable SKILL.md docs as it solves problems, building a personal knowledge base over time
+emoji: 🧠
+added: "2026-02-28"

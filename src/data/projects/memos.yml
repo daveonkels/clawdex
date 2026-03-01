@@ -13,9 +13,9 @@ highlight: Persistent skill memory that lets agents learn and reuse across tasks
 emoji: 🧠
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 5975
+  stars: 5977
   forks: 542
-  open_issues: 21
+  open_issues: 22
   license: Apache-2.0
   topics:
     - agent
@@ -39,5 +39,5 @@ github_data:
   last_commit: "2026-02-28T09:30:38Z"
   latest_release: v2.0.7
   latest_release_date: "2026-02-28T09:31:47Z"
-  star_growth_7d: 0
-  last_enriched: "2026-02-28T19:35:10.961Z"
+  star_growth_7d: 2
+  last_enriched: "2026-03-01T04:20:37.346Z"

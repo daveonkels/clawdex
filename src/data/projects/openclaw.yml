@@ -13,9 +13,9 @@ highlight: On a rocket ship full of stars. The one that started the molt.
 emoji: 🦞
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 240066
-  forks: 46311
-  open_issues: 9377
+  stars: 240763
+  forks: 46512
+  open_issues: 9584
   license: MIT
   topics:
     - ai
@@ -25,8 +25,8 @@ github_data:
     - openclaw
     - own-your-data
     - personal
-  last_commit: "2026-02-28T18:16:34Z"
+  last_commit: "2026-03-01T04:03:31Z"
   latest_release: v2026.2.26
   latest_release_date: "2026-02-27T00:01:43Z"
-  star_growth_7d: 0
-  last_enriched: "2026-02-28T19:00:46.555Z"
+  star_growth_7d: 697
+  last_enriched: "2026-03-01T04:20:40.275Z"

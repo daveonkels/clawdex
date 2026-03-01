@@ -13,15 +13,15 @@ highlight: OpenClaw running serverless on Cloudflare Workers — no persistent i
 emoji: ☁️
 added: 2026-02-27T00:00:00.000Z
 github_data:
-  stars: 9298
-  forks: 1683
-  open_issues: 119
+  stars: 9302
+  forks: 1684
+  open_issues: 120
   license: Apache-2.0
   topics:
     - ai-agents
     - cloudflare-workers
-  last_commit: "2026-02-25T23:45:35Z"
+  last_commit: "2026-03-01T01:19:04Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 0
-  last_enriched: "2026-02-28T19:35:12.431Z"
+  star_growth_7d: 4
+  last_enriched: "2026-03-01T04:20:38.880Z"

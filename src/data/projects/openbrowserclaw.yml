@@ -1,7 +1,7 @@
 name: OpenBrowserClaw
 slug: openbrowserclaw
-tagline: "Browser-native personal AI assistant — zero infrastructure, the browser is the server"
-description: "A browser-only reimagination of NanoClaw. Runs entirely in a browser tab as a PWA with no backend. Uses IndexedDB for storage, OPFS for files, Web Workers for the agent loop, and a WebVM (v86 Alpine Linux in WASM) for shell commands. Supports Telegram as an optional channel. Paste an Anthropic API key and go."
+tagline: Browser-native personal AI assistant — zero infrastructure, the browser is the server
+description: A browser-only reimagination of NanoClaw. Runs entirely in a browser tab as a PWA with no backend. Uses IndexedDB for storage, OPFS for files, Web Workers for the agent loop, and a WebVM (v86 Alpine Linux in WASM) for shell commands. Supports Telegram as an optional channel. Paste an Anthropic API key and go.
 language: typescript
 category:
   - browser
@@ -10,6 +10,25 @@ category:
 github: sachaa/openbrowserclaw
 status: active
 tier: 2
-highlight: "Entire personal AI assistant running in a single browser tab — no server, no Docker, no Node.js"
+highlight: Entire personal AI assistant running in a single browser tab — no server, no Docker, no Node.js
 emoji: 🌐
-added: 2026-02-28
+added: 2026-02-28T00:00:00.000Z
+github_data:
+  stars: 467
+  forks: 53
+  open_issues: 4
+  license: MIT
+  topics:
+    - ai-agents
+    - ai-assistant
+    - browser
+    - claude
+    - claw
+    - openclaw
+    - pwa
+    - typescript
+  last_commit: "2026-02-26T00:56:03Z"
+  latest_release: null
+  latest_release_date: null
+  star_growth_7d: 0
+  last_enriched: "2026-03-01T04:20:39.985Z"

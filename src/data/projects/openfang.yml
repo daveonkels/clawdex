@@ -14,9 +14,9 @@ highlight: Built in Rust from scratch — 137K LOC, 1,767+ tests. One binary, on
 emoji: ⚙️
 added: "2026-02-25"
 github_data:
-  stars: 5251
-  forks: 557
-  open_issues: 59
+  stars: 5911
+  forks: 620
+  open_issues: 71
   license: Apache-2.0
   topics:
     - agent-framework
@@ -27,8 +27,8 @@ github_data:
     - openclaw
     - operating-system
     - rust
-  last_commit: "2026-02-28T18:21:15Z"
-  latest_release: v0.2.1
-  latest_release_date: "2026-02-28T18:21:26Z"
-  star_growth_7d: 0
-  last_enriched: "2026-02-28T19:00:46.990Z"
+  last_commit: "2026-03-01T01:17:03Z"
+  latest_release: v0.2.3
+  latest_release_date: "2026-03-01T01:27:50Z"
+  star_growth_7d: 660
+  last_enriched: "2026-03-01T04:20:40.558Z"

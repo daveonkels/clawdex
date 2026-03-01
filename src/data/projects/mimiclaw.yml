@@ -13,8 +13,8 @@ highlight: Pure C on ESP32-S3 ($5). No OS needed
 emoji: 🦾
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 3578
-  forks: 475
+  stars: 3586
+  forks: 480
   open_issues: 61
   license: MIT
   topics:
@@ -27,5 +27,5 @@ github_data:
   last_commit: "2026-02-28T01:51:47Z"
   latest_release: v0.1.0
   latest_release_date: "2026-02-09T14:11:23Z"
-  star_growth_7d: 0
-  last_enriched: "2026-02-28T19:35:11.807Z"
+  star_growth_7d: 9
+  last_enriched: "2026-03-01T04:20:38.185Z"

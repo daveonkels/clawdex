@@ -13,13 +13,13 @@ highlight: 4,000 lines of Python. Research-friendly, ultra-minimal
 emoji: 🔬
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 26868
-  forks: 4274
-  open_issues: 743
+  stars: 26944
+  forks: 4305
+  open_issues: 753
   license: MIT
   topics: []
   last_commit: "2026-02-28T18:06:59Z"
   latest_release: v0.1.4.post3
   latest_release_date: "2026-02-28T18:01:25Z"
-  star_growth_7d: 0
-  last_enriched: "2026-02-28T19:35:12.565Z"
+  star_growth_7d: 80
+  last_enriched: "2026-03-01T04:20:39.173Z"
