@@ -1,5 +1,43 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { loadProjects, formatStars } from '../lib/projects';
+import { loadLeaderboard } from '../lib/compare';
+
+const projects = await loadProjects();
+const { entries: leaderboard } = loadLeaderboard();
+const projectCount = projects.length;
+
+// Language counts
+const langCounts = new Map<string, number>();
+for (const p of projects) {
+  langCounts.set(p.language, (langCounts.get(p.language) || 0) + 1);
+}
+const langCount = langCounts.size;
+
+// Helper to look up formatted star count by slug
+function stars(slug: string): string {
+  const entry = leaderboard.find(e => e.slug === slug);
+  if (entry) return formatStars(entry.stars);
+  const proj = projects.find(p => p.slug === slug);
+  return formatStars(proj?.github_data?.stars ?? proj?.stars ?? 0);
+}
+
+// Helper for full number star count
+function starsNum(slug: string): string {
+  const entry = leaderboard.find(e => e.slug === slug);
+  if (entry) return entry.stars.toLocaleString();
+  const proj = projects.find(p => p.slug === slug);
+  return (proj?.github_data?.stars ?? proj?.stars ?? 0).toLocaleString();
+}
+
+// Top 5 projects by stars (excluding openclaw)
+const top5 = leaderboard.filter(e => e.slug !== 'openclaw').slice(0, 5);
+
+// Rust projects
+const rustProjects = projects.filter(p => p.language.toLowerCase() === 'rust');
+
+// Most starred alternative
+const topAlt = leaderboard.find(e => e.slug !== 'openclaw');
 ---
 
 <Layout
@@ -69,7 +107,7 @@ import Layout from '../layouts/Layout.astro';
           <h3 class="font-display text-xl font-semibold text-white mb-4">What is OpenClaw?</h3>
           <div class="text-gray-300 leading-relaxed space-y-4">
             <p>
-              <a href="/projects/openclaw" class="text-biolum hover:text-biolum-light transition-colors">OpenClaw</a> is a self-hosted, open-source personal AI super-agent platform created by Peter Steinberger. It is written in TypeScript, released under the MIT license, and has accumulated over 240,000 GitHub stars since its launch. The project began life as a WhatsApp relay bot in November 2025 and went through several name changes &mdash; Clawd, Clawdis, Clawdbot, Moltbot &mdash; before settling on OpenClaw in late January 2026.
+              <a href="/projects/openclaw" class="text-biolum hover:text-biolum-light transition-colors">OpenClaw</a> is a self-hosted, open-source personal AI super-agent platform created by Peter Steinberger. It is written in TypeScript, released under the MIT license, and has accumulated over {starsNum('openclaw')} GitHub stars since its launch. The project began life as a WhatsApp relay bot in November 2025 and went through several name changes &mdash; Clawd, Clawdis, Clawdbot, Moltbot &mdash; before settling on OpenClaw in late January 2026.
             </p>
             <p>
               At its core, OpenClaw gives you a personal AI agent that can interact with your tools, files, and services on your behalf. It runs on your own hardware, keeping your data local by default. The project's rapid growth has spawned an entire ecosystem of clones, forks, and reimplementations, which is exactly what <a href="/" class="text-biolum hover:text-biolum-light transition-colors">Shelldex</a> exists to catalog.
@@ -85,10 +123,10 @@ import Layout from '../layouts/Layout.astro';
           <h3 class="font-display text-xl font-semibold text-white mb-4">What are the best OpenClaw alternatives?</h3>
           <div class="text-gray-300 leading-relaxed space-y-4">
             <p>
-              The best alternative depends on your priorities. By raw popularity, the top five projects by GitHub stars are <a href="/projects/openclaw" class="text-biolum hover:text-biolum-light transition-colors">OpenClaw</a> (240k+), <a href="/projects/nanobot" class="text-biolum hover:text-biolum-light transition-colors">Nanobot</a> (26k+), <a href="/projects/zeroclaw" class="text-biolum hover:text-biolum-light transition-colors">ZeroClaw</a> (21k+), <a href="/projects/picoclaw" class="text-biolum hover:text-biolum-light transition-colors">PicoClaw</a> (21k+), and <a href="/projects/astrbot" class="text-biolum hover:text-biolum-light transition-colors">AstrBot</a> (18k+). Each takes a different approach: Nanobot is a research-focused Python implementation in 4,000 lines, ZeroClaw is a Rust-based runtime with sub-10ms startup, and PicoClaw targets embedded hardware like $10 RISC-V boards.
+              The best alternative depends on your priorities. By raw popularity, the top five projects by GitHub stars are <a href="/projects/openclaw" class="text-biolum hover:text-biolum-light transition-colors">OpenClaw</a> ({stars('openclaw')}), <a href="/projects/nanobot" class="text-biolum hover:text-biolum-light transition-colors">Nanobot</a> ({stars('nanobot')}), <a href="/projects/zeroclaw" class="text-biolum hover:text-biolum-light transition-colors">ZeroClaw</a> ({stars('zeroclaw')}), <a href="/projects/picoclaw" class="text-biolum hover:text-biolum-light transition-colors">PicoClaw</a> ({stars('picoclaw')}), and <a href="/projects/astrbot" class="text-biolum hover:text-biolum-light transition-colors">AstrBot</a> ({stars('astrbot')}). Each takes a different approach: Nanobot is a research-focused Python implementation in 4,000 lines, ZeroClaw is a Rust-based runtime with sub-10ms startup, and PicoClaw targets embedded hardware like $10 RISC-V boards.
             </p>
             <p>
-              If security is your primary concern, look at <a href="/projects/nanoclaw" class="text-biolum hover:text-biolum-light transition-colors">NanoClaw</a> (16k+ stars, OS-level container isolation), <a href="/projects/ironclaw" class="text-biolum hover:text-biolum-light transition-colors">IronClaw</a> (Rust-hardened privacy fortress), or <a href="/projects/moltis" class="text-biolum hover:text-biolum-light transition-colors">Moltis</a> (zero-unsafe Rust with full audit trails). For cloud-native deployments, <a href="/projects/moltworker" class="text-biolum hover:text-biolum-light transition-colors">Moltworker</a> runs on Cloudflare Workers. Check the <a href="/leaderboard" class="text-biolum hover:text-biolum-light transition-colors">leaderboard</a> for the full ranked list.
+              If security is your primary concern, look at <a href="/projects/nanoclaw" class="text-biolum hover:text-biolum-light transition-colors">NanoClaw</a> ({stars('nanoclaw')} stars, OS-level container isolation), <a href="/projects/ironclaw" class="text-biolum hover:text-biolum-light transition-colors">IronClaw</a> (Rust-hardened privacy fortress), or <a href="/projects/moltis" class="text-biolum hover:text-biolum-light transition-colors">Moltis</a> (zero-unsafe Rust with full audit trails). For cloud-native deployments, <a href="/projects/moltworker" class="text-biolum hover:text-biolum-light transition-colors">Moltworker</a> runs on Cloudflare Workers. Check the <a href="/leaderboard" class="text-biolum hover:text-biolum-light transition-colors">leaderboard</a> for the full ranked list.
             </p>
           </div>
         </div>
@@ -98,7 +136,7 @@ import Layout from '../layouts/Layout.astro';
           <h3 class="font-display text-xl font-semibold text-white mb-4">How many OpenClaw alternatives exist?</h3>
           <div class="text-gray-300 leading-relaxed space-y-4">
             <p>
-              Shelldex currently tracks <strong class="text-white">29 projects</strong> across the OpenClaw ecosystem. That number includes the original OpenClaw itself, direct forks, clean-room reimplementations in different languages, and inspired projects that have taken the personal AI agent concept in new directions.
+              Shelldex currently tracks <strong class="text-white">{projectCount} projects</strong> across the OpenClaw ecosystem. That number includes the original OpenClaw itself, direct forks, clean-room reimplementations in different languages, and inspired projects that have taken the personal AI agent concept in new directions.
             </p>
             <p>
               The ecosystem is still growing rapidly. New projects surface weekly, and the <a href="/submit" class="text-biolum hover:text-biolum-light transition-colors">submission page</a> is open for anyone to add a project they have found or built. Browse the full <a href="/" class="text-biolum hover:text-biolum-light transition-colors">directory</a> to see every tracked project at a glance.
@@ -114,7 +152,7 @@ import Layout from '../layouts/Layout.astro';
               The OpenClaw ecosystem refers to the constellation of projects that have emerged around the original OpenClaw personal AI agent. It includes direct forks, language ports, security-hardened variants, minimal reimplementations, cloud-hosted versions, and entirely new frameworks that cite OpenClaw as their primary inspiration.
             </p>
             <p>
-              Projects in the ecosystem span seven programming languages &mdash; TypeScript, Python, Rust, Go, C, Bash, and Zig &mdash; and range from <a href="/projects/bashobot" class="text-biolum hover:text-biolum-light transition-colors">BashoBot</a> (a pure Bash implementation) to production-grade platforms like <a href="/projects/openfang" class="text-biolum hover:text-biolum-light transition-colors">OpenFang</a> (137,000 lines of Rust). Some focus on embedded hardware, others on enterprise cloud, and still others on security research. The <a href="/analysis" class="text-biolum hover:text-biolum-light transition-colors">analysis page</a> breaks down the ecosystem's language distribution, activity trends, and growth patterns.
+              Projects in the ecosystem span {langCount} programming languages &mdash; TypeScript, Python, Rust, Go, C, Bash, and Zig &mdash; and range from <a href="/projects/bashobot" class="text-biolum hover:text-biolum-light transition-colors">BashoBot</a> (a pure Bash implementation) to production-grade platforms like <a href="/projects/openfang" class="text-biolum hover:text-biolum-light transition-colors">OpenFang</a> (137,000 lines of Rust). Some focus on embedded hardware, others on enterprise cloud, and still others on security research. The <a href="/analysis" class="text-biolum hover:text-biolum-light transition-colors">analysis page</a> breaks down the ecosystem's language distribution, activity trends, and growth patterns.
             </p>
           </div>
         </div>
@@ -172,15 +210,12 @@ import Layout from '../layouts/Layout.astro';
           <h3 class="font-display text-xl font-semibold text-white mb-4">Which OpenClaw alternatives are written in Rust?</h3>
           <div class="text-gray-300 leading-relaxed space-y-4">
             <p>
-              Rust is the second most popular language in the ecosystem after TypeScript, with six projects currently tracked by Shelldex. They span a wide range of use cases:
+              Rust is the second most popular language in the ecosystem after TypeScript, with {rustProjects.length} projects currently tracked by Shelldex. They span a wide range of use cases:
             </p>
             <ul class="list-disc list-inside space-y-2 pl-2">
-              <li><a href="/projects/zeroclaw" class="text-biolum hover:text-biolum-light transition-colors">ZeroClaw</a> &mdash; performance-focused runtime, sub-10ms startup, 3.4MB binary</li>
-              <li><a href="/projects/ironclaw" class="text-biolum hover:text-biolum-light transition-colors">IronClaw</a> &mdash; privacy-first implementation with security hardening</li>
-              <li><a href="/projects/microclaw" class="text-biolum hover:text-biolum-light transition-colors">MicroClaw</a> &mdash; NanoClaw-inspired chat agent with Rust's memory safety</li>
-              <li><a href="/projects/moltis" class="text-biolum hover:text-biolum-light transition-colors">Moltis</a> &mdash; zero-unsafe Rust with built-in voice I/O and full audit trails</li>
-              <li><a href="/projects/openfang" class="text-biolum hover:text-biolum-light transition-colors">OpenFang</a> &mdash; production-grade agent OS, 137K lines of code, 1,767+ tests</li>
-              <li><a href="/projects/carapace" class="text-biolum hover:text-biolum-light transition-colors">Carapace</a> &mdash; hardened shell with signed WASM plugins and strict local-first defaults</li>
+              {rustProjects.map(p => (
+                <li><a href={`/projects/${p.slug}`} class="text-biolum hover:text-biolum-light transition-colors">{p.name}</a> &mdash; {p.tagline}</li>
+              ))}
             </ul>
             <p>
               Rust's compile-time memory safety, absence of garbage collection pauses, and single-binary distribution make it particularly attractive for agent frameworks where security and performance matter. Visit the <a href="/leaderboard" class="text-biolum hover:text-biolum-light transition-colors">leaderboard</a> to sort all projects by language.
@@ -193,10 +228,10 @@ import Layout from '../layouts/Layout.astro';
           <h3 class="font-display text-xl font-semibold text-white mb-4">Which OpenClaw alternative has the most GitHub stars?</h3>
           <div class="text-gray-300 leading-relaxed space-y-4">
             <p>
-              Excluding the original OpenClaw (240k+ stars), the most-starred alternative is <a href="/projects/nanobot" class="text-biolum hover:text-biolum-light transition-colors">Nanobot</a> with over 26,000 stars. Nanobot is an ultra-minimal Python implementation designed for research and experimentation &mdash; just 4,000 lines of code that prioritize readability over feature density.
+              Excluding the original OpenClaw ({stars('openclaw')} stars), the most-starred alternative is <a href={`/projects/${top5[0].slug}`} class="text-biolum hover:text-biolum-light transition-colors">{top5[0].name}</a> with {starsNum(top5[0].slug)} stars. Nanobot is an ultra-minimal Python implementation designed for research and experimentation &mdash; just 4,000 lines of code that prioritize readability over feature density.
             </p>
             <p>
-              Close behind are <a href="/projects/zeroclaw" class="text-biolum hover:text-biolum-light transition-colors">ZeroClaw</a> and <a href="/projects/picoclaw" class="text-biolum hover:text-biolum-light transition-colors">PicoClaw</a>, each with around 21,000 stars. Rounding out the top five alternatives are <a href="/projects/astrbot" class="text-biolum hover:text-biolum-light transition-colors">AstrBot</a> (18k+) and <a href="/projects/aionui" class="text-biolum hover:text-biolum-light transition-colors">AionUi</a> (17k+). The <a href="/leaderboard" class="text-biolum hover:text-biolum-light transition-colors">leaderboard</a> provides real-time rankings with seven-day star growth trends to help you track which projects are gaining momentum fastest.
+              Close behind are <a href="/projects/zeroclaw" class="text-biolum hover:text-biolum-light transition-colors">ZeroClaw</a> and <a href="/projects/picoclaw" class="text-biolum hover:text-biolum-light transition-colors">PicoClaw</a>, each with around {starsNum('zeroclaw')} and {starsNum('picoclaw')} stars respectively. Rounding out the top five alternatives are <a href="/projects/astrbot" class="text-biolum hover:text-biolum-light transition-colors">AstrBot</a> ({stars('astrbot')}) and <a href="/projects/aionui" class="text-biolum hover:text-biolum-light transition-colors">AionUi</a> ({stars('aionui')}). The <a href="/leaderboard" class="text-biolum hover:text-biolum-light transition-colors">leaderboard</a> provides real-time rankings with seven-day star growth trends to help you track which projects are gaining momentum fastest.
             </p>
           </div>
         </div>
@@ -206,10 +241,10 @@ import Layout from '../layouts/Layout.astro';
           <h3 class="font-display text-xl font-semibold text-white mb-4">What programming languages are OpenClaw alternatives written in?</h3>
           <div class="text-gray-300 leading-relaxed space-y-4">
             <p>
-              The 29 projects tracked by Shelldex span seven programming languages. TypeScript leads with 8 projects, reflecting the ecosystem's web-first origins (OpenClaw itself is TypeScript). Python is next with 7 projects, favored by the research and automation communities. Rust has 5 projects, driven by developers who prioritize memory safety and performance.
+              The {projectCount} projects tracked by Shelldex span {langCount} programming languages. TypeScript leads with {langCounts.get('typescript') ?? 0} projects, reflecting the ecosystem's web-first origins (OpenClaw itself is TypeScript). Python is next with {langCounts.get('python') ?? 0} projects, favored by the research and automation communities. Rust has {langCounts.get('rust') ?? 0} projects, driven by developers who prioritize memory safety and performance.
             </p>
             <p>
-              Go accounts for 2 projects (including <a href="/projects/picoclaw" class="text-biolum hover:text-biolum-light transition-colors">PicoClaw</a>), while C, Bash, and Zig each have 1 project apiece. The C project targets bare-metal performance, <a href="/projects/bashobot" class="text-biolum hover:text-biolum-light transition-colors">BashoBot</a> proves that a personal AI agent can run in pure shell script, and the Zig entry explores systems-level agent development without the complexity of C++. For a visual breakdown of language distribution across the ecosystem, see the <a href="/analysis" class="text-biolum hover:text-biolum-light transition-colors">analysis page</a>.
+              Go accounts for {langCounts.get('go') ?? 0} projects (including <a href="/projects/picoclaw" class="text-biolum hover:text-biolum-light transition-colors">PicoClaw</a>), while C has {langCounts.get('c') ?? 0}, Bash has {langCounts.get('bash') ?? 0}, and Zig has {langCounts.get('zig') ?? 0}. The C project targets bare-metal performance, <a href="/projects/bashobot" class="text-biolum hover:text-biolum-light transition-colors">BashoBot</a> proves that a personal AI agent can run in pure shell script, and the Zig entry explores systems-level agent development without the complexity of C++. For a visual breakdown of language distribution across the ecosystem, see the <a href="/analysis" class="text-biolum hover:text-biolum-light transition-colors">analysis page</a>.
             </p>
           </div>
         </div>
@@ -241,7 +276,7 @@ import Layout from '../layouts/Layout.astro';
           <h3 class="font-display text-xl font-semibold text-white mb-4">What is the most secure OpenClaw clone?</h3>
           <div class="text-gray-300 leading-relaxed space-y-4">
             <p>
-              Several projects compete for this title, each with a different security philosophy. <a href="/projects/nanoclaw" class="text-biolum hover:text-biolum-light transition-colors">NanoClaw</a> takes a minimalism-first approach: five files, one process, OS-level container isolation. By reducing the surface area to the absolute minimum, there is less to exploit. It has over 16,000 stars and is one of the most battle-tested security alternatives.
+              Several projects compete for this title, each with a different security philosophy. <a href="/projects/nanoclaw" class="text-biolum hover:text-biolum-light transition-colors">NanoClaw</a> takes a minimalism-first approach: five files, one process, OS-level container isolation. By reducing the surface area to the absolute minimum, there is less to exploit. It has {starsNum('nanoclaw')} stars and is one of the most battle-tested security alternatives.
             </p>
             <p>
               On the Rust side, <a href="/projects/ironclaw" class="text-biolum hover:text-biolum-light transition-colors">IronClaw</a> is a privacy-focused implementation with security hardening baked into its architecture. <a href="/projects/moltis" class="text-biolum hover:text-biolum-light transition-colors">Moltis</a> takes it further with zero-unsafe Rust and a complete audit trail for every agent action. <a href="/projects/carapace" class="text-biolum hover:text-biolum-light transition-colors">Carapace</a> adds signed WASM plugins and strict local-first defaults, preventing any untrusted code from executing without explicit cryptographic approval.
@@ -282,10 +317,10 @@ import Layout from '../layouts/Layout.astro';
           <h3 class="font-display text-xl font-semibold text-white mb-4">OpenClaw vs NanoClaw &mdash; which is better?</h3>
           <div class="text-gray-300 leading-relaxed space-y-4">
             <p>
-              It depends on your priorities. <a href="/projects/openclaw" class="text-biolum hover:text-biolum-light transition-colors">OpenClaw</a> is the full-featured reference implementation with 240k+ stars, an enormous plugin ecosystem, and the largest community. If you want maximum functionality, the widest range of integrations, and the most community support, OpenClaw is the default choice.
+              It depends on your priorities. <a href="/projects/openclaw" class="text-biolum hover:text-biolum-light transition-colors">OpenClaw</a> is the full-featured reference implementation with {stars('openclaw')} stars, an enormous plugin ecosystem, and the largest community. If you want maximum functionality, the widest range of integrations, and the most community support, OpenClaw is the default choice.
             </p>
             <p>
-              <a href="/projects/nanoclaw" class="text-biolum hover:text-biolum-light transition-colors">NanoClaw</a> strips that down to five files and one process, trading features for security and simplicity. It uses OS-level container isolation and has accumulated over 16,000 stars from developers who specifically value its security-first, radically minimal approach. If you do not need OpenClaw's full plugin surface and prefer a smaller, more auditable codebase, NanoClaw is the stronger choice.
+              <a href="/projects/nanoclaw" class="text-biolum hover:text-biolum-light transition-colors">NanoClaw</a> strips that down to five files and one process, trading features for security and simplicity. It uses OS-level container isolation and has accumulated over {starsNum('nanoclaw')} stars from developers who specifically value its security-first, radically minimal approach. If you do not need OpenClaw's full plugin surface and prefer a smaller, more auditable codebase, NanoClaw is the stronger choice.
             </p>
             <p>
               Both are written in TypeScript and released under the MIT license, so switching between them does not require learning a new language or navigating license restrictions. For a side-by-side breakdown, see the <a href="/compare" class="text-biolum hover:text-biolum-light transition-colors">comparison tool</a>.
@@ -301,7 +336,7 @@ import Layout from '../layouts/Layout.astro';
               <a href="/projects/openclaw" class="text-biolum hover:text-biolum-light transition-colors">OpenClaw</a> and <a href="/projects/zeroclaw" class="text-biolum hover:text-biolum-light transition-colors">ZeroClaw</a> are fundamentally different projects that happen to solve the same problem. OpenClaw is a mature TypeScript platform with a massive ecosystem of plugins and integrations. ZeroClaw is a Rust-native runtime built for raw performance: sub-10ms startup, a 3.4MB binary, and less than 5MB of RAM at runtime.
             </p>
             <p>
-              Choose OpenClaw if you need the broadest plugin support, a large community for troubleshooting, and you are comfortable running a Node.js stack. Choose ZeroClaw if you are deploying to resource-constrained environments, need deterministic performance characteristics, or prefer Rust's compile-time safety guarantees. ZeroClaw's 21,000+ stars show significant community validation of the performance-first approach.
+              Choose OpenClaw if you need the broadest plugin support, a large community for troubleshooting, and you are comfortable running a Node.js stack. Choose ZeroClaw if you are deploying to resource-constrained environments, need deterministic performance characteristics, or prefer Rust's compile-time safety guarantees. ZeroClaw's {starsNum('zeroclaw')}+ stars show significant community validation of the performance-first approach.
             </p>
             <p>
               Use the <a href="/compare" class="text-biolum hover:text-biolum-light transition-colors">comparison tool</a> to see how they stack up on stars, activity, releases, and community health.
@@ -368,7 +403,7 @@ import Layout from '../layouts/Layout.astro';
               Project data is enriched from the GitHub API on every production build. This means star counts, fork counts, open issues, latest releases, and commit timestamps are refreshed each time the site is deployed. Deployments happen regularly as new projects are submitted and reviewed.
             </p>
             <p>
-              New project additions depend on community submissions and maintainer curation. The ecosystem is growing quickly &mdash; Shelldex went from zero to 29 tracked projects within its first weeks. If you spot a project that should be listed, the <a href="/submit" class="text-biolum hover:text-biolum-light transition-colors">submission process</a> is open and straightforward.
+              New project additions depend on community submissions and maintainer curation. The ecosystem is growing quickly &mdash; Shelldex went from zero to {projectCount} tracked projects within its first weeks. If you spot a project that should be listed, the <a href="/submit" class="text-biolum hover:text-biolum-light transition-colors">submission process</a> is open and straightforward.
             </p>
           </div>
         </div>
