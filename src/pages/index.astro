@@ -3,12 +3,23 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import FilterBar from '../components/FilterBar.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import MomentumTicker from '../components/MomentumTicker.astro';
 import { loadProjects, getUniqueLanguages, getUniqueStatuses } from '../lib/projects';
+import { loadLeaderboard } from '../lib/compare';
+import fs from 'node:fs';
 
 const projects = await loadProjects();
 const languages = getUniqueLanguages(projects);
 const statuses = getUniqueStatuses(projects);
 const categories = [...new Set(projects.flatMap(p => p.category))].sort();
+
+// Momentum ticker data
+const leaderboard = loadLeaderboard();
+const movers = leaderboard.entries
+  .filter(e => e.star_growth_7d && e.star_growth_7d > 0)
+  .sort((a, b) => (b.star_growth_7d ?? 0) - (a.star_growth_7d ?? 0));
+const lbRaw = JSON.parse(fs.readFileSync('src/data/generated/leaderboard.json', 'utf-8'));
+const generatedDate = new Date(lbRaw.generated);
 ---
 
 <Layout title="Shelldex — The OpenClaw Ecosystem">
@@ -44,6 +55,9 @@ const categories = [...new Set(projects.flatMap(p => p.category))].sort();
       "url": `https://shelldex.com/projects/${p.slug}`,
     })),
   })} />
+  {movers.length > 0 && (
+    <MomentumTicker movers={movers} generatedDate={generatedDate} />
+  )}
   <Hero projectCount={projects.length} />
 
   <section id="directory" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">

@@ -106,4 +106,25 @@
   .card-glow:hover .og-lobster::after {
     opacity: 1;
   }
+
+  /* Momentum ticker */
+  .ticker-track {
+    display: flex;
+    gap: 1.25rem;
+    width: max-content;
+    animation: ticker-scroll 54s linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+}
+
+/* Pause animations for reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation-play-state: paused;
+  }
 }

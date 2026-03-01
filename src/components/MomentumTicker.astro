@@ -1,0 +1,49 @@
+---
+import type { LeaderboardEntry } from '../lib/compare';
+
+interface Props {
+  movers: LeaderboardEntry[];
+  generatedDate: Date;
+}
+
+const { movers, generatedDate } = Astro.props;
+
+// Format the "Updated" label
+const now = new Date();
+const diffMs = now.getTime() - generatedDate.getTime();
+const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+const updatedLabel = diffHours < 1
+  ? 'just now'
+  : diffHours < 24
+    ? `${diffHours}h ago`
+    : `${diffDays}d ago`;
+---
+
+<div class="relative w-full overflow-hidden border-b border-white/5 bg-ocean-card/60 backdrop-blur-sm py-2.5">
+  <!-- Gradient masks -->
+  <div class="absolute inset-y-0 left-0 w-16 sm:w-24 z-10 pointer-events-none" style="background: linear-gradient(to right, #0f1729, transparent)"></div>
+  <div class="absolute inset-y-0 right-0 w-16 sm:w-24 z-10 pointer-events-none" style="background: linear-gradient(to left, #0f1729, transparent)"></div>
+
+  <!-- Scrolling track — content duplicated for seamless loop -->
+  <div class="ticker-track" aria-label="Ecosystem momentum — 7-day star growth for tracked projects">
+    {[0, 1].map(() => (
+      <div class="flex items-center gap-5 sm:gap-8 shrink-0 px-4">
+        {movers.map((m) => (
+          <a
+            href={`/projects/${m.slug}`}
+            class="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap text-xs sm:text-sm text-gray-400 hover:text-white transition-colors group"
+          >
+            <span class="text-sm sm:text-base">{m.emoji}</span>
+            <span class="group-hover:underline decoration-biolum/40 underline-offset-2">{m.name}</span>
+            <span class="text-biolum font-mono text-xs">+{m.star_growth_7d} ★</span>
+          </a>
+        ))}
+      </div>
+    ))}
+  </div>
+
+</div>
+<div class="text-center px-3 sm:px-6 pb-0.5">
+  <span class="text-[10px] text-gray-600/50 font-mono tracking-wide">7d momentum · Updated {updatedLabel}</span>
+</div>
