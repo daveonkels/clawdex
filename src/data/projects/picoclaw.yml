@@ -14,13 +14,13 @@ highlight: Runs on $10 RISC-V boards, <10MB RAM, 1s boot
 emoji: 💡
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 21161
-  forks: 2673
-  open_issues: 389
+  stars: 21168
+  forks: 2675
+  open_issues: 387
   license: NOASSERTION
   topics: []
   last_commit: "2026-03-01T04:20:20Z"
   latest_release: v0.2.0
   latest_release_date: "2026-02-28T12:08:31Z"
-  star_growth_7d: 67
-  last_enriched: "2026-03-01T04:20:40.857Z"
+  star_growth_7d: 74
+  last_enriched: "2026-03-01T05:10:02.096Z"

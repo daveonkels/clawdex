@@ -14,9 +14,9 @@ highlight: Built in Rust from scratch — 137K LOC, 1,767+ tests. One binary, on
 emoji: ⚙️
 added: "2026-02-25"
 github_data:
-  stars: 5911
-  forks: 620
-  open_issues: 71
+  stars: 5979
+  forks: 625
+  open_issues: 73
   license: Apache-2.0
   topics:
     - agent-framework
@@ -30,5 +30,5 @@ github_data:
   last_commit: "2026-03-01T01:17:03Z"
   latest_release: v0.2.3
   latest_release_date: "2026-03-01T01:27:50Z"
-  star_growth_7d: 660
-  last_enriched: "2026-03-01T04:20:40.558Z"
+  star_growth_7d: 728
+  last_enriched: "2026-03-01T05:10:01.758Z"

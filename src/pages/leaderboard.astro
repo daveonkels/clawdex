@@ -94,7 +94,23 @@ const langColors: Record<string, string> = {
 <Layout
   title="Leaderboard — Shelldex"
   description="GitHub stars leaderboard for OpenClaw ecosystem projects. Ranked by stars with growth trends and health indicators."
+  ogImage="https://shelldex.com/images/og-grid.webp"
 >
+  {hasData && (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "OpenClaw Ecosystem Leaderboard",
+      "description": "GitHub stars leaderboard for OpenClaw ecosystem projects, ranked by popularity.",
+      "numberOfItems": leaderboard.count,
+      "itemListElement": leaderboard.entries.slice(0, 10).map((entry) => ({
+        "@type": "ListItem",
+        "position": entry.rank,
+        "name": entry.name,
+        "url": `https://shelldex.com/projects/${entry.slug}`,
+      })),
+    })} />
+  )}
   <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <!-- Header -->
     <div class="mb-10">

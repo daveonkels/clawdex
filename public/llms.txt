@@ -1,0 +1,35 @@
+# Shelldex
+
+> The OpenClaw ecosystem, cataloged — clones, forks, derivatives, and alternatives.
+
+Shelldex is a community-maintained directory of every project in the OpenClaw ecosystem. It tracks personal AI agent frameworks that trace their lineage to Peter Steinberger's original self-hosted assistant, OpenClaw.
+
+## What Shelldex tracks
+
+- OpenClaw clones, forks, reimplementations, and inspired projects
+- GitHub stars, forks, open issues, and commit activity
+- Programming language (TypeScript, Rust, Python, Go, C, Bash, Zig)
+- Project status (active, experimental, archived)
+
+## What Shelldex does NOT track
+
+- Workflow galleries or use case recipes
+- Tutorials or guides
+- Security scanners for OpenClaw skills
+- Commercial-only products
+
+## Pages
+
+- Homepage / Directory: https://shelldex.com/
+- Leaderboard (ranked by GitHub stars): https://shelldex.com/leaderboard/
+- About: https://shelldex.com/about/
+- Submit a project: https://shelldex.com/submit/
+- Individual project pages: https://shelldex.com/projects/{slug}/
+
+## Key facts
+
+- Created by Dave Onkels (https://onk.io)
+- Inspired by OpenClaw by Peter Steinberger
+- Formerly known as Clawdex (theclawdex.com)
+- Built with Astro and Tailwind CSS
+- Open source: https://github.com/daveonkels/clawdex

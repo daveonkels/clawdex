@@ -3,6 +3,23 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="About — Shelldex | OpenClaw Ecosystem Tracker" description="Shelldex catalogs the OpenClaw ecosystem — inspired agentic projects, not workflows or tutorials. Compare projects by stars, language, and activity." ogImage="https://shelldex.com/images/og-about.jpg">
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Shelldex",
+    "description": "Shelldex is a community-maintained directory of every project in the OpenClaw ecosystem — clones, forks, reimplementations, and inspired projects.",
+    "url": "https://shelldex.com/about",
+    "mainEntity": {
+      "@type": "WebSite",
+      "name": "Shelldex",
+      "url": "https://shelldex.com"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Dave Onkels",
+      "url": "https://onk.io"
+    }
+  })} />
   <!-- Hero image -->
   <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-4">
     <div class="relative rounded-2xl overflow-hidden h-64 sm:h-80">

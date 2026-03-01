@@ -13,3 +13,14 @@ tier: 1
 highlight: Self-improving skill system — agent writes reusable SKILL.md docs as it solves problems, building a personal knowledge base over time
 emoji: 🧠
 added: "2026-02-28"
+github_data:
+  stars: 1175
+  forks: 173
+  open_issues: 71
+  license: null
+  topics: []
+  last_commit: "2026-03-01T02:13:58Z"
+  latest_release: null
+  latest_release_date: null
+  star_growth_7d: 0
+  last_enriched: "2026-03-01T05:09:57.719Z"

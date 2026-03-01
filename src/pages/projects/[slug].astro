@@ -100,7 +100,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
 ---
 
 <Layout
-  title={`${name} — ${tagline} | Clawdex`}
+  title={`${name} — ${tagline} | Shelldex`}
   description={description}
 >
   <script type="application/ld+json" set:html={JSON.stringify(softwareJsonLd)} />
@@ -234,7 +234,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
           <svg class="w-4 h-4 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
         </a>
         {formattedDate && (
-          <p class="text-xs text-gray-600 mt-3">Added to Clawdex on {formattedDate}</p>
+          <p class="text-xs text-gray-600 mt-3">Added to Shelldex on {formattedDate}</p>
         )}
       </div>
     )}

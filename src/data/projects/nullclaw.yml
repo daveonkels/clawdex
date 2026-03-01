@@ -14,9 +14,9 @@ highlight: 678 KB Zig binary — runs on $5 hardware, 22+ providers, 17 channels
 emoji: 🦞
 added: 2026-02-26T00:00:00.000Z
 github_data:
-  stars: 3177
-  forks: 380
-  open_issues: 9
+  stars: 3206
+  forks: 383
+  open_issues: 13
   license: MIT
   topics:
     - ai
@@ -26,5 +26,5 @@ github_data:
   last_commit: "2026-03-01T01:45:00Z"
   latest_release: v2026.2.26
   latest_release_date: "2026-02-27T01:43:08Z"
-  star_growth_7d: 425
-  last_enriched: "2026-03-01T04:20:39.732Z"
+  star_growth_7d: 454
+  last_enriched: "2026-03-01T05:10:00.848Z"
