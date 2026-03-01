@@ -9,7 +9,7 @@ interface Props {
 const {
   title,
   description = 'The OpenClaw ecosystem, cataloged — clones, forks, derivatives, and alternatives. Compare by GitHub stars, language, and activity. Not workflows. Not tutorials. Just the projects.',
-  ogImage = 'https://shelldex.com/images/og-default.jpg',
+  ogImage = 'https://shelldex.com/images/og-default.png',
   canonicalUrl,
 } = Astro.props;
 
@@ -36,7 +36,7 @@ const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathn
     <meta property="og:description" content={description} />
     <meta property="og:site_name" content="Shelldex — The OpenClaw Ecosystem" />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
