@@ -22,9 +22,13 @@ Shelldex is a community-maintained directory of every project in the OpenClaw ec
 
 - Homepage / Directory: https://shelldex.com/
 - Leaderboard (ranked by GitHub stars): https://shelldex.com/leaderboard/
+- Compare projects: https://shelldex.com/compare/
+- Ecosystem analysis: https://shelldex.com/analysis/
+- FAQ: https://shelldex.com/faq/
 - About: https://shelldex.com/about/
 - Submit a project: https://shelldex.com/submit/
 - Individual project pages: https://shelldex.com/projects/{slug}/
+- Comparison pages: https://shelldex.com/compare/{project-a}-vs-{project-b}/
 
 ## Key facts
 

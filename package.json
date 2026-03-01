@@ -8,9 +8,11 @@
     "preview": "astro preview",
     "astro": "astro",
     "validate": "node scripts/validate-yaml.mjs",
-    "enrich": "tsx scripts/enrich-github-data.ts"
+    "enrich": "tsx scripts/enrich-github-data.ts",
+    "generate-images": "tsx scripts/generate-images.ts"
   },
   "devDependencies": {
+    "@fal-ai/client": "^1.2.0",
     "tsx": "^4.19.0"
   },
   "dependencies": {

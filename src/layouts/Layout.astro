@@ -3,13 +3,17 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  canonicalUrl?: string;
 }
 
 const {
   title,
   description = 'The OpenClaw ecosystem, cataloged — clones, forks, derivatives, and alternatives. Compare by GitHub stars, language, and activity. Not workflows. Not tutorials. Just the projects.',
   ogImage = 'https://shelldex.com/images/og-default.jpg',
+  canonicalUrl,
 } = Astro.props;
+
+const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathname}`;
 ---
 
 <!doctype html>
@@ -23,7 +27,7 @@ const {
     <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-latin.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/titan-one-latin.woff2" crossorigin />
-    <link rel="canonical" href={`https://shelldex.com${Astro.url.pathname}`} />
+    <link rel="canonical" href={resolvedCanonical} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -95,6 +99,8 @@ const {
           <div class="flex items-center gap-5 sm:gap-6 w-full sm:w-auto sm:ml-auto pb-3 sm:pb-0 border-t border-white/5 sm:border-0 pt-2 sm:pt-0">
             <a href="/" class="text-sm leading-none text-gray-400 hover:text-biolum transition-colors py-1">Directory</a>
             <a href="/leaderboard" class="text-sm leading-none text-gray-400 hover:text-biolum transition-colors py-1">Leaderboard</a>
+            <a href="/compare" class="text-sm leading-none text-gray-400 hover:text-biolum transition-colors py-1">Compare</a>
+            <a href="/analysis" class="text-sm leading-none text-gray-400 hover:text-biolum transition-colors py-1">Analysis</a>
             <a href="/about" class="text-sm leading-none text-gray-400 hover:text-biolum transition-colors py-1">About</a>
             <a href="/submit" class="text-sm leading-none text-gray-400 hover:text-biolum transition-colors py-1">Submit</a>
           </div>
@@ -121,6 +127,9 @@ const {
             <ul class="space-y-2 text-sm text-gray-500">
               <li><a href="/" class="hover:text-biolum transition-colors">Directory</a></li>
               <li><a href="/leaderboard" class="hover:text-biolum transition-colors">Leaderboard</a></li>
+              <li><a href="/compare" class="hover:text-biolum transition-colors">Compare</a></li>
+              <li><a href="/analysis" class="hover:text-biolum transition-colors">Analysis</a></li>
+              <li><a href="/faq" class="hover:text-biolum transition-colors">FAQ</a></li>
               <li><a href="/about" class="hover:text-biolum transition-colors">About</a></li>
               <li><a href="/submit" class="hover:text-biolum transition-colors">Submit a Project</a></li>
             </ul>

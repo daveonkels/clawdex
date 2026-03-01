@@ -1,0 +1,168 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { loadProjects } from '../../lib/projects';
+import { getUniquePairs } from '../../lib/compare';
+
+const projects = await loadProjects();
+const uniquePairs = getUniquePairs(projects);
+const projectNames = new Map(projects.map(p => [p.slug, { name: p.name, emoji: p.emoji }]));
+
+const pageTitle = 'Compare OpenClaw Alternatives — Shelldex';
+const pageDescription = `Compare any two projects in the OpenClaw ecosystem side by side. ${uniquePairs.length} unique comparisons across ${projects.length} projects.`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": pageTitle,
+    "description": pageDescription,
+    "url": "https://shelldex.com/compare",
+    "numberOfItems": uniquePairs.length,
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Shelldex", "item": "https://shelldex.com" },
+        { "@type": "ListItem", "position": 2, "name": "Compare", "item": "https://shelldex.com/compare" },
+      ],
+    },
+  })} />
+
+  <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-gray-600 mb-10" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-biolum transition-colors">Shelldex</a>
+      <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      <span class="text-gray-400">Compare</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-3xl">⚖️</span>
+        <h1 class="text-3xl sm:text-4xl font-display font-bold text-white">
+          Compare Projects
+        </h1>
+      </div>
+      <p class="text-gray-400 max-w-2xl">
+        Compare any two projects in the OpenClaw ecosystem side by side. {uniquePairs.length} unique comparisons across {projects.length} projects.
+      </p>
+    </div>
+
+    <!-- Quick Compare -->
+    <div class="rounded-xl border border-white/5 bg-ocean-card p-6 mb-12">
+      <h2 class="font-display text-lg font-semibold text-white mb-4">Quick Compare</h2>
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-4">
+        <div class="flex-1">
+          <label for="compare-a" class="block text-sm text-gray-500 mb-1.5">Project A</label>
+          <select
+            id="compare-a"
+            class="w-full bg-ocean-lighter border border-white/10 text-gray-200 text-sm rounded-lg px-3 py-2.5 focus:border-biolum/50 focus:outline-none"
+          >
+            <option value="">Select a project...</option>
+            {projects.map(p => (
+              <option value={p.slug}>{p.emoji} {p.name}</option>
+            ))}
+          </select>
+        </div>
+        <span class="text-gray-500 font-display font-bold text-center sm:pb-2.5">vs</span>
+        <div class="flex-1">
+          <label for="compare-b" class="block text-sm text-gray-500 mb-1.5">Project B</label>
+          <select
+            id="compare-b"
+            class="w-full bg-ocean-lighter border border-white/10 text-gray-200 text-sm rounded-lg px-3 py-2.5 focus:border-biolum/50 focus:outline-none"
+          >
+            <option value="">Select a project...</option>
+            {projects.map(p => (
+              <option value={p.slug}>{p.emoji} {p.name}</option>
+            ))}
+          </select>
+        </div>
+        <button
+          id="compare-btn"
+          class="px-6 py-2.5 bg-biolum/10 border border-biolum/30 text-biolum font-semibold rounded-lg hover:bg-biolum/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          disabled
+        >
+          Compare
+        </button>
+      </div>
+    </div>
+
+    <!-- Search filter -->
+    <div class="mb-6">
+      <input
+        id="pair-search"
+        type="text"
+        placeholder="Search comparisons..."
+        class="w-full sm:max-w-sm bg-ocean-lighter border border-white/10 text-gray-200 text-sm rounded-lg px-4 py-2.5 focus:border-biolum/50 focus:outline-none placeholder:text-gray-600"
+      />
+      <p class="text-xs text-gray-600 mt-2">
+        <span id="pair-count">{uniquePairs.length}</span> comparisons
+      </p>
+    </div>
+
+    <!-- All comparisons grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2" id="pairs-grid">
+      {uniquePairs.map(pair => {
+        const aInfo = projectNames.get(pair.slugA);
+        const bInfo = projectNames.get(pair.slugB);
+        return (
+          <a
+            href={`/compare/${pair.canonical}`}
+            class="pair-link flex items-center gap-2 rounded-lg border border-white/5 bg-ocean-card/50 px-4 py-3 text-sm text-gray-400 hover:text-biolum hover:border-biolum/20 transition-all"
+            data-names={`${aInfo?.name?.toLowerCase() ?? ''} ${bInfo?.name?.toLowerCase() ?? ''}`}
+          >
+            <span class="flex-shrink-0">{aInfo?.emoji}</span>
+            <span class="truncate">{aInfo?.name} vs {bInfo?.name}</span>
+            <span class="flex-shrink-0">{bInfo?.emoji}</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Client-side JS -->
+  <script is:inline>
+    (function () {
+      // Quick Compare navigation
+      var selectA = document.getElementById('compare-a');
+      var selectB = document.getElementById('compare-b');
+      var btn = document.getElementById('compare-btn');
+
+      function updateBtn() {
+        var a = selectA.value;
+        var b = selectB.value;
+        btn.disabled = !a || !b || a === b;
+      }
+
+      selectA.addEventListener('change', updateBtn);
+      selectB.addEventListener('change', updateBtn);
+
+      btn.addEventListener('click', function () {
+        var a = selectA.value;
+        var b = selectB.value;
+        if (a && b && a !== b) {
+          window.location.href = '/compare/' + a + '-vs-' + b;
+        }
+      });
+
+      // Search filter
+      var search = document.getElementById('pair-search');
+      var grid = document.getElementById('pairs-grid');
+      var countEl = document.getElementById('pair-count');
+      var links = grid.querySelectorAll('.pair-link');
+
+      search.addEventListener('input', function () {
+        var q = this.value.toLowerCase().trim();
+        var visible = 0;
+        links.forEach(function (link) {
+          var names = link.dataset.names;
+          var show = !q || names.indexOf(q) !== -1;
+          link.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+        countEl.textContent = visible;
+      });
+    })();
+  </script>
+</Layout>
