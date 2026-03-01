@@ -110,7 +110,7 @@
   /* Momentum ticker */
   .ticker-track {
     display: flex;
-    gap: 1.25rem;
+    gap: 0.75rem;
     width: max-content;
     animation: ticker-scroll 54s linear infinite;
     will-change: transform;

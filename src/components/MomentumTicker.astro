@@ -28,7 +28,7 @@ const updatedLabel = diffHours < 1
   <!-- Scrolling track — content duplicated for seamless loop -->
   <div class="ticker-track" aria-label="Ecosystem momentum — 7-day star growth for tracked projects">
     {[0, 1].map(() => (
-      <div class="flex items-center gap-5 sm:gap-8 shrink-0 px-4">
+      <div class="flex items-center gap-3 sm:gap-5 shrink-0 px-4">
         {movers.map((m) => (
           <a
             href={`/projects/${m.slug}`}
@@ -36,7 +36,7 @@ const updatedLabel = diffHours < 1
           >
             <span class="text-sm sm:text-base">{m.emoji}</span>
             <span class="group-hover:underline decoration-biolum/40 underline-offset-2">{m.name}</span>
-            <span class="text-biolum font-mono text-xs">+{m.star_growth_7d} ★</span>
+            <span class="text-biolum font-mono text-xs">+{m.star_growth_7d}★</span>
           </a>
         ))}
       </div>

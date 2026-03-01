@@ -155,7 +155,7 @@ const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathn
       <slot />
     </main>
 
-    <footer class="border-t border-white/5 mt-20">
+    <footer class="border-t border-white/5 mt-10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -163,11 +163,25 @@ const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathn
               <span class="text-xl">🦞</span>
               <span style="font-family: 'Titan One', sans-serif; font-weight: 400; font-style: normal; letter-spacing: 0.04em; background: linear-gradient(to right, #c73b20, #e8603a, #ff9a5c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">shelldex</span>
             </div>
-            <p class="text-sm text-gray-500">Every shell in the sea.</p>
+            <p class="text-sm text-gray-500 italic" id="footer-tagline">Every shell in the sea.</p>
+            <script is:inline>
+              (function() {
+                var taglines = [
+                  'Every shell in the sea.',
+                  'Five name changes. Forty-three thousand forks. One crustacean.',
+                  'A directory of projects that exist because one lobster couldn\'t sit still.',
+                  'Cataloging the ecosystem before it molts again.',
+                  'None of these are affiliated with actual lobsters. Probably.',
+                  'Somebody had to keep track. We drew the short claw.',
+                ];
+                var el = document.getElementById('footer-tagline');
+                if (el) el.textContent = taglines[Math.floor(Math.random() * taglines.length)];
+              })();
+            </script>
           </div>
           <div>
             <h3 class="font-display font-semibold text-white text-sm mb-3">Links</h3>
-            <ul class="grid grid-cols-2 md:grid-cols-1 gap-x-8 gap-y-2 text-sm text-gray-500">
+            <ul class="grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-500">
               <li><a href="/" class="hover:text-biolum transition-colors">Directory</a></li>
               <li><a href="/leaderboard" class="hover:text-biolum transition-colors">Leaderboard</a></li>
               <li><a href="/compare" class="hover:text-biolum transition-colors">Compare</a></li>
