@@ -29,3 +29,6 @@ src/data/generated/
 
 # jetbrains setting folder
 .idea/
+
+# claude code
+CLAUDE.md
