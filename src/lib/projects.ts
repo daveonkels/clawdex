@@ -2,6 +2,30 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 
+export type Platform = 'server' | 'browser' | 'embedded' | 'serverless' | 'messaging' | 'desktop';
+
+export type EcosystemRole = 'reference' | 'fork' | 'reimplementation' | 'derivative' | 'infrastructure' | 'alternative';
+
+export interface PerfProfile {
+  binary_size?: string;
+  startup_time?: string;
+  ram?: string;
+}
+
+export type MentionType = 'tweet' | 'article' | 'video' | 'post';
+
+export interface Mention {
+  type: MentionType;
+  url: string;
+  author: string;
+  author_url?: string;
+  title?: string;
+  date: string;
+  quote?: string;
+  thumbnail?: string;
+  source?: string;
+}
+
 export interface GitHubData {
   stars: number;
   forks: number;
@@ -30,6 +54,13 @@ export interface Project {
   added: string;
   stars?: number;
   github_data?: GitHubData;
+  platform?: Platform[];
+  requires_llm?: boolean;
+  mcp_support?: boolean;
+  integration_count?: number;
+  perf?: PerfProfile;
+  ecosystem_role?: EcosystemRole;
+  mentions?: Mention[];
 }
 
 const STARS_CACHE_PATH = path.join(process.cwd(), '.stars-cache.json');
@@ -104,6 +135,10 @@ export function getUniqueLanguages(projects: Project[]): string[] {
 
 export function getUniqueCategories(projects: Project[]): string[] {
   return [...new Set(projects.flatMap(p => p.category))].sort();
+}
+
+export function getUniquePlatforms(projects: Project[]): Platform[] {
+  return [...new Set(projects.flatMap(p => p.platform ?? []))].sort() as Platform[];
 }
 
 export function getUniqueStatuses(projects: Project[]): string[] {

@@ -12,6 +12,12 @@ status: active
 tier: 1
 highlight: Self-improving skill system — agent writes reusable SKILL.md docs as it solves problems, building a personal knowledge base over time
 emoji: 🧠
+platform:
+  - server
+  - messaging
+requires_llm: true
+mcp_support: true
+ecosystem_role: alternative
 added: "2026-02-28"
 github_data:
   stars: 1175

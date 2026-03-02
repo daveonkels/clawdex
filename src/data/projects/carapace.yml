@@ -11,6 +11,11 @@ status: experimental
 tier: 1
 highlight: Hardened Rust core, signed WASM plugins, strict local-first defaults
 emoji: 🛡️
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
 added: 2026-02-27T00:00:00.000Z
 github_data:
   stars: 39

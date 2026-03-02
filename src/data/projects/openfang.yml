@@ -12,6 +12,13 @@ status: active
 tier: 1
 highlight: Built in Rust from scratch — 137K LOC, 1,767+ tests. One binary, one command, agents live. Not a chatbot wrapper. An actual OS for autonomous agents.
 emoji: ⚙️
+platform:
+  - server
+requires_llm: true
+mcp_support: true
+ecosystem_role: alternative
+perf:
+  binary_size: "32MB"
 added: "2026-02-25"
 github_data:
   stars: 5979

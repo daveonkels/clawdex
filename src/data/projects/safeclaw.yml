@@ -11,6 +11,11 @@ status: active
 tier: 1
 highlight: No LLM required — deterministic, rule-based, zero token costs
 emoji: 🧯
+platform:
+  - server
+requires_llm: false
+mcp_support: false
+ecosystem_role: alternative
 added: 2026-02-27T00:00:00.000Z
 github_data:
   stars: 86

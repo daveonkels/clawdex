@@ -12,6 +12,12 @@ status: active
 tier: 1
 highlight: Bash-only personal assistant — runs on minimal systems, no Node.js or runtimes needed
 emoji: 🐚
+platform:
+  - server
+  - embedded
+requires_llm: true
+mcp_support: false
+ecosystem_role: reimplementation
 added: 2026-02-26T00:00:00.000Z
 github_data:
   stars: 4

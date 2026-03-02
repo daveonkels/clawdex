@@ -11,6 +11,12 @@ status: active
 tier: 1
 highlight: Self-described OpenClaw alternative with deep IM platform integration
 emoji: ⭐
+platform:
+  - server
+  - messaging
+requires_llm: true
+mcp_support: true
+ecosystem_role: alternative
 added: 2026-02-25T00:00:00.000Z
 github_data:
   stars: 18368

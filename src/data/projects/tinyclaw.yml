@@ -11,6 +11,11 @@ status: active
 tier: 1
 highlight: Personality system (Heartware) for self-improving AI
 emoji: 💖
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: derivative
 added: 2026-02-25T00:00:00.000Z
 github_data:
   stars: 120

@@ -11,6 +11,12 @@ status: active
 tier: 1
 highlight: Supports 10+ IM platforms with agent capabilities, knowledge base, and plugin system
 emoji: 🤖
+platform:
+  - server
+  - messaging
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
 added: 2026-02-25T00:00:00.000Z
 github_data:
   stars: 15409

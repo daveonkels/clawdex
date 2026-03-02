@@ -3,9 +3,19 @@ interface Props {
   languages: string[];
   categories: string[];
   statuses: string[];
+  platforms?: string[];
 }
 
-const { languages, categories, statuses } = Astro.props;
+const { languages, categories, statuses, platforms } = Astro.props;
+
+const platformLabels: Record<string, string> = {
+  server: 'Server',
+  browser: 'Browser',
+  embedded: 'Embedded',
+  serverless: 'Serverless',
+  messaging: 'Messaging',
+  desktop: 'Desktop',
+};
 ---
 
 <div class="space-y-4 mb-10" id="filter-bar">
@@ -50,6 +60,19 @@ const { languages, categories, statuses } = Astro.props;
         ))}
       </div>
     </div>
+
+    <!-- Platform -->
+    {platforms && platforms.length > 0 && (
+      <div>
+        <span class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2 block">Platform</span>
+        <div class="flex flex-wrap gap-1.5" data-filter-group="platform">
+          <button class="filter-btn filter-btn-active" data-filter-value="all">All</button>
+          {platforms.map(p => (
+            <button class="filter-btn filter-btn-inactive" data-filter-value={p}>{platformLabels[p] ?? p}</button>
+          ))}
+        </div>
+      </div>
+    )}
   </div>
 </div>
 
@@ -62,6 +85,7 @@ const { languages, categories, statuses } = Astro.props;
     const activeFilters: Record<string, string> = {
       language: 'all',
       status: 'all',
+      platform: 'all',
     };
 
     let searchQuery = '';
@@ -70,13 +94,15 @@ const { languages, categories, statuses } = Astro.props;
       cards.forEach(card => {
         const lang = card.dataset.language || '';
         const status = card.dataset.status || '';
+        const platforms = card.dataset.platform || '';
         const text = card.textContent?.toLowerCase() || '';
 
         const matchLang = activeFilters.language === 'all' || lang === activeFilters.language;
         const matchStatus = activeFilters.status === 'all' || status === activeFilters.status;
+        const matchPlatform = activeFilters.platform === 'all' || platforms.split(',').includes(activeFilters.platform);
         const matchSearch = !searchQuery || text.includes(searchQuery.toLowerCase());
 
-        card.style.display = matchLang && matchStatus && matchSearch ? '' : 'none';
+        card.style.display = matchLang && matchStatus && matchPlatform && matchSearch ? '' : 'none';
       });
 
       // Update count

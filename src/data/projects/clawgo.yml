@@ -11,6 +11,11 @@ status: active
 tier: 1
 highlight: Official Go client for RPi/Linux — voice transcript streaming and local TTS
 emoji: 🍓
+platform:
+  - embedded
+requires_llm: true
+mcp_support: false
+ecosystem_role: derivative
 added: 2026-02-25T00:00:00.000Z
 github_data:
   stars: 44

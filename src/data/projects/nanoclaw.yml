@@ -11,6 +11,32 @@ status: active
 tier: 1
 highlight: 5 files, one process, OS-level container isolation
 emoji: 🔐
+mentions:
+  - type: tweet
+    url: "https://x.com/swyx/status/2018230334488527022"
+    author: "swyx"
+    author_url: "https://x.com/swyx"
+    quote: "NanoClaw fixes a couple complaints people have about OpenClaw — it's a minimal, hackable reproduction (700LOC), that uses Apple Containers for sandboxing/security."
+    date: "2026-01-30"
+    source: X
+  - type: tweet
+    url: "https://x.com/Gavriel_Cohen/status/2024514255249096880"
+    author: "Gavriel Cohen"
+    author_url: "https://x.com/Gavriel_Cohen"
+    quote: "I went on CNBC and didn't hold back about OpenClaw. AI agent swarms are a multiplier. That amplifies the value, but it also amplifies the risk if the foundation isn't secure."
+    date: "2026-02-22"
+    source: X
+  - type: article
+    url: "https://venturebeat.com/orchestration/nanoclaw-solves-one-of-openclaws-biggest-security-issues-and-its-already"
+    author: "VentureBeat"
+    title: "NanoClaw solves one of OpenClaw's biggest security issues"
+    date: "2026-02-18"
+    source: VentureBeat
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: reimplementation
 added: 2026-02-25T00:00:00.000Z
 github_data:
   stars: 16672

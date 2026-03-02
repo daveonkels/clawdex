@@ -11,6 +11,11 @@ status: experimental
 tier: 1
 highlight: OpenClaw running serverless on Cloudflare Workers — no persistent infra needed
 emoji: ☁️
+platform:
+  - serverless
+requires_llm: true
+mcp_support: true
+ecosystem_role: derivative
 added: 2026-02-27T00:00:00.000Z
 github_data:
   stars: 9304

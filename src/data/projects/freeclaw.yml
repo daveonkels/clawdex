@@ -11,6 +11,11 @@ status: active
 tier: 1
 highlight: Multi-agent profiles, minimal footprint — no framework bloat
 emoji: 🆓
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: reimplementation
 added: 2026-02-27T00:00:00.000Z
 github_data:
   stars: 31

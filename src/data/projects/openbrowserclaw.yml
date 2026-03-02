@@ -12,6 +12,12 @@ status: active
 tier: 2
 highlight: Entire personal AI assistant running in a single browser tab — no server, no Docker, no Node.js
 emoji: 🌐
+platform:
+  - browser
+  - messaging
+requires_llm: true
+mcp_support: false
+ecosystem_role: reimplementation
 added: 2026-02-28T00:00:00.000Z
 github_data:
   stars: 469

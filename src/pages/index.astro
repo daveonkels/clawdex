@@ -4,7 +4,7 @@ import Hero from '../components/Hero.astro';
 import FilterBar from '../components/FilterBar.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import MomentumTicker from '../components/MomentumTicker.astro';
-import { loadProjects, getUniqueLanguages, getUniqueStatuses } from '../lib/projects';
+import { loadProjects, getUniqueLanguages, getUniqueStatuses, getUniquePlatforms } from '../lib/projects';
 import { loadLeaderboard } from '../lib/compare';
 import fs from 'node:fs';
 
@@ -12,6 +12,7 @@ const projects = await loadProjects();
 const languages = getUniqueLanguages(projects);
 const statuses = getUniqueStatuses(projects);
 const categories = [...new Set(projects.flatMap(p => p.category))].sort();
+const platforms = getUniquePlatforms(projects);
 
 // Momentum ticker data
 const leaderboard = loadLeaderboard();
@@ -70,6 +71,7 @@ const generatedDate = new Date(lbRaw.generated);
       languages={languages}
       categories={categories}
       statuses={statuses}
+      platforms={platforms}
     />
 
     <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -87,6 +89,9 @@ const generatedDate = new Date(lbRaw.generated);
           emoji={project.emoji}
           stars={project.stars}
           added={project.added}
+          platform={project.platform}
+          requires_llm={project.requires_llm}
+          mcp_support={project.mcp_support}
         />
       ))}
     </div>

@@ -12,4 +12,11 @@ status: active
 tier: 1
 highlight: 94 built-in tools turn Telegram into a full AI workstation — from headless browsing and Gmail to Python execution and persistent memory
 emoji: 🐾
+platform:
+  - server
+  - messaging
+requires_llm: true
+mcp_support: false
+integration_count: 94
+ecosystem_role: alternative
 added: "2026-03-01"

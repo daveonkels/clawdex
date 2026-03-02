@@ -21,7 +21,27 @@ interface Props {
 }
 
 const { project, allProjects } = Astro.props;
-const { name, slug, tagline, description, language, category, github, status, highlight, emoji, stars, added, github_data } = project;
+const { name, slug, tagline, description, language, category, github, status, highlight, emoji, stars, added, github_data, platform, requires_llm, mcp_support, integration_count, perf, ecosystem_role, mentions } = project;
+
+const platformLabels: Record<string, string> = {
+  server: 'Server / VPS / Docker',
+  browser: 'Browser (PWA / WASM)',
+  embedded: 'Embedded / IoT / RPi',
+  serverless: 'Serverless (Workers / Lambda)',
+  messaging: 'Messaging (Telegram / Discord)',
+  desktop: 'Desktop App',
+};
+
+const ecosystemRoleLabels: Record<string, string> = {
+  reference: 'Reference Implementation',
+  fork: 'Fork',
+  reimplementation: 'Reimplementation',
+  derivative: 'Derivative',
+  infrastructure: 'Infrastructure',
+  alternative: 'Alternative',
+};
+
+const sortedMentions = mentions?.slice().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
 
 // Load leaderboard to get this project's rank
 let leaderboardRank: number | null = null;
@@ -154,6 +174,63 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
       <p class="text-gray-300 leading-relaxed text-lg">{description}</p>
     </section>
 
+    <!-- At a Glance -->
+    {(platform || requires_llm !== undefined || mcp_support !== undefined || integration_count || ecosystem_role || perf) && (
+      <section class="mb-8">
+        <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">At a Glance</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {platform && platform.length > 0 && (
+            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
+              <p class="text-xs text-gray-500 mb-1.5">Runs On</p>
+              <div class="flex flex-wrap gap-1">
+                {platform.map((p: string) => (
+                  <span class="text-xs text-gray-300 bg-white/[0.06] rounded px-1.5 py-0.5">{platformLabels[p] ?? p}</span>
+                ))}
+              </div>
+            </div>
+          )}
+          {requires_llm !== undefined && (
+            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
+              <p class="text-xs text-gray-500 mb-1.5">LLM Required</p>
+              <p class={`text-sm font-medium ${requires_llm ? 'text-gray-300' : 'text-green-400'}`}>
+                {requires_llm ? 'Yes — needs API key' : 'No — zero LLM cost'}
+              </p>
+            </div>
+          )}
+          {mcp_support !== undefined && (
+            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
+              <p class="text-xs text-gray-500 mb-1.5">MCP Support</p>
+              <p class={`text-sm font-medium ${mcp_support ? 'text-purple-400' : 'text-gray-500'}`}>
+                {mcp_support ? 'Yes' : 'No'}
+              </p>
+            </div>
+          )}
+          {integration_count && (
+            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
+              <p class="text-xs text-gray-500 mb-1.5">Integrations</p>
+              <p class="text-lg font-mono text-gray-300">{integration_count}+</p>
+            </div>
+          )}
+          {ecosystem_role && (
+            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
+              <p class="text-xs text-gray-500 mb-1.5">Ecosystem Role</p>
+              <p class="text-sm font-medium text-gray-300">{ecosystemRoleLabels[ecosystem_role] ?? ecosystem_role}</p>
+            </div>
+          )}
+          {perf && (
+            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
+              <p class="text-xs text-gray-500 mb-1.5">Performance</p>
+              <div class="space-y-0.5">
+                {perf.binary_size && <p class="text-xs text-gray-300"><span class="text-gray-500">Binary:</span> {perf.binary_size}</p>}
+                {perf.startup_time && <p class="text-xs text-gray-300"><span class="text-gray-500">Startup:</span> {perf.startup_time}</p>}
+                {perf.ram && <p class="text-xs text-gray-300"><span class="text-gray-500">RAM:</span> {perf.ram}</p>}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
     <!-- Highlight -->
     <section class="mb-8 rounded-xl bg-biolum/5 border border-biolum/15 px-6 py-5">
       <p class="text-biolum font-medium leading-relaxed">{highlight}</p>
@@ -202,6 +279,55 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
           {github_data.latest_release && (
             <span>Latest release: <span class="text-gray-400 font-mono">{github_data.latest_release}</span></span>
           )}
+        </div>
+      </section>
+    )}
+
+    <!-- What People Are Saying -->
+    {sortedMentions && sortedMentions.length > 0 && (
+      <section class="mb-8">
+        <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">What People Are Saying</h2>
+        <div class="space-y-3">
+          {sortedMentions.map((m) => (
+            <a
+              href={m.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-start gap-3 rounded-xl border border-white/5 bg-ocean-card/50 px-5 py-4 hover:border-biolum/20 transition-all group"
+            >
+              <span class="flex-shrink-0 mt-0.5 text-gray-500 group-hover:text-biolum transition-colors">
+                {m.type === 'tweet' && (
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                )}
+                {m.type === 'article' && (
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+                )}
+                {m.type === 'video' && (
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                )}
+                {m.type === 'post' && (
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+                )}
+              </span>
+              <div class="flex-1 min-w-0">
+                {m.quote && (
+                  <p class="text-sm text-gray-300 leading-relaxed mb-1.5 italic">"{m.quote}"</p>
+                )}
+                {!m.quote && m.title && (
+                  <p class="text-sm text-gray-300 leading-relaxed mb-1.5">{m.title}</p>
+                )}
+                <div class="flex items-center gap-2 text-xs text-gray-500">
+                  <span class="font-medium text-gray-400">{m.author}</span>
+                  {m.source && <span>on {m.source}</span>}
+                  <span>{new Date(m.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                </div>
+              </div>
+              {m.thumbnail && (
+                <img src={m.thumbnail} alt="" class="w-16 h-12 rounded object-cover flex-shrink-0" loading="lazy" />
+              )}
+              <svg class="w-4 h-4 text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+          ))}
         </div>
       </section>
     )}

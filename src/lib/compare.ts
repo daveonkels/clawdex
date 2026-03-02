@@ -221,6 +221,62 @@ export function generateKeyDifferences(a: Project, b: Project, aEntry: Leaderboa
     diffs.push(`${a.name} uses the ${aLicense} license while ${b.name} uses ${bLicense}.`);
   }
 
+  // Platform
+  const aPlatforms = a.platform ?? [];
+  const bPlatforms = b.platform ?? [];
+  if (aPlatforms.length > 0 && bPlatforms.length > 0) {
+    const aHasBrowser = aPlatforms.includes('browser');
+    const bHasBrowser = bPlatforms.includes('browser');
+    const aHasEmbedded = aPlatforms.includes('embedded');
+    const bHasEmbedded = bPlatforms.includes('embedded');
+    const aHasServerless = aPlatforms.includes('serverless');
+    const bHasServerless = bPlatforms.includes('serverless');
+
+    if (aHasBrowser && !bHasBrowser) {
+      diffs.push(`${a.name} runs in the browser while ${b.name} requires a server.`);
+    } else if (bHasBrowser && !aHasBrowser) {
+      diffs.push(`${b.name} runs in the browser while ${a.name} requires a server.`);
+    }
+
+    if (aHasEmbedded && !bHasEmbedded) {
+      diffs.push(`${a.name} supports embedded/IoT hardware while ${b.name} does not.`);
+    } else if (bHasEmbedded && !aHasEmbedded) {
+      diffs.push(`${b.name} supports embedded/IoT hardware while ${a.name} does not.`);
+    }
+
+    if (aHasServerless && !bHasServerless) {
+      diffs.push(`${a.name} can run serverless while ${b.name} requires persistent infrastructure.`);
+    } else if (bHasServerless && !aHasServerless) {
+      diffs.push(`${b.name} can run serverless while ${a.name} requires persistent infrastructure.`);
+    }
+  }
+
+  // LLM requirement
+  if (a.requires_llm === false && b.requires_llm !== false) {
+    diffs.push(`${a.name} works without any API keys — zero LLM cost — while ${b.name} requires an LLM provider.`);
+  } else if (b.requires_llm === false && a.requires_llm !== false) {
+    diffs.push(`${b.name} works without any API keys — zero LLM cost — while ${a.name} requires an LLM provider.`);
+  }
+
+  // MCP support
+  if (a.mcp_support === true && !b.mcp_support) {
+    diffs.push(`${a.name} has MCP (Model Context Protocol) support while ${b.name} does not.`);
+  } else if (b.mcp_support === true && !a.mcp_support) {
+    diffs.push(`${b.name} has MCP (Model Context Protocol) support while ${a.name} does not.`);
+  }
+
+  // Integration count
+  if (a.integration_count && b.integration_count && a.integration_count !== b.integration_count) {
+    const leader = a.integration_count > b.integration_count ? a : b;
+    const leaderCount = Math.max(a.integration_count, b.integration_count);
+    const trailerCount = Math.min(a.integration_count, b.integration_count);
+    diffs.push(`${leader.name} advertises ${leaderCount}+ integrations vs ${trailerCount}+ for the other.`);
+  } else if (a.integration_count && !b.integration_count) {
+    diffs.push(`${a.name} advertises ${a.integration_count}+ built-in integrations.`);
+  } else if (b.integration_count && !a.integration_count) {
+    diffs.push(`${b.name} advertises ${b.integration_count}+ built-in integrations.`);
+  }
+
   // Categories
   const aOnly = a.category.filter(c => !b.category.includes(c));
   const bOnly = b.category.filter(c => !a.category.includes(c));
@@ -287,6 +343,21 @@ export function generateRecommendation(a: Project, b: Project, aEntry: Leaderboa
     } else if (bHealth > aHealth + 15) {
       lines.push(`${b.name} currently shows stronger project health indicators, suggesting more consistent maintenance and release cadence.`);
     }
+  }
+
+  // Platform-specific recommendations
+  if (a.requires_llm === false && b.requires_llm !== false) {
+    lines.push(`If you want zero API costs, ${a.name} doesn't require any LLM provider.`);
+  } else if (b.requires_llm === false && a.requires_llm !== false) {
+    lines.push(`If you want zero API costs, ${b.name} doesn't require any LLM provider.`);
+  }
+
+  const aPlatforms = a.platform ?? [];
+  const bPlatforms = b.platform ?? [];
+  if (aPlatforms.includes('embedded') && !bPlatforms.includes('embedded')) {
+    lines.push(`For IoT or embedded deployments, ${a.name} is designed to run on constrained hardware.`);
+  } else if (bPlatforms.includes('embedded') && !aPlatforms.includes('embedded')) {
+    lines.push(`For IoT or embedded deployments, ${b.name} is designed to run on constrained hardware.`);
   }
 
   if (lines.length === 0) {

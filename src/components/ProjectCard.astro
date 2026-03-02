@@ -14,9 +14,12 @@ interface Props {
   emoji: string;
   stars?: number;
   added?: string;
+  platform?: string[];
+  requires_llm?: boolean;
+  mcp_support?: boolean;
 }
 
-const { name, slug, tagline, language, category, github, status, highlight, emoji, stars, added } = Astro.props;
+const { name, slug, tagline, language, category, github, status, highlight, emoji, stars, added, platform, requires_llm, mcp_support } = Astro.props;
 
 const languageColors: Record<string, { bg: string; text: string; border: string }> = {
   typescript: { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/20' },
@@ -47,6 +50,7 @@ const statusColors: Record<string, string> = {
   data-stars={stars ?? 0}
   data-name={name}
   data-added={added ?? ''}
+  data-platform={platform?.join(',') ?? ''}
 >
   <div class="flex items-start justify-between mb-4">
     <div class="flex items-center gap-3">
@@ -75,6 +79,16 @@ const statusColors: Record<string, string> = {
     <span class={`badge-language border border-white/10 bg-white/5 ${statusColors[status]}`}>
       {status}
     </span>
+    {requires_llm === false && (
+      <span class="badge-language border border-green-500/20 bg-green-500/10 text-green-400">
+        zero-cost
+      </span>
+    )}
+    {mcp_support === true && (
+      <span class="badge-language border border-purple-500/20 bg-purple-500/10 text-purple-400">
+        MCP
+      </span>
+    )}
   </div>
 
   <div class="flex flex-wrap gap-1.5 mb-4">

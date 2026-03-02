@@ -11,6 +11,12 @@ status: active
 tier: 1
 highlight: Multi-channel routing and task orchestration — self-hostable, lightweight Python
 emoji: 🧠
+platform:
+  - server
+  - messaging
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
 added: 2026-02-27T00:00:00.000Z
 github_data:
   stars: 2

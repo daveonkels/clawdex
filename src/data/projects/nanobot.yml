@@ -11,6 +11,32 @@ status: active
 tier: 1
 highlight: 4,000 lines of Python. Research-friendly, ultra-minimal
 emoji: 🔬
+mentions:
+  - type: tweet
+    url: "https://x.com/huang_chao4969/status/2017995428281929964"
+    author: "Chao Huang"
+    author_url: "https://x.com/huang_chao4969"
+    quote: "Want to build your own personal JARVIS, but find Clawdbot too complex to deploy? Introducing nanobot — an ultra-lightweight Clawdbot (99% simpler) that gets your personal AI assistant running in under a minute."
+    date: "2026-02-04"
+    source: X
+  - type: tweet
+    url: "https://x.com/huang_chao4969/status/2025256294106751104"
+    author: "Chao Huang"
+    author_url: "https://x.com/huang_chao4969"
+    quote: "Just found out that Andrej Karpathy noticed our nanobot — quite unexpected! nanobot aims to deliver an ultra-lightweight personal AI assistant with less than 4k lines of code."
+    date: "2026-02-22"
+    source: X
+  - type: post
+    url: "https://news.ycombinator.com/item?id=46897737"
+    author: "Hacker News"
+    title: "Nanobot: Ultra-Lightweight Alternative to OpenClaw"
+    date: "2026-02-08"
+    source: Hacker News
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: reimplementation
 added: 2026-02-25T00:00:00.000Z
 github_data:
   stars: 26956

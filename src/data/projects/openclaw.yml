@@ -11,6 +11,32 @@ status: active
 tier: 1
 highlight: On a rocket ship full of stars. The one that started the molt.
 emoji: 🦞
+mentions:
+  - type: tweet
+    url: "https://x.com/lexfridman/status/2021785659644453136"
+    author: "Lex Fridman"
+    author_url: "https://x.com/lexfridman"
+    quote: "Here's my conversation with Peter Steinberger, creator of OpenClaw, an open-source AI agent that has taken the Internet by storm, with now over 180,000 stars on GitHub."
+    date: "2026-02-20"
+    source: X
+  - type: tweet
+    url: "https://x.com/scottbelsky/status/2017436989604192505"
+    author: "Scott Belsky"
+    author_url: "https://x.com/scottbelsky"
+    quote: "good breakdown of the architecture behind OpenClaw/Clawdbot, and also makes it perfectly clear that our operating systems are overdue for reimagination."
+    date: "2026-01-28"
+    source: X
+  - type: article
+    url: "https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/"
+    author: "TechCrunch"
+    title: "OpenClaw creator Peter Steinberger joins OpenAI"
+    date: "2026-02-15"
+    source: TechCrunch
+platform:
+  - server
+requires_llm: true
+mcp_support: true
+ecosystem_role: reference
 added: 2026-02-25T00:00:00.000Z
 github_data:
   stars: 240864

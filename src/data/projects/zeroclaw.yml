@@ -11,6 +11,36 @@ status: active
 tier: 1
 highlight: Sub-10ms startup, 3.4MB binary, <5MB RAM
 emoji: 🦀
+mentions:
+  - type: tweet
+    url: "https://x.com/dabit3/status/2022676502471409795"
+    author: "Nader Dabit"
+    author_url: "https://x.com/dabit3"
+    quote: "One of my only gripes with OpenClaw is that it's kind of slow. Today I'm going to be trying out ZeroClaw, OpenClaw rebuilt in Rust and optimized for speed. Seems insanely fast."
+    date: "2026-02-12"
+    source: X
+  - type: tweet
+    url: "https://x.com/DataChaz/status/2026218429536186575"
+    author: "Charly Wargnier"
+    author_url: "https://x.com/DataChaz"
+    quote: "Why buy a Mac Mini when you can run ZeroClaw on $10 hardware? A 99% reduction in memory and 98% cheaper to run."
+    date: "2026-02-24"
+    source: X
+  - type: post
+    url: "https://news.ycombinator.com/item?id=47016328"
+    author: "Hacker News"
+    title: "ZeroClaw — Open Claw Rebuilt in Rust"
+    date: "2026-02-14"
+    source: Hacker News
+platform:
+  - server
+requires_llm: true
+mcp_support: true
+ecosystem_role: reimplementation
+perf:
+  binary_size: "3.4MB"
+  startup_time: "<10ms"
+  ram: "<5MB"
 added: 2026-02-25T00:00:00.000Z
 github_data:
   stars: 21203

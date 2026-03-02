@@ -12,6 +12,11 @@ status: active
 tier: 1
 highlight: 10k+ stars. Memory-first architecture with proactive agent behavior, local-first privacy, reduced LLM token costs.
 emoji: 🧠
+platform:
+  - server
+requires_llm: true
+mcp_support: true
+ecosystem_role: infrastructure
 added: "2025-02-25"
 github_data:
   stars: 11712
