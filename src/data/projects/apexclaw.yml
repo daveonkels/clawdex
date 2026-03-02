@@ -1,0 +1,15 @@
+name: ApexClaw
+slug: apexclaw
+tagline: AI assistant that lives in your Telegram
+description: Personal AI assistant powered by the z.ai engine that runs inside Telegram. Goes beyond chat with 94 built-in tools — browse the web, send emails, run scripts, manage files, track stocks, and more. Supports vision, voice, memory, and real browser automation.
+language: go
+category:
+  - multi-platform
+  - messaging
+  - autonomous
+github: AmarnathCJD/ApexClaw
+status: active
+tier: 1
+highlight: 94 built-in tools turn Telegram into a full AI workstation — from headless browsing and Gmail to Python execution and persistent memory
+emoji: 🐾
+added: "2026-03-01"
