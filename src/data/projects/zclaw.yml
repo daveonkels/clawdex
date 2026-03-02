@@ -1,0 +1,22 @@
+name: ZClaw
+slug: zclaw
+tagline: Personal AI assistant on ESP32 — 888 KiB firmware
+description: C-based personal AI assistant that runs on ESP32 microcontrollers. Supports scheduled tasks, GPIO control, persistent memory, custom tools, and Telegram integration. Strict 888 KiB all-in firmware budget including ESP-IDF runtime, Wi-Fi, TLS, and certs. The smallest claw-family project running on actual hardware.
+language: c
+category:
+  - embedded
+  - iot
+  - minimal
+github: tnm/zclaw
+status: active
+tier: 2
+highlight: 888 KiB firmware — runs on ESP32, not a server
+emoji: 🔌
+platform:
+  - embedded
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
+perf:
+  binary_size: 888 KiB
+added: "2026-03-02"
