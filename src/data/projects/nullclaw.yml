@@ -19,22 +19,22 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: reimplementation
 perf:
-  binary_size: "678KB"
-  startup_time: "<2ms"
+  binary_size: 678KB
+  startup_time: <2ms
 integration_count: 22
 added: 2026-02-26T00:00:00.000Z
 github_data:
-  stars: 3206
-  forks: 383
-  open_issues: 13
+  stars: 4494
+  forks: 495
+  open_issues: 30
   license: MIT
   topics:
     - ai
     - assistant
     - personal
     - zig
-  last_commit: "2026-03-01T01:45:00Z"
-  latest_release: v2026.2.26
-  latest_release_date: "2026-02-27T01:43:08Z"
-  star_growth_7d: 454
-  last_enriched: "2026-03-01T05:10:00.848Z"
+  last_commit: "2026-03-02T23:14:33Z"
+  latest_release: v2026.3.1
+  latest_release_date: "2026-03-02T00:36:04Z"
+  star_growth_7d: 1742
+  last_enriched: "2026-03-02T23:14:49.749Z"

@@ -13,23 +13,23 @@ highlight: On a rocket ship full of stars. The one that started the molt.
 emoji: 🦞
 mentions:
   - type: tweet
-    url: "https://x.com/lexfridman/status/2021785659644453136"
-    author: "Lex Fridman"
-    author_url: "https://x.com/lexfridman"
-    quote: "Here's my conversation with Peter Steinberger, creator of OpenClaw, an open-source AI agent that has taken the Internet by storm, with now over 180,000 stars on GitHub."
+    url: https://x.com/lexfridman/status/2021785659644453136
+    author: Lex Fridman
+    author_url: https://x.com/lexfridman
+    quote: Here's my conversation with Peter Steinberger, creator of OpenClaw, an open-source AI agent that has taken the Internet by storm, with now over 180,000 stars on GitHub.
     date: "2026-02-20"
     source: X
   - type: tweet
-    url: "https://x.com/scottbelsky/status/2017436989604192505"
-    author: "Scott Belsky"
-    author_url: "https://x.com/scottbelsky"
-    quote: "good breakdown of the architecture behind OpenClaw/Clawdbot, and also makes it perfectly clear that our operating systems are overdue for reimagination."
+    url: https://x.com/scottbelsky/status/2017436989604192505
+    author: Scott Belsky
+    author_url: https://x.com/scottbelsky
+    quote: good breakdown of the architecture behind OpenClaw/Clawdbot, and also makes it perfectly clear that our operating systems are overdue for reimagination.
     date: "2026-01-28"
     source: X
   - type: article
-    url: "https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/"
-    author: "TechCrunch"
-    title: "OpenClaw creator Peter Steinberger joins OpenAI"
+    url: https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/
+    author: TechCrunch
+    title: OpenClaw creator Peter Steinberger joins OpenAI
     date: "2026-02-15"
     source: TechCrunch
 platform:
@@ -39,9 +39,9 @@ mcp_support: true
 ecosystem_role: reference
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 240864
-  forks: 46528
-  open_issues: 9602
+  stars: 247588
+  forks: 47810
+  open_issues: 10079
   license: MIT
   topics:
     - ai
@@ -51,8 +51,8 @@ github_data:
     - openclaw
     - own-your-data
     - personal
-  last_commit: "2026-03-01T04:52:32Z"
-  latest_release: v2026.2.26
-  latest_release_date: "2026-02-27T00:01:43Z"
-  star_growth_7d: 798
-  last_enriched: "2026-03-01T05:10:01.465Z"
+  last_commit: "2026-03-02T23:14:01Z"
+  latest_release: v2026.3.1
+  latest_release_date: "2026-03-02T04:42:57Z"
+  star_growth_7d: 7522
+  last_enriched: "2026-03-02T23:14:50.350Z"

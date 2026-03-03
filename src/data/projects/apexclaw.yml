@@ -20,3 +20,28 @@ mcp_support: false
 integration_count: 94
 ecosystem_role: alternative
 added: "2026-03-01"
+github_data:
+  stars: 20
+  forks: 6
+  open_issues: 0
+  license: null
+  topics:
+    - ai
+    - apexclaw
+    - clawdbot
+    - clawdbot-skill
+    - free
+    - glm
+    - glm-5
+    - gogram
+    - moltbot
+    - personal-assistant
+    - skill
+    - telegram
+    - tools
+    - zai
+  last_commit: "2026-03-02T19:18:38Z"
+  latest_release: v0.4
+  latest_release_date: "2026-02-28T07:42:14Z"
+  star_growth_7d: 0
+  last_enriched: "2026-03-02T22:14:46.511Z"

@@ -14,22 +14,22 @@ highlight: Runs on $10 RISC-V boards, <10MB RAM, 1s boot
 emoji: 💡
 mentions:
   - type: tweet
-    url: "https://x.com/SipeedIO/status/2020832292885930288"
-    author: "Sipeed"
-    author_url: "https://x.com/SipeedIO"
-    quote: "Ditch your Mac Mini — now you can run a full AI assistant on $10 RISCV hardware with 10MB RAM."
+    url: https://x.com/SipeedIO/status/2020832292885930288
+    author: Sipeed
+    author_url: https://x.com/SipeedIO
+    quote: Ditch your Mac Mini — now you can run a full AI assistant on $10 RISCV hardware with 10MB RAM.
     date: "2026-02-08"
     source: X
   - type: article
-    url: "https://www.hackster.io/news/forget-the-mac-mini-run-this-openclaw-alternative-for-just-10-da23b2819d25"
-    author: "Nick Bild"
+    url: https://www.hackster.io/news/forget-the-mac-mini-run-this-openclaw-alternative-for-just-10-da23b2819d25
+    author: Nick Bild
     title: "Forget the Mac Mini: Run This OpenClaw Alternative for Just $10"
     date: "2026-02-10"
     source: Hackster.io
   - type: article
-    url: "https://www.cnx-software.com/2026/02/10/picoclaw-ultra-lightweight-personal-ai-assistant-run-on-just-10mb-of-ram/"
-    author: "Jean-Luc Aufranc"
-    title: "PicoClaw ultra-lightweight personal AI Assistant runs on just 10MB of RAM"
+    url: https://www.cnx-software.com/2026/02/10/picoclaw-ultra-lightweight-personal-ai-assistant-run-on-just-10mb-of-ram/
+    author: Jean-Luc Aufranc
+    title: PicoClaw ultra-lightweight personal AI Assistant runs on just 10MB of RAM
     date: "2026-02-10"
     source: CNX Software
 platform:
@@ -38,17 +38,17 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: reimplementation
 perf:
-  ram: "<10MB"
-  startup_time: "1s"
+  ram: <10MB
+  startup_time: 1s
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 21168
-  forks: 2675
-  open_issues: 387
+  stars: 21632
+  forks: 2754
+  open_issues: 397
   license: NOASSERTION
   topics: []
-  last_commit: "2026-03-01T04:20:20Z"
+  last_commit: "2026-03-02T21:23:55Z"
   latest_release: v0.2.0
   latest_release_date: "2026-02-28T12:08:31Z"
-  star_growth_7d: 74
-  last_enriched: "2026-03-01T05:10:02.096Z"
+  star_growth_7d: 538
+  last_enriched: "2026-03-02T23:14:51.019Z"

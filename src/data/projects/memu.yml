@@ -19,9 +19,9 @@ mcp_support: true
 ecosystem_role: infrastructure
 added: "2025-02-25"
 github_data:
-  stars: 11712
-  forks: 865
-  open_issues: 73
+  stars: 12358
+  forks: 896
+  open_issues: 76
   license: NOASSERTION
   topics:
     - agent-memory
@@ -39,5 +39,5 @@ github_data:
   last_commit: "2026-03-01T03:20:20Z"
   latest_release: v1.4.0
   latest_release_date: "2026-02-06T00:55:10Z"
-  star_growth_7d: 79
-  last_enriched: "2026-03-01T05:09:58.831Z"
+  star_growth_7d: 725
+  last_enriched: "2026-03-02T23:14:47.509Z"

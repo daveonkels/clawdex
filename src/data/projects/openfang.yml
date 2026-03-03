@@ -18,12 +18,12 @@ requires_llm: true
 mcp_support: true
 ecosystem_role: alternative
 perf:
-  binary_size: "32MB"
+  binary_size: 32MB
 added: "2026-02-25"
 github_data:
-  stars: 5979
-  forks: 625
-  open_issues: 73
+  stars: 9054
+  forks: 946
+  open_issues: 101
   license: Apache-2.0
   topics:
     - agent-framework
@@ -34,8 +34,8 @@ github_data:
     - openclaw
     - operating-system
     - rust
-  last_commit: "2026-03-01T01:17:03Z"
-  latest_release: v0.2.3
-  latest_release_date: "2026-03-01T01:27:50Z"
-  star_growth_7d: 728
-  last_enriched: "2026-03-01T05:10:01.758Z"
+  last_commit: "2026-03-02T22:19:08Z"
+  latest_release: v0.3.3
+  latest_release_date: "2026-03-02T22:30:27Z"
+  star_growth_7d: 3803
+  last_enriched: "2026-03-02T23:14:50.692Z"

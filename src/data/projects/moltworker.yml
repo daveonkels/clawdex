@@ -18,9 +18,9 @@ mcp_support: true
 ecosystem_role: derivative
 added: 2026-02-27T00:00:00.000Z
 github_data:
-  stars: 9304
-  forks: 1684
-  open_issues: 120
+  stars: 9361
+  forks: 1696
+  open_issues: 121
   license: Apache-2.0
   topics:
     - ai-agents
@@ -28,5 +28,5 @@ github_data:
   last_commit: "2026-03-01T01:19:04Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 6
-  last_enriched: "2026-03-01T05:10:00.002Z"
+  star_growth_7d: 63
+  last_enriched: "2026-03-02T23:14:48.832Z"
