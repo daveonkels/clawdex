@@ -1,0 +1,15 @@
+name: Spacebot
+slug: spacebot
+tagline: "Concurrent multi-process AI agent for communities and teams"
+description: "Rust-based AI agent built for multi-user environments — Discord servers, Slack workspaces, Telegram groups. Splits the monolith into five specialized processes (Channel, Branch, Worker, Compactor, Cortex) that run concurrently so the agent is never blocked. Typed memory graph (SQLite + LanceDB), cron jobs, MCP support, headless browser, OpenCode integration, and OpenClaw-compatible skills. Single binary, no server dependencies. FSL-1.1-ALv2 license, converting to Apache 2.0 after two years."
+language: rust
+category:
+  - multi-user
+  - community
+  - rust
+github: spacedriveapp/spacebot
+status: active
+tier: 1
+highlight: "Concurrent Channel/Branch/Worker/Cortex architecture — 50 users at once without blocking"
+emoji: 🚀
+added: 2026-03-04
