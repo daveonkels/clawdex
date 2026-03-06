@@ -1,0 +1,20 @@
+name: GoGogot
+slug: gogogot
+tagline: Lightweight self-hosted AI agent in Go
+description: A lightweight self-hosted personal AI agent written in Go. Deploys as a single ~15 MB binary that runs shell commands, edits files, browses the web, manages persistent memory, and schedules tasks. Runs on a $4/month VPS.
+language: go
+category:
+  - lightweight
+  - self-hosted
+github: aspasskiy/GoGogot
+website: https://go-go-got.com/
+status: active
+tier: 1
+highlight: Single 15 MB Go binary — 4,500 lines of code, runs on a $4/mo VPS
+emoji: 🏃
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: derivative
+added: 2026-03-05T00:00:00.000Z

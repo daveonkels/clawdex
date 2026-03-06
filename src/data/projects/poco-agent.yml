@@ -1,0 +1,20 @@
+name: Poco Agent
+slug: poco-agent
+tagline: Beautiful Web UI alternative to OpenClaw with sandboxed runtime
+description: A more beautiful and easier-to-use alternative to OpenClaw featuring a polished Web UI, built-in IM support, and a sandboxed runtime for improved safety. Powered by a Claude Code-based agent under the hood.
+language: typescript
+category:
+  - self-hosted
+  - messaging
+github: poco-ai/poco-agent
+website: https://poco-ai.com
+status: active
+tier: 1
+highlight: Polished Web UI with sandboxed agent runtime and built-in IM support
+emoji: 🎨
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: derivative
+added: 2026-03-05T00:00:00.000Z
