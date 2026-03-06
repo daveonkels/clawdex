@@ -95,6 +95,29 @@ const generatedDate = new Date(lbRaw.generated);
         />
       ))}
     </div>
+
+    <!-- Explore the ecosystem -->
+    <div class="mt-14 border-t border-white/5 pt-10">
+      <h2 class="font-display text-xl font-bold text-white mb-5">Explore the ecosystem</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <a href="/compare/" class="rounded-xl border border-white/5 bg-ocean-card p-5 hover:border-biolum/30 transition-all group">
+          <p class="text-white font-semibold mb-1 group-hover:text-biolum transition-colors">Compare Projects</p>
+          <p class="text-sm text-gray-500">{Math.round(projects.length * (projects.length - 1) / 2)}+ side-by-side comparisons across {projects.length} projects</p>
+        </a>
+        <a href="/leaderboard/" class="rounded-xl border border-white/5 bg-ocean-card p-5 hover:border-biolum/30 transition-all group">
+          <p class="text-white font-semibold mb-1 group-hover:text-biolum transition-colors">Leaderboard</p>
+          <p class="text-sm text-gray-500">Projects ranked by GitHub stars, growth, and health score</p>
+        </a>
+        <a href="/best-alternatives/" class="rounded-xl border border-white/5 bg-ocean-card p-5 hover:border-biolum/30 transition-all group">
+          <p class="text-white font-semibold mb-1 group-hover:text-biolum transition-colors">Best Alternatives</p>
+          <p class="text-sm text-gray-500">Ranked guide with pros, cons, and comparison links</p>
+        </a>
+        <a href="/analysis/" class="rounded-xl border border-white/5 bg-ocean-card p-5 hover:border-biolum/30 transition-all group">
+          <p class="text-white font-semibold mb-1 group-hover:text-biolum transition-colors">Ecosystem Analysis</p>
+          <p class="text-sm text-gray-500">Language distribution, growth trends, and community stats</p>
+        </a>
+      </div>
+    </div>
   </section>
 </Layout>
 

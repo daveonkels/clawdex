@@ -77,14 +77,30 @@ export function makePairSlug(slugA: string, slugB: string): string {
 
 export function generateAllPairs(projects: Project[]): PairEntry[] {
   const pairs: PairEntry[] = [];
+  const seen = new Set<string>();
+
+  function addPair(pair: string, canonical: string, slugA: string, slugB: string) {
+    if (seen.has(pair)) return;
+    seen.add(pair);
+    pairs.push({ pair, canonical, slugA, slugB });
+  }
+
   for (let i = 0; i < projects.length; i++) {
     for (let j = 0; j < projects.length; j++) {
       if (i === j) continue;
       const a = projects[i].slug;
       const b = projects[j].slug;
-      const pair = makePairSlug(a, b);
       const canonical = makeCanonicalSlug(a, b);
-      pairs.push({ pair, canonical, slugA: a, slugB: b });
+
+      addPair(makePairSlug(a, b), canonical, a, b);
+
+      // Generate alias-based pairs (same content, different URL, canonical points to real page)
+      for (const aliasA of projects[i].slug_aliases ?? []) {
+        addPair(makePairSlug(aliasA, b), canonical, a, b);
+      }
+      for (const aliasB of projects[j].slug_aliases ?? []) {
+        addPair(makePairSlug(a, aliasB), canonical, a, b);
+      }
     }
   }
   return pairs;

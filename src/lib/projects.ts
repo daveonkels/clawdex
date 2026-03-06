@@ -61,6 +61,7 @@ export interface Project {
   perf?: PerfProfile;
   ecosystem_role?: EcosystemRole;
   mentions?: Mention[];
+  slug_aliases?: string[];
 }
 
 const STARS_CACHE_PATH = path.join(process.cwd(), '.stars-cache.json');

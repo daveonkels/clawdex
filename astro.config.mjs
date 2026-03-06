@@ -22,6 +22,10 @@ export default defineConfig({
         else if (item.url === 'https://shelldex.com/compare/') {
           item.priority = 0.8;
         }
+        // Per-project alternatives pages
+        else if (item.url.includes('/alternatives/')) {
+          item.priority = 0.7;
+        }
         // Individual comparison pages
         else if (item.url.includes('/compare/')) {
           item.priority = 0.6;

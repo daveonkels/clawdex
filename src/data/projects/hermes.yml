@@ -1,5 +1,7 @@
 name: Hermes Agent
 slug: hermes
+slug_aliases:
+  - hermes-agent
 tagline: The agent that grows with you
 description: Persistent personal AI agent by Nous Research with multi-level growing memory, self-authored skills, and multi-platform messaging. Learns your projects and builds reusable knowledge over time.
 language: python
@@ -20,13 +22,13 @@ mcp_support: true
 ecosystem_role: alternative
 added: "2026-02-28"
 github_data:
-  stars: 1510
-  forks: 225
-  open_issues: 66
+  stars: 1664
+  forks: 254
+  open_issues: 130
   license: null
   topics: []
-  last_commit: "2026-03-02T19:35:09Z"
+  last_commit: "2026-03-05T00:37:01Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 0
-  last_enriched: "2026-03-02T22:14:49.387Z"
+  star_growth_7d: 154
+  last_enriched: "2026-03-05T00:56:37.665Z"

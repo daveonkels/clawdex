@@ -39,7 +39,7 @@ export async function getStaticPaths() {
         aEntry,
         bEntry,
         isCanonical,
-        canonicalUrl: `https://shelldex.com/compare/${entry.canonical}`,
+        canonicalUrl: `https://shelldex.com/compare/${entry.canonical}/`,
         keyDifferences: generateKeyDifferences(a, b, aEntry, bEntry),
         recommendation: generateRecommendation(a, b, aEntry, bEntry),
         faqItems: generateFAQItems(a, b, aEntry, bEntry),
