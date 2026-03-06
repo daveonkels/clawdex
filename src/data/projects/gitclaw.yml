@@ -1,0 +1,21 @@
+name: Gitclaw
+slug: gitclaw
+tagline: Your agent lives inside a git repo
+description: A universal git-native AI agent framework where identity, rules, memory, tools, and skills are all version-controlled files. Fork an agent, branch a personality, git log its memory. Supports CLI, SDK, and remote repo modes.
+language: typescript
+category:
+  - framework
+  - self-hosted
+  - developer-tools
+github: open-gitagent/gitclaw
+status: active
+tier: 2
+highlight: Agent-as-repo architecture — agent.yaml, SOUL.md, RULES.md, memory/, tools/, skills/ are all git-committed files you can fork, branch, and diff
+emoji: 🐙
+platform:
+  - cli
+  - sdk
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
+added: "2026-03-06"
