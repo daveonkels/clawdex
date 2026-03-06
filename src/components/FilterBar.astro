@@ -8,14 +8,6 @@ interface Props {
 
 const { languages, categories, statuses, platforms } = Astro.props;
 
-const platformLabels: Record<string, string> = {
-  server: 'Server',
-  browser: 'Browser',
-  embedded: 'Embedded',
-  serverless: 'Serverless',
-  messaging: 'Messaging',
-  desktop: 'Desktop',
-};
 ---
 
 <div class="space-y-4 mb-10" id="filter-bar">
@@ -68,7 +60,7 @@ const platformLabels: Record<string, string> = {
         <div class="flex flex-wrap gap-1.5" data-filter-group="platform">
           <button class="filter-btn filter-btn-active" data-filter-value="all">All</button>
           {platforms.map(p => (
-            <button class="filter-btn filter-btn-inactive" data-filter-value={p}>{platformLabels[p] ?? p}</button>
+            <button class="filter-btn filter-btn-inactive" data-filter-value={p}>{p}</button>
           ))}
         </div>
       </div>
