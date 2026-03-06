@@ -2,7 +2,7 @@ name: Kai
 slug: kai
 tagline: OpenClaw alternative in your pocket
 description: A mobile-first OpenClaw alternative built with Kotlin Multiplatform and Jetpack Compose. Runs on Android and iOS with any OpenAI-compatible endpoint. The first mobile-native entry in the OpenClaw ecosystem.
-language: multi
+language: kotlin
 category:
   - mobile
   - lightweight

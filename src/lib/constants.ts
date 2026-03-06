@@ -8,6 +8,7 @@ export const languageLabel: Record<string, string> = {
   c: 'C',
   bash: 'Bash',
   zig: 'Zig',
+  kotlin: 'Kotlin',
   multi: 'Multi-language',
 };
 
@@ -19,6 +20,7 @@ export const languageColors: Record<string, { bg: string; text: string; border: 
   c: { bg: 'bg-gray-500/10', text: 'text-gray-400', border: 'border-gray-500/20' },
   bash: { bg: 'bg-green-500/10', text: 'text-green-400', border: 'border-green-500/20' },
   zig: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20' },
+  kotlin: { bg: 'bg-violet-500/10', text: 'text-violet-400', border: 'border-violet-500/20' },
   multi: { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/20' },
 };
 
@@ -31,6 +33,7 @@ export const langColorsFlat: Record<string, string> = {
   c: 'bg-gray-500/20 text-gray-300',
   bash: 'bg-green-500/20 text-green-300',
   zig: 'bg-amber-500/20 text-amber-300',
+  kotlin: 'bg-violet-500/20 text-violet-300',
   multi: 'bg-purple-500/20 text-purple-300',
 };
 
