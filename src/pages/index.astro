@@ -23,7 +23,7 @@ const lbRaw = JSON.parse(fs.readFileSync('src/data/generated/leaderboard.json', 
 const generatedDate = new Date(lbRaw.generated);
 ---
 
-<Layout title="Shelldex — The OpenClaw Ecosystem">
+<Layout title={`${projects.length} OpenClaw Alternatives & Forks Compared (${new Date().getFullYear()}) — Shelldex`} description={`Compare ${projects.length} OpenClaw alternatives and forks side by side — stars, language, performance, and project health. The complete registry of the OpenClaw ecosystem.`}>
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebSite",

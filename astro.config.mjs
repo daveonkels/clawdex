@@ -4,13 +4,14 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://shelldex.com',
+  trailingSlash: 'always',
   integrations: [
     tailwind(),
     sitemap({
       priority: 0.7,
       serialize(item) {
         // Editorial pages get highest priority
-        if (item.url.includes('/analysis') || item.url.includes('/faq')) {
+        if (item.url.includes('/analysis') || item.url.includes('/faq') || item.url.includes('/best-alternatives')) {
           item.priority = 0.9;
         }
         // Project detail pages

@@ -373,6 +373,102 @@ export function generateRecommendation(a: Project, b: Project, aEntry: Leaderboa
   return paragraphs.join('\n\n');
 }
 
+// ── FAQ generation ──────────────────────────────────────────────────────────
+
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export function generateFAQItems(a: Project, b: Project, aEntry: LeaderboardEntry | null, bEntry: LeaderboardEntry | null): FAQItem[] {
+  const items: FAQItem[] = [];
+  const aStars = a.github_data?.stars ?? a.stars ?? 0;
+  const bStars = b.github_data?.stars ?? b.stars ?? 0;
+  const aLang = languageLabel[a.language] ?? a.language;
+  const bLang = languageLabel[b.language] ?? b.language;
+
+  // Popularity question
+  if (aStars > 0 && bStars > 0) {
+    const leader = aStars >= bStars ? a : b;
+    const leaderStars = Math.max(aStars, bStars);
+    const trailer = aStars >= bStars ? b : a;
+    const trailerStars = Math.min(aStars, bStars);
+    const aGrowth = a.github_data?.star_growth_7d ?? 0;
+    const bGrowth = b.github_data?.star_growth_7d ?? 0;
+    const growthNote = aGrowth > 0 || bGrowth > 0
+      ? ` In the last 7 days, ${aGrowth >= bGrowth ? a.name : b.name} gained more stars (+${formatStars(Math.max(aGrowth, bGrowth))}).`
+      : '';
+    items.push({
+      question: `Is ${a.name} or ${b.name} more popular?`,
+      answer: `${leader.name} currently has ${formatStars(leaderStars)} GitHub stars compared to ${formatStars(trailerStars)} for ${trailer.name}.${growthNote}`,
+    });
+  }
+
+  // Language question
+  if (a.language !== b.language) {
+    items.push({
+      question: `What language is ${a.name} vs ${b.name} written in?`,
+      answer: `${a.name} is written in ${aLang} while ${b.name} uses ${bLang}. This affects plugin ecosystems, contribution accessibility, and runtime performance characteristics.`,
+    });
+  } else {
+    items.push({
+      question: `What language are ${a.name} and ${b.name} written in?`,
+      answer: `Both ${a.name} and ${b.name} are written in ${aLang}. This means they share similar deployment requirements and can potentially reuse plugins or extensions.`,
+    });
+  }
+
+  // MCP question
+  if (a.mcp_support !== undefined || b.mcp_support !== undefined) {
+    const aMcp = a.mcp_support === true;
+    const bMcp = b.mcp_support === true;
+    if (aMcp && bMcp) {
+      items.push({
+        question: `Do ${a.name} and ${b.name} support MCP?`,
+        answer: `Yes, both ${a.name} and ${b.name} support the Model Context Protocol (MCP), allowing them to connect to external tools and data sources through a standardized interface.`,
+      });
+    } else if (aMcp || bMcp) {
+      const hasMcp = aMcp ? a : b;
+      const noMcp = aMcp ? b : a;
+      items.push({
+        question: `Does ${a.name} or ${b.name} support MCP?`,
+        answer: `${hasMcp.name} supports the Model Context Protocol (MCP) for connecting to external tools, while ${noMcp.name} does not currently offer MCP support.`,
+      });
+    }
+  }
+
+  // Self-hosting / LLM requirement question
+  if (a.requires_llm !== undefined || b.requires_llm !== undefined) {
+    const aFree = a.requires_llm === false;
+    const bFree = b.requires_llm === false;
+    if (aFree !== bFree) {
+      const free = aFree ? a : b;
+      const paid = aFree ? b : a;
+      items.push({
+        question: `Which is cheaper to self-host, ${a.name} or ${b.name}?`,
+        answer: `${free.name} does not require an LLM API key, meaning zero ongoing token costs. ${paid.name} requires an LLM provider, so you will need an API key and will incur per-token costs. For cost-conscious self-hosting, ${free.name} has an advantage.`,
+      });
+    }
+  }
+
+  // Platform question
+  const aPlatforms = a.platform ?? [];
+  const bPlatforms = b.platform ?? [];
+  if (aPlatforms.length > 0 && bPlatforms.length > 0) {
+    const aHasEmbedded = aPlatforms.includes('embedded');
+    const bHasEmbedded = bPlatforms.includes('embedded');
+    if (aHasEmbedded !== bHasEmbedded) {
+      const embedded = aHasEmbedded ? a : b;
+      const other = aHasEmbedded ? b : a;
+      items.push({
+        question: `Can ${a.name} or ${b.name} run on embedded hardware?`,
+        answer: `${embedded.name} is designed to run on embedded and IoT devices like Raspberry Pi and ESP32 boards. ${other.name} targets ${(aHasEmbedded ? bPlatforms : aPlatforms).join(', ')} platforms and is not optimized for constrained hardware.`,
+      });
+    }
+  }
+
+  return items.slice(0, 4);
+}
+
 // ── Related comparisons ─────────────────────────────────────────────────────
 
 export function getRelatedComparisons(slugA: string, slugB: string, allPairs: PairEntry[], limit = 8): PairEntry[] {

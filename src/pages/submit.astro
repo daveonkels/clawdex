@@ -89,6 +89,24 @@ import Layout from '../layouts/Layout.astro';
         </ul>
       </div>
 
+      <!-- Badge -->
+      <div>
+        <h2 class="font-display text-xl font-bold text-white mb-4">Add a Shelldex Badge</h2>
+        <p class="text-gray-400 text-sm mb-4">Help others discover your project by adding a Shelldex badge to your README:</p>
+        <div class="bg-ocean-card border border-white/5 rounded-xl p-5 space-y-4">
+          <div>
+            <p class="text-xs text-gray-500 mb-2">Preview:</p>
+            <img src="/badges/shelldex-badge.svg" alt="Listed on Shelldex" class="h-5" />
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 mb-2">Markdown (replace <code class="text-biolum font-mono">your-slug</code> with your project slug):</p>
+            <div class="bg-black/30 rounded-lg px-4 py-3 font-mono text-xs text-gray-300 overflow-x-auto">
+              [![Listed on Shelldex](https://shelldex.com/badges/shelldex-badge.svg)](https://shelldex.com/projects/your-slug/)
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- CTA -->
       <div class="pt-4">
         <a

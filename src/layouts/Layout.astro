@@ -8,7 +8,7 @@ interface Props {
 
 const {
   title,
-  description = 'The OpenClaw ecosystem, cataloged — clones, forks, derivatives, and alternatives. Compare by GitHub stars, language, and activity. Not workflows. Not tutorials. Just the projects.',
+  description = 'Compare OpenClaw alternatives and forks side by side — GitHub stars, language, performance, and project health. The complete registry of the OpenClaw ecosystem.',
   ogImage = 'https://shelldex.com/images/og-default.png',
   canonicalUrl,
 } = Astro.props;
@@ -95,6 +95,7 @@ const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathn
               <a href="/leaderboard" class="text-sm text-gray-400 hover:text-biolum transition-colors">Leaderboard</a>
               <a href="/compare" class="text-sm text-gray-400 hover:text-biolum transition-colors">Compare</a>
               <a href="/analysis" class="text-sm text-gray-400 hover:text-biolum transition-colors">Analysis</a>
+              <a href="/best-alternatives/" class="text-sm text-gray-400 hover:text-biolum transition-colors">Alternatives</a>
               <a href="/about" class="text-sm text-gray-400 hover:text-biolum transition-colors">About</a>
               <a href="/submit" class="text-sm text-gray-400 hover:text-biolum transition-colors">Submit</a>
             </div>
@@ -128,6 +129,7 @@ const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathn
             <a href="/compare" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Compare</a>
             <a href="/analysis" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Analysis</a>
             <a href="/faq" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">FAQ</a>
+            <a href="/best-alternatives/" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Alternatives</a>
             <a href="/about" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">About</a>
             <a href="/submit" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Submit a Project</a>
           </div>
@@ -190,6 +192,7 @@ const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathn
               <li><a href="/faq" class="hover:text-biolum transition-colors">FAQ</a></li>
               <li><a href="/about" class="hover:text-biolum transition-colors">About</a></li>
               <li><a href="/submit" class="hover:text-biolum transition-colors">Submit a Project</a></li>
+              <li><a href="/badges/" class="hover:text-biolum transition-colors">Badges</a></li>
             </ul>
           </div>
           <div>

@@ -116,7 +116,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
 ---
 
 <Layout
-  title={`${name} — ${tagline} | Shelldex`}
+  title={slug === 'openclaw' ? `${name} — ${tagline} | Shelldex` : `${name}: ${tagline} — OpenClaw Alternative (${formatStars(stars ?? 0)} Stars) | Shelldex`}
   description={description}
 >
   <script type="application/ld+json" set:html={JSON.stringify(softwareJsonLd)} />

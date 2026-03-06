@@ -7,8 +7,9 @@ const projects = await loadProjects();
 const uniquePairs = getUniquePairs(projects);
 const projectNames = new Map(projects.map(p => [p.slug, { name: p.name, emoji: p.emoji }]));
 
-const pageTitle = 'Compare OpenClaw Alternatives — Shelldex';
-const pageDescription = `Compare any two projects in the OpenClaw ecosystem side by side. ${uniquePairs.length} unique comparisons across ${projects.length} projects.`;
+const year = new Date().getFullYear();
+const pageTitle = `Compare ${projects.length} OpenClaw Alternatives Side by Side (${year}) — Shelldex`;
+const pageDescription = `Compare any two projects in the OpenClaw ecosystem side by side. ${uniquePairs.length} unique comparisons across ${projects.length} projects — stars, growth, language, and health.`;
 ---
 
 <Layout title={pageTitle} description={pageDescription}>

@@ -38,25 +38,57 @@ const rustProjects = projects.filter(p => p.language.toLowerCase() === 'rust');
 
 // Most starred alternative
 const topAlt = leaderboard.find(e => e.slug !== 'openclaw');
+
+// FAQ schema data — plain text versions of Q&A for JSON-LD
+const faqSchemaItems = [
+  { q: "What is OpenClaw?", a: `OpenClaw is a self-hosted, open-source personal AI super-agent platform created by Peter Steinberger. Written in TypeScript under the MIT license, it has accumulated over ${starsNum('openclaw')} GitHub stars. It gives you a personal AI agent that interacts with your tools, files, and services on your behalf, running on your own hardware.` },
+  { q: "What are the best OpenClaw alternatives?", a: `The top alternatives by GitHub stars are Nanobot (${stars('nanobot')}), ZeroClaw (${stars('zeroclaw')}), PicoClaw (${stars('picoclaw')}), and AstrBot (${stars('astrbot')}). For security, consider NanoClaw, IronClaw, or Moltis. For cloud-native, Moltworker runs on Cloudflare Workers.` },
+  { q: "How many OpenClaw alternatives exist?", a: `Shelldex currently tracks ${projectCount} projects across the OpenClaw ecosystem, including the original, direct forks, clean-room reimplementations, and inspired projects. The ecosystem is still growing rapidly.` },
+  { q: "What is the OpenClaw ecosystem?", a: `The OpenClaw ecosystem refers to the constellation of projects that have emerged around the original OpenClaw personal AI agent. It includes forks, language ports, security-hardened variants, minimal reimplementations, and cloud-hosted versions spanning ${langCount} programming languages.` },
+  { q: "Is OpenClaw free and open source?", a: "Yes. OpenClaw is released under the MIT license. You can use, modify, and redistribute it freely, including in commercial products. Most ecosystem projects also use permissive licenses like MIT or Apache 2.0." },
+  { q: "What is the lightest OpenClaw alternative?", a: "ZeroClaw ships as a 3.4MB Rust binary with sub-10ms startup and under 5MB RAM. PicoClaw runs on $10 RISC-V boards with under 10MB RAM. BashoBot is built entirely in Bash with zero runtime dependencies." },
+  { q: "Can you run an OpenClaw alternative on a Raspberry Pi?", a: "Yes. PicoClaw, ZeroClaw, BashoBot, MicroClaw, and IronClaw all run well on Raspberry Pi. The main bottleneck is LLM inference, not the agent framework itself." },
+  { q: "Which OpenClaw alternatives are written in Rust?", a: `Rust is the second most popular language in the ecosystem with ${rustProjects.length} projects: ${rustProjects.map(p => p.name).join(', ')}. Rust's memory safety and single-binary distribution make it attractive for agent frameworks.` },
+  { q: "Which OpenClaw alternative has the most GitHub stars?", a: `Excluding OpenClaw itself, the most-starred alternative is ${top5[0]?.name} with ${top5[0] ? starsNum(top5[0].slug) : '0'} stars. It is an ultra-minimal Python implementation designed for research.` },
+  { q: "What programming languages are OpenClaw alternatives written in?", a: `The ${projectCount} projects span ${langCount} languages: TypeScript (${langCounts.get('typescript') ?? 0}), Python (${langCounts.get('python') ?? 0}), Rust (${langCounts.get('rust') ?? 0}), Go, C, Bash, and Zig.` },
+  { q: "Is OpenClaw safe to use?", a: "OpenClaw is open-source under MIT and self-hosted, so your data stays local. Security-focused alternatives like NanoClaw (container isolation), Moltis (zero-unsafe Rust, audit trails), and Carapace (signed WASM plugins) address specific attack surfaces." },
+  { q: "What is the most secure OpenClaw clone?", a: "NanoClaw uses OS-level container isolation with minimal surface area. IronClaw and Moltis are Rust-hardened with audit trails. Carapace requires signed WASM plugins. Secure-OpenClaw by Composio offers enterprise-grade controls." },
+  { q: "How do OpenClaw alternatives handle permissions?", a: "Models vary: OpenClaw uses skill-based permissions, NanoClaw uses OS-level containers, Moltis logs to an immutable audit trail, Carapace requires signed WASM modules, and SafeClaw uses no LLM at all for deterministic rule-based logic." },
+  { q: "OpenClaw vs NanoClaw — which is better?", a: `OpenClaw (${stars('openclaw')} stars) is the full-featured reference with the largest community. NanoClaw (${starsNum('nanoclaw')} stars) strips it to five files with OS-level container isolation, trading features for security. Both are TypeScript/MIT.` },
+  { q: "OpenClaw vs ZeroClaw — which should I choose?", a: `Choose OpenClaw for broadest plugin support and community. Choose ZeroClaw for raw performance: sub-10ms startup, 3.4MB binary, under 5MB RAM. ZeroClaw is written in Rust; OpenClaw in TypeScript.` },
+  { q: "What's the difference between OpenClaw and its forks?", a: "True forks like Secure-OpenClaw and Moltworker share OpenClaw's codebase. Most alternatives are reimplementations in different languages (Rust, Python, Go, C, Zig) that share the concept but not the code." },
+  { q: "What is Shelldex?", a: "Shelldex is a community-maintained directory cataloging every project in the OpenClaw ecosystem. It tracks clones, forks, and reimplementations, comparing them by GitHub stars, language, activity, and health. Formerly known as Clawdex." },
+  { q: "How do I submit a project to Shelldex?", a: "Open a pull request on the GitHub repository adding a YAML file to src/data/projects/ with the project's name, description, language, and GitHub URL. A human reviews every submission before merging." },
+  { q: "How often is Shelldex updated?", a: "Project data is enriched from the GitHub API on every production build. Star counts, forks, issues, and commits are refreshed each deployment. New projects are added as community submissions are reviewed." },
+  { q: "Is Shelldex affiliated with OpenClaw?", a: "No. Shelldex is an independent project by Dave Onkels. It is not affiliated with OpenClaw, Peter Steinberger, or Anthropic. It lists all projects under the same criteria." },
+];
 ---
 
 <Layout
-  title="FAQ — OpenClaw Ecosystem Questions Answered | Shelldex"
-  description="Frequently asked questions about OpenClaw, its alternatives, and the Shelldex directory. Find answers about security, performance, language support, and more."
+  title={`OpenClaw FAQ: Best Alternatives, Security, Rust vs Python & More (${new Date().getFullYear()}) | Shelldex`}
+  description={`Answers to ${projectCount}+ questions about OpenClaw alternatives — which is fastest, most secure, best for self-hosting, Rust vs Python, MCP support, and more.`}
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "FAQ — Shelldex",
-    "description": "Frequently asked questions about OpenClaw, its alternatives, and the Shelldex directory. Find answers about security, performance, language support, and more.",
-    "url": "https://shelldex.com/faq",
+    "@type": "FAQPage",
+    "name": "OpenClaw FAQ",
+    "description": `Answers to ${projectCount}+ questions about OpenClaw alternatives — which is fastest, most secure, best for self-hosting, and more.`,
+    "url": "https://shelldex.com/faq/",
     "breadcrumb": {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Shelldex", "item": "https://shelldex.com" },
-        { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://shelldex.com/faq" }
+        { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://shelldex.com/faq/" }
       ]
-    }
+    },
+    "mainEntity": faqSchemaItems.map(item => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.a,
+      },
+    })),
   })} />
 
   <!-- Breadcrumb -->

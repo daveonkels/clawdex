@@ -1,0 +1,293 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadProjects, formatStars } from '../lib/projects';
+import { loadLeaderboard, computeHealthScore, makeCanonicalSlug } from '../lib/compare';
+import { languageLabel, languageColors } from '../lib/constants';
+
+const projects = await loadProjects();
+const { entries: leaderboard, count: lbTotal } = loadLeaderboard();
+
+// All alternatives (exclude openclaw), sorted by stars
+const alternatives = projects
+  .filter(p => p.slug !== 'openclaw')
+  .sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0));
+
+const year = new Date().getFullYear();
+const pageTitle = `Best OpenClaw Alternatives (${year}): ${alternatives.length} Projects Ranked & Compared | Shelldex`;
+const pageDescription = `The definitive guide to OpenClaw alternatives — ranked by GitHub stars, project health, and community momentum. From Rust rewrites to embedded agents, find the right one for your stack.`;
+
+const openclaw = projects.find(p => p.slug === 'openclaw');
+const oclawStars = formatStars(openclaw?.stars ?? 0);
+
+function getHealthScore(slug: string): number {
+  const entry = leaderboard.find(e => e.slug === slug);
+  return computeHealthScore(entry ?? null);
+}
+
+function getPros(p: typeof projects[0]): string[] {
+  const pros: string[] = [];
+  if ((p.stars ?? 0) >= 10000) pros.push(`${formatStars(p.stars ?? 0)} GitHub stars — strong community validation`);
+  else if ((p.stars ?? 0) >= 1000) pros.push(`${formatStars(p.stars ?? 0)} GitHub stars — growing community`);
+
+  if (p.requires_llm === false) pros.push('No LLM API key needed — zero token costs');
+  if (p.mcp_support) pros.push('MCP (Model Context Protocol) support');
+  if (p.perf?.binary_size) pros.push(`Lightweight: ${p.perf.binary_size} binary`);
+  if (p.perf?.startup_time) pros.push(`Fast startup: ${p.perf.startup_time}`);
+  if (p.perf?.ram) pros.push(`Low memory: ${p.perf.ram} RAM`);
+  if (p.platform?.includes('embedded')) pros.push('Runs on embedded/IoT hardware');
+  if (p.platform?.includes('browser')) pros.push('Runs in the browser — no server needed');
+  if (p.platform?.includes('serverless')) pros.push('Serverless deployment support');
+  if (p.integration_count) pros.push(`${p.integration_count}+ built-in integrations`);
+
+  const health = getHealthScore(p.slug);
+  if (health >= 70) pros.push('Excellent project health score');
+
+  if (pros.length < 2) {
+    if (p.category.includes('security')) pros.push('Security-focused architecture');
+    if (p.category.includes('lightweight')) pros.push('Minimal footprint');
+    if (p.category.includes('research')) pros.push('Research-friendly design');
+  }
+
+  return pros.slice(0, 4);
+}
+
+function getCons(p: typeof projects[0]): string[] {
+  const cons: string[] = [];
+  if ((p.stars ?? 0) < 500) cons.push('Smaller community — fewer resources and plugins');
+  if (p.requires_llm !== false) cons.push('Requires LLM API key (ongoing token costs)');
+  if (p.status === 'experimental') cons.push('Experimental status — may have breaking changes');
+  if (!p.mcp_support && p.mcp_support !== undefined) cons.push('No MCP support yet');
+
+  const entry = leaderboard.find(e => e.slug === p.slug);
+  if (entry && entry.health.days_since_last_commit > 30) cons.push('Less frequent updates recently');
+
+  return cons.slice(0, 3);
+}
+
+function bestFor(p: typeof projects[0]): string {
+  if (p.category.includes('security') || p.category.includes('privacy')) return 'Security-conscious deployments';
+  if (p.category.includes('embedded') || p.category.includes('iot')) return 'IoT and embedded devices';
+  if (p.category.includes('research')) return 'Research and experimentation';
+  if (p.category.includes('performance') || p.category.includes('lightweight')) return 'Performance-critical environments';
+  if (p.category.includes('messaging')) return 'Chat platform integrations';
+  if (p.category.includes('companion') || p.category.includes('persona')) return 'Personalized AI companions';
+  if (p.category.includes('memory') || p.category.includes('proactive')) return 'Memory-first agent workflows';
+  if (p.category.includes('productivity') || p.category.includes('automation')) return 'Task automation and productivity';
+  if (p.category.includes('coding')) return 'Code-focused AI workflows';
+  if (p.platform?.includes('browser')) return 'Browser-based deployments';
+  if (p.platform?.includes('serverless')) return 'Serverless and edge computing';
+  return 'General-purpose AI agent use cases';
+}
+
+const itemListJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": `Best OpenClaw Alternatives (${year})`,
+  "description": pageDescription,
+  "url": "https://shelldex.com/best-alternatives/",
+  "numberOfItems": alternatives.length,
+  "itemListElement": alternatives.map((p, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "name": p.name,
+    "url": `https://shelldex.com/projects/${p.slug}/`,
+  })),
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Shelldex", "item": "https://shelldex.com" },
+    { "@type": "ListItem", "position": 2, "name": "Best Alternatives", "item": "https://shelldex.com/best-alternatives/" },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-gray-600 mb-10" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-biolum transition-colors">Shelldex</a>
+      <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      <span class="text-gray-400">Best Alternatives</span>
+    </nav>
+
+    <!-- Hero -->
+    <header class="mb-12">
+      <h1 class="font-display text-4xl sm:text-5xl font-bold text-white leading-tight mb-6">
+        Best OpenClaw Alternatives ({year})
+      </h1>
+      <div class="text-lg text-gray-400 space-y-4 leading-relaxed">
+        <p>
+          <a href="/projects/openclaw/" class="text-biolum hover:text-biolum-light transition-colors">OpenClaw</a> ({oclawStars} stars) kicked off the personal AI agent revolution. But it is not the only option. The ecosystem now includes <strong class="text-white">{alternatives.length} alternative projects</strong> spanning {new Set(alternatives.map(p => p.language)).size} programming languages — from minimal Rust binaries to browser-native agents to embedded IoT frameworks.
+        </p>
+        <p>
+          This guide ranks every OpenClaw alternative by GitHub stars and project health, with pros, cons, and direct comparison links. Whether you need maximum security, minimal resource usage, or a specific programming language, there is an alternative built for your use case.
+        </p>
+      </div>
+    </header>
+
+    <!-- Quick nav -->
+    <div class="rounded-xl bg-ocean-card border border-white/5 p-5 mb-12">
+      <p class="text-sm text-gray-500 mb-3 font-medium">Jump to a project:</p>
+      <div class="flex flex-wrap gap-2">
+        {alternatives.map(p => (
+          <a href={`#${p.slug}`} class="text-xs text-gray-400 hover:text-biolum bg-white/5 hover:bg-biolum/10 px-2.5 py-1 rounded-md transition-colors">
+            {p.emoji} {p.name}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Project listings -->
+    <div class="space-y-10">
+      {alternatives.map((p, i) => {
+        const lang = languageColors[p.language] || languageColors.multi;
+        const langName = languageLabel[p.language] ?? p.language;
+        const pros = getPros(p);
+        const cons = getCons(p);
+        const compareSlug = makeCanonicalSlug('openclaw', p.slug);
+        const health = getHealthScore(p.slug);
+
+        return (
+          <article id={p.slug} class="rounded-xl border border-white/5 bg-ocean-card p-6 sm:p-8 scroll-mt-20">
+            <!-- Header -->
+            <div class="flex items-start gap-4 mb-4">
+              <span class="text-3xl sm:text-4xl leading-none mt-0.5">{p.emoji}</span>
+              <div class="flex-1 min-w-0">
+                <h2 class="font-display text-2xl font-bold text-white mb-1">
+                  <span class="text-gray-500 font-mono text-lg mr-2">#{i + 1}</span>
+                  <a href={`/projects/${p.slug}/`} class="hover:text-biolum transition-colors">{p.name}</a>
+                  {p.stars && p.stars > 0 && (
+                    <span class="text-yellow-400 text-base font-mono ml-2">({formatStars(p.stars)} stars)</span>
+                  )}
+                </h2>
+                <p class="text-gray-400">{p.tagline}</p>
+              </div>
+            </div>
+
+            <!-- Best for -->
+            <div class="mb-4">
+              <span class="text-xs font-semibold text-biolum uppercase tracking-wider">Best for:</span>
+              <span class="text-sm text-gray-300 ml-2">{bestFor(p)}</span>
+            </div>
+
+            <!-- Description -->
+            <p class="text-gray-300 leading-relaxed mb-5">{p.description}</p>
+
+            <!-- Badges -->
+            <div class="flex flex-wrap items-center gap-2 mb-5">
+              <span class={`badge-language border ${lang.bg} ${lang.text} ${lang.border}`}>
+                {langName}
+              </span>
+              <span class={`badge-language border ${p.status === 'active' ? 'border-biolum/30 bg-biolum/10 text-biolum' : 'border-yellow-500/30 bg-yellow-500/10 text-yellow-400'}`}>
+                {p.status}
+              </span>
+              {p.mcp_support && (
+                <span class="badge-language border border-purple-500/20 bg-purple-500/10 text-purple-400">MCP</span>
+              )}
+              {p.requires_llm === false && (
+                <span class="badge-language border border-green-500/20 bg-green-500/10 text-green-400">No LLM needed</span>
+              )}
+              <span class={`badge-language border ${health >= 70 ? 'border-biolum/20 bg-biolum/10 text-biolum' : health >= 40 ? 'border-yellow-500/20 bg-yellow-500/10 text-yellow-400' : 'border-gray-500/20 bg-gray-500/10 text-gray-500'}`}>
+                Health: {health}/100
+              </span>
+            </div>
+
+            <!-- Pros/Cons -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+              {pros.length > 0 && (
+                <div>
+                  <p class="text-xs font-semibold text-biolum uppercase tracking-wider mb-2">Pros</p>
+                  <ul class="space-y-1.5">
+                    {pros.map(pro => (
+                      <li class="flex items-start gap-2 text-sm text-gray-300">
+                        <span class="text-biolum mt-0.5 flex-shrink-0">+</span>
+                        <span>{pro}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {cons.length > 0 && (
+                <div>
+                  <p class="text-xs font-semibold text-coral uppercase tracking-wider mb-2">Cons</p>
+                  <ul class="space-y-1.5">
+                    {cons.map(con => (
+                      <li class="flex items-start gap-2 text-sm text-gray-400">
+                        <span class="text-coral mt-0.5 flex-shrink-0">-</span>
+                        <span>{con}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <!-- Links -->
+            <div class="flex flex-wrap gap-3 pt-3 border-t border-white/5">
+              <a
+                href={`/projects/${p.slug}/`}
+                class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-biolum transition-colors"
+              >
+                Full profile
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+              </a>
+              <a
+                href={`/compare/${compareSlug}/`}
+                class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-biolum transition-colors"
+              >
+                Compare with OpenClaw
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+              </a>
+              {p.github && (
+                <a
+                  href={`https://github.com/${p.github}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-biolum transition-colors"
+                >
+                  GitHub
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+                </a>
+              )}
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="mt-12 rounded-xl bg-biolum/5 border border-biolum/15 p-6 text-center">
+      <p class="text-biolum font-medium mb-3">Know a project we are missing?</p>
+      <a
+        href="/submit/"
+        class="inline-flex items-center gap-2 px-5 py-2.5 bg-biolum/10 border border-biolum/30 rounded-lg text-biolum hover:bg-biolum/20 transition-colors text-sm font-medium"
+      >
+        Submit a Project
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <!-- Back links -->
+    <div class="border-t border-white/5 pt-8 mt-10 flex flex-wrap gap-6">
+      <a href="/" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Directory
+      </a>
+      <a href="/compare/" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+        Compare projects
+      </a>
+      <a href="/leaderboard/" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+        Leaderboard
+      </a>
+    </div>
+  </div>
+</Layout>
