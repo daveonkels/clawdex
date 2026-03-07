@@ -1,0 +1,22 @@
+name: OpenLegion
+slug: openlegion
+tagline: Secure autonomous AI agent fleets
+description: Production-grade multi-agent platform where every agent runs in its own Docker container. Features vault-based API key isolation, per-agent cost budgets, deterministic YAML DAG workflows, and multi-channel support. Designed for team deployments with security as a first principle.
+language: python
+category:
+  - multi-agent
+  - security
+  - self-hosted
+  - enterprise
+github: openlegion-ai/openlegion
+status: active
+tier: 2
+highlight: Docker-isolated agent fleet — each agent in its own container, API keys in a vault proxy agents never see, per-agent daily and monthly budget caps
+emoji: 🛡️
+platform:
+  - server
+  - messaging
+requires_llm: true
+mcp_support: true
+ecosystem_role: alternative
+added: "2026-03-07"

@@ -1,0 +1,22 @@
+name: Golem
+slug: golem
+tagline: Your AI agent, single binary, zero dependencies
+description: Terminal-first personal AI agent built in pure Go. Single binary deployment with TUI, multi-channel bot support, tool calling, long-term memory, skill packs, cron scheduling, and gateway API. No Python, Node, or Docker required.
+language: go
+category:
+  - self-hosted
+  - lightweight
+  - developer-tools
+github: MEKXH/golem
+status: active
+tier: 2
+highlight: Single binary, zero runtime dependencies — a full personal AI agent with TUI, channels, tools, memory, skills, and cron in one Go executable
+emoji: 🗿
+platform:
+  - cli
+  - server
+  - messaging
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
+added: "2026-03-07"

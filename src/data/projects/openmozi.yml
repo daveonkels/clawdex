@@ -1,0 +1,21 @@
+name: OpenMozi
+slug: openmozi
+tagline: Lightweight OpenClaw for China's app ecosystem
+description: A lightweight AI assistant framework focused on Chinese platforms. Supports QQ, Feishu, DingTalk, and WeCom channels with native Chinese LLM providers (DeepSeek, Doubao, Qwen, Kimi, Zhipu). 3% of OpenClaw's codebase with core functionality intact.
+language: typescript
+category:
+  - multi-platform
+  - self-hosted
+  - chinese-ecosystem
+github: oujingzhou/openmozi
+status: active
+tier: 2
+highlight: Chinese ecosystem first — native QQ, Feishu, DingTalk, WeCom channels with DeepSeek, Doubao, Qwen, Kimi, and Zhipu AI providers, all in 16K lines of code
+emoji: 🏮
+platform:
+  - server
+  - messaging
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
+added: "2026-03-07"

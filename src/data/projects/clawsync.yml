@@ -1,0 +1,21 @@
+name: ClawSync
+slug: clawsync
+tagline: OpenClaw for the cloud
+description: Cloud-native personal AI agent platform built on Convex. Multi-agent system with shared soul documents, agent-to-agent communication, chat UI, skills marketplace, MCP support, browser automation via Stagehand, and AI-powered analytics. Designed for deployment without self-hosting infrastructure.
+language: typescript
+category:
+  - cloud
+  - multi-agent
+  - self-hosted
+github: waynesutton/clawsync
+status: active
+tier: 2
+highlight: Cloud-first OpenClaw — multi-agent with shared soul documents, agent-to-agent delegation, public chat UI, SyncBoard admin dashboard, and Convex-powered persistence
+emoji: ☁️
+platform:
+  - web
+  - messaging
+requires_llm: true
+mcp_support: true
+ecosystem_role: alternative
+added: "2026-03-07"

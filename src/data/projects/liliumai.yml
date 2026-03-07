@@ -1,0 +1,21 @@
+name: Lilium AI
+slug: liliumai
+tagline: AI co-pilot for total computer automation
+description: Personal AI agent framework for autonomous computer control. Features browser automation, shell execution, sub-agent spawning, voice-to-action via Whisper, and omni-channel support including WeChat, Feishu, DingTalk, Telegram, WhatsApp, and Discord. RAG knowledge base with SQLite/LanceDB memory.
+language: javascript
+category:
+  - automation
+  - self-hosted
+  - multi-platform
+github: beidald/liliumai
+status: active
+tier: 2
+highlight: Omni-channel computer automation — browser driver, shell control, cron scheduling, voice commands, and the widest channel support including WeChat and DingTalk
+emoji: 🌸
+platform:
+  - server
+  - messaging
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
+added: "2026-03-07"
