@@ -88,7 +88,7 @@ const softwareJsonLd = {
   "@type": "SoftwareApplication",
   "name": name,
   "description": description,
-  "url": `https://shelldex.com/projects/${slug}`,
+  "url": `https://shelldex.com/projects/${slug}/`,
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Linux, macOS, Windows",
   ...(language !== 'multi' ? { "programmingLanguage": languageLabel[language] ?? language } : {}),
@@ -108,7 +108,7 @@ const breadcrumbJsonLd = {
   "@type": "BreadcrumbList",
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "Shelldex", "item": "https://shelldex.com" },
-    { "@type": "ListItem", "position": 2, "name": name, "item": `https://shelldex.com/projects/${slug}` },
+    { "@type": "ListItem", "position": 2, "name": name, "item": `https://shelldex.com/projects/${slug}/` },
   ],
 };
 
@@ -242,7 +242,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
         <div class="flex items-center justify-between mb-3">
           <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider">GitHub Stats</h2>
           {leaderboardRank && (
-            <a href="/leaderboard" class="text-sm text-gray-500 hover:text-biolum transition-colors">
+            <a href="/leaderboard/" class="text-sm text-gray-500 hover:text-biolum transition-colors">
               #{leaderboardRank} of {leaderboardTotal} on the leaderboard →
             </a>
           )}
@@ -337,7 +337,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
       <section class="mb-8">
         <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">OpenClaw Relationship</h2>
         <p class="text-gray-400 leading-relaxed">
-          {name} is an <a href="/projects/openclaw" class="text-biolum hover:underline">OpenClaw</a>-inspired project — part of the growing ecosystem of personal AI agent frameworks that trace their lineage to Peter Steinberger's original self-hosted assistant.
+          {name} is an <a href="/projects/openclaw/" class="text-biolum hover:underline">OpenClaw</a>-inspired project — part of the growing ecosystem of personal AI agent frameworks that trace their lineage to Peter Steinberger's original self-hosted assistant.
         </p>
       </section>
     )}
@@ -378,7 +378,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
         {otherProjects.map(p => (
           <a
-            href={`/compare/${makeCanonicalSlug(slug, p.slug)}`}
+            href={`/compare/${makeCanonicalSlug(slug, p.slug)}/`}
             class="flex items-center gap-2 rounded-lg border border-white/5 bg-ocean-card/50 px-3 py-2 text-sm text-gray-400 hover:text-biolum hover:border-biolum/20 transition-all"
           >
             <span class="flex-shrink-0">{p.emoji}</span>
@@ -395,7 +395,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {similarProjects.map(p => (
             <a
-              href={`/projects/${p.slug}`}
+              href={`/projects/${p.slug}/`}
               class="flex items-center gap-3 rounded-lg border border-white/5 bg-ocean-card/50 px-4 py-3 hover:border-biolum/20 transition-all group"
             >
               <span class="text-xl flex-shrink-0">{p.emoji}</span>
@@ -433,7 +433,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 5l-7 7 7 7"/></svg>
         All projects
       </a>
-      <a href="/compare" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors">
+      <a href="/compare/" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
         Compare projects
       </a>

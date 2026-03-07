@@ -94,7 +94,6 @@ const langColors: Record<string, string> = {
 <Layout
   title={`OpenClaw Alternatives Ranked by Stars, Growth & Health (${new Date().getFullYear()}) | Shelldex`}
   description="GitHub stars leaderboard for OpenClaw ecosystem projects. Ranked by stars with growth trends and health indicators."
-  ogImage="https://shelldex.com/images/og-grid.webp"
 >
   {hasData && (
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -107,7 +106,7 @@ const langColors: Record<string, string> = {
         "@type": "ListItem",
         "position": entry.rank,
         "name": entry.name,
-        "url": `https://shelldex.com/projects/${entry.slug}`,
+        "url": `https://shelldex.com/projects/${entry.slug}/`,
       })),
     })} />
   )}
@@ -185,7 +184,7 @@ const langColors: Record<string, string> = {
                 >
                   <td class="py-3 px-4 text-gray-500 font-mono text-sm lb-rank">{e.rank}</td>
                   <td class="py-3 px-4">
-                    <a href={`/projects/${e.slug}`} class="group flex items-center gap-2">
+                    <a href={`/projects/${e.slug}/`} class="group flex items-center gap-2">
                       <span class="text-lg">{e.emoji}</span>
                       <span class="text-white font-medium group-hover:text-biolum transition-colors">{e.name}</span>
                     </a>
@@ -230,7 +229,7 @@ const langColors: Record<string, string> = {
         <div class="md:hidden space-y-3" id="lb-cards">
           {leaderboard.entries.map((e) => (
             <a
-              href={`/projects/${e.slug}`}
+              href={`/projects/${e.slug}/`}
               class="block bg-ocean-card border border-white/5 rounded-xl p-4 hover:border-biolum/20 transition-all lb-card"
               data-stars={e.stars}
               data-growth={e.star_growth_7d ?? -999999}

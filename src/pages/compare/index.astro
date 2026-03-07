@@ -18,13 +18,13 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem side
     "@type": "CollectionPage",
     "name": pageTitle,
     "description": pageDescription,
-    "url": "https://shelldex.com/compare",
+    "url": "https://shelldex.com/compare/",
     "numberOfItems": uniquePairs.length,
     "breadcrumb": {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Shelldex", "item": "https://shelldex.com" },
-        { "@type": "ListItem", "position": 2, "name": "Compare", "item": "https://shelldex.com/compare" },
+        { "@type": "ListItem", "position": 2, "name": "Compare", "item": "https://shelldex.com/compare/" },
       ],
     },
   })} />
@@ -109,7 +109,7 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem side
         const bInfo = projectNames.get(pair.slugB);
         return (
           <a
-            href={`/compare/${pair.canonical}`}
+            href={`/compare/${pair.canonical}/`}
             class="pair-link flex items-center gap-2 rounded-lg border border-white/5 bg-ocean-card/50 px-4 py-3 text-sm text-gray-400 hover:text-biolum hover:border-biolum/20 transition-all"
             data-names={`${aInfo?.name?.toLowerCase() ?? ''} ${bInfo?.name?.toLowerCase() ?? ''}`}
           >

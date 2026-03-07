@@ -106,7 +106,7 @@ const breadcrumbJsonLd = {
   "@type": "BreadcrumbList",
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "Shelldex", "item": "https://shelldex.com" },
-    { "@type": "ListItem", "position": 2, "name": "Compare", "item": "https://shelldex.com/compare" },
+    { "@type": "ListItem", "position": 2, "name": "Compare", "item": "https://shelldex.com/compare/" },
     { "@type": "ListItem", "position": 3, "name": `${a.name} vs ${b.name}`, "item": canonicalUrl },
   ],
 };
@@ -134,13 +134,13 @@ const webPageJsonLd = {
     {
       "@type": "SoftwareApplication",
       "name": a.name,
-      "url": `https://shelldex.com/projects/${a.slug}`,
+      "url": `https://shelldex.com/projects/${a.slug}/`,
       ...(a.github ? { "codeRepository": `https://github.com/${a.github}` } : {}),
     },
     {
       "@type": "SoftwareApplication",
       "name": b.name,
-      "url": `https://shelldex.com/projects/${b.slug}`,
+      "url": `https://shelldex.com/projects/${b.slug}/`,
       ...(b.github ? { "codeRepository": `https://github.com/${b.github}` } : {}),
     },
   ],
@@ -305,7 +305,7 @@ const metrics = [
     <nav class="flex items-center gap-2 text-sm text-gray-600 mb-10" aria-label="Breadcrumb">
       <a href="/" class="hover:text-biolum transition-colors">Shelldex</a>
       <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-      <a href="/compare" class="hover:text-biolum transition-colors">Compare</a>
+      <a href="/compare/" class="hover:text-biolum transition-colors">Compare</a>
       <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
       <span class="text-gray-400">{a.name} vs {b.name}</span>
     </nav>
@@ -331,12 +331,12 @@ const metrics = [
         <div class="grid grid-cols-3 border-b border-white/10 text-sm">
           <div class="px-4 py-3 text-gray-500 font-medium">Metric</div>
           <div class="px-4 py-3 text-center">
-            <a href={`/projects/${a.slug}`} class="text-white font-semibold hover:text-biolum transition-colors">
+            <a href={`/projects/${a.slug}/`} class="text-white font-semibold hover:text-biolum transition-colors">
               {a.emoji} {a.name}
             </a>
           </div>
           <div class="px-4 py-3 text-center">
-            <a href={`/projects/${b.slug}`} class="text-white font-semibold hover:text-biolum transition-colors">
+            <a href={`/projects/${b.slug}/`} class="text-white font-semibold hover:text-biolum transition-colors">
               {b.emoji} {b.name}
             </a>
           </div>
@@ -388,7 +388,7 @@ const metrics = [
     <section class="mb-12">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <a
-          href={`/projects/${a.slug}`}
+          href={`/projects/${a.slug}/`}
           class="flex items-center gap-4 rounded-xl border border-white/5 bg-ocean-card p-5 hover:border-biolum/30 transition-all group"
         >
           <span class="text-3xl">{a.emoji}</span>
@@ -399,7 +399,7 @@ const metrics = [
           <svg class="w-5 h-5 text-gray-600 ml-auto group-hover:text-biolum transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </a>
         <a
-          href={`/projects/${b.slug}`}
+          href={`/projects/${b.slug}/`}
           class="flex items-center gap-4 rounded-xl border border-white/5 bg-ocean-card p-5 hover:border-biolum/30 transition-all group"
         >
           <span class="text-3xl">{b.emoji}</span>
@@ -439,7 +439,7 @@ const metrics = [
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {related.map(r => (
             <a
-              href={`/compare/${r.canonical}`}
+              href={`/compare/${r.canonical}/`}
               class="flex items-center gap-2 rounded-lg border border-white/5 bg-ocean-card/50 px-4 py-3 text-sm text-gray-400 hover:text-biolum hover:border-biolum/20 transition-all"
             >
               <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
@@ -452,7 +452,7 @@ const metrics = [
 
     <!-- Back links -->
     <div class="border-t border-white/5 pt-8 flex flex-wrap gap-6">
-      <a href="/compare" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors">
+      <a href="/compare/" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 5l-7 7 7 7"/></svg>
         All comparisons
       </a>

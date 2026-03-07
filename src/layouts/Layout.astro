@@ -3,17 +3,29 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   canonicalUrl?: string;
 }
 
 const {
   title,
   description = 'Compare OpenClaw alternatives and forks side by side — GitHub stars, language, performance, and project health. The complete registry of the OpenClaw ecosystem.',
-  ogImage = 'https://shelldex.com/images/og-default.png',
+  ogImage = 'https://shelldex.com/images/og-default.jpg',
+  ogImageAlt = 'Shelldex social preview image',
   canonicalUrl,
 } = Astro.props;
 
 const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathname}`;
+
+function inferImageType(url: string): string | undefined {
+  const pathname = new URL(url).pathname.toLowerCase();
+  if (pathname.endsWith('.png')) return 'image/png';
+  if (pathname.endsWith('.webp')) return 'image/webp';
+  if (pathname.endsWith('.jpg') || pathname.endsWith('.jpeg')) return 'image/jpeg';
+  return undefined;
+}
+
+const ogImageType = inferImageType(ogImage);
 ---
 
 <!doctype html>
@@ -31,20 +43,25 @@ const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathn
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={`https://shelldex.com${Astro.url.pathname}`} />
+    <meta property="og:url" content={resolvedCanonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:site_name" content="Shelldex — The OpenClaw Ecosystem" />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:secure_url" content={ogImage} />
+    {ogImageType && <meta property="og:image:type" content={ogImageType} />}
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={resolvedCanonical} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:src" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <!-- SEO -->
     <meta name="keywords" content="shelldex, clawdex, theclawdex, openclaw alternatives, openclaw clones, openclaw forks, openclaw comparison, zeroclaw, nanoclaw, picoclaw, ironclaw, moltis, nanobot, bashobot, nullclaw, openclaw-inspired projects, personal ai agent, agentic projects, self-hosted ai agent, open source ai assistant, clawdbot alternatives" />
@@ -92,12 +109,13 @@ const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathn
             <!-- Desktop nav -->
             <div class="hidden sm:flex items-center gap-6">
               <a href="/" class="text-sm text-gray-400 hover:text-biolum transition-colors">Directory</a>
-              <a href="/leaderboard" class="text-sm text-gray-400 hover:text-biolum transition-colors">Leaderboard</a>
-              <a href="/compare" class="text-sm text-gray-400 hover:text-biolum transition-colors">Compare</a>
-              <a href="/analysis" class="text-sm text-gray-400 hover:text-biolum transition-colors">Analysis</a>
+              <a href="/leaderboard/" class="text-sm text-gray-400 hover:text-biolum transition-colors">Leaderboard</a>
+              <a href="/compare/" class="text-sm text-gray-400 hover:text-biolum transition-colors">Compare</a>
+              <a href="/analysis/" class="text-sm text-gray-400 hover:text-biolum transition-colors">Analysis</a>
+              <a href="/faq/" class="text-sm text-gray-400 hover:text-biolum transition-colors">FAQ</a>
               <a href="/best-alternatives/" class="text-sm text-gray-400 hover:text-biolum transition-colors">Alternatives</a>
-              <a href="/about" class="text-sm text-gray-400 hover:text-biolum transition-colors">About</a>
-              <a href="/submit" class="text-sm text-gray-400 hover:text-biolum transition-colors">Submit</a>
+              <a href="/about/" class="text-sm text-gray-400 hover:text-biolum transition-colors">About</a>
+              <a href="/submit/" class="text-sm text-gray-400 hover:text-biolum transition-colors">Submit</a>
             </div>
             <a
               href="https://github.com/daveonkels/clawdex"
@@ -125,13 +143,13 @@ const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathn
         <div id="mobile-menu" class="hidden sm:hidden border-t border-white/5 pb-4 pt-2">
           <div class="flex flex-col gap-1">
             <a href="/" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Directory</a>
-            <a href="/leaderboard" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Leaderboard</a>
-            <a href="/compare" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Compare</a>
-            <a href="/analysis" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Analysis</a>
-            <a href="/faq" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">FAQ</a>
+            <a href="/leaderboard/" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Leaderboard</a>
+            <a href="/compare/" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Compare</a>
+            <a href="/analysis/" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Analysis</a>
+            <a href="/faq/" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">FAQ</a>
             <a href="/best-alternatives/" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Alternatives</a>
-            <a href="/about" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">About</a>
-            <a href="/submit" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Submit a Project</a>
+            <a href="/about/" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">About</a>
+            <a href="/submit/" class="block px-3 py-2.5 text-sm text-gray-300 hover:text-biolum hover:bg-white/5 rounded-lg transition-colors">Submit a Project</a>
           </div>
         </div>
       </div>
@@ -186,12 +204,12 @@ const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathn
             <h3 class="font-display font-semibold text-white text-sm mb-3">Links</h3>
             <ul class="grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-500">
               <li><a href="/" class="hover:text-biolum transition-colors">Directory</a></li>
-              <li><a href="/leaderboard" class="hover:text-biolum transition-colors">Leaderboard</a></li>
-              <li><a href="/compare" class="hover:text-biolum transition-colors">Compare</a></li>
-              <li><a href="/analysis" class="hover:text-biolum transition-colors">Analysis</a></li>
-              <li><a href="/faq" class="hover:text-biolum transition-colors">FAQ</a></li>
-              <li><a href="/about" class="hover:text-biolum transition-colors">About</a></li>
-              <li><a href="/submit" class="hover:text-biolum transition-colors">Submit a Project</a></li>
+              <li><a href="/leaderboard/" class="hover:text-biolum transition-colors">Leaderboard</a></li>
+              <li><a href="/compare/" class="hover:text-biolum transition-colors">Compare</a></li>
+              <li><a href="/analysis/" class="hover:text-biolum transition-colors">Analysis</a></li>
+              <li><a href="/faq/" class="hover:text-biolum transition-colors">FAQ</a></li>
+              <li><a href="/about/" class="hover:text-biolum transition-colors">About</a></li>
+              <li><a href="/submit/" class="hover:text-biolum transition-colors">Submit a Project</a></li>
               <li><a href="/badges/" class="hover:text-biolum transition-colors">Badges</a></li>
             </ul>
           </div>
