@@ -1,11 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { loadProjects, formatStars } from '../../lib/projects';
-import { languageLabel, languageColors, statusColors } from '../../lib/constants';
+import { languageLabel, languageColors } from '../../lib/constants';
 import {
   generateAllPairs,
-  makeCanonicalSlug,
-  getUniquePairs,
+  getIndexableComparePairs,
   generateKeyDifferences,
   generateRecommendation,
   generateFAQItems,
@@ -15,21 +14,24 @@ import {
 } from '../../lib/compare';
 import type { PairEntry, LeaderboardEntry, FAQItem } from '../../lib/compare';
 import type { Project } from '../../lib/projects';
+import { buildComparisonHref } from '../../lib/compare-seo.js';
 
 export async function getStaticPaths() {
   const projects = await loadProjects();
   const allPairs = generateAllPairs(projects);
+  const indexablePairs = getIndexableComparePairs(projects);
+  const indexableCompareSlugs = new Set(indexablePairs.map((entry) => entry.canonical));
   const projectMap = new Map(projects.map(p => [p.slug, p]));
   const lb = loadLeaderboard();
   const lbMap = new Map(lb.entries.map(e => [e.slug, e]));
-  const uniquePairs = getUniquePairs(projects);
 
   return allPairs.map(entry => {
     const a = projectMap.get(entry.slugA)!;
     const b = projectMap.get(entry.slugB)!;
-    const isCanonical = entry.pair === entry.canonical;
     const aEntry = lbMap.get(entry.slugA) ?? null;
     const bEntry = lbMap.get(entry.slugB) ?? null;
+    const isIndexable = entry.pair === entry.canonical && indexableCompareSlugs.has(entry.canonical);
+    const redirectUrl = buildComparisonHref(entry.slugA, entry.slugB, indexableCompareSlugs);
 
     return {
       params: { pair: entry.pair },
@@ -38,12 +40,13 @@ export async function getStaticPaths() {
         b,
         aEntry,
         bEntry,
-        isCanonical,
+        isIndexable,
         canonicalUrl: `https://shelldex.com/compare/${entry.canonical}/`,
+        redirectUrl,
         keyDifferences: generateKeyDifferences(a, b, aEntry, bEntry),
         recommendation: generateRecommendation(a, b, aEntry, bEntry),
         faqItems: generateFAQItems(a, b, aEntry, bEntry),
-        related: getRelatedComparisons(entry.slugA, entry.slugB, uniquePairs),
+        related: getRelatedComparisons(entry.slugA, entry.slugB, indexablePairs),
       },
     };
   });
@@ -54,15 +57,16 @@ interface Props {
   b: Project;
   aEntry: LeaderboardEntry | null;
   bEntry: LeaderboardEntry | null;
-  isCanonical: boolean;
+  isIndexable: boolean;
   canonicalUrl: string;
+  redirectUrl: string;
   keyDifferences: string[];
   recommendation: string;
   faqItems: FAQItem[];
   related: PairEntry[];
 }
 
-const { a, b, aEntry, bEntry, isCanonical, canonicalUrl, keyDifferences, recommendation, faqItems, related } = Astro.props;
+const { a, b, aEntry, bEntry, isIndexable, canonicalUrl, redirectUrl, keyDifferences, recommendation, faqItems, related } = Astro.props;
 
 function daysSince(dateStr: string | null | undefined): number | null {
   if (!dateStr) return null;
@@ -100,6 +104,60 @@ const aLangName = languageLabel[a.language] ?? a.language;
 const bLangName = languageLabel[b.language] ?? b.language;
 const pageTitle = `${a.name} vs ${b.name}: Side-by-Side Comparison (${year}) | Shelldex`;
 const pageDescription = `Compare ${a.name} (${formatStars(aStars)} stars, ${aLangName}) and ${b.name} (${formatStars(bStars)} stars, ${bLangName}) — GitHub stats, performance, MCP support, and project health side by side.`;
+const redirectCanonicalUrl = redirectUrl.includes('?') ? 'https://shelldex.com/compare/' : redirectUrl;
+
+function chooseReasons(project: Project, other: Project, projectHealth: number, otherHealth: number): string[] {
+  const reasons: string[] = [];
+  const projectStars = project.github_data?.stars ?? project.stars ?? 0;
+  const otherStars = other.github_data?.stars ?? other.stars ?? 0;
+  const projectLang = languageLabel[project.language] ?? project.language;
+
+  if (projectStars > otherStars * 2 && projectStars > 0) {
+    reasons.push(`You want the larger community footprint and stronger proof of adoption in the market.`);
+  }
+  if (project.language !== other.language) {
+    reasons.push(`Your team already builds in ${projectLang} and wants a stack-aligned codebase.`);
+  }
+  if (project.requires_llm === false && other.requires_llm !== false) {
+    reasons.push(`You want to avoid recurring LLM API costs and keep the deployment self-contained.`);
+  }
+  if (project.mcp_support === true && other.mcp_support !== true) {
+    reasons.push(`MCP connectivity matters for your workflow and you want a tool-friendly integration model.`);
+  }
+  if ((project.platform ?? []).includes('embedded') && !(other.platform ?? []).includes('embedded')) {
+    reasons.push(`You need something viable on constrained hardware or edge devices.`);
+  }
+  if ((project.platform ?? []).includes('browser') && !(other.platform ?? []).includes('browser')) {
+    reasons.push(`You prefer a browser-native experience over a server-heavy runtime.`);
+  }
+  if (projectHealth >= otherHealth + 15) {
+    reasons.push(`Maintenance signals look stronger right now, with healthier release and commit activity.`);
+  }
+  if (reasons.length < 3 && project.category.length > 0) {
+    reasons.push(`Its positioning around ${project.category.slice(0, 2).join(' and ')} is closer to what you need.`);
+  }
+  if (reasons.length < 3 && project.github_data?.star_growth_7d && (project.github_data.star_growth_7d ?? 0) > (other.github_data?.star_growth_7d ?? 0)) {
+    reasons.push(`It is gaining momentum faster this week, which can matter if you value ecosystem energy.`);
+  }
+
+  return reasons.slice(0, 4);
+}
+
+function matchupSummary(): string {
+  if (aStars > bStars * 4) {
+    return `${a.name} is the more established choice by community size, while ${b.name} is the more niche option for teams that care about its specific design tradeoffs.`;
+  }
+  if (bStars > aStars * 4) {
+    return `${b.name} is the more established choice by community size, while ${a.name} is the more niche option for teams that care about its specific design tradeoffs.`;
+  }
+  if (a.language !== b.language) {
+    return `This matchup is mostly about tradeoffs between ${aLangName} and ${bLangName}, plus the different product philosophies each project brings to the OpenClaw ecosystem.`;
+  }
+  return `${a.name} and ${b.name} target similar problems, so the decision comes down to ecosystem maturity, maintenance quality, and feature emphasis rather than raw category fit.`;
+}
+
+const chooseA = chooseReasons(a, b, aHealthScore, bHealthScore);
+const chooseB = chooseReasons(b, a, bHealthScore, aHealthScore);
 
 const breadcrumbJsonLd = {
   "@context": "https://schema.org",
@@ -291,14 +349,37 @@ const metrics = [
 ---
 
 <Layout
-  title={pageTitle}
-  description={pageDescription}
-  canonicalUrl={isCanonical ? undefined : canonicalUrl}
+  title={isIndexable ? pageTitle : `Redirecting ${a.name} vs ${b.name} — Shelldex`}
+  description={isIndexable ? pageDescription : `Redirecting to the current comparison experience for ${a.name} and ${b.name}.`}
+  canonicalUrl={isIndexable ? canonicalUrl : redirectCanonicalUrl}
+  robots={isIndexable ? 'index, follow' : 'noindex, follow'}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />
-  {faqJsonLd && <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}
+  {!isIndexable && (
+    <Fragment slot="head">
+      <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />
+      <script is:inline set:html={`window.location.replace(${JSON.stringify(redirectUrl)});`}></script>
+    </Fragment>
+  )}
+  {isIndexable && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />}
+  {isIndexable && <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />}
+  {isIndexable && faqJsonLd && <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}
 
+  {!isIndexable ? (
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="rounded-2xl border border-white/5 bg-ocean-card p-8 text-center">
+        <h1 class="font-display text-3xl font-bold text-white mb-4">Redirecting comparison</h1>
+        <p class="text-gray-400 leading-relaxed mb-6">
+          The old long-tail comparison URL for {a.name} vs {b.name} has been consolidated into Shelldex&apos;s curated comparison library.
+        </p>
+        <a
+          href={redirectUrl}
+          class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-biolum/30 bg-biolum/10 text-biolum font-semibold hover:bg-biolum/20 transition-colors"
+        >
+          Continue to the current comparison
+        </a>
+      </div>
+    </div>
+  ) : (
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
     <!-- Breadcrumb -->
@@ -323,6 +404,45 @@ const metrics = [
         Side-by-side comparison of {a.name} and {b.name} — two projects in the OpenClaw ecosystem.
       </p>
     </header>
+
+    <section class="mb-12">
+      <div class="rounded-2xl border border-white/5 bg-ocean-card p-6 sm:p-8">
+        <h2 class="font-display text-2xl font-bold text-white mb-4">Executive Summary</h2>
+        <p class="text-gray-300 leading-relaxed mb-4">
+          {matchupSummary()}
+        </p>
+        <p class="text-gray-400 leading-relaxed">
+          Use the score table for the hard numbers, then use the decision notes below to figure out which tradeoffs matter for your team.
+        </p>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
+          <h2 class="font-display text-xl font-bold text-white mb-4">Choose {a.name} If...</h2>
+          <ul class="space-y-3">
+            {chooseA.map(reason => (
+              <li class="flex items-start gap-3 text-sm text-gray-300 leading-relaxed">
+                <span class="text-biolum mt-0.5 flex-shrink-0">+</span>
+                <span>{reason}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
+          <h2 class="font-display text-xl font-bold text-white mb-4">Choose {b.name} If...</h2>
+          <ul class="space-y-3">
+            {chooseB.map(reason => (
+              <li class="flex items-start gap-3 text-sm text-gray-300 leading-relaxed">
+                <span class="text-biolum mt-0.5 flex-shrink-0">+</span>
+                <span>{reason}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
 
     <!-- Side-by-side metrics table -->
     <section class="mb-12">
@@ -463,4 +583,5 @@ const metrics = [
     </div>
 
   </div>
+  )}
 </Layout>

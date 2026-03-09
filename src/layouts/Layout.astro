@@ -5,6 +5,7 @@ interface Props {
   ogImage?: string;
   ogImageAlt?: string;
   canonicalUrl?: string;
+  robots?: string;
 }
 
 const {
@@ -13,6 +14,7 @@ const {
   ogImage = 'https://shelldex.com/images/og-default.jpg',
   ogImageAlt = 'Shelldex social preview image',
   canonicalUrl,
+  robots = 'index, follow',
 } = Astro.props;
 
 const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathname}`;
@@ -65,9 +67,10 @@ const ogImageType = inferImageType(ogImage);
 
     <!-- SEO -->
     <meta name="keywords" content="shelldex, clawdex, theclawdex, openclaw alternatives, openclaw clones, openclaw forks, openclaw comparison, zeroclaw, nanoclaw, picoclaw, ironclaw, moltis, nanobot, bashobot, nullclaw, openclaw-inspired projects, personal ai agent, agentic projects, self-hosted ai agent, open source ai assistant, clawdbot alternatives" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={robots} />
 
     <title>{title}</title>
+    <slot name="head" />
     <script is:inline>
       window.addEventListener('load', function() {
         setTimeout(function() {

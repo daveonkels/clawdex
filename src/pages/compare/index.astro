@@ -1,58 +1,118 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { loadProjects } from '../../lib/projects';
-import { getUniquePairs } from '../../lib/compare';
+import { loadProjects, formatStars } from '../../lib/projects';
+import { computeHealthScore, getFeaturedComparePairs, getIndexableComparePairs, loadLeaderboard } from '../../lib/compare';
+import { languageLabel } from '../../lib/constants';
 
 const projects = await loadProjects();
-const uniquePairs = getUniquePairs(projects);
-const projectNames = new Map(projects.map(p => [p.slug, { name: p.name, emoji: p.emoji }]));
+const projectMap = new Map(projects.map((project) => [project.slug, project]));
+const indexablePairs = getIndexableComparePairs(projects);
+const featuredPairs = getFeaturedComparePairs(projects, 24);
+const openclawPairs = featuredPairs.filter((pair) => pair.slugA === 'openclaw' || pair.slugB === 'openclaw').slice(0, 12);
+const editorialPairs = featuredPairs.filter((pair) => pair.slugA !== 'openclaw' && pair.slugB !== 'openclaw').slice(0, 12);
+const projectedMatchups = Math.round(projects.length * (projects.length - 1) / 2);
+
+const { entries: leaderboard } = loadLeaderboard();
+const healthBySlug = new Map(leaderboard.map((entry) => [entry.slug, computeHealthScore(entry)]));
+const indexableCompareSlugs = new Set(indexablePairs.map((pair) => pair.canonical));
+
+function pairLabel(slugA: string, slugB: string): string {
+  return `${projectMap.get(slugA)?.name ?? slugA} vs ${projectMap.get(slugB)?.name ?? slugB}`;
+}
+
+const clientProjects = Object.fromEntries(
+  projects.map((project) => [
+    project.slug,
+    {
+      slug: project.slug,
+      name: project.name,
+      emoji: project.emoji,
+      tagline: project.tagline,
+      language: languageLabel[project.language] ?? project.language,
+      stars: project.github_data?.stars ?? project.stars ?? 0,
+      growth: project.github_data?.star_growth_7d ?? null,
+      forks: project.github_data?.forks ?? null,
+      issues: project.github_data?.open_issues ?? null,
+      health: healthBySlug.get(project.slug) ?? 0,
+      requiresLlm: project.requires_llm,
+      mcpSupport: project.mcp_support,
+      platform: project.platform ?? [],
+      categories: project.category,
+      license: project.github_data?.license ?? null,
+      lastCommit: project.github_data?.last_commit ?? null,
+      latestRelease: project.github_data?.latest_release ?? null,
+    },
+  ]),
+);
 
 const year = new Date().getFullYear();
-const pageTitle = `Compare ${projects.length} OpenClaw Alternatives Side by Side (${year}) — Shelldex`;
-const pageDescription = `Compare any two projects in the OpenClaw ecosystem side by side. ${uniquePairs.length} unique comparisons across ${projects.length} projects — stars, growth, language, and health.`;
+const pageTitle = `Compare OpenClaw Alternatives Side by Side (${year}) — Curated Matchups & Tool | Shelldex`;
+const pageDescription = `Compare any two projects in the OpenClaw ecosystem. Shelldex publishes ${indexablePairs.length} curated comparison landing pages and provides an on-page tool for every other matchup across ${projects.length} tracked projects.`;
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
   <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": pageTitle,
-    "description": pageDescription,
-    "url": "https://shelldex.com/compare/",
-    "numberOfItems": uniquePairs.length,
-    "breadcrumb": {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Shelldex", "item": "https://shelldex.com" },
-        { "@type": "ListItem", "position": 2, "name": "Compare", "item": "https://shelldex.com/compare/" },
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: pageTitle,
+    description: pageDescription,
+    url: 'https://shelldex.com/compare/',
+    numberOfItems: indexablePairs.length,
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Shelldex', item: 'https://shelldex.com' },
+        { '@type': 'ListItem', position: 2, name: 'Compare', item: 'https://shelldex.com/compare/' },
       ],
     },
   })} />
 
+  <script id="compare-project-data" type="application/json" set:html={JSON.stringify(clientProjects)} />
+  <script id="compare-indexable-slugs" type="application/json" set:html={JSON.stringify([...indexableCompareSlugs])} />
+
   <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 text-sm text-gray-600 mb-10" aria-label="Breadcrumb">
       <a href="/" class="hover:text-biolum transition-colors">Shelldex</a>
       <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
       <span class="text-gray-400">Compare</span>
     </nav>
 
-    <!-- Header -->
-    <div class="mb-10">
+    <header class="mb-10">
       <div class="flex items-center gap-3 mb-4">
         <span class="text-3xl">⚖️</span>
-        <h1 class="text-3xl sm:text-4xl font-display font-bold text-white">
-          Compare Projects
-        </h1>
+        <h1 class="text-3xl sm:text-4xl font-display font-bold text-white">Compare Projects</h1>
       </div>
-      <p class="text-gray-400 max-w-2xl">
-        Compare any two projects in the OpenClaw ecosystem side by side. {uniquePairs.length} unique comparisons across {projects.length} projects.
-      </p>
+      <div class="space-y-4 max-w-3xl text-gray-400 leading-relaxed">
+        <p>
+          Shelldex now publishes a curated set of <strong class="text-white">{indexablePairs.length} comparison landing pages</strong> instead of exposing every possible pairwise permutation to search engines. That keeps the indexed compare library focused on the matchups users actually care about.
+        </p>
+        <p>
+          You can still compare any two projects here. High-signal matchups open dedicated pages; everything else renders as an on-page comparison tool without creating another low-value crawl target.
+        </p>
+      </div>
+    </header>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+      <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
+        <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Tracked Projects</p>
+        <p class="text-3xl font-mono text-white">{projects.length}</p>
+      </div>
+      <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
+        <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Possible Matchups</p>
+        <p class="text-3xl font-mono text-white">{projectedMatchups}</p>
+      </div>
+      <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
+        <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Indexed Matchups</p>
+        <p class="text-3xl font-mono text-biolum">{indexablePairs.length}</p>
+      </div>
+      <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
+        <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Editorial Ratio</p>
+        <p class="text-3xl font-mono text-white">{Math.round((indexablePairs.length / projectedMatchups) * 100)}%</p>
+      </div>
     </div>
 
-    <!-- Quick Compare -->
-    <div class="rounded-xl border border-white/5 bg-ocean-card p-6 mb-12">
-      <h2 class="font-display text-lg font-semibold text-white mb-4">Quick Compare</h2>
+    <div class="rounded-2xl border border-white/5 bg-ocean-card p-6 mb-12">
+      <h2 class="font-display text-xl font-semibold text-white mb-4">Quick Compare</h2>
       <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-4">
         <div class="flex-1">
           <label for="compare-a" class="block text-sm text-gray-500 mb-1.5">Project A</label>
@@ -61,8 +121,8 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem side
             class="w-full bg-ocean-lighter border border-white/10 text-gray-200 text-sm rounded-lg px-3 py-2.5 focus:border-biolum/50 focus:outline-none"
           >
             <option value="">Select a project...</option>
-            {projects.map(p => (
-              <option value={p.slug}>{p.emoji} {p.name}</option>
+            {projects.map((project) => (
+              <option value={project.slug}>{project.emoji} {project.name}</option>
             ))}
           </select>
         </div>
@@ -74,8 +134,8 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem side
             class="w-full bg-ocean-lighter border border-white/10 text-gray-200 text-sm rounded-lg px-3 py-2.5 focus:border-biolum/50 focus:outline-none"
           >
             <option value="">Select a project...</option>
-            {projects.map(p => (
-              <option value={p.slug}>{p.emoji} {p.name}</option>
+            {projects.map((project) => (
+              <option value={project.slug}>{project.emoji} {project.name}</option>
             ))}
           </select>
         </div>
@@ -87,83 +147,261 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem side
           Compare
         </button>
       </div>
-    </div>
-
-    <!-- Search filter -->
-    <div class="mb-6">
-      <input
-        id="pair-search"
-        type="text"
-        placeholder="Search comparisons..."
-        class="w-full sm:max-w-sm bg-ocean-lighter border border-white/10 text-gray-200 text-sm rounded-lg px-4 py-2.5 focus:border-biolum/50 focus:outline-none placeholder:text-gray-600"
-      />
-      <p class="text-xs text-gray-600 mt-2">
-        <span id="pair-count">{uniquePairs.length}</span> comparisons
+      <p id="compare-hint" class="text-sm text-gray-500 mt-3">
+        Dedicated pages exist for editorially selected matchups. Everything else stays inside this tool.
       </p>
     </div>
 
-    <!-- All comparisons grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2" id="pairs-grid">
-      {uniquePairs.map(pair => {
-        const aInfo = projectNames.get(pair.slugA);
-        const bInfo = projectNames.get(pair.slugB);
-        return (
+    <div id="compare-results" class="hidden mb-12"></div>
+
+    <section class="mb-12">
+      <div class="flex items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="font-display text-2xl font-bold text-white">OpenClaw Matchups</h2>
+          <p class="text-sm text-gray-500 mt-1">The highest-intent comparison pages in the ecosystem.</p>
+        </div>
+        <a href="/best-alternatives/" class="text-sm text-gray-400 hover:text-biolum transition-colors">See the ranked alternatives guide →</a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {openclawPairs.map((pair) => (
           <a
             href={`/compare/${pair.canonical}/`}
-            class="pair-link flex items-center gap-2 rounded-lg border border-white/5 bg-ocean-card/50 px-4 py-3 text-sm text-gray-400 hover:text-biolum hover:border-biolum/20 transition-all"
-            data-names={`${aInfo?.name?.toLowerCase() ?? ''} ${bInfo?.name?.toLowerCase() ?? ''}`}
+            class="flex items-center gap-3 rounded-xl border border-white/5 bg-ocean-card/50 px-4 py-4 text-sm text-gray-300 hover:text-biolum hover:border-biolum/20 transition-all"
           >
-            <span class="flex-shrink-0">{aInfo?.emoji}</span>
-            <span class="truncate">{aInfo?.name} vs {bInfo?.name}</span>
-            <span class="flex-shrink-0">{bInfo?.emoji}</span>
+            <span>{projectMap.get(pair.slugA)?.emoji}</span>
+            <span class="truncate">{pairLabel(pair.slugA, pair.slugB)}</span>
+            <span class="ml-auto text-xs text-gray-500">Featured</span>
           </a>
-        );
-      })}
-    </div>
+        ))}
+      </div>
+    </section>
+
+    {editorialPairs.length > 0 && (
+      <section class="mb-12">
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="font-display text-2xl font-bold text-white">Featured Head-to-Heads</h2>
+            <p class="text-sm text-gray-500 mt-1">Useful cross-ecosystem matchups that earned dedicated landing pages.</p>
+          </div>
+          <span class="text-xs uppercase tracking-wider text-gray-600">{editorialPairs.length} editorial pages</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {editorialPairs.map((pair) => (
+            <a
+              href={`/compare/${pair.canonical}/`}
+              class="flex items-center gap-3 rounded-xl border border-white/5 bg-ocean-card/50 px-4 py-4 text-sm text-gray-300 hover:text-biolum hover:border-biolum/20 transition-all"
+            >
+              <span>{projectMap.get(pair.slugA)?.emoji}</span>
+              <span class="truncate">{pairLabel(pair.slugA, pair.slugB)}</span>
+              <span>{projectMap.get(pair.slugB)?.emoji}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
   </section>
 
-  <!-- Client-side JS -->
   <script is:inline>
     (function () {
-      // Quick Compare navigation
+      var projectsEl = document.getElementById('compare-project-data');
+      var indexableEl = document.getElementById('compare-indexable-slugs');
       var selectA = document.getElementById('compare-a');
       var selectB = document.getElementById('compare-b');
       var btn = document.getElementById('compare-btn');
+      var hint = document.getElementById('compare-hint');
+      var results = document.getElementById('compare-results');
+      if (!projectsEl || !indexableEl || !selectA || !selectB || !btn || !hint || !results) return;
 
-      function updateBtn() {
-        var a = selectA.value;
-        var b = selectB.value;
-        btn.disabled = !a || !b || a === b;
+      var projects = JSON.parse(projectsEl.textContent || '{}');
+      var indexableSlugs = new Set(JSON.parse(indexableEl.textContent || '[]'));
+
+      function esc(value) {
+        return String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
       }
 
-      selectA.addEventListener('change', updateBtn);
-      selectB.addEventListener('change', updateBtn);
+      function canonical(a, b) {
+        return [a, b].sort().join('-vs-');
+      }
+
+      function compareHref(a, b) {
+        var pair = canonical(a, b);
+        if (indexableSlugs.has(pair)) return '/compare/' + pair + '/';
+        return '/compare/?a=' + encodeURIComponent(a) + '&b=' + encodeURIComponent(b);
+      }
+
+      function formatCount(value) {
+        if (value === null || value === undefined) return '—';
+        if (Math.abs(value) >= 10000) return Math.round(value / 1000) + 'k';
+        if (Math.abs(value) >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+        return String(value);
+      }
+
+      function daysSince(dateString) {
+        if (!dateString) return '—';
+        var days = Math.floor((Date.now() - new Date(dateString).getTime()) / 86400000);
+        return days + 'd ago';
+      }
+
+      function summaryLines(a, b) {
+        var lines = [];
+        if (a.stars > 0 && b.stars > 0) {
+          if (a.stars > b.stars * 2) {
+            lines.push(a.name + ' has the larger community footprint (' + formatCount(a.stars) + ' vs ' + formatCount(b.stars) + ' stars).');
+          } else if (b.stars > a.stars * 2) {
+            lines.push(b.name + ' has the larger community footprint (' + formatCount(b.stars) + ' vs ' + formatCount(a.stars) + ' stars).');
+          }
+        }
+        if (a.language !== b.language) {
+          lines.push(a.name + ' is built in ' + a.language + ' while ' + b.name + ' uses ' + b.language + '.');
+        }
+        if (a.requiresLlm === false && b.requiresLlm !== false) {
+          lines.push(a.name + ' can run without recurring LLM API spend.');
+        } else if (b.requiresLlm === false && a.requiresLlm !== false) {
+          lines.push(b.name + ' can run without recurring LLM API spend.');
+        }
+        if (a.mcpSupport === true && b.mcpSupport !== true) {
+          lines.push(a.name + ' includes MCP support while ' + b.name + ' does not.');
+        } else if (b.mcpSupport === true && a.mcpSupport !== true) {
+          lines.push(b.name + ' includes MCP support while ' + a.name + ' does not.');
+        }
+        if (a.health > b.health + 15) {
+          lines.push(a.name + ' currently shows stronger maintenance health signals.');
+        } else if (b.health > a.health + 15) {
+          lines.push(b.name + ' currently shows stronger maintenance health signals.');
+        }
+        return lines.slice(0, 4);
+      }
+
+      function metrics(a, b) {
+        return [
+          ['Stars', formatCount(a.stars), formatCount(b.stars)],
+          ['7d Growth', a.growth === null ? '—' : (a.growth > 0 ? '+' : '') + formatCount(a.growth), b.growth === null ? '—' : (b.growth > 0 ? '+' : '') + formatCount(b.growth)],
+          ['Health', a.health + '/100', b.health + '/100'],
+          ['MCP', a.mcpSupport === undefined ? '—' : (a.mcpSupport ? 'Yes' : 'No'), b.mcpSupport === undefined ? '—' : (b.mcpSupport ? 'Yes' : 'No')],
+          ['LLM Required', a.requiresLlm === undefined ? '—' : (a.requiresLlm ? 'Yes' : 'No'), b.requiresLlm === undefined ? '—' : (b.requiresLlm ? 'Yes' : 'No')],
+          ['Last Commit', daysSince(a.lastCommit), daysSince(b.lastCommit)],
+        ];
+      }
+
+      function renderComparison(aSlug, bSlug) {
+        var a = projects[aSlug];
+        var b = projects[bSlug];
+        if (!a || !b || aSlug === bSlug) {
+          results.classList.add('hidden');
+          results.innerHTML = '';
+          return;
+        }
+
+        var pair = canonical(aSlug, bSlug);
+        var hasLandingPage = indexableSlugs.has(pair);
+        var lines = summaryLines(a, b);
+        var rows = metrics(a, b).map(function (row) {
+          return '<tr class="border-b border-white/5">' +
+            '<td class="px-4 py-3 text-gray-500">' + esc(row[0]) + '</td>' +
+            '<td class="px-4 py-3 text-center text-gray-200 font-mono">' + esc(row[1]) + '</td>' +
+            '<td class="px-4 py-3 text-center text-gray-200 font-mono">' + esc(row[2]) + '</td>' +
+          '</tr>';
+        }).join('');
+
+        var summary = lines.length
+          ? '<ul class="space-y-2">' + lines.map(function (line) {
+              return '<li class="flex items-start gap-2 text-sm text-gray-300"><span class="text-biolum mt-0.5">+</span><span>' + esc(line) + '</span></li>';
+            }).join('') + '</ul>'
+          : '<p class="text-sm text-gray-400">These two projects are close enough that your preferred stack and workflow fit will matter more than any single headline metric.</p>';
+
+        var notice = hasLandingPage
+          ? '<p class="text-sm text-biolum">This matchup has a dedicated comparison page because it is part of the curated indexable library.</p>'
+          : '<p class="text-sm text-gray-400">This is an on-page comparison only. Shelldex no longer publishes a separate indexable page for every long-tail pair.</p>';
+
+        results.innerHTML =
+          '<div class="rounded-2xl border border-white/5 bg-ocean-card p-6 sm:p-8">' +
+            '<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">' +
+              '<div>' +
+                '<h2 class="font-display text-2xl font-bold text-white mb-2">' + esc(a.emoji + ' ' + a.name + ' vs ' + b.name + ' ' + b.emoji) + '</h2>' +
+                '<p class="text-gray-400 text-sm max-w-2xl">' + esc(a.tagline) + ' | ' + esc(b.tagline) + '</p>' +
+              '</div>' +
+              '<a href="' + compareHref(aSlug, bSlug) + '" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-biolum/30 bg-biolum/10 text-biolum font-semibold hover:bg-biolum/20 transition-colors">' +
+                (hasLandingPage ? 'Open dedicated page' : 'Share this comparison') +
+              '</a>' +
+            '</div>' +
+            '<div class="mb-5">' + notice + '</div>' +
+            '<div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-5">' +
+              '<div class="rounded-xl border border-white/5 overflow-hidden">' +
+                '<div class="grid grid-cols-3 border-b border-white/10 text-sm">' +
+                  '<div class="px-4 py-3 text-gray-500 font-medium">Metric</div>' +
+                  '<div class="px-4 py-3 text-center text-white font-semibold">' + esc(a.name) + '</div>' +
+                  '<div class="px-4 py-3 text-center text-white font-semibold">' + esc(b.name) + '</div>' +
+                '</div>' +
+                '<table class="w-full text-sm"><tbody>' + rows + '</tbody></table>' +
+              '</div>' +
+              '<div class="rounded-xl border border-white/5 bg-black/10 p-5">' +
+                '<h3 class="font-display text-lg font-bold text-white mb-3">What stands out</h3>' +
+                summary +
+              '</div>' +
+            '</div>' +
+          '</div>';
+
+        results.classList.remove('hidden');
+      }
+
+      function updateButtonState() {
+        var a = selectA.value;
+        var b = selectB.value;
+        var valid = a && b && a !== b;
+        btn.disabled = !valid;
+        if (!valid) {
+          btn.textContent = 'Compare';
+          hint.textContent = 'Dedicated pages exist for editorially selected matchups. Everything else stays inside this tool.';
+          return;
+        }
+
+        var pair = canonical(a, b);
+        if (indexableSlugs.has(pair)) {
+          btn.textContent = 'Open comparison page';
+          hint.textContent = 'This pair has a dedicated landing page and will open as its own canonical comparison.';
+        } else {
+          btn.textContent = 'Compare on this page';
+          hint.textContent = 'This pair stays in the compare tool instead of creating another long-tail crawl target.';
+        }
+      }
+
+      selectA.addEventListener('change', updateButtonState);
+      selectB.addEventListener('change', updateButtonState);
 
       btn.addEventListener('click', function () {
         var a = selectA.value;
         var b = selectB.value;
-        if (a && b && a !== b) {
-          window.location.href = '/compare/' + a + '-vs-' + b;
+        if (!a || !b || a === b) return;
+
+        var pair = canonical(a, b);
+        if (indexableSlugs.has(pair)) {
+          window.location.href = '/compare/' + pair + '/';
+          return;
         }
+
+        var nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set('a', a);
+        nextUrl.searchParams.set('b', b);
+        window.history.replaceState({}, '', nextUrl.toString());
+        renderComparison(a, b);
+        results.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
 
-      // Search filter
-      var search = document.getElementById('pair-search');
-      var grid = document.getElementById('pairs-grid');
-      var countEl = document.getElementById('pair-count');
-      var links = grid.querySelectorAll('.pair-link');
+      var params = new URL(window.location.href).searchParams;
+      var initialA = params.get('a');
+      var initialB = params.get('b');
+      if (initialA && projects[initialA]) selectA.value = initialA;
+      if (initialB && projects[initialB]) selectB.value = initialB;
+      updateButtonState();
 
-      search.addEventListener('input', function () {
-        var q = this.value.toLowerCase().trim();
-        var visible = 0;
-        links.forEach(function (link) {
-          var names = link.dataset.names;
-          var show = !q || names.indexOf(q) !== -1;
-          link.style.display = show ? '' : 'none';
-          if (show) visible++;
-        });
-        countEl.textContent = visible;
-      });
+      if (initialA && initialB && initialA !== initialB) {
+        renderComparison(initialA, initialB);
+      }
     })();
   </script>
 </Layout>

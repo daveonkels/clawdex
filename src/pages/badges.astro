@@ -6,7 +6,7 @@ const projects = await loadProjects();
 const tracked = projects.filter(p => p.slug !== 'openclaw' && p.github);
 ---
 
-<Layout title="Shelldex Badges — Add a Badge to Your README" description="Add a Shelldex badge to your project's README. Show visitors where to find your project profile, comparisons, and ecosystem context.">
+<Layout title="Shelldex Badges — Add a Badge to Your README" description="Add a Shelldex badge to your project's README. Show visitors where to find your project profile, comparisons, and ecosystem context." robots="noindex, follow">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <h1 class="font-display text-4xl font-bold text-white mb-4">Shelldex Badges</h1>
     <p class="text-lg text-gray-400 mb-10">Add a badge to your project's README to help users discover your Shelldex profile, comparisons, and ecosystem context.</p>

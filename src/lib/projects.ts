@@ -52,6 +52,7 @@ export interface Project {
   highlight: string;
   emoji: string;
   added: string;
+  tier?: number;
   stars?: number;
   github_data?: GitHubData;
   platform?: Platform[];

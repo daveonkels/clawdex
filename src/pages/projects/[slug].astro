@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { loadProjects, formatStars } from '../../lib/projects';
 import type { Project } from '../../lib/projects';
 import { languageLabel, languageColors, statusColors } from '../../lib/constants';
-import { makeCanonicalSlug } from '../../lib/compare';
+import { buildComparisonHref, getIndexableCompareSlugSet } from '../../lib/compare-seo.js';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -66,9 +66,14 @@ function formatCount(n: number): string {
 }
 
 const lang = languageColors[language] || languageColors.multi;
+const langName = languageLabel[language] ?? language;
+const projectStars = github_data?.stars ?? stars ?? 0;
 
 // Other projects for comparison links
 const otherProjects = allProjects.filter(p => p.slug !== slug);
+const indexableCompareSlugs = getIndexableCompareSlugSet(allProjects);
+const openclawProject = allProjects.find(p => p.slug === 'openclaw');
+const openclawStars = openclawProject?.github_data?.stars ?? openclawProject?.stars ?? 0;
 
 // Similar projects: share categories or language, sorted by most categories in common then by stars
 const similarProjects = otherProjects
@@ -81,7 +86,89 @@ const similarProjects = otherProjects
   .slice(0, 6)
   .map(x => x.project);
 
+function similarityScore(other: Project): number {
+  const sharedCategories = other.category.filter(c => category.includes(c)).length;
+  const sharedPlatform = (other.platform ?? []).filter(value => (platform ?? []).includes(value)).length;
+  const sameLanguage = other.language === language ? 1 : 0;
+  return (sharedCategories * 3) + (sharedPlatform * 2) + sameLanguage;
+}
+
+const compareCandidates = otherProjects
+  .filter((other) => indexableCompareSlugs.has([slug, other.slug].sort().join('-vs-')))
+  .sort((left, right) => {
+    const similarityDelta = similarityScore(right) - similarityScore(left);
+    if (similarityDelta !== 0) return similarityDelta;
+    return (right.github_data?.stars ?? right.stars ?? 0) - (left.github_data?.stars ?? left.stars ?? 0);
+  })
+  .slice(0, 12);
+
 const isDerivative = slug !== 'openclaw';
+
+function bestForLabel(): string {
+  if (category.includes('security') || category.includes('privacy')) return 'Security-sensitive deployments';
+  if (category.includes('research')) return 'Research and experimentation';
+  if (category.includes('lightweight') || category.includes('performance')) return 'Minimal-footprint environments';
+  if ((platform ?? []).includes('embedded')) return 'Edge and embedded deployments';
+  if ((platform ?? []).includes('browser')) return 'Browser-first deployments';
+  if ((platform ?? []).includes('messaging')) return 'Message-driven assistant workflows';
+  if (category.includes('memory')) return 'Long-lived agents with memory-heavy workflows';
+  return 'General self-hosted agent deployments';
+}
+
+function strengths(): string[] {
+  const items: string[] = [];
+  if (projectStars >= 10000) items.push(`A large GitHub footprint (${formatStars(projectStars)} stars) gives it more tutorials, contributors, and social proof than most projects in the ecosystem.`);
+  else if (projectStars >= 1000) items.push(`It already has meaningful community validation at ${formatStars(projectStars)} GitHub stars.`);
+  if (requires_llm === false) items.push('It can run without a paid LLM API, which materially changes the operating cost profile.');
+  if (mcp_support) items.push('MCP support makes it easier to integrate external tools and data sources without custom glue code.');
+  if ((platform ?? []).includes('embedded')) items.push('Its platform story explicitly includes constrained hardware, not just servers and laptops.');
+  if ((platform ?? []).includes('browser')) items.push('It supports browser-native usage, which lowers the operational burden for lightweight deployments.');
+  if (integration_count) items.push(`${integration_count}+ integrations give it a broader out-of-the-box workflow surface than most peer projects.`);
+  if (perf?.binary_size || perf?.startup_time || perf?.ram) items.push('The published performance profile suggests a deliberate focus on runtime efficiency rather than feature sprawl.');
+  if (items.length < 3 && category.length > 0) items.push(`Its category focus on ${category.slice(0, 2).join(' and ')} makes the product direction easier to understand than generic agent frameworks.`);
+  return items.slice(0, 4);
+}
+
+function tradeoffs(): string[] {
+  const items: string[] = [];
+  if (projectStars < 1000) items.push('The smaller community means fewer battle-tested examples, integrations, and third-party writeups.');
+  if (status === 'experimental') items.push('Experimental status usually means faster iteration but more volatility in APIs, docs, and deployment assumptions.');
+  if (requires_llm !== false) items.push('It still depends on an external LLM provider, so token spend and vendor reliability remain part of the operating model.');
+  if (!mcp_support && mcp_support !== undefined) items.push('Teams standardizing on MCP will need custom integration work or a different tool choice.');
+  if (!(platform ?? []).includes('server') && (platform ?? []).length > 0) items.push('Its deployment focus is opinionated, so it may not fit teams that want a conventional server-first setup.');
+  if (items.length < 3 && category.length > 0) items.push(`Its specialization around ${category[0]} can be a limitation if you need a broader, more general-purpose assistant runtime.`);
+  return items.slice(0, 4);
+}
+
+function editorialOverview(): string[] {
+  const paragraphs: string[] = [];
+  const relationship = isDerivative
+    ? `${name} sits in the OpenClaw family as a ${ecosystemRoleLabels[ecosystem_role ?? 'alternative']?.toLowerCase() ?? 'project'} rather than a generic AI agent tool.`
+    : `${name} is the reference point for the rest of the ecosystem and remains the benchmark every other project is measured against.`;
+
+  paragraphs.push(
+    `${relationship} It is written in ${langName}${projectStars > 0 ? ` and currently shows ${formatStars(projectStars)} GitHub stars` : ''}, which gives a quick sense of where it fits between experimentation and mainstream adoption.`
+  );
+
+  if (slug !== 'openclaw' && openclawStars > 0) {
+    const ratio = projectStars > 0 ? Math.max(1, Math.round(openclawStars / Math.max(projectStars, 1))) : null;
+    paragraphs.push(
+      `${name} is best understood as a response to the tradeoffs in OpenClaw itself. Compared with the flagship project${ratio ? `, its community is roughly ${ratio}x smaller` : ''}, but that smaller scope often exists because the project is optimizing for a sharper use case: ${bestForLabel().toLowerCase()}.`
+    );
+  } else {
+    paragraphs.push(
+      `${name} is still the broadest and most battle-tested option in this directory. It earns that position through sheer ecosystem gravity, but that breadth also creates room for smaller projects to specialize where the original is intentionally general.`
+    );
+  }
+
+  if ((platform ?? []).length > 0 || requires_llm !== undefined || mcp_support !== undefined) {
+    paragraphs.push(
+      `Operationally, this project targets ${bestForLabel().toLowerCase()}. ${requires_llm === false ? 'Because it does not require an external LLM provider, cost control is a real advantage. ' : ''}${mcp_support ? 'MCP support improves interoperability with modern tool ecosystems. ' : ''}${(platform ?? []).length > 0 ? `Its deployment surface spans ${(platform ?? []).map((value) => platformLabels[value] ?? value).join(', ')}.` : ''}`
+    );
+  }
+
+  return paragraphs;
+}
 
 const softwareJsonLd = {
   "@context": "https://schema.org",
@@ -116,7 +203,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
 ---
 
 <Layout
-  title={slug === 'openclaw' ? `${name} — ${tagline} | Shelldex` : `${name}: ${tagline} — OpenClaw Alternative (${formatStars(stars ?? 0)} Stars) | Shelldex`}
+  title={slug === 'openclaw' ? `${name} — ${tagline} | Shelldex` : `${name}: ${tagline} — OpenClaw Alternative (${formatStars(projectStars)} Stars) | Shelldex`}
   description={description}
 >
   <script type="application/ld+json" set:html={JSON.stringify(softwareJsonLd)} />
@@ -234,6 +321,44 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
     <!-- Highlight -->
     <section class="mb-8 rounded-xl bg-biolum/5 border border-biolum/15 px-6 py-5">
       <p class="text-biolum font-medium leading-relaxed">{highlight}</p>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Editorial Take</h2>
+      <div class="space-y-4 text-gray-300 leading-relaxed">
+        {editorialOverview().map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
+          <h2 class="font-display text-lg font-bold text-white mb-3">Best For</h2>
+          <p class="text-sm text-gray-300 leading-relaxed mb-4">{bestForLabel()}</p>
+          <ul class="space-y-2">
+            {strengths().map((item) => (
+              <li class="flex items-start gap-3 text-sm text-gray-300 leading-relaxed">
+                <span class="text-biolum mt-0.5 flex-shrink-0">+</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
+          <h2 class="font-display text-lg font-bold text-white mb-3">Tradeoffs</h2>
+          <p class="text-sm text-gray-400 leading-relaxed mb-4">What to understand before choosing {name} over another project in the ecosystem.</p>
+          <ul class="space-y-2">
+            {tradeoffs().map((item) => (
+              <li class="flex items-start gap-3 text-sm text-gray-300 leading-relaxed">
+                <span class="text-coral mt-0.5 flex-shrink-0">-</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </section>
 
     <!-- GitHub Stats -->
@@ -375,10 +500,10 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
     <!-- Compare with... -->
     <section class="mb-8">
       <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Compare with...</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-        {otherProjects.map(p => (
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-4">
+        {compareCandidates.map(p => (
           <a
-            href={`/compare/${makeCanonicalSlug(slug, p.slug)}/`}
+            href={buildComparisonHref(slug, p.slug, indexableCompareSlugs)}
             class="flex items-center gap-2 rounded-lg border border-white/5 bg-ocean-card/50 px-3 py-2 text-sm text-gray-400 hover:text-biolum hover:border-biolum/20 transition-all"
           >
             <span class="flex-shrink-0">{p.emoji}</span>
@@ -386,6 +511,13 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
           </a>
         ))}
       </div>
+      <a
+        href={`/compare/?a=${slug}`}
+        class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+        Compare {name} with any project in the tool
+      </a>
     </section>
 
     <!-- Similar Projects -->

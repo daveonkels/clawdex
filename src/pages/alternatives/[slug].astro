@@ -1,7 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { loadProjects, formatStars } from '../../lib/projects';
-import { makeCanonicalSlug, loadLeaderboard, computeHealthScore } from '../../lib/compare';
+import { loadLeaderboard, computeHealthScore } from '../../lib/compare';
+import { buildComparisonHref, getIndexableCompareSlugSet } from '../../lib/compare-seo.js';
 import { languageLabel, languageColors } from '../../lib/constants';
 import type { Project } from '../../lib/projects';
 
@@ -36,6 +37,7 @@ const alternatives = allProjects
 
 const topAlternatives = alternatives.filter(a => a.shared > 0);
 const otherProjects = alternatives.filter(a => a.shared === 0);
+const indexableCompareSlugs = getIndexableCompareSlugSet(allProjects);
 
 function getHealthScore(s: string): number {
   const entry = leaderboard.find(e => e.slug === s);
@@ -85,7 +87,7 @@ const breadcrumbJsonLd = {
 };
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} robots="noindex, follow">
   <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 
@@ -117,10 +119,9 @@ const breadcrumbJsonLd = {
       <section class="mb-12">
         <h2 class="font-display text-2xl font-bold text-white mb-6">Most Similar to {name}</h2>
         <div class="space-y-4">
-          {topAlternatives.map(({ project: p, shared }) => {
+          {topAlternatives.slice(0, 12).map(({ project: p }) => {
             const lang = languageColors[p.language] || languageColors.multi;
             const pLangName = languageLabel[p.language] ?? p.language;
-            const compareSlug = makeCanonicalSlug(slug, p.slug);
             const health = getHealthScore(p.slug);
 
             return (
@@ -138,7 +139,7 @@ const breadcrumbJsonLd = {
                     </div>
                     <p class="text-sm text-gray-400 mb-3">{p.tagline}</p>
                     <div class="flex flex-wrap gap-3">
-                      <a href={`/compare/${compareSlug}/`} class="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-biolum transition-colors">
+                      <a href={buildComparisonHref(slug, p.slug, indexableCompareSlugs)} class="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-biolum transition-colors">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
                         Compare with {name}
                       </a>
@@ -165,11 +166,10 @@ const breadcrumbJsonLd = {
       <section class="mb-12">
         <h2 class="font-display text-2xl font-bold text-white mb-6">Other Projects in the Ecosystem</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {otherProjects.map(({ project: p }) => {
-            const compareSlug = makeCanonicalSlug(slug, p.slug);
+          {otherProjects.slice(0, 16).map(({ project: p }) => {
             return (
               <a
-                href={`/compare/${compareSlug}/`}
+                href={`/projects/${p.slug}/`}
                 class="flex items-center gap-3 rounded-lg border border-white/5 bg-ocean-card/50 px-4 py-3 hover:border-biolum/20 transition-all group"
               >
                 <span class="text-xl flex-shrink-0">{p.emoji}</span>
@@ -184,6 +184,10 @@ const breadcrumbJsonLd = {
             );
           })}
         </div>
+        <a href={`/compare/?a=${slug}`} class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors mt-4">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          Compare {name} with any project in the compare tool
+        </a>
       </section>
     )}
 

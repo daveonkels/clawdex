@@ -3,6 +3,7 @@ import { formatStars } from './projects';
 import { languageLabel } from './constants';
 import fs from 'node:fs';
 import path from 'node:path';
+import { makeCanonicalSlug as makeCanonicalSlugBase, getIndexableComparePairs as getIndexableComparePairsBase, getFeaturedComparePairs as getFeaturedComparePairsBase } from './compare-seo.js';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -66,10 +67,7 @@ export function loadLeaderboard(): { entries: LeaderboardEntry[]; count: number 
 
 // ── Pair generation ─────────────────────────────────────────────────────────
 
-export function makeCanonicalSlug(slugA: string, slugB: string): string {
-  const sorted = [slugA, slugB].sort();
-  return `${sorted[0]}-vs-${sorted[1]}`;
-}
+export const makeCanonicalSlug = makeCanonicalSlugBase;
 
 export function makePairSlug(slugA: string, slugB: string): string {
   return `${slugA}-vs-${slugB}`;
@@ -121,6 +119,24 @@ export function getUniquePairs(projects: Project[]): PairEntry[] {
     }
   }
   return unique.sort((a, b) => a.pair.localeCompare(b.pair));
+}
+
+export function getIndexableComparePairs(projects: Project[]): PairEntry[] {
+  return getIndexableComparePairsBase(projects).map((pair: { canonical: string; slugA: string; slugB: string }) => ({
+    pair: pair.canonical,
+    canonical: pair.canonical,
+    slugA: pair.slugA,
+    slugB: pair.slugB,
+  }));
+}
+
+export function getFeaturedComparePairs(projects: Project[], limit?: number): PairEntry[] {
+  return getFeaturedComparePairsBase(projects, limit).map((pair: { canonical: string; slugA: string; slugB: string }) => ({
+    pair: pair.canonical,
+    canonical: pair.canonical,
+    slugA: pair.slugA,
+    slugB: pair.slugB,
+  }));
 }
 
 // ── Health score ────────────────────────────────────────────────────────────
