@@ -1,0 +1,15 @@
+name: ZeptoClaw
+slug: zeptoclaw
+tagline: "A complete AI agent runtime in 6MB"
+description: "Ultra-lightweight personal AI assistant that combines the best of OpenClaw's integrations, NanoClaw's security, and PicoClaw's minimalism — without their tradeoffs. Ships as a single Rust binary with 32 built-in tools, MCP support, multi-channel messaging (Telegram, Slack, Discord, WhatsApp, Email, MQTT), container isolation, and IoT-ready architecture."
+language: rust
+category:
+  - lightweight
+  - security
+  - iot
+github: qhkm/zeptoclaw
+website: https://crates.io/crates/zeptoclaw
+status: active
+highlight: "32 tools, 6 channels, MCP client, container isolation, and IoT support — all in a single ~6MB stripped binary"
+emoji: 🦀
+added: 2026-03-12
