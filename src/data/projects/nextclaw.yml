@@ -1,0 +1,23 @@
+name: NextClaw
+slug: nextclaw
+tagline: Ultra-lightweight OpenClaw alternative with full plugin compatibility
+description: OpenClaw-inspired personal AI assistant at ~1/20 the codebase. 12+ AI providers, 10+ message channels (Discord, Telegram, Slack, WhatsApp, Feishu, DingTalk, and more), cron and heartbeat scheduling, browser UI configuration. Published on npm, runs locally.
+language: typescript
+category:
+  - self-hosted
+  - lightweight
+  - messaging
+github: Peiiii/nextclaw
+website: https://docs.nextclaw.io
+status: active
+tier: 2
+highlight: Ultra-lightweight design (~1/20 codebase) with full OpenClaw plugin compatibility and 10+ channel integrations
+emoji: ⚡
+platform:
+  - cli
+  - server
+  - messaging
+requires_llm: true
+mcp_support: false
+ecosystem_role: derivative
+added: "2026-03-15"

@@ -1,0 +1,21 @@
+name: CoWork-OS
+slug: cowork-os
+tagline: Security-first operating system for personal AI agents
+description: Multi-channel (WhatsApp, Telegram, Discord, Slack, iMessage), multi-provider (Claude, GPT, Gemini, Ollama) personal AI agent OS. Fully self-hosted with a security-first architecture. TypeScript, MIT licensed.
+language: typescript
+category:
+  - self-hosted
+  - messaging
+  - security
+github: CoWork-OS/CoWork-OS
+status: active
+tier: 2
+highlight: Security-first design with native iMessage support and multi-provider routing
+emoji: 🏢
+platform:
+  - server
+  - messaging
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
+added: "2026-03-15"
