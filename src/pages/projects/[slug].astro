@@ -100,7 +100,7 @@ const compareCandidates = otherProjects
     if (similarityDelta !== 0) return similarityDelta;
     return (right.github_data?.stars ?? right.stars ?? 0) - (left.github_data?.stars ?? left.stars ?? 0);
   })
-  .slice(0, 12);
+  .slice(0, 20);
 
 const isDerivative = slug !== 'openclaw';
 
@@ -204,7 +204,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
 
 <Layout
   title={slug === 'openclaw' ? `${name} — ${tagline} | Shelldex` : `${name}: ${tagline} — OpenClaw Alternative (${formatStars(projectStars)} Stars) | Shelldex`}
-  description={description}
+  description={`${description} ${langName} project with ${formatStars(projectStars)} GitHub stars.${requires_llm === false ? ' No LLM API needed.' : ''}${mcp_support ? ' MCP support included.' : ''} See stats, health score, and comparisons.`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(softwareJsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />

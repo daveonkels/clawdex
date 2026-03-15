@@ -5,7 +5,7 @@ import FilterBar from '../components/FilterBar.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import MomentumTicker from '../components/MomentumTicker.astro';
 import { loadProjects, getUniqueLanguages, getUniqueStatuses, getUniquePlatforms } from '../lib/projects';
-import { loadLeaderboard } from '../lib/compare';
+import { loadLeaderboard, getIndexableComparePairs } from '../lib/compare';
 import fs from 'node:fs';
 
 const projects = await loadProjects();
@@ -21,9 +21,14 @@ const movers = leaderboard.entries
   .sort((a, b) => (b.star_growth_7d ?? 0) - (a.star_growth_7d ?? 0));
 const lbRaw = JSON.parse(fs.readFileSync('src/data/generated/leaderboard.json', 'utf-8'));
 const generatedDate = new Date(lbRaw.generated);
+
+// Top comparison pairs for internal linking
+const indexablePairs = getIndexableComparePairs(projects);
+const projectMap = new Map(projects.map(p => [p.slug, p]));
+const topComparePairs = indexablePairs.slice(0, 12);
 ---
 
-<Layout title={`${projects.length} OpenClaw Alternatives & Forks Compared (${new Date().getFullYear()}) — Shelldex`} description={`Compare ${projects.length} OpenClaw alternatives and forks side by side — stars, language, performance, and project health. The complete registry of the OpenClaw ecosystem.`}>
+<Layout title={`OpenClaw Alternatives: ${projects.length} Projects Compared (${new Date().getFullYear()}) | Shelldex`} description={`Find the best OpenClaw alternative for your stack. Compare ${projects.length} projects by GitHub stars, language, health score, and MCP support — updated weekly.`}>
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -96,8 +101,28 @@ const generatedDate = new Date(lbRaw.generated);
       ))}
     </div>
 
-    <!-- Explore the ecosystem -->
+    <!-- Popular Comparisons -->
     <div class="mt-14 border-t border-white/5 pt-10">
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="font-display text-xl font-bold text-white">Popular Comparisons</h2>
+        <a href="/compare/" class="text-sm text-gray-400 hover:text-biolum transition-colors">View all {indexablePairs.length} comparisons &rarr;</a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mb-10">
+        {topComparePairs.map((pair) => (
+          <a
+            href={`/compare/${pair.canonical}/`}
+            class="flex items-center gap-2 rounded-lg border border-white/5 bg-ocean-card/50 px-3 py-2.5 text-sm text-gray-400 hover:text-biolum hover:border-biolum/20 transition-all"
+          >
+            <span class="flex-shrink-0">{projectMap.get(pair.slugA)?.emoji}</span>
+            <span class="truncate">{projectMap.get(pair.slugA)?.name} vs {projectMap.get(pair.slugB)?.name}</span>
+            <span class="flex-shrink-0">{projectMap.get(pair.slugB)?.emoji}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Explore the ecosystem -->
+    <div class="mt-6 border-t border-white/5 pt-10">
       <h2 class="font-display text-xl font-bold text-white mb-5">Explore the ecosystem</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <a href="/compare/" class="rounded-xl border border-white/5 bg-ocean-card p-5 hover:border-biolum/30 transition-all group">

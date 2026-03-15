@@ -102,8 +102,41 @@ const bLang = languageColors[b.language] || languageColors.multi;
 const year = new Date().getFullYear();
 const aLangName = languageLabel[a.language] ?? a.language;
 const bLangName = languageLabel[b.language] ?? b.language;
-const pageTitle = `${a.name} vs ${b.name}: Side-by-Side Comparison (${year}) | Shelldex`;
-const pageDescription = `Compare ${a.name} (${formatStars(aStars)} stars, ${aLangName}) and ${b.name} (${formatStars(bStars)} stars, ${bLangName}) — GitHub stats, performance, MCP support, and project health side by side.`;
+// Title: front-load the matchup for mobile truncation (keep under 55 chars before " | Shelldex")
+const pageTitle = `${a.name} vs ${b.name} (${year}) — Full Comparison | Shelldex`;
+
+// Description: lead with the key differentiator, then a hook
+function buildCompareDescription(): string {
+  const parts: string[] = [];
+
+  // Lead with the most interesting differentiator
+  if (a.language !== b.language) {
+    parts.push(`${aLangName} vs ${bLangName}.`);
+  }
+  if (aStars > bStars * 2 && bStars > 0) {
+    parts.push(`${a.name} leads with ${formatStars(aStars)} stars vs ${formatStars(bStars)}.`);
+  } else if (bStars > aStars * 2 && aStars > 0) {
+    parts.push(`${b.name} leads with ${formatStars(bStars)} stars vs ${formatStars(aStars)}.`);
+  } else if (aStars > 0 && bStars > 0) {
+    parts.push(`${formatStars(aStars)} vs ${formatStars(bStars)} GitHub stars.`);
+  }
+  if (a.mcp_support !== b.mcp_support) {
+    const mcpProject = a.mcp_support ? a.name : b.name;
+    parts.push(`${mcpProject} has MCP support.`);
+  }
+  if (a.requires_llm !== b.requires_llm && a.requires_llm === false) {
+    parts.push(`${a.name} runs without an LLM API.`);
+  } else if (a.requires_llm !== b.requires_llm && b.requires_llm === false) {
+    parts.push(`${b.name} runs without an LLM API.`);
+  }
+
+  // Always end with the call-to-action hook
+  parts.push(`See the full breakdown — stats, health scores, and which one fits your stack.`);
+
+  return parts.join(' ');
+}
+
+const pageDescription = buildCompareDescription();
 const redirectCanonicalUrl = redirectUrl.includes('?') ? 'https://shelldex.com/compare/' : redirectUrl;
 
 function chooseReasons(project: Project, other: Project, projectHealth: number, otherHealth: number): string[] {
@@ -354,12 +387,9 @@ const metrics = [
   canonicalUrl={isIndexable ? canonicalUrl : redirectCanonicalUrl}
   robots={isIndexable ? 'index, follow' : 'noindex, follow'}
 >
-  {!isIndexable && (
-    <Fragment slot="head">
-      <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />
-      <script is:inline set:html={`window.location.replace(${JSON.stringify(redirectUrl)});`}></script>
-    </Fragment>
-  )}
+  {/* Non-indexable pairs: no meta refresh redirect — just noindex + canonical.
+       This avoids "Page with redirect" errors in Search Console while keeping
+       the canonical signal pointing to the right destination. */}
   {isIndexable && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />}
   {isIndexable && <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />}
   {isIndexable && faqJsonLd && <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}
@@ -367,15 +397,15 @@ const metrics = [
   {!isIndexable ? (
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
       <div class="rounded-2xl border border-white/5 bg-ocean-card p-8 text-center">
-        <h1 class="font-display text-3xl font-bold text-white mb-4">Redirecting comparison</h1>
+        <h1 class="font-display text-3xl font-bold text-white mb-4">{a.name} vs {b.name}</h1>
         <p class="text-gray-400 leading-relaxed mb-6">
-          The old long-tail comparison URL for {a.name} vs {b.name} has been consolidated into Shelldex&apos;s curated comparison library.
+          This comparison is available through our curated comparison library. Use the link below or the <a href="/compare/" class="text-biolum hover:underline">Compare tool</a> to explore this matchup.
         </p>
         <a
           href={redirectUrl}
           class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-biolum/30 bg-biolum/10 text-biolum font-semibold hover:bg-biolum/20 transition-colors"
         >
-          Continue to the current comparison
+          View this comparison
         </a>
       </div>
     </div>

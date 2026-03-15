@@ -15,6 +15,12 @@ const PROMOTED_COMPARE_SLUGS = new Set(
     ['zeroclaw', 'nullclaw'],
     ['ironclaw', 'secure-openclaw'],
     ['memu', 'memos'],
+    // GSC-driven promotions: these pages are already ranking and driving traffic
+    ['astrbot', 'openbrowserclaw'],
+    ['hermes', 'safeclaw'],
+    ['hermes', 'tinyclaw'],
+    ['ironclaw', 'moltis'],
+    ['kai', 'secure-openclaw'],
   ].map(([a, b]) => makeCanonicalSlug(a, b)),
 );
 

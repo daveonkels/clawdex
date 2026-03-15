@@ -10,6 +10,10 @@ const indexablePairs = getIndexableComparePairs(projects);
 const featuredPairs = getFeaturedComparePairs(projects, 24);
 const openclawPairs = featuredPairs.filter((pair) => pair.slugA === 'openclaw' || pair.slugB === 'openclaw').slice(0, 12);
 const editorialPairs = featuredPairs.filter((pair) => pair.slugA !== 'openclaw' && pair.slugB !== 'openclaw').slice(0, 12);
+
+// All remaining indexable pairs not in featured sections (for the full directory)
+const featuredSlugs = new Set([...openclawPairs, ...editorialPairs].map(p => p.canonical));
+const remainingPairs = indexablePairs.filter(p => !featuredSlugs.has(p.canonical));
 const projectedMatchups = Math.round(projects.length * (projects.length - 1) / 2);
 
 const { entries: leaderboard } = loadLeaderboard();
@@ -194,6 +198,29 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
               <span>{projectMap.get(pair.slugA)?.emoji}</span>
               <span class="truncate">{pairLabel(pair.slugA, pair.slugB)}</span>
               <span>{projectMap.get(pair.slugB)?.emoji}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {remainingPairs.length > 0 && (
+      <section class="mb-12">
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="font-display text-2xl font-bold text-white">All Indexed Comparisons</h2>
+            <p class="text-sm text-gray-500 mt-1">Every curated matchup in the Shelldex comparison library — {indexablePairs.length} total pages.</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+          {remainingPairs.map((pair) => (
+            <a
+              href={`/compare/${pair.canonical}/`}
+              class="flex items-center gap-2 rounded-lg border border-white/5 bg-ocean-card/30 px-3 py-2.5 text-sm text-gray-400 hover:text-biolum hover:border-biolum/20 transition-all"
+            >
+              <span class="flex-shrink-0">{projectMap.get(pair.slugA)?.emoji}</span>
+              <span class="truncate">{pairLabel(pair.slugA, pair.slugB)}</span>
+              <span class="flex-shrink-0">{projectMap.get(pair.slugB)?.emoji}</span>
             </a>
           ))}
         </div>

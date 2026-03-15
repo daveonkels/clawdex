@@ -40,7 +40,8 @@ const ogImageType = inferImageType(ogImage);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-latin.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/titan-one-latin.woff2" crossorigin />
+    <!-- Titan One is logo-only — prefetch instead of preload to reduce mobile LCP blocking -->
+    <link rel="prefetch" as="font" type="font/woff2" href="/fonts/titan-one-latin.woff2" crossorigin />
     <link rel="canonical" href={resolvedCanonical} />
 
     <!-- Open Graph -->

@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { loadProjects, formatStars } from '../lib/projects';
-import { loadLeaderboard, computeHealthScore, makeCanonicalSlug } from '../lib/compare';
+import { loadLeaderboard, computeHealthScore, makeCanonicalSlug, getIndexableComparePairs } from '../lib/compare';
 import { languageLabel, languageColors } from '../lib/constants';
 
 const projects = await loadProjects();
@@ -13,11 +13,25 @@ const alternatives = projects
   .sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0));
 
 const year = new Date().getFullYear();
-const pageTitle = `Best OpenClaw Alternatives (${year}): ${alternatives.length} Projects Ranked & Compared | Shelldex`;
-const pageDescription = `The definitive guide to OpenClaw alternatives — ranked by GitHub stars, project health, and community momentum. From Rust rewrites to embedded agents, find the right one for your stack.`;
+const pageTitle = `OpenClaw Alternative? ${alternatives.length} Projects Ranked (${year}) | Shelldex`;
+const pageDescription = `Looking for an OpenClaw alternative? Compare ${alternatives.length} projects ranked by GitHub stars, health score, and momentum. Rust rewrites, embedded agents, zero-LLM options — find the right fit for your stack.`;
 
 const openclaw = projects.find(p => p.slug === 'openclaw');
 const oclawStars = formatStars(openclaw?.stars ?? 0);
+
+// Build a map of each project's top non-OpenClaw comparison pages
+const indexablePairs = getIndexableComparePairs(projects);
+const projectCompareMap = new Map<string, Array<{slug: string; name: string; canonical: string}>>();
+const projectNameMap = new Map(projects.map(p => [p.slug, p.name]));
+for (const pair of indexablePairs) {
+  if (pair.slugA === 'openclaw' || pair.slugB === 'openclaw') continue;
+  for (const slug of [pair.slugA, pair.slugB]) {
+    const other = slug === pair.slugA ? pair.slugB : pair.slugA;
+    if (!projectCompareMap.has(slug)) projectCompareMap.set(slug, []);
+    const arr = projectCompareMap.get(slug)!;
+    if (arr.length < 3) arr.push({ slug: other, name: projectNameMap.get(other) ?? other, canonical: pair.canonical });
+  }
+}
 
 function getHealthScore(slug: string): number {
   const entry = leaderboard.find(e => e.slug === slug);
@@ -242,9 +256,18 @@ const breadcrumbJsonLd = {
                 href={`/compare/${compareSlug}/`}
                 class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-biolum transition-colors"
               >
-                Compare with OpenClaw
+                vs OpenClaw
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
               </a>
+              {(projectCompareMap.get(p.slug) ?? []).map((comp) => (
+                <a
+                  href={`/compare/${comp.canonical}/`}
+                  class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-biolum transition-colors"
+                >
+                  vs {comp.name}
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                </a>
+              ))}
               {p.github && (
                 <a
                   href={`https://github.com/${p.github}`}
