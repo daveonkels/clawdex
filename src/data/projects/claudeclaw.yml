@@ -1,0 +1,19 @@
+name: ClaudeClaw
+slug: claudeclaw
+tagline: OpenClaw built into Claude Code
+description: A lightweight, open-source OpenClaw alternative built into Claude Code. Uses Claude's subscription without separate API keys.
+language: typescript
+category:
+  - lightweight
+  - claude-native
+github: moazbuilds/claudeclaw
+status: active
+tier: 2
+highlight: Uses Claude subscription directly — no separate API keys needed
+emoji: 🔗
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: reimplementation
+added: 2026-03-15T00:00:00.000Z

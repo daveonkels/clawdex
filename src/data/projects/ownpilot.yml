@@ -1,0 +1,20 @@
+name: OwnPilot
+slug: ownpilot
+tagline: Privacy-first autonomous agent platform
+description: Privacy-first personal AI assistant platform with autonomous agents, tool orchestration, and multi-provider support.
+language: typescript
+category:
+  - privacy
+  - multi-provider
+  - autonomous
+github: ownpilot/OwnPilot
+status: active
+tier: 2
+highlight: Privacy-first with multi-provider support and autonomous agent orchestration
+emoji: 🛡️
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
+added: 2026-03-15T00:00:00.000Z
