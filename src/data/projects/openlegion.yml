@@ -1,17 +1,18 @@
 name: OpenLegion
 slug: openlegion
-tagline: Secure autonomous AI agent fleets
-description: Production-grade multi-agent platform where every agent runs in its own Docker container. Features vault-based API key isolation, per-agent cost budgets, deterministic YAML DAG workflows, and multi-channel support. Designed for team deployments with security as a first principle.
+tagline: Security-first AI agent framework for production multi-agent systems
+description: Production-grade multi-agent platform built on the assumption that agents can be compromised. Every agent runs in its own Docker container with blast-radius containment through isolation, credential separation, permissions, and cost controls. Credentials live in a vault/proxy layer so agents never directly access raw keys. Includes a built-in stealth browser for human-like web interaction without fragile external browser setups. Designed for teams deploying agents in production, especially in security-sensitive or enterprise environments.
 language: python
 category:
   - multi-agent
   - security
   - self-hosted
   - enterprise
+  - browser
 github: openlegion-ai/openlegion
 status: active
 tier: 2
-highlight: Docker-isolated agent fleet — each agent in its own container, API keys in a vault proxy agents never see, per-agent daily and monthly budget caps
+highlight: Security-first agent fleet — blast-radius containment per agent, vault-proxied credentials agents never see, built-in stealth browser, per-agent budget caps
 emoji: 🛡️
 platform:
   - server
@@ -20,3 +21,31 @@ requires_llm: true
 mcp_support: true
 ecosystem_role: alternative
 added: "2026-03-07"
+github_data:
+  stars: 66
+  forks: 6
+  open_issues: 2
+  license: NOASSERTION
+  topics:
+    - agent-framework
+    - ai-agents
+    - ai-assistant
+    - ai-orchestration
+    - ai-runtime
+    - ai-runtime-security
+    - autonomous-agents
+    - docker-sandbox
+    - llm-agents
+    - memu
+    - multi-agent
+    - nanobot
+    - nanoclaw
+    - openclaw
+    - openclaw-alternative
+    - self-hosted
+    - zeroclaw
+  last_commit: "2026-03-09T00:58:39Z"
+  latest_release: null
+  latest_release_date: null
+  star_growth_7d: 0
+  last_enriched: "2026-03-09T04:42:17.962Z"
