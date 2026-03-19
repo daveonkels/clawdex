@@ -1,0 +1,20 @@
+name: OpenMolt
+slug: openmolt
+tagline: Programmatic AI agents for Node.js
+description: Build autonomous AI agents in Node.js/TypeScript with a code-first API. Scope-gated tool access, 30+ built-in integrations (Gmail, Slack, GitHub, Notion, Stripe), Zod-typed outputs, cron scheduling, and long-term memory — all from your codebase.
+language: typescript
+category:
+  - developer
+  - framework
+github: ybouane/OpenMolt.dev
+website: https://openmolt.dev
+status: active
+tier: 3
+highlight: Code-first agents with scope-gated security and Zod-typed outputs
+emoji: 🔧
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: reimplementation
+added: 2026-03-18T00:00:00.000Z

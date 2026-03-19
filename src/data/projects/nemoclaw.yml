@@ -1,0 +1,27 @@
+name: NemoClaw
+slug: nemoclaw
+tagline: NVIDIA's secure OpenClaw deployment stack
+description: Open source stack from NVIDIA that wraps OpenClaw in the OpenShell sandbox runtime with policy-based privacy and security guardrails. One-command install, containerized execution, inference routed through NVIDIA cloud.
+language: javascript
+category:
+  - security
+  - enterprise
+github: NVIDIA/NemoClaw
+website: https://www.nvidia.com/en-us/ai/nemoclaw/
+status: active
+tier: 1
+highlight: NVIDIA-backed sandbox + guardrails for OpenClaw, one-command install
+emoji: 🟢
+mentions:
+  - type: article
+    url: https://build.nvidia.com/nemoclaw
+    author: NVIDIA
+    title: NemoClaw on NVIDIA Build
+    source: NVIDIA
+platform:
+  - server
+  - cloud
+requires_llm: true
+mcp_support: false
+ecosystem_role: fork
+added: 2026-03-19T00:00:00.000Z
