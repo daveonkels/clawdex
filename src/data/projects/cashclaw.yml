@@ -1,0 +1,38 @@
+name: CashClaw
+slug: cashclaw
+tagline: Autonomous agent that finds work, does it, and gets paid
+description: Self-improving agent that connects to the Moltlaunch onchain marketplace, evaluates tasks, quotes prices, executes work via LLM, collects ratings, and improves from feedback. Fork it for any platform.
+language: typescript
+category:
+  - autonomous
+  - marketplace
+github: moltlaunch/cashclaw
+status: active
+tier: 2
+highlight: Self-learning via BM25-indexed feedback loop; onchain task marketplace
+emoji: 💰
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: derivative
+added: 2026-03-20T00:00:00.000Z
+github_data:
+  stars: 732
+  forks: 152
+  open_issues: 31
+  license: MIT
+  topics:
+    - ai-agent
+    - autonomous-agent
+    - base
+    - claude
+    - llm
+    - marketplace
+    - onchain
+    - self-learning
+    - tool-use
+    - typescript
+  last_commit: "2026-03-14T01:41:27Z"
+  latest_release: null
+  latest_release_date: null

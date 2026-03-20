@@ -1,0 +1,33 @@
+name: OpenCrabs
+slug: opencrabs
+tagline: Autonomous, self-improving Rust agent
+description: Single Rust binary with multi-channel support, local TTS/STT via whisper.cpp, SQLite memory, and zero network listeners. Keys zeroized from RAM on drop. Inspired by OpenClaw.
+language: rust
+category:
+  - security
+  - privacy
+github: adolfousier/opencrabs
+status: active
+tier: 2
+highlight: Zero network listeners, RAM-zeroized API keys, built-in local voice (whisper.cpp)
+emoji: 🦀
+platform:
+  - desktop
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: reimplementation
+added: 2026-03-20T00:00:00.000Z
+github_data:
+  stars: 543
+  forks: 51
+  open_issues: 0
+  license: MIT
+  topics:
+    - agentic-framework
+    - open-source
+    - opencrab
+    - orchestration-framework
+  last_commit: "2026-03-20T05:26:41Z"
+  latest_release: null
+  latest_release_date: null

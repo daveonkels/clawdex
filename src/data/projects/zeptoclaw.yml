@@ -1,0 +1,33 @@
+name: ZeptoClaw
+slug: zeptoclaw
+tagline: Ultra-lightweight Rust agent with container isolation
+description: One 6MB Rust binary with 32 tools, 9 channels, 9 providers, and container sandboxing. Studies OpenClaw, NanoClaw, and PicoClaw — keeps the integrations, drops the bloat.
+language: rust
+category:
+  - lightweight
+  - security
+github: qhkm/zeptoclaw
+status: active
+tier: 2
+highlight: 6MB binary, 50ms startup, 6MB RAM, container isolation + prompt injection detection
+emoji: ⚡
+platform:
+  - server
+  - edge
+requires_llm: true
+mcp_support: false
+ecosystem_role: reimplementation
+added: 2026-03-20T00:00:00.000Z
+github_data:
+  stars: 524
+  forks: 73
+  open_issues: 34
+  license: Apache-2.0
+  topics:
+    - ai
+    - ai-assistant
+    - open-source
+    - rust
+  last_commit: "2026-03-18T05:28:31Z"
+  latest_release: null
+  latest_release_date: null

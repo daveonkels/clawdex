@@ -1,0 +1,28 @@
+name: LettaBot
+slug: lettabot
+tagline: Persistent-memory agent across 5 messaging channels
+description: Personal AI assistant that remembers everything across Telegram, Slack, Discord, WhatsApp, and Signal. Unified memory, heartbeat check-ins, voice transcription, and scheduling — powered by the Letta SDK.
+language: typescript
+category:
+  - memory
+  - messaging
+github: letta-ai/lettabot
+status: active
+tier: 2
+highlight: Unified long-term memory across 5 channels + Bluesky Jetstream ingestion
+emoji: 🧠
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
+added: 2026-03-20T00:00:00.000Z
+github_data:
+  stars: 277
+  forks: 67
+  open_issues: 68
+  license: Apache-2.0
+  topics: []
+  last_commit: "2026-03-20T16:49:51Z"
+  latest_release: null
+  latest_release_date: null

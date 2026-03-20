@@ -1,0 +1,29 @@
+name: Picobot
+slug: picobot
+tagline: AI agent that runs anywhere — even on a $5 VPS
+description: Single ~9MB Go binary with persistent memory, tool calling, skills, and Telegram/Discord integration. Zero dependencies, boots in milliseconds, idles at 10MB RAM.
+language: go
+category:
+  - lightweight
+  - edge
+github: louisho5/picobot
+status: active
+tier: 2
+highlight: 9MB binary, 10MB RAM, runs on a $5 VPS or Raspberry Pi
+emoji: 🤖
+platform:
+  - server
+  - edge
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
+added: 2026-03-20T00:00:00.000Z
+github_data:
+  stars: 1165
+  forks: 155
+  open_issues: 9
+  license: MIT
+  topics: []
+  last_commit: "2026-03-18T18:44:18Z"
+  latest_release: null
+  latest_release_date: null
