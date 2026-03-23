@@ -14,15 +14,20 @@ highlight: Concurrent Channel/Branch/Worker/Cortex architecture — 50 users at 
 emoji: 🚀
 added: 2026-03-04T00:00:00.000Z
 github_data:
-  stars: 1569
-  forks: 224
-  open_issues: 74
+  stars: 1633
+  forks: 237
+  open_issues: 85
   license: NOASSERTION
   topics:
     - agent
+    - agentic
     - ai
-  last_commit: "2026-03-05T01:54:59Z"
-  latest_release: v0.2.2
-  latest_release_date: "2026-03-01T13:00:02Z"
-  star_growth_7d: 0
-  last_enriched: "2026-03-05T01:56:35.602Z"
+    - automation
+    - developer-tools
+    - enterprise
+    - messaging
+  last_commit: "2026-03-09T04:41:53Z"
+  latest_release: v0.3.1
+  latest_release_date: "2026-03-08T15:54:45Z"
+  star_growth_7d: 64
+  last_enriched: "2026-03-09T04:42:19.675Z"

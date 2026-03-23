@@ -24,17 +24,17 @@ perf:
 integration_count: 22
 added: 2026-02-26T00:00:00.000Z
 github_data:
-  stars: 4494
-  forks: 495
-  open_issues: 30
+  stars: 5984
+  forks: 710
+  open_issues: 63
   license: MIT
   topics:
     - ai
     - assistant
     - personal
     - zig
-  last_commit: "2026-03-02T23:14:33Z"
-  latest_release: v2026.3.1
-  latest_release_date: "2026-03-02T00:36:04Z"
-  star_growth_7d: 1742
-  last_enriched: "2026-03-02T23:14:49.749Z"
+  last_commit: "2026-03-09T02:48:25Z"
+  latest_release: v2026.3.8
+  latest_release_date: "2026-03-09T02:19:38Z"
+  star_growth_7d: 1490
+  last_enriched: "2026-03-09T04:42:16.833Z"

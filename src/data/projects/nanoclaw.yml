@@ -39,18 +39,18 @@ mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 17603
-  forks: 2812
-  open_issues: 250
+  stars: 20567
+  forks: 3441
+  open_issues: 285
   license: MIT
   topics:
     - ai-agents
     - ai-assistant
     - claude-code
     - claude-skills
-    - clawdbot
-  last_commit: "2026-03-02T22:39:18Z"
+    - openclaw
+  last_commit: "2026-03-08T22:29:40Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 1100
-  last_enriched: "2026-03-02T23:14:49.431Z"
+  star_growth_7d: 2964
+  last_enriched: "2026-03-09T04:42:16.551Z"

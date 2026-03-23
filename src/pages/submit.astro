@@ -4,78 +4,78 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="Submit a Project — Shelldex" description="Submit an OpenClaw clone, fork, or derivative to the Shelldex directory. Add your project via GitHub PR with a simple YAML file." robots="noindex, follow">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="font-display text-4xl font-bold text-white mb-4">Submit a Project</h1>
-    <p class="text-lg text-gray-400 mb-12">Know of an OpenClaw clone, fork, or derivative we're missing? Add it via GitHub PR.</p>
+    <h1 class="font-display text-4xl font-bold text-ledger-text mb-4">Submit a Project</h1>
+    <p class="text-lg text-ledger-faint mb-12">Know of an OpenClaw clone, fork, or derivative we're missing? Add it via GitHub PR.</p>
 
     <div class="space-y-10">
       <!-- Steps -->
       <div class="space-y-6">
         <div class="flex gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-biolum/10 border border-biolum/30 flex items-center justify-center">
-            <span class="text-sm font-bold text-biolum">1</span>
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-ledger-red-bg border border-ledger-red/30 flex items-center justify-center">
+            <span class="text-sm font-bold text-ledger-red">1</span>
           </div>
           <div>
-            <h3 class="font-display font-bold text-white mb-1">Fork the repo</h3>
-            <p class="text-gray-400 text-sm">Fork <a href="https://github.com/daveonkels/clawdex" class="text-biolum hover:text-biolum-light">openclaw/clawdex</a> on GitHub.</p>
+            <h3 class="font-display font-bold text-ledger-text mb-1">Fork the repo</h3>
+            <p class="text-ledger-faint text-sm">Fork <a href="https://github.com/daveonkels/clawdex" class="text-ledger-red hover:text-ledger-coral">openclaw/clawdex</a> on GitHub.</p>
           </div>
         </div>
 
         <div class="flex gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-biolum/10 border border-biolum/30 flex items-center justify-center">
-            <span class="text-sm font-bold text-biolum">2</span>
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-ledger-red-bg border border-ledger-red/30 flex items-center justify-center">
+            <span class="text-sm font-bold text-ledger-red">2</span>
           </div>
           <div>
-            <h3 class="font-display font-bold text-white mb-1">Create a YAML file</h3>
-            <p class="text-gray-400 text-sm mb-3">Add a new file to <code class="text-biolum bg-biolum/10 px-1.5 py-0.5 rounded text-xs font-mono">src/data/projects/your-project.yml</code></p>
+            <h3 class="font-display font-bold text-ledger-text mb-1">Create a YAML file</h3>
+            <p class="text-ledger-faint text-sm mb-3">Add a new file to <code class="text-ledger-red bg-ledger-red-bg px-1.5 py-0.5 rounded text-xs font-mono">src/data/projects/your-project.yml</code></p>
           </div>
         </div>
 
         <div class="flex gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-biolum/10 border border-biolum/30 flex items-center justify-center">
-            <span class="text-sm font-bold text-biolum">3</span>
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-ledger-red-bg border border-ledger-red/30 flex items-center justify-center">
+            <span class="text-sm font-bold text-ledger-red">3</span>
           </div>
           <div>
-            <h3 class="font-display font-bold text-white mb-1">Open a PR</h3>
-            <p class="text-gray-400 text-sm">Submit a pull request. CI validates the YAML schema. A human reviews and merges.</p>
+            <h3 class="font-display font-bold text-ledger-text mb-1">Open a PR</h3>
+            <p class="text-ledger-faint text-sm">Submit a pull request. CI validates the YAML schema. A human reviews and merges.</p>
           </div>
         </div>
       </div>
 
       <!-- Template -->
       <div>
-        <h2 class="font-display text-xl font-bold text-white mb-4">YAML Template</h2>
-        <div class="bg-ocean-card border border-white/5 rounded-xl p-6 overflow-x-auto">
-          <pre class="text-sm font-mono text-gray-300 leading-relaxed"><code><span class="text-biolum">name</span>: Your Project Name
-<span class="text-biolum">slug</span>: your-project-name
-<span class="text-biolum">tagline</span>: "A short catchy description"
-<span class="text-biolum">description</span>: "A longer description of what this project does"
-<span class="text-biolum">language</span>: rust  <span class="text-gray-600"># typescript | rust | python | go | c | multi</span>
-<span class="text-biolum">category</span>:
+        <h2 class="font-display text-xl font-bold text-ledger-text mb-4">YAML Template</h2>
+        <div class="bg-ledger-surface border border-ledger-border rounded-xl p-6 overflow-x-auto">
+          <pre class="text-sm font-mono text-ledger-muted leading-relaxed"><code><span class="text-ledger-red">name</span>: Your Project Name
+<span class="text-ledger-red">slug</span>: your-project-name
+<span class="text-ledger-red">tagline</span>: "A short catchy description"
+<span class="text-ledger-red">description</span>: "A longer description of what this project does"
+<span class="text-ledger-red">language</span>: rust  <span class="text-ledger-whisper"># typescript | rust | python | go | c | multi</span>
+<span class="text-ledger-red">category</span>:
   - security
   - lightweight
-<span class="text-biolum">github</span>: owner/repo  <span class="text-gray-600"># optional</span>
-<span class="text-biolum">website</span>: https://example.com  <span class="text-gray-600"># optional</span>
-<span class="text-biolum">status</span>: active  <span class="text-gray-600"># active | experimental | archived</span>
-<span class="text-biolum">highlight</span>: "The one thing that makes this project stand out"
-<span class="text-biolum">emoji</span>: 🦀
-<span class="text-biolum">added</span>: 2026-02-25</code></pre>
+<span class="text-ledger-red">github</span>: owner/repo  <span class="text-ledger-whisper"># optional</span>
+<span class="text-ledger-red">website</span>: https://example.com  <span class="text-ledger-whisper"># optional</span>
+<span class="text-ledger-red">status</span>: active  <span class="text-ledger-whisper"># active | experimental | archived</span>
+<span class="text-ledger-red">highlight</span>: "The one thing that makes this project stand out"
+<span class="text-ledger-red">emoji</span>: 🦀
+<span class="text-ledger-red">added</span>: 2026-02-25</code></pre>
         </div>
       </div>
 
       <!-- Guidelines -->
       <div>
-        <h2 class="font-display text-xl font-bold text-white mb-4">Guidelines</h2>
-        <ul class="space-y-3 text-gray-400 text-sm">
+        <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Guidelines</h2>
+        <ul class="space-y-3 text-ledger-faint text-sm">
           <li class="flex gap-2">
-            <span class="text-biolum">✓</span>
+            <span class="text-ledger-red">✓</span>
             <span>Project must be related to the OpenClaw ecosystem (clone, fork, derivative, or clearly inspired by)</span>
           </li>
           <li class="flex gap-2">
-            <span class="text-biolum">✓</span>
+            <span class="text-ledger-red">✓</span>
             <span>Must have a public repository or website</span>
           </li>
           <li class="flex gap-2">
-            <span class="text-biolum">✓</span>
+            <span class="text-ledger-red">✓</span>
             <span>Must be a real project with actual code (not just an idea or README)</span>
           </li>
           <li class="flex gap-2">
@@ -91,16 +91,16 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- Badge -->
       <div>
-        <h2 class="font-display text-xl font-bold text-white mb-4">Add a Shelldex Badge</h2>
-        <p class="text-gray-400 text-sm mb-4">Help others discover your project by adding a Shelldex badge to your README:</p>
-        <div class="bg-ocean-card border border-white/5 rounded-xl p-5 space-y-4">
+        <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Add a Shelldex Badge</h2>
+        <p class="text-ledger-faint text-sm mb-4">Help others discover your project by adding a Shelldex badge to your README:</p>
+        <div class="bg-ledger-surface border border-ledger-border rounded-xl p-5 space-y-4">
           <div>
-            <p class="text-xs text-gray-500 mb-2">Preview:</p>
+            <p class="text-xs text-ledger-faint mb-2">Preview:</p>
             <img src="/badges/shelldex-badge.svg" alt="Listed on Shelldex" class="h-5" />
           </div>
           <div>
-            <p class="text-xs text-gray-500 mb-2">Markdown (replace <code class="text-biolum font-mono">your-slug</code> with your project slug):</p>
-            <div class="bg-black/30 rounded-lg px-4 py-3 font-mono text-xs text-gray-300 overflow-x-auto">
+            <p class="text-xs text-ledger-faint mb-2">Markdown (replace <code class="text-ledger-red font-mono">your-slug</code> with your project slug):</p>
+            <div class="bg-ledger-border/60 rounded-lg px-4 py-3 font-mono text-xs text-ledger-muted overflow-x-auto">
               [![Listed on Shelldex](https://shelldex.com/badges/shelldex-badge.svg)](https://shelldex.com/projects/your-slug/)
             </div>
           </div>
@@ -113,7 +113,7 @@ import Layout from '../layouts/Layout.astro';
           href="https://github.com/daveonkels/clawdex/new/main/src/data/projects"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-6 py-3 bg-biolum text-ocean font-semibold rounded-lg hover:bg-biolum-light transition-all duration-200 shadow-lg shadow-biolum/20"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-ledger-red text-ledger-surface font-semibold rounded-lg hover:bg-ledger-coral transition-all duration-200 shadow-lg shadow-ledger-red/20"
         >
           Create YAML File on GitHub
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>

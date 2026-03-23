@@ -81,10 +81,10 @@ function formatCount(n: number | null | undefined): string {
 }
 
 function freshness(days: number | null): string {
-  if (days === null) return 'text-gray-600';
-  if (days <= 7) return 'text-biolum';
-  if (days <= 30) return 'text-gray-300';
-  return 'text-gray-600';
+  if (days === null) return 'text-ledger-whisper';
+  if (days <= 7) return 'text-ledger-red';
+  if (days <= 30) return 'text-ledger-muted';
+  return 'text-ledger-whisper';
 }
 
 const aStars = a.github_data?.stars ?? a.stars ?? 0;
@@ -243,8 +243,8 @@ const metrics = [
     label: 'Stars',
     aVal: aStars > 0 ? `★ ${formatCount(aStars)}` : '—',
     bVal: bStars > 0 ? `★ ${formatCount(bStars)}` : '—',
-    aClass: 'text-yellow-300 font-mono',
-    bClass: 'text-yellow-300 font-mono',
+    aClass: 'text-yellow-700 font-mono',
+    bClass: 'text-yellow-700 font-mono',
     aWins: aStars > bStars,
     bWins: bStars > aStars,
   },
@@ -256,8 +256,8 @@ const metrics = [
     bVal: b.github_data?.star_growth_7d !== null && b.github_data?.star_growth_7d !== undefined
       ? (b.github_data.star_growth_7d > 0 ? `+${formatCount(b.github_data.star_growth_7d)}` : String(b.github_data.star_growth_7d))
       : '—',
-    aClass: (a.github_data?.star_growth_7d ?? 0) > 0 ? 'text-biolum font-mono' : 'text-gray-500 font-mono',
-    bClass: (b.github_data?.star_growth_7d ?? 0) > 0 ? 'text-biolum font-mono' : 'text-gray-500 font-mono',
+    aClass: (a.github_data?.star_growth_7d ?? 0) > 0 ? 'text-ledger-red font-mono' : 'text-ledger-faint font-mono',
+    bClass: (b.github_data?.star_growth_7d ?? 0) > 0 ? 'text-ledger-red font-mono' : 'text-ledger-faint font-mono',
     aWins: (a.github_data?.star_growth_7d ?? 0) > (b.github_data?.star_growth_7d ?? 0),
     bWins: (b.github_data?.star_growth_7d ?? 0) > (a.github_data?.star_growth_7d ?? 0),
   },
@@ -265,8 +265,8 @@ const metrics = [
     label: 'Forks',
     aVal: formatCount(a.github_data?.forks),
     bVal: formatCount(b.github_data?.forks),
-    aClass: 'text-gray-300 font-mono',
-    bClass: 'text-gray-300 font-mono',
+    aClass: 'text-ledger-muted font-mono',
+    bClass: 'text-ledger-muted font-mono',
     aWins: (a.github_data?.forks ?? 0) > (b.github_data?.forks ?? 0),
     bWins: (b.github_data?.forks ?? 0) > (a.github_data?.forks ?? 0),
   },
@@ -274,8 +274,8 @@ const metrics = [
     label: 'Open Issues',
     aVal: formatCount(a.github_data?.open_issues),
     bVal: formatCount(b.github_data?.open_issues),
-    aClass: 'text-gray-300 font-mono',
-    bClass: 'text-gray-300 font-mono',
+    aClass: 'text-ledger-muted font-mono',
+    bClass: 'text-ledger-muted font-mono',
     aWins: (a.github_data?.open_issues ?? Infinity) < (b.github_data?.open_issues ?? Infinity),
     bWins: (b.github_data?.open_issues ?? Infinity) < (a.github_data?.open_issues ?? Infinity),
   },
@@ -292,8 +292,8 @@ const metrics = [
     label: 'Categories',
     aVal: a.category.join(', '),
     bVal: b.category.join(', '),
-    aClass: 'text-gray-400 text-sm',
-    bClass: 'text-gray-400 text-sm',
+    aClass: 'text-ledger-faint text-sm',
+    bClass: 'text-ledger-faint text-sm',
     aWins: false,
     bWins: false,
   },
@@ -301,8 +301,8 @@ const metrics = [
     label: 'Platform',
     aVal: a.platform?.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', ') ?? '—',
     bVal: b.platform?.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', ') ?? '—',
-    aClass: 'text-gray-400 text-sm',
-    bClass: 'text-gray-400 text-sm',
+    aClass: 'text-ledger-faint text-sm',
+    bClass: 'text-ledger-faint text-sm',
     aWins: false,
     bWins: false,
   },
@@ -310,8 +310,8 @@ const metrics = [
     label: 'LLM Required',
     aVal: a.requires_llm === undefined ? '—' : a.requires_llm ? 'Yes' : 'No',
     bVal: b.requires_llm === undefined ? '—' : b.requires_llm ? 'Yes' : 'No',
-    aClass: a.requires_llm === false ? 'text-green-400' : 'text-gray-300',
-    bClass: b.requires_llm === false ? 'text-green-400' : 'text-gray-300',
+    aClass: a.requires_llm === false ? 'text-emerald-700' : 'text-ledger-muted',
+    bClass: b.requires_llm === false ? 'text-emerald-700' : 'text-ledger-muted',
     aWins: a.requires_llm === false && b.requires_llm !== false,
     bWins: b.requires_llm === false && a.requires_llm !== false,
   },
@@ -319,8 +319,8 @@ const metrics = [
     label: 'MCP Support',
     aVal: a.mcp_support === undefined ? '—' : a.mcp_support ? 'Yes' : 'No',
     bVal: b.mcp_support === undefined ? '—' : b.mcp_support ? 'Yes' : 'No',
-    aClass: a.mcp_support ? 'text-purple-400' : 'text-gray-500',
-    bClass: b.mcp_support ? 'text-purple-400' : 'text-gray-500',
+    aClass: a.mcp_support ? 'text-purple-700' : 'text-ledger-faint',
+    bClass: b.mcp_support ? 'text-purple-700' : 'text-ledger-faint',
     aWins: a.mcp_support === true && !b.mcp_support,
     bWins: b.mcp_support === true && !a.mcp_support,
   },
@@ -328,8 +328,8 @@ const metrics = [
     label: 'Integrations',
     aVal: a.integration_count ? `${a.integration_count}+` : '—',
     bVal: b.integration_count ? `${b.integration_count}+` : '—',
-    aClass: 'text-gray-300 font-mono',
-    bClass: 'text-gray-300 font-mono',
+    aClass: 'text-ledger-muted font-mono',
+    bClass: 'text-ledger-muted font-mono',
     aWins: (a.integration_count ?? 0) > (b.integration_count ?? 0),
     bWins: (b.integration_count ?? 0) > (a.integration_count ?? 0),
   },
@@ -337,8 +337,8 @@ const metrics = [
     label: 'License',
     aVal: a.github_data?.license ?? '—',
     bVal: b.github_data?.license ?? '—',
-    aClass: 'text-gray-300',
-    bClass: 'text-gray-300',
+    aClass: 'text-ledger-muted',
+    bClass: 'text-ledger-muted',
     aWins: false,
     bWins: false,
   },
@@ -355,8 +355,8 @@ const metrics = [
     label: 'Latest Release',
     aVal: a.github_data?.latest_release ?? '—',
     bVal: b.github_data?.latest_release ?? '—',
-    aClass: 'text-gray-300 font-mono text-sm',
-    bClass: 'text-gray-300 font-mono text-sm',
+    aClass: 'text-ledger-muted font-mono text-sm',
+    bClass: 'text-ledger-muted font-mono text-sm',
     aWins: false,
     bWins: false,
   },
@@ -364,8 +364,8 @@ const metrics = [
     label: 'Health Score',
     aVal: `${aHealthScore}/100`,
     bVal: `${bHealthScore}/100`,
-    aClass: aHealthScore >= 70 ? 'text-biolum font-mono' : aHealthScore >= 40 ? 'text-yellow-400 font-mono' : 'text-coral font-mono',
-    bClass: bHealthScore >= 70 ? 'text-biolum font-mono' : bHealthScore >= 40 ? 'text-yellow-400 font-mono' : 'text-coral font-mono',
+    aClass: aHealthScore >= 70 ? 'text-ledger-red font-mono' : aHealthScore >= 40 ? 'text-amber-700 font-mono' : 'text-coral font-mono',
+    bClass: bHealthScore >= 70 ? 'text-ledger-red font-mono' : bHealthScore >= 40 ? 'text-amber-700 font-mono' : 'text-coral font-mono',
     aWins: aHealthScore > bHealthScore,
     bWins: bHealthScore > aHealthScore,
   },
@@ -373,8 +373,8 @@ const metrics = [
     label: 'Leaderboard Rank',
     aVal: aRank ? `#${aRank} of ${lbTotal}` : '—',
     bVal: bRank ? `#${bRank} of ${lbTotal}` : '—',
-    aClass: 'text-gray-300 font-mono',
-    bClass: 'text-gray-300 font-mono',
+    aClass: 'text-ledger-muted font-mono',
+    bClass: 'text-ledger-muted font-mono',
     aWins: aRank !== null && bRank !== null && aRank < bRank,
     bWins: bRank !== null && aRank !== null && bRank < aRank,
   },
@@ -396,14 +396,14 @@ const metrics = [
 
   {!isIndexable ? (
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-      <div class="rounded-2xl border border-white/5 bg-ocean-card p-8 text-center">
-        <h1 class="font-display text-3xl font-bold text-white mb-4">{a.name} vs {b.name}</h1>
-        <p class="text-gray-400 leading-relaxed mb-6">
-          This comparison is available through our curated comparison library. Use the link below or the <a href="/compare/" class="text-biolum hover:underline">Compare tool</a> to explore this matchup.
+      <div class="rounded-2xl border border-ledger-border bg-ledger-surface p-8 text-center">
+        <h1 class="font-display text-3xl font-bold text-ledger-text mb-4">{a.name} vs {b.name}</h1>
+        <p class="text-ledger-faint leading-relaxed mb-6">
+          This comparison is available through our curated comparison library. Use the link below or the <a href="/compare/" class="text-ledger-red hover:underline">Compare tool</a> to explore this matchup.
         </p>
         <a
           href={redirectUrl}
-          class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-biolum/30 bg-biolum/10 text-biolum font-semibold hover:bg-biolum/20 transition-colors"
+          class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-ledger-red/30 bg-ledger-red-bg text-ledger-red font-semibold hover:bg-ledger-red-bg transition-colors"
         >
           View this comparison
         </a>
@@ -413,35 +413,35 @@ const metrics = [
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
     <!-- Breadcrumb -->
-    <nav class="flex items-center gap-2 text-sm text-gray-600 mb-10" aria-label="Breadcrumb">
-      <a href="/" class="hover:text-biolum transition-colors">Shelldex</a>
+    <nav class="flex items-center gap-2 text-sm text-ledger-whisper mb-10" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-ledger-red transition-colors">Shelldex</a>
       <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-      <a href="/compare/" class="hover:text-biolum transition-colors">Compare</a>
+      <a href="/compare/" class="hover:text-ledger-red transition-colors">Compare</a>
       <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-      <span class="text-gray-400">{a.name} vs {b.name}</span>
+      <span class="text-ledger-faint">{a.name} vs {b.name}</span>
     </nav>
 
     <!-- H1 -->
     <header class="text-center mb-12">
-      <h1 class="font-display text-3xl sm:text-4xl font-bold text-white leading-tight">
+      <h1 class="font-display text-3xl sm:text-4xl font-bold text-ledger-text leading-tight">
         <span class="text-4xl sm:text-5xl">{a.emoji}</span>
         {a.name}
-        <span class="text-gray-500 mx-2">vs</span>
+        <span class="text-ledger-faint mx-2">vs</span>
         {b.name}
         <span class="text-4xl sm:text-5xl">{b.emoji}</span>
       </h1>
-      <p class="text-gray-400 mt-4 max-w-2xl mx-auto">
+      <p class="text-ledger-faint mt-4 max-w-2xl mx-auto">
         Side-by-side comparison of {a.name} and {b.name} — two projects in the OpenClaw ecosystem.
       </p>
     </header>
 
     <section class="mb-12">
-      <div class="rounded-2xl border border-white/5 bg-ocean-card p-6 sm:p-8">
-        <h2 class="font-display text-2xl font-bold text-white mb-4">Executive Summary</h2>
-        <p class="text-gray-300 leading-relaxed mb-4">
+      <div class="rounded-2xl border border-ledger-border bg-ledger-surface p-6 sm:p-8">
+        <h2 class="font-display text-2xl font-bold text-ledger-text mb-4">Executive Summary</h2>
+        <p class="text-ledger-muted leading-relaxed mb-4">
           {matchupSummary()}
         </p>
-        <p class="text-gray-400 leading-relaxed">
+        <p class="text-ledger-faint leading-relaxed">
           Use the score table for the hard numbers, then use the decision notes below to figure out which tradeoffs matter for your team.
         </p>
       </div>
@@ -449,23 +449,23 @@ const metrics = [
 
     <section class="mb-12">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
-          <h2 class="font-display text-xl font-bold text-white mb-4">Choose {a.name} If...</h2>
+        <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
+          <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Choose {a.name} If...</h2>
           <ul class="space-y-3">
             {chooseA.map(reason => (
-              <li class="flex items-start gap-3 text-sm text-gray-300 leading-relaxed">
-                <span class="text-biolum mt-0.5 flex-shrink-0">+</span>
+              <li class="flex items-start gap-3 text-sm text-ledger-muted leading-relaxed">
+                <span class="text-ledger-red mt-0.5 flex-shrink-0">+</span>
                 <span>{reason}</span>
               </li>
             ))}
           </ul>
         </div>
-        <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
-          <h2 class="font-display text-xl font-bold text-white mb-4">Choose {b.name} If...</h2>
+        <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
+          <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Choose {b.name} If...</h2>
           <ul class="space-y-3">
             {chooseB.map(reason => (
-              <li class="flex items-start gap-3 text-sm text-gray-300 leading-relaxed">
-                <span class="text-biolum mt-0.5 flex-shrink-0">+</span>
+              <li class="flex items-start gap-3 text-sm text-ledger-muted leading-relaxed">
+                <span class="text-ledger-red mt-0.5 flex-shrink-0">+</span>
                 <span>{reason}</span>
               </li>
             ))}
@@ -476,17 +476,17 @@ const metrics = [
 
     <!-- Side-by-side metrics table -->
     <section class="mb-12">
-      <div class="rounded-xl border border-white/5 bg-ocean-card overflow-hidden">
+      <div class="rounded-xl border border-ledger-border bg-ledger-surface overflow-hidden">
         <!-- Table header -->
-        <div class="grid grid-cols-3 border-b border-white/10 text-sm">
-          <div class="px-4 py-3 text-gray-500 font-medium">Metric</div>
+        <div class="grid grid-cols-3 border-b border-ledger-border text-sm">
+          <div class="px-4 py-3 text-ledger-faint font-medium">Metric</div>
           <div class="px-4 py-3 text-center">
-            <a href={`/projects/${a.slug}/`} class="text-white font-semibold hover:text-biolum transition-colors">
+            <a href={`/projects/${a.slug}/`} class="text-ledger-text font-semibold hover:text-ledger-red transition-colors">
               {a.emoji} {a.name}
             </a>
           </div>
           <div class="px-4 py-3 text-center">
-            <a href={`/projects/${b.slug}/`} class="text-white font-semibold hover:text-biolum transition-colors">
+            <a href={`/projects/${b.slug}/`} class="text-ledger-text font-semibold hover:text-ledger-red transition-colors">
               {b.emoji} {b.name}
             </a>
           </div>
@@ -494,12 +494,12 @@ const metrics = [
 
         <!-- Metric rows -->
         {metrics.map((m, i) => (
-          <div class={`grid grid-cols-3 ${i < metrics.length - 1 ? 'border-b border-white/5' : ''} text-sm`}>
-            <div class="px-4 py-3 text-gray-500">{m.label}</div>
-            <div class={`px-4 py-3 text-center ${m.aClass} ${m.aWins ? 'bg-biolum/5' : ''}`}>
+          <div class={`grid grid-cols-3 ${i < metrics.length - 1 ? 'border-b border-ledger-border' : ''} text-sm`}>
+            <div class="px-4 py-3 text-ledger-faint">{m.label}</div>
+            <div class={`px-4 py-3 text-center ${m.aClass} ${m.aWins ? 'bg-ledger-red/5' : ''}`}>
               {m.aVal}
             </div>
-            <div class={`px-4 py-3 text-center ${m.bClass} ${m.bWins ? 'bg-biolum/5' : ''}`}>
+            <div class={`px-4 py-3 text-center ${m.bClass} ${m.bWins ? 'bg-ledger-red/5' : ''}`}>
               {m.bVal}
             </div>
           </div>
@@ -510,11 +510,11 @@ const metrics = [
     <!-- Key Differences -->
     {keyDifferences.length > 0 && (
       <section class="mb-12">
-        <h2 class="font-display text-2xl font-bold text-white mb-6">Key Differences</h2>
+        <h2 class="font-display text-2xl font-bold text-ledger-text mb-6">Key Differences</h2>
         <ul class="space-y-4">
           {keyDifferences.map(diff => (
-            <li class="flex items-start gap-3 text-gray-300 leading-relaxed">
-              <span class="text-biolum mt-1 flex-shrink-0">
+            <li class="flex items-start gap-3 text-ledger-muted leading-relaxed">
+              <span class="text-ledger-red mt-1 flex-shrink-0">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
               </span>
               <span>{diff}</span>
@@ -526,8 +526,8 @@ const metrics = [
 
     <!-- Which should you choose? -->
     <section class="mb-12">
-      <h2 class="font-display text-2xl font-bold text-white mb-6">Which should you choose?</h2>
-      <div class="space-y-4 text-gray-300 leading-relaxed">
+      <h2 class="font-display text-2xl font-bold text-ledger-text mb-6">Which should you choose?</h2>
+      <div class="space-y-4 text-ledger-muted leading-relaxed">
         {recommendation.split('\n\n').map(para => (
           <p>{para}</p>
         ))}
@@ -539,25 +539,25 @@ const metrics = [
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <a
           href={`/projects/${a.slug}/`}
-          class="flex items-center gap-4 rounded-xl border border-white/5 bg-ocean-card p-5 hover:border-biolum/30 transition-all group"
+          class="flex items-center gap-4 rounded-xl border border-ledger-border bg-ledger-surface p-5 hover:border-ledger-red/30 transition-all group"
         >
           <span class="text-3xl">{a.emoji}</span>
           <div>
-            <p class="text-white font-semibold group-hover:text-biolum transition-colors">{a.name}</p>
-            <p class="text-sm text-gray-500">{a.tagline}</p>
+            <p class="text-ledger-text font-semibold group-hover:text-ledger-red transition-colors">{a.name}</p>
+            <p class="text-sm text-ledger-faint">{a.tagline}</p>
           </div>
-          <svg class="w-5 h-5 text-gray-600 ml-auto group-hover:text-biolum transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          <svg class="w-5 h-5 text-ledger-whisper ml-auto group-hover:text-ledger-red transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </a>
         <a
           href={`/projects/${b.slug}/`}
-          class="flex items-center gap-4 rounded-xl border border-white/5 bg-ocean-card p-5 hover:border-biolum/30 transition-all group"
+          class="flex items-center gap-4 rounded-xl border border-ledger-border bg-ledger-surface p-5 hover:border-ledger-red/30 transition-all group"
         >
           <span class="text-3xl">{b.emoji}</span>
           <div>
-            <p class="text-white font-semibold group-hover:text-biolum transition-colors">{b.name}</p>
-            <p class="text-sm text-gray-500">{b.tagline}</p>
+            <p class="text-ledger-text font-semibold group-hover:text-ledger-red transition-colors">{b.name}</p>
+            <p class="text-sm text-ledger-faint">{b.tagline}</p>
           </div>
-          <svg class="w-5 h-5 text-gray-600 ml-auto group-hover:text-biolum transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          <svg class="w-5 h-5 text-ledger-whisper ml-auto group-hover:text-ledger-red transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </a>
       </div>
     </section>
@@ -565,15 +565,15 @@ const metrics = [
     <!-- FAQ -->
     {faqItems.length > 0 && (
       <section class="mb-12">
-        <h2 class="font-display text-2xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+        <h2 class="font-display text-2xl font-bold text-ledger-text mb-6">Frequently Asked Questions</h2>
         <div class="space-y-3">
           {faqItems.map(item => (
-            <details class="group rounded-xl border border-white/5 bg-ocean-card">
-              <summary class="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-medium text-sm hover:text-biolum transition-colors">
+            <details class="group rounded-xl border border-ledger-border bg-ledger-surface">
+              <summary class="flex items-center justify-between cursor-pointer px-5 py-4 text-ledger-text font-medium text-sm hover:text-ledger-red transition-colors">
                 <span>{item.question}</span>
-                <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0 ml-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                <svg class="w-4 h-4 text-ledger-faint group-open:rotate-180 transition-transform flex-shrink-0 ml-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
               </summary>
-              <div class="px-5 pb-4 text-sm text-gray-400 leading-relaxed border-t border-white/5 pt-3">
+              <div class="px-5 pb-4 text-sm text-ledger-faint leading-relaxed border-t border-ledger-border pt-3">
                 {item.answer}
               </div>
             </details>
@@ -585,12 +585,12 @@ const metrics = [
     <!-- Related Comparisons -->
     {related.length > 0 && (
       <section class="mb-12">
-        <h2 class="font-display text-2xl font-bold text-white mb-6">Related Comparisons</h2>
+        <h2 class="font-display text-2xl font-bold text-ledger-text mb-6">Related Comparisons</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {related.map(r => (
             <a
               href={`/compare/${r.canonical}/`}
-              class="flex items-center gap-2 rounded-lg border border-white/5 bg-ocean-card/50 px-4 py-3 text-sm text-gray-400 hover:text-biolum hover:border-biolum/20 transition-all"
+              class="flex items-center gap-2 rounded-lg border border-ledger-border bg-ledger-surface/80 px-4 py-3 text-sm text-ledger-faint hover:text-ledger-red hover:border-ledger-red/20 transition-all"
             >
               <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
               <span>{r.slugA.replace(/-/g, ' ')} vs {r.slugB.replace(/-/g, ' ')}</span>
@@ -601,12 +601,12 @@ const metrics = [
     )}
 
     <!-- Back links -->
-    <div class="border-t border-white/5 pt-8 flex flex-wrap gap-6">
-      <a href="/compare/" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors">
+    <div class="border-t border-ledger-border pt-8 flex flex-wrap gap-6">
+      <a href="/compare/" class="inline-flex items-center gap-2 text-sm text-ledger-faint hover:text-ledger-red transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 5l-7 7 7 7"/></svg>
         All comparisons
       </a>
-      <a href="/" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors">
+      <a href="/" class="inline-flex items-center gap-2 text-sm text-ledger-faint hover:text-ledger-red transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 5l-7 7 7 7"/></svg>
         Directory
       </a>

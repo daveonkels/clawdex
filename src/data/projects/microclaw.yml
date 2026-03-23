@@ -19,17 +19,17 @@ mcp_support: false
 ecosystem_role: derivative
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 439
-  forks: 77
-  open_issues: 2
+  stars: 512
+  forks: 89
+  open_issues: 5
   license: MIT
   topics:
     - bot
     - nanoclaw
     - openclaw
     - rust
-  last_commit: "2026-03-02T17:41:47Z"
-  latest_release: v0.0.133
-  latest_release_date: "2026-03-02T17:31:25Z"
-  star_growth_7d: -20
-  last_enriched: "2026-03-02T23:14:47.882Z"
+  last_commit: "2026-03-09T04:39:23Z"
+  latest_release: v0.0.163
+  latest_release_date: "2026-03-08T18:45:42Z"
+  star_growth_7d: 73
+  last_enriched: "2026-03-09T04:42:15.192Z"

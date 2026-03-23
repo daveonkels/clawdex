@@ -19,3 +19,19 @@ requires_llm: true
 mcp_support: true
 ecosystem_role: alternative
 added: "2026-03-07"
+github_data:
+  stars: 54
+  forks: 20
+  open_issues: 0
+  license: MIT
+  topics:
+    - ai
+    - ai-agents
+    - convex
+    - openclaw
+    - real-time
+  last_commit: "2026-02-11T06:41:54Z"
+  latest_release: null
+  latest_release_date: null
+  star_growth_7d: 0
+  last_enriched: "2026-03-09T03:59:32.460Z"

@@ -67,6 +67,13 @@ function formatCount(n: number): string {
 
 const lang = languageColors[language] || languageColors.multi;
 const langName = languageLabel[language] ?? language;
+
+const langDot: Record<string, string> = {
+  typescript: 'bg-blue-500', rust: 'bg-orange-500', python: 'bg-yellow-500',
+  go: 'bg-cyan-600', c: 'bg-gray-500', bash: 'bg-green-600',
+  zig: 'bg-amber-500', javascript: 'bg-yellow-400', kotlin: 'bg-purple-500',
+  multi: 'bg-ledger-faint',
+};
 const projectStars = github_data?.stars ?? stars ?? 0;
 
 // Other projects for comparison links
@@ -212,10 +219,10 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
     <!-- Breadcrumb -->
-    <nav class="flex items-center gap-2 text-sm text-gray-600 mb-10" aria-label="Breadcrumb">
-      <a href="/" class="hover:text-biolum transition-colors">Shelldex</a>
+    <nav class="flex items-center gap-2 text-sm text-ledger-whisper mb-10" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-ledger-red transition-colors">Shelldex</a>
       <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-      <span class="text-gray-400">{name}</span>
+      <span class="text-ledger-faint">{name}</span>
     </nav>
 
     <!-- Header -->
@@ -223,19 +230,21 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
       <div class="flex items-start gap-5 mb-6">
         <span class="text-5xl leading-none mt-1">{emoji}</span>
         <div>
-          <h1 class="font-display text-4xl font-bold text-white leading-tight mb-2">{name}</h1>
-          <p class="text-lg text-gray-400">{tagline}</p>
+          <h1 class="font-display text-4xl font-bold text-ledger-text leading-tight mb-2">{name}</h1>
+          <p class="text-lg text-ledger-faint">{tagline}</p>
         </div>
       </div>
 
       <!-- Badges -->
-      <div class="flex flex-wrap items-center gap-2">
+      <div class="flex flex-wrap items-center gap-2.5">
         {language !== 'multi' && (
-          <span class={`badge-language border ${lang.bg} ${lang.text} ${lang.border}`}>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-ledger-surface border border-ledger-border text-sm font-medium text-ledger-text">
+            <span class={`w-2 h-2 rounded-full ${langDot[language] || 'bg-ledger-faint'}`}></span>
             {languageLabel[language] ?? language}
           </span>
         )}
-        <span class={`badge-language border ${statusColors[status]}`}>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-ledger-surface border border-ledger-border text-sm font-medium text-ledger-text">
+          <span class={`w-2 h-2 rounded-full ${status === 'active' ? 'bg-emerald-500' : status === 'experimental' ? 'bg-amber-500' : 'bg-gray-400'}`}></span>
           {status}
         </span>
         {stars !== undefined && stars > 0 && github && (
@@ -243,74 +252,74 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
             href={`https://github.com/${github}`}
             target="_blank"
             rel="noopener noreferrer"
-            class="flex items-center gap-1.5 badge-language border border-yellow-500/20 bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20 transition-colors"
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-ledger-surface border border-ledger-border text-sm font-medium text-ledger-text hover:border-ledger-border-strong transition-colors"
           >
-            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 19.896l-7.416 3.517 1.48-8.279L0 9.306l8.332-1.151z"/></svg>
+            <svg class="w-3.5 h-3.5 text-ledger-coral" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 19.896l-7.416 3.517 1.48-8.279L0 9.306l8.332-1.151z"/></svg>
             {formatStars(stars)}
           </a>
         )}
         {category.map((cat: string) => (
-          <span class="badge-language border border-white/10 bg-white/5 text-gray-500">{cat}</span>
+          <span class="inline-flex items-center px-3 py-1 rounded-full bg-ledger-surface border border-ledger-border text-sm text-ledger-muted">{cat}</span>
         ))}
       </div>
     </header>
 
     <!-- Description -->
     <section class="mb-8">
-      <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">About</h2>
-      <p class="text-gray-300 leading-relaxed text-lg">{description}</p>
+      <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">About</h2>
+      <p class="text-ledger-muted leading-relaxed text-lg">{description}</p>
     </section>
 
     <!-- At a Glance -->
     {(platform || requires_llm !== undefined || mcp_support !== undefined || integration_count || ecosystem_role || perf) && (
       <section class="mb-8">
-        <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">At a Glance</h2>
+        <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">At a Glance</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {platform && platform.length > 0 && (
-            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
-              <p class="text-xs text-gray-500 mb-1.5">Runs On</p>
+            <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
+              <p class="text-xs text-ledger-faint mb-1.5">Runs On</p>
               <div class="flex flex-wrap gap-1">
                 {platform.map((p: string) => (
-                  <span class="text-xs text-gray-300 bg-white/[0.06] rounded px-1.5 py-0.5">{platformLabels[p] ?? p}</span>
+                  <span class="text-xs text-ledger-muted bg-white/[0.06] rounded px-1.5 py-0.5">{platformLabels[p] ?? p}</span>
                 ))}
               </div>
             </div>
           )}
           {requires_llm !== undefined && (
-            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
-              <p class="text-xs text-gray-500 mb-1.5">LLM Required</p>
-              <p class={`text-sm font-medium ${requires_llm ? 'text-gray-300' : 'text-green-400'}`}>
+            <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
+              <p class="text-xs text-ledger-faint mb-1.5">LLM Required</p>
+              <p class={`text-sm font-medium ${requires_llm ? 'text-ledger-muted' : 'text-emerald-700'}`}>
                 {requires_llm ? 'Yes — needs API key' : 'No — zero LLM cost'}
               </p>
             </div>
           )}
           {mcp_support !== undefined && (
-            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
-              <p class="text-xs text-gray-500 mb-1.5">MCP Support</p>
-              <p class={`text-sm font-medium ${mcp_support ? 'text-purple-400' : 'text-gray-500'}`}>
+            <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
+              <p class="text-xs text-ledger-faint mb-1.5">MCP Support</p>
+              <p class={`text-sm font-medium ${mcp_support ? 'text-purple-700' : 'text-ledger-faint'}`}>
                 {mcp_support ? 'Yes' : 'No'}
               </p>
             </div>
           )}
           {integration_count && (
-            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
-              <p class="text-xs text-gray-500 mb-1.5">Integrations</p>
-              <p class="text-lg font-mono text-gray-300">{integration_count}+</p>
+            <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
+              <p class="text-xs text-ledger-faint mb-1.5">Integrations</p>
+              <p class="text-lg font-mono text-ledger-muted">{integration_count}+</p>
             </div>
           )}
           {ecosystem_role && (
-            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
-              <p class="text-xs text-gray-500 mb-1.5">Ecosystem Role</p>
-              <p class="text-sm font-medium text-gray-300">{ecosystemRoleLabels[ecosystem_role] ?? ecosystem_role}</p>
+            <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
+              <p class="text-xs text-ledger-faint mb-1.5">Ecosystem Role</p>
+              <p class="text-sm font-medium text-ledger-muted">{ecosystemRoleLabels[ecosystem_role] ?? ecosystem_role}</p>
             </div>
           )}
           {perf && (
-            <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
-              <p class="text-xs text-gray-500 mb-1.5">Performance</p>
+            <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
+              <p class="text-xs text-ledger-faint mb-1.5">Performance</p>
               <div class="space-y-0.5">
-                {perf.binary_size && <p class="text-xs text-gray-300"><span class="text-gray-500">Binary:</span> {perf.binary_size}</p>}
-                {perf.startup_time && <p class="text-xs text-gray-300"><span class="text-gray-500">Startup:</span> {perf.startup_time}</p>}
-                {perf.ram && <p class="text-xs text-gray-300"><span class="text-gray-500">RAM:</span> {perf.ram}</p>}
+                {perf.binary_size && <p class="text-xs text-ledger-muted"><span class="text-ledger-faint">Binary:</span> {perf.binary_size}</p>}
+                {perf.startup_time && <p class="text-xs text-ledger-muted"><span class="text-ledger-faint">Startup:</span> {perf.startup_time}</p>}
+                {perf.ram && <p class="text-xs text-ledger-muted"><span class="text-ledger-faint">RAM:</span> {perf.ram}</p>}
               </div>
             </div>
           )}
@@ -319,13 +328,13 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
     )}
 
     <!-- Highlight -->
-    <section class="mb-8 rounded-xl bg-biolum/5 border border-biolum/15 px-6 py-5">
-      <p class="text-biolum font-medium leading-relaxed">{highlight}</p>
+    <section class="mb-8 rounded-xl bg-ledger-red/5 border border-ledger-red/15 px-6 py-5">
+      <p class="text-ledger-red font-medium leading-relaxed">{highlight}</p>
     </section>
 
     <section class="mb-8">
-      <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Editorial Take</h2>
-      <div class="space-y-4 text-gray-300 leading-relaxed">
+      <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">Editorial Take</h2>
+      <div class="space-y-4 text-ledger-muted leading-relaxed">
         {editorialOverview().map((paragraph) => (
           <p>{paragraph}</p>
         ))}
@@ -334,24 +343,24 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
 
     <section class="mb-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
-          <h2 class="font-display text-lg font-bold text-white mb-3">Best For</h2>
-          <p class="text-sm text-gray-300 leading-relaxed mb-4">{bestForLabel()}</p>
+        <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
+          <h2 class="font-display text-lg font-bold text-ledger-text mb-3">Best For</h2>
+          <p class="text-sm text-ledger-muted leading-relaxed mb-4">{bestForLabel()}</p>
           <ul class="space-y-2">
             {strengths().map((item) => (
-              <li class="flex items-start gap-3 text-sm text-gray-300 leading-relaxed">
-                <span class="text-biolum mt-0.5 flex-shrink-0">+</span>
+              <li class="flex items-start gap-3 text-sm text-ledger-muted leading-relaxed">
+                <span class="text-ledger-red mt-0.5 flex-shrink-0">+</span>
                 <span>{item}</span>
               </li>
             ))}
           </ul>
         </div>
-        <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
-          <h2 class="font-display text-lg font-bold text-white mb-3">Tradeoffs</h2>
-          <p class="text-sm text-gray-400 leading-relaxed mb-4">What to understand before choosing {name} over another project in the ecosystem.</p>
+        <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
+          <h2 class="font-display text-lg font-bold text-ledger-text mb-3">Tradeoffs</h2>
+          <p class="text-sm text-ledger-faint leading-relaxed mb-4">What to understand before choosing {name} over another project in the ecosystem.</p>
           <ul class="space-y-2">
             {tradeoffs().map((item) => (
-              <li class="flex items-start gap-3 text-sm text-gray-300 leading-relaxed">
+              <li class="flex items-start gap-3 text-sm text-ledger-muted leading-relaxed">
                 <span class="text-coral mt-0.5 flex-shrink-0">-</span>
                 <span>{item}</span>
               </li>
@@ -365,44 +374,44 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
     {github_data && (
       <section class="mb-8">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider">GitHub Stats</h2>
+          <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider">GitHub Stats</h2>
           {leaderboardRank && (
-            <a href="/leaderboard/" class="text-sm text-gray-500 hover:text-biolum transition-colors">
+            <a href="/leaderboard/" class="text-sm text-ledger-faint hover:text-ledger-red transition-colors">
               #{leaderboardRank} of {leaderboardTotal} on the leaderboard →
             </a>
           )}
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
-            <p class="text-xs text-gray-500 mb-1">Stars</p>
-            <p class="text-lg font-mono text-yellow-300">★ {formatCount(github_data.stars)}</p>
+          <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
+            <p class="text-xs text-ledger-faint mb-1">Stars</p>
+            <p class="text-lg font-mono text-yellow-700">★ {formatCount(github_data.stars)}</p>
             {github_data.star_growth_7d !== null && github_data.star_growth_7d !== 0 && (
-              <p class={`text-xs font-mono mt-0.5 ${github_data.star_growth_7d > 0 ? 'text-biolum' : 'text-red-400'}`}>
+              <p class={`text-xs font-mono mt-0.5 ${github_data.star_growth_7d > 0 ? 'text-ledger-red' : 'text-ledger-red'}`}>
                 {github_data.star_growth_7d > 0 ? '+' : ''}{formatCount(github_data.star_growth_7d)} this week
               </p>
             )}
           </div>
-          <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
-            <p class="text-xs text-gray-500 mb-1">Forks</p>
-            <p class="text-lg font-mono text-gray-300">{formatCount(github_data.forks)}</p>
+          <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
+            <p class="text-xs text-ledger-faint mb-1">Forks</p>
+            <p class="text-lg font-mono text-ledger-muted">{formatCount(github_data.forks)}</p>
           </div>
-          <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
-            <p class="text-xs text-gray-500 mb-1">Open Issues</p>
-            <p class="text-lg font-mono text-gray-300">{formatCount(github_data.open_issues)}</p>
+          <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
+            <p class="text-xs text-ledger-faint mb-1">Open Issues</p>
+            <p class="text-lg font-mono text-ledger-muted">{formatCount(github_data.open_issues)}</p>
           </div>
-          <div class="rounded-lg border border-white/5 bg-ocean-card px-4 py-3">
-            <p class="text-xs text-gray-500 mb-1">Last Commit</p>
-            <p class={`text-lg font-mono ${(daysSince(github_data.last_commit) ?? 999) <= 7 ? 'text-biolum' : (daysSince(github_data.last_commit) ?? 999) <= 30 ? 'text-gray-300' : 'text-gray-600'}`}>
+          <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
+            <p class="text-xs text-ledger-faint mb-1">Last Commit</p>
+            <p class={`text-lg font-mono ${(daysSince(github_data.last_commit) ?? 999) <= 7 ? 'text-ledger-red' : (daysSince(github_data.last_commit) ?? 999) <= 30 ? 'text-ledger-muted' : 'text-ledger-whisper'}`}>
               {daysSince(github_data.last_commit) !== null ? `${daysSince(github_data.last_commit)}d ago` : '—'}
             </p>
           </div>
         </div>
-        <div class="flex flex-wrap gap-x-6 gap-y-1 mt-3 text-xs text-gray-500">
+        <div class="flex flex-wrap gap-x-6 gap-y-1 mt-3 text-xs text-ledger-faint">
           {github_data.license && (
-            <span>License: <span class="text-gray-400">{github_data.license}</span></span>
+            <span>License: <span class="text-ledger-faint">{github_data.license}</span></span>
           )}
           {github_data.latest_release && (
-            <span>Latest release: <span class="text-gray-400 font-mono">{github_data.latest_release}</span></span>
+            <span>Latest release: <span class="text-ledger-faint font-mono">{github_data.latest_release}</span></span>
           )}
         </div>
       </section>
@@ -411,16 +420,16 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
     <!-- What People Are Saying -->
     {sortedMentions && sortedMentions.length > 0 && (
       <section class="mb-8">
-        <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">What People Are Saying</h2>
+        <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">What People Are Saying</h2>
         <div class="space-y-3">
           {sortedMentions.map((m) => (
             <a
               href={m.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="flex items-start gap-3 rounded-xl border border-white/5 bg-ocean-card/50 px-5 py-4 hover:border-biolum/20 transition-all group"
+              class="flex items-start gap-3 rounded-xl border border-ledger-border bg-ledger-surface/80 px-5 py-4 hover:border-ledger-red/20 transition-all group"
             >
-              <span class="flex-shrink-0 mt-0.5 text-gray-500 group-hover:text-biolum transition-colors">
+              <span class="flex-shrink-0 mt-0.5 text-ledger-faint group-hover:text-ledger-red transition-colors">
                 {m.type === 'tweet' && (
                   <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 )}
@@ -436,13 +445,13 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
               </span>
               <div class="flex-1 min-w-0">
                 {m.quote && (
-                  <p class="text-sm text-gray-300 leading-relaxed mb-1.5 italic">"{m.quote}"</p>
+                  <p class="text-sm text-ledger-muted leading-relaxed mb-1.5 italic">"{m.quote}"</p>
                 )}
                 {!m.quote && m.title && (
-                  <p class="text-sm text-gray-300 leading-relaxed mb-1.5">{m.title}</p>
+                  <p class="text-sm text-ledger-muted leading-relaxed mb-1.5">{m.title}</p>
                 )}
-                <div class="flex items-center gap-2 text-xs text-gray-500">
-                  <span class="font-medium text-gray-400">{m.author}</span>
+                <div class="flex items-center gap-2 text-xs text-ledger-faint">
+                  <span class="font-medium text-ledger-faint">{m.author}</span>
                   {m.source && <span>on {m.source}</span>}
                   <span>{new Date(m.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                 </div>
@@ -450,7 +459,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
               {m.thumbnail && (
                 <img src={m.thumbnail} alt="" class="w-16 h-12 rounded object-cover flex-shrink-0" loading="lazy" />
               )}
-              <svg class="w-4 h-4 text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+              <svg class="w-4 h-4 text-ledger-whisper opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
             </a>
           ))}
         </div>
@@ -460,9 +469,9 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
     <!-- Relation to OpenClaw -->
     {isDerivative && (
       <section class="mb-8">
-        <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">OpenClaw Relationship</h2>
-        <p class="text-gray-400 leading-relaxed">
-          {name} is an <a href="/projects/openclaw/" class="text-biolum hover:underline">OpenClaw</a>-inspired project — part of the growing ecosystem of personal AI agent frameworks that trace their lineage to Peter Steinberger's original self-hosted assistant.
+        <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">OpenClaw Relationship</h2>
+        <p class="text-ledger-faint leading-relaxed">
+          {name} is an <a href="/projects/openclaw/" class="text-ledger-red hover:underline">OpenClaw</a>-inspired project — part of the growing ecosystem of personal AI agent frameworks that trace their lineage to Peter Steinberger's original self-hosted assistant.
         </p>
       </section>
     )}
@@ -474,14 +483,14 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
           href={`https://github.com/${github}`}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-lg text-gray-300 hover:border-biolum/40 hover:text-biolum transition-all duration-200"
+          class="inline-flex items-center gap-3 px-6 py-3 bg-ledger-red-bg/50 border border-ledger-border rounded-lg text-ledger-muted hover:border-ledger-red/40 hover:text-ledger-red transition-all duration-200"
         >
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
           <span class="font-medium">{github}</span>
           <svg class="w-4 h-4 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
         </a>
         {formattedDate && (
-          <p class="text-xs text-gray-600 mt-3">Added to Shelldex on {formattedDate}</p>
+          <p class="text-xs text-ledger-whisper mt-3">Added to Shelldex on {formattedDate}</p>
         )}
       </div>
     )}
@@ -490,21 +499,21 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
     <section class="mb-8">
       <a
         href={`/alternatives/${slug}/`}
-        class="inline-flex items-center gap-3 px-5 py-3 rounded-xl border border-white/5 bg-ocean-card hover:border-biolum/30 transition-all group"
+        class="inline-flex items-center gap-3 px-5 py-3 rounded-xl border border-ledger-border bg-ledger-surface hover:border-ledger-red/30 transition-all group"
       >
-        <span class="text-biolum font-medium group-hover:text-biolum-light transition-colors">See all {name} alternatives</span>
-        <svg class="w-4 h-4 text-gray-500 group-hover:text-biolum transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        <span class="text-ledger-red font-medium group-hover:text-ledger-coral transition-colors">See all {name} alternatives</span>
+        <svg class="w-4 h-4 text-ledger-faint group-hover:text-ledger-red transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
       </a>
     </section>
 
     <!-- Compare with... -->
     <section class="mb-8">
-      <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Compare with...</h2>
+      <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">Compare with...</h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-4">
         {compareCandidates.map(p => (
           <a
             href={buildComparisonHref(slug, p.slug, indexableCompareSlugs)}
-            class="flex items-center gap-2 rounded-lg border border-white/5 bg-ocean-card/50 px-3 py-2 text-sm text-gray-400 hover:text-biolum hover:border-biolum/20 transition-all"
+            class="flex items-center gap-2 rounded-lg border border-ledger-border bg-ledger-surface/80 px-3 py-2 text-sm text-ledger-faint hover:text-ledger-red hover:border-ledger-red/20 transition-all"
           >
             <span class="flex-shrink-0">{p.emoji}</span>
             <span class="truncate">{p.name}</span>
@@ -513,7 +522,7 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
       </div>
       <a
         href={`/compare/?a=${slug}`}
-        class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors"
+        class="inline-flex items-center gap-2 text-sm text-ledger-faint hover:text-ledger-red transition-colors"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
         Compare {name} with any project in the tool
@@ -523,17 +532,17 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
     <!-- Similar Projects -->
     {similarProjects.length > 0 && (
       <section class="mb-8">
-        <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Similar Projects</h2>
+        <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">Similar Projects</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {similarProjects.map(p => (
             <a
               href={`/projects/${p.slug}/`}
-              class="flex items-center gap-3 rounded-lg border border-white/5 bg-ocean-card/50 px-4 py-3 hover:border-biolum/20 transition-all group"
+              class="flex items-center gap-3 rounded-lg border border-ledger-border bg-ledger-surface/80 px-4 py-3 hover:border-ledger-red/20 transition-all group"
             >
               <span class="text-xl flex-shrink-0">{p.emoji}</span>
               <div class="min-w-0">
-                <p class="text-white text-sm font-medium group-hover:text-biolum transition-colors truncate">{p.name}</p>
-                <p class="text-xs text-gray-500 truncate">{p.tagline}</p>
+                <p class="text-ledger-text text-sm font-medium group-hover:text-ledger-red transition-colors truncate">{p.name}</p>
+                <p class="text-xs text-ledger-faint truncate">{p.tagline}</p>
               </div>
               {p.stars !== undefined && p.stars > 0 && (
                 <span class="text-xs text-yellow-500/70 font-mono ml-auto flex-shrink-0">★ {formatStars(p.stars)}</span>
@@ -546,12 +555,12 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
 
     <!-- Community -->
     <section class="mb-10">
-      <h2 class="font-display text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Community</h2>
+      <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">Community</h2>
       <a
         href={`https://www.reddit.com/search/?q=${encodeURIComponent(name)}`}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-biolum transition-colors"
+        class="inline-flex items-center gap-2 text-sm text-ledger-faint hover:text-ledger-red transition-colors"
       >
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
         Search Reddit for {name}
@@ -560,12 +569,12 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
     </section>
 
     <!-- Back link -->
-    <div class="border-t border-white/5 pt-8 flex flex-wrap gap-6">
-      <a href="/" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors">
+    <div class="border-t border-ledger-border pt-8 flex flex-wrap gap-6">
+      <a href="/" class="inline-flex items-center gap-2 text-sm text-ledger-faint hover:text-ledger-red transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 5l-7 7 7 7"/></svg>
         All projects
       </a>
-      <a href="/compare/" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-biolum transition-colors">
+      <a href="/compare/" class="inline-flex items-center gap-2 text-sm text-ledger-faint hover:text-ledger-red transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
         Compare projects
       </a>

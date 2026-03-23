@@ -21,13 +21,13 @@ perf:
   binary_size: 888 KiB
 added: "2026-03-02"
 github_data:
-  stars: 1672
-  forks: 125
-  open_issues: 7
+  stars: 1812
+  forks: 148
+  open_issues: 6
   license: MIT
   topics: []
-  last_commit: "2026-03-02T21:50:39Z"
-  latest_release: v2.8.2
-  latest_release_date: "2026-03-01T05:25:18Z"
-  star_growth_7d: 0
-  last_enriched: "2026-03-03T00:14:49.232Z"
+  last_commit: "2026-03-07T19:04:41Z"
+  latest_release: v2.11.2
+  latest_release_date: "2026-03-07T19:05:38Z"
+  star_growth_7d: 140
+  last_enriched: "2026-03-09T04:42:20.344Z"

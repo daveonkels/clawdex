@@ -1,7 +1,7 @@
 name: ApexClaw
 slug: apexclaw
 tagline: AI assistant that lives in your Telegram
-description: Personal AI assistant powered by the z.ai engine that runs inside Telegram. Goes beyond chat with 94 built-in tools — browse the web, send emails, run scripts, manage files, track stocks, and more. Supports vision, voice, memory, and real browser automation.
+description: Personal AI assistant powered by the z.ai engine that runs inside Telegram. Goes beyond chat with 100+ built-in tools — browse the web, send emails, run scripts, manage files, track stocks, and more. Supports vision, voice, memory, and real browser automation.
 language: go
 category:
   - multi-platform
@@ -17,14 +17,14 @@ platform:
   - messaging
 requires_llm: true
 mcp_support: false
-integration_count: 94
+integration_count: 100
 ecosystem_role: alternative
 added: "2026-03-01"
 github_data:
-  stars: 20
-  forks: 6
+  stars: 26
+  forks: 7
   open_issues: 0
-  license: null
+  license: MIT
   topics:
     - ai
     - apexclaw
@@ -40,8 +40,8 @@ github_data:
     - telegram
     - tools
     - zai
-  last_commit: "2026-03-02T19:18:38Z"
+  last_commit: "2026-03-05T13:36:45Z"
   latest_release: v0.4
   latest_release_date: "2026-02-28T07:42:14Z"
-  star_growth_7d: 0
-  last_enriched: "2026-03-02T22:14:46.511Z"
+  star_growth_7d: 3
+  last_enriched: "2026-03-09T03:59:31.653Z"

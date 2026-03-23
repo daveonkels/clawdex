@@ -20,3 +20,14 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: alternative
 added: "2026-03-07"
+github_data:
+  stars: 88
+  forks: 10
+  open_issues: 1
+  license: MIT
+  topics: []
+  last_commit: "2026-03-08T22:43:57Z"
+  latest_release: v0.6.4
+  latest_release_date: "2026-03-03T11:27:56Z"
+  star_growth_7d: 0
+  last_enriched: "2026-03-09T03:59:33.160Z"

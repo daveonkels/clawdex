@@ -13,39 +13,39 @@ export const languageLabel: Record<string, string> = {
 };
 
 export const languageColors: Record<string, { bg: string; text: string; border: string }> = {
-  typescript: { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/20' },
-  rust: { bg: 'bg-orange-500/10', text: 'text-orange-400', border: 'border-orange-500/20' },
-  python: { bg: 'bg-yellow-500/10', text: 'text-yellow-400', border: 'border-yellow-500/20' },
-  go: { bg: 'bg-cyan-500/10', text: 'text-cyan-400', border: 'border-cyan-500/20' },
-  c: { bg: 'bg-gray-500/10', text: 'text-gray-400', border: 'border-gray-500/20' },
-  bash: { bg: 'bg-green-500/10', text: 'text-green-400', border: 'border-green-500/20' },
-  zig: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20' },
-  kotlin: { bg: 'bg-violet-500/10', text: 'text-violet-400', border: 'border-violet-500/20' },
-  multi: { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/20' },
+  typescript: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+  rust: { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },
+  python: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
+  go: { bg: 'bg-cyan-50', text: 'text-cyan-700', border: 'border-cyan-200' },
+  c: { bg: 'bg-gray-50', text: 'text-gray-600', border: 'border-gray-200' },
+  bash: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
+  zig: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
+  kotlin: { bg: 'bg-violet-50', text: 'text-violet-700', border: 'border-violet-200' },
+  multi: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
 };
 
 // Flat variant used in leaderboard table rows
 export const langColorsFlat: Record<string, string> = {
-  typescript: 'bg-blue-500/20 text-blue-300',
-  rust: 'bg-orange-500/20 text-orange-300',
-  python: 'bg-yellow-500/20 text-yellow-300',
-  go: 'bg-cyan-500/20 text-cyan-300',
-  c: 'bg-gray-500/20 text-gray-300',
-  bash: 'bg-green-500/20 text-green-300',
-  zig: 'bg-amber-500/20 text-amber-300',
-  kotlin: 'bg-violet-500/20 text-violet-300',
-  multi: 'bg-purple-500/20 text-purple-300',
+  typescript: 'bg-blue-100 text-blue-700',
+  rust: 'bg-orange-100 text-orange-700',
+  python: 'bg-amber-100 text-amber-700',
+  go: 'bg-cyan-100 text-cyan-700',
+  c: 'bg-gray-100 text-gray-600',
+  bash: 'bg-emerald-100 text-emerald-700',
+  zig: 'bg-amber-100 text-amber-700',
+  kotlin: 'bg-violet-100 text-violet-700',
+  multi: 'bg-purple-100 text-purple-700',
 };
 
 export const statusColors: Record<string, string> = {
-  active: 'text-green-400 border-green-500/20 bg-green-500/10',
-  experimental: 'text-yellow-400 border-yellow-500/20 bg-yellow-500/10',
-  archived: 'text-gray-500 border-gray-500/20 bg-gray-500/10',
+  active: 'text-emerald-700 border-emerald-200 bg-emerald-50',
+  experimental: 'text-amber-700 border-amber-200 bg-amber-50',
+  archived: 'text-gray-500 border-gray-200 bg-gray-50',
 };
 
 // Simpler status color variant used in ProjectCard (no border/bg in class)
 export const statusColorsSimple: Record<string, string> = {
-  active: 'text-green-400',
-  experimental: 'text-yellow-400',
+  active: 'text-emerald-700',
+  experimental: 'text-amber-700',
   archived: 'text-gray-500',
 };

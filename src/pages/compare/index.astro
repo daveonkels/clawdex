@@ -75,20 +75,20 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
   <script id="compare-indexable-slugs" type="application/json" set:html={JSON.stringify([...indexableCompareSlugs])} />
 
   <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <nav class="flex items-center gap-2 text-sm text-gray-600 mb-10" aria-label="Breadcrumb">
-      <a href="/" class="hover:text-biolum transition-colors">Shelldex</a>
+    <nav class="flex items-center gap-2 text-sm text-ledger-whisper mb-10" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-ledger-red transition-colors">Shelldex</a>
       <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-      <span class="text-gray-400">Compare</span>
+      <span class="text-ledger-faint">Compare</span>
     </nav>
 
     <header class="mb-10">
       <div class="flex items-center gap-3 mb-4">
         <span class="text-3xl">⚖️</span>
-        <h1 class="text-3xl sm:text-4xl font-display font-bold text-white">Compare Projects</h1>
+        <h1 class="text-3xl sm:text-4xl font-display font-bold text-ledger-text">Compare Projects</h1>
       </div>
-      <div class="space-y-4 max-w-3xl text-gray-400 leading-relaxed">
+      <div class="space-y-4 max-w-3xl text-ledger-faint leading-relaxed">
         <p>
-          Shelldex now publishes a curated set of <strong class="text-white">{indexablePairs.length} comparison landing pages</strong> instead of exposing every possible pairwise permutation to search engines. That keeps the indexed compare library focused on the matchups users actually care about.
+          Shelldex now publishes a curated set of <strong class="text-ledger-text">{indexablePairs.length} comparison landing pages</strong> instead of exposing every possible pairwise permutation to search engines. That keeps the indexed compare library focused on the matchups users actually care about.
         </p>
         <p>
           You can still compare any two projects here. High-signal matchups open dedicated pages; everything else renders as an on-page comparison tool without creating another low-value crawl target.
@@ -97,32 +97,32 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
     </header>
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-      <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
-        <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Tracked Projects</p>
-        <p class="text-3xl font-mono text-white">{projects.length}</p>
+      <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
+        <p class="text-xs uppercase tracking-wider text-ledger-faint mb-1">Tracked Projects</p>
+        <p class="text-3xl font-mono text-ledger-text">{projects.length}</p>
       </div>
-      <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
-        <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Possible Matchups</p>
-        <p class="text-3xl font-mono text-white">{projectedMatchups}</p>
+      <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
+        <p class="text-xs uppercase tracking-wider text-ledger-faint mb-1">Possible Matchups</p>
+        <p class="text-3xl font-mono text-ledger-text">{projectedMatchups}</p>
       </div>
-      <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
-        <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Indexed Matchups</p>
-        <p class="text-3xl font-mono text-biolum">{indexablePairs.length}</p>
+      <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
+        <p class="text-xs uppercase tracking-wider text-ledger-faint mb-1">Indexed Matchups</p>
+        <p class="text-3xl font-mono text-ledger-red">{indexablePairs.length}</p>
       </div>
-      <div class="rounded-xl border border-white/5 bg-ocean-card p-5">
-        <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Editorial Ratio</p>
-        <p class="text-3xl font-mono text-white">{Math.round((indexablePairs.length / projectedMatchups) * 100)}%</p>
+      <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
+        <p class="text-xs uppercase tracking-wider text-ledger-faint mb-1">Editorial Ratio</p>
+        <p class="text-3xl font-mono text-ledger-text">{Math.round((indexablePairs.length / projectedMatchups) * 100)}%</p>
       </div>
     </div>
 
-    <div class="rounded-2xl border border-white/5 bg-ocean-card p-6 mb-12">
-      <h2 class="font-display text-xl font-semibold text-white mb-4">Quick Compare</h2>
+    <div class="rounded-2xl border border-ledger-border bg-ledger-surface p-6 mb-12">
+      <h2 class="font-display text-xl font-semibold text-ledger-text mb-4">Quick Compare</h2>
       <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-4">
         <div class="flex-1">
-          <label for="compare-a" class="block text-sm text-gray-500 mb-1.5">Project A</label>
+          <label for="compare-a" class="block text-sm text-ledger-faint mb-1.5">Project A</label>
           <select
             id="compare-a"
-            class="w-full bg-ocean-lighter border border-white/10 text-gray-200 text-sm rounded-lg px-3 py-2.5 focus:border-biolum/50 focus:outline-none"
+            class="w-full bg-ledger-surfaceer border border-ledger-border text-ledger-muted text-sm rounded-lg px-3 py-2.5 focus:border-ledger-red/50 focus:outline-none"
           >
             <option value="">Select a project...</option>
             {projects.map((project) => (
@@ -130,12 +130,12 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
             ))}
           </select>
         </div>
-        <span class="text-gray-500 font-display font-bold text-center sm:pb-2.5">vs</span>
+        <span class="text-ledger-faint font-display font-bold text-center sm:pb-2.5">vs</span>
         <div class="flex-1">
-          <label for="compare-b" class="block text-sm text-gray-500 mb-1.5">Project B</label>
+          <label for="compare-b" class="block text-sm text-ledger-faint mb-1.5">Project B</label>
           <select
             id="compare-b"
-            class="w-full bg-ocean-lighter border border-white/10 text-gray-200 text-sm rounded-lg px-3 py-2.5 focus:border-biolum/50 focus:outline-none"
+            class="w-full bg-ledger-surfaceer border border-ledger-border text-ledger-muted text-sm rounded-lg px-3 py-2.5 focus:border-ledger-red/50 focus:outline-none"
           >
             <option value="">Select a project...</option>
             {projects.map((project) => (
@@ -145,13 +145,13 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
         </div>
         <button
           id="compare-btn"
-          class="px-6 py-2.5 bg-biolum/10 border border-biolum/30 text-biolum font-semibold rounded-lg hover:bg-biolum/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          class="px-6 py-2.5 bg-ledger-red-bg border border-ledger-red/30 text-ledger-red font-semibold rounded-lg hover:bg-ledger-red-bg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           disabled
         >
           Compare
         </button>
       </div>
-      <p id="compare-hint" class="text-sm text-gray-500 mt-3">
+      <p id="compare-hint" class="text-sm text-ledger-faint mt-3">
         Dedicated pages exist for editorially selected matchups. Everything else stays inside this tool.
       </p>
     </div>
@@ -161,20 +161,20 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
     <section class="mb-12">
       <div class="flex items-center justify-between gap-4 mb-6">
         <div>
-          <h2 class="font-display text-2xl font-bold text-white">OpenClaw Matchups</h2>
-          <p class="text-sm text-gray-500 mt-1">The highest-intent comparison pages in the ecosystem.</p>
+          <h2 class="font-display text-2xl font-bold text-ledger-text">OpenClaw Matchups</h2>
+          <p class="text-sm text-ledger-faint mt-1">The highest-intent comparison pages in the ecosystem.</p>
         </div>
-        <a href="/best-alternatives/" class="text-sm text-gray-400 hover:text-biolum transition-colors">See the ranked alternatives guide →</a>
+        <a href="/best-alternatives/" class="text-sm text-ledger-faint hover:text-ledger-red transition-colors">See the ranked alternatives guide →</a>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {openclawPairs.map((pair) => (
           <a
             href={`/compare/${pair.canonical}/`}
-            class="flex items-center gap-3 rounded-xl border border-white/5 bg-ocean-card/50 px-4 py-4 text-sm text-gray-300 hover:text-biolum hover:border-biolum/20 transition-all"
+            class="flex items-center gap-3 rounded-xl border border-ledger-border bg-ledger-surface/80 px-4 py-4 text-sm text-ledger-muted hover:text-ledger-red hover:border-ledger-red/20 transition-all"
           >
             <span>{projectMap.get(pair.slugA)?.emoji}</span>
             <span class="truncate">{pairLabel(pair.slugA, pair.slugB)}</span>
-            <span class="ml-auto text-xs text-gray-500">Featured</span>
+            <span class="ml-auto text-xs text-ledger-faint">Featured</span>
           </a>
         ))}
       </div>
@@ -184,16 +184,16 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
       <section class="mb-12">
         <div class="flex items-center justify-between gap-4 mb-6">
           <div>
-            <h2 class="font-display text-2xl font-bold text-white">Featured Head-to-Heads</h2>
-            <p class="text-sm text-gray-500 mt-1">Useful cross-ecosystem matchups that earned dedicated landing pages.</p>
+            <h2 class="font-display text-2xl font-bold text-ledger-text">Featured Head-to-Heads</h2>
+            <p class="text-sm text-ledger-faint mt-1">Useful cross-ecosystem matchups that earned dedicated landing pages.</p>
           </div>
-          <span class="text-xs uppercase tracking-wider text-gray-600">{editorialPairs.length} editorial pages</span>
+          <span class="text-xs uppercase tracking-wider text-ledger-whisper">{editorialPairs.length} editorial pages</span>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {editorialPairs.map((pair) => (
             <a
               href={`/compare/${pair.canonical}/`}
-              class="flex items-center gap-3 rounded-xl border border-white/5 bg-ocean-card/50 px-4 py-4 text-sm text-gray-300 hover:text-biolum hover:border-biolum/20 transition-all"
+              class="flex items-center gap-3 rounded-xl border border-ledger-border bg-ledger-surface/80 px-4 py-4 text-sm text-ledger-muted hover:text-ledger-red hover:border-ledger-red/20 transition-all"
             >
               <span>{projectMap.get(pair.slugA)?.emoji}</span>
               <span class="truncate">{pairLabel(pair.slugA, pair.slugB)}</span>
@@ -208,15 +208,15 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
       <section class="mb-12">
         <div class="flex items-center justify-between gap-4 mb-6">
           <div>
-            <h2 class="font-display text-2xl font-bold text-white">All Indexed Comparisons</h2>
-            <p class="text-sm text-gray-500 mt-1">Every curated matchup in the Shelldex comparison library — {indexablePairs.length} total pages.</p>
+            <h2 class="font-display text-2xl font-bold text-ledger-text">All Indexed Comparisons</h2>
+            <p class="text-sm text-ledger-faint mt-1">Every curated matchup in the Shelldex comparison library — {indexablePairs.length} total pages.</p>
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
           {remainingPairs.map((pair) => (
             <a
               href={`/compare/${pair.canonical}/`}
-              class="flex items-center gap-2 rounded-lg border border-white/5 bg-ocean-card/30 px-3 py-2.5 text-sm text-gray-400 hover:text-biolum hover:border-biolum/20 transition-all"
+              class="flex items-center gap-2 rounded-lg border border-ledger-border bg-ledger-surface/30 px-3 py-2.5 text-sm text-ledger-faint hover:text-ledger-red hover:border-ledger-red/20 transition-all"
             >
               <span class="flex-shrink-0">{projectMap.get(pair.slugA)?.emoji}</span>
               <span class="truncate">{pairLabel(pair.slugA, pair.slugB)}</span>
@@ -328,46 +328,46 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
         var hasLandingPage = indexableSlugs.has(pair);
         var lines = summaryLines(a, b);
         var rows = metrics(a, b).map(function (row) {
-          return '<tr class="border-b border-white/5">' +
-            '<td class="px-4 py-3 text-gray-500">' + esc(row[0]) + '</td>' +
-            '<td class="px-4 py-3 text-center text-gray-200 font-mono">' + esc(row[1]) + '</td>' +
-            '<td class="px-4 py-3 text-center text-gray-200 font-mono">' + esc(row[2]) + '</td>' +
+          return '<tr class="border-b border-ledger-border">' +
+            '<td class="px-4 py-3 text-ledger-faint">' + esc(row[0]) + '</td>' +
+            '<td class="px-4 py-3 text-center text-ledger-muted font-mono">' + esc(row[1]) + '</td>' +
+            '<td class="px-4 py-3 text-center text-ledger-muted font-mono">' + esc(row[2]) + '</td>' +
           '</tr>';
         }).join('');
 
         var summary = lines.length
           ? '<ul class="space-y-2">' + lines.map(function (line) {
-              return '<li class="flex items-start gap-2 text-sm text-gray-300"><span class="text-biolum mt-0.5">+</span><span>' + esc(line) + '</span></li>';
+              return '<li class="flex items-start gap-2 text-sm text-ledger-muted"><span class="text-ledger-red mt-0.5">+</span><span>' + esc(line) + '</span></li>';
             }).join('') + '</ul>'
-          : '<p class="text-sm text-gray-400">These two projects are close enough that your preferred stack and workflow fit will matter more than any single headline metric.</p>';
+          : '<p class="text-sm text-ledger-faint">These two projects are close enough that your preferred stack and workflow fit will matter more than any single headline metric.</p>';
 
         var notice = hasLandingPage
-          ? '<p class="text-sm text-biolum">This matchup has a dedicated comparison page because it is part of the curated indexable library.</p>'
-          : '<p class="text-sm text-gray-400">This is an on-page comparison only. Shelldex no longer publishes a separate indexable page for every long-tail pair.</p>';
+          ? '<p class="text-sm text-ledger-red">This matchup has a dedicated comparison page because it is part of the curated indexable library.</p>'
+          : '<p class="text-sm text-ledger-faint">This is an on-page comparison only. Shelldex no longer publishes a separate indexable page for every long-tail pair.</p>';
 
         results.innerHTML =
-          '<div class="rounded-2xl border border-white/5 bg-ocean-card p-6 sm:p-8">' +
+          '<div class="rounded-2xl border border-ledger-border bg-ledger-surface p-6 sm:p-8">' +
             '<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">' +
               '<div>' +
-                '<h2 class="font-display text-2xl font-bold text-white mb-2">' + esc(a.emoji + ' ' + a.name + ' vs ' + b.name + ' ' + b.emoji) + '</h2>' +
-                '<p class="text-gray-400 text-sm max-w-2xl">' + esc(a.tagline) + ' | ' + esc(b.tagline) + '</p>' +
+                '<h2 class="font-display text-2xl font-bold text-ledger-text mb-2">' + esc(a.emoji + ' ' + a.name + ' vs ' + b.name + ' ' + b.emoji) + '</h2>' +
+                '<p class="text-ledger-faint text-sm max-w-2xl">' + esc(a.tagline) + ' | ' + esc(b.tagline) + '</p>' +
               '</div>' +
-              '<a href="' + compareHref(aSlug, bSlug) + '" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-biolum/30 bg-biolum/10 text-biolum font-semibold hover:bg-biolum/20 transition-colors">' +
+              '<a href="' + compareHref(aSlug, bSlug) + '" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-ledger-red/30 bg-ledger-red-bg text-ledger-red font-semibold hover:bg-ledger-red-bg transition-colors">' +
                 (hasLandingPage ? 'Open dedicated page' : 'Share this comparison') +
               '</a>' +
             '</div>' +
             '<div class="mb-5">' + notice + '</div>' +
             '<div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-5">' +
-              '<div class="rounded-xl border border-white/5 overflow-hidden">' +
-                '<div class="grid grid-cols-3 border-b border-white/10 text-sm">' +
-                  '<div class="px-4 py-3 text-gray-500 font-medium">Metric</div>' +
-                  '<div class="px-4 py-3 text-center text-white font-semibold">' + esc(a.name) + '</div>' +
-                  '<div class="px-4 py-3 text-center text-white font-semibold">' + esc(b.name) + '</div>' +
+              '<div class="rounded-xl border border-ledger-border overflow-hidden">' +
+                '<div class="grid grid-cols-3 border-b border-ledger-border text-sm">' +
+                  '<div class="px-4 py-3 text-ledger-faint font-medium">Metric</div>' +
+                  '<div class="px-4 py-3 text-center text-ledger-text font-semibold">' + esc(a.name) + '</div>' +
+                  '<div class="px-4 py-3 text-center text-ledger-text font-semibold">' + esc(b.name) + '</div>' +
                 '</div>' +
                 '<table class="w-full text-sm"><tbody>' + rows + '</tbody></table>' +
               '</div>' +
-              '<div class="rounded-xl border border-white/5 bg-black/10 p-5">' +
-                '<h3 class="font-display text-lg font-bold text-white mb-3">What stands out</h3>' +
+              '<div class="rounded-xl border border-ledger-border bg-ledger-border/30 p-5">' +
+                '<h3 class="font-display text-lg font-bold text-ledger-text mb-3">What stands out</h3>' +
                 summary +
               '</div>' +
             '</div>' +

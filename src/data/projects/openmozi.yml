@@ -19,3 +19,26 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: alternative
 added: "2026-03-07"
+github_data:
+  stars: 172
+  forks: 22
+  open_issues: 13
+  license: Apache-2.0
+  topics:
+    - agent
+    - claude
+    - claude-code
+    - clawdbot
+    - deepseek
+    - dingding
+    - feishu
+    - minimax
+    - moltbot
+    - openclaw
+    - qq
+    - qqbot
+  last_commit: "2026-02-13T07:00:03Z"
+  latest_release: 1.10.2
+  latest_release_date: "2026-02-09T03:44:31Z"
+  star_growth_7d: 0
+  last_enriched: "2026-03-09T04:42:18.209Z"

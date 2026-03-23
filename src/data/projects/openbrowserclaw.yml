@@ -20,9 +20,9 @@ mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-02-28T00:00:00.000Z
 github_data:
-  stars: 490
-  forks: 56
-  open_issues: 4
+  stars: 548
+  forks: 72
+  open_issues: 5
   license: MIT
   topics:
     - ai-agents
@@ -36,5 +36,5 @@ github_data:
   last_commit: "2026-02-26T00:56:03Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 25
-  last_enriched: "2026-03-02T23:14:50.048Z"
+  star_growth_7d: 58
+  last_enriched: "2026-03-09T04:42:17.077Z"

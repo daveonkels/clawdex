@@ -19,9 +19,9 @@ mcp_support: true
 ecosystem_role: alternative
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 18602
-  forks: 1399
-  open_issues: 542
+  stars: 19926
+  forks: 1455
+  open_issues: 621
   license: AGPL-3.0
   topics:
     - agent
@@ -40,8 +40,8 @@ github_data:
     - qq
     - qqbot
     - telegram
-  last_commit: "2026-03-02T18:09:50Z"
-  latest_release: v4.18.3
-  latest_release_date: "2026-02-26T11:14:24Z"
-  star_growth_7d: 261
-  last_enriched: "2026-03-02T22:14:46.847Z"
+  last_commit: "2026-03-09T03:14:00Z"
+  latest_release: v4.19.4
+  latest_release_date: "2026-03-09T03:16:07Z"
+  star_growth_7d: 1324
+  last_enriched: "2026-03-09T03:59:31.774Z"

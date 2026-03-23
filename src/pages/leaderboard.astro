@@ -61,33 +61,29 @@ function formatGrowth(n: number | null): string {
 }
 
 function growthClass(n: number | null): string {
-  if (n === null) return 'text-gray-600';
-  if (n > 0) return 'text-biolum';
+  if (n === null) return 'text-ledger-whisper';
+  if (n > 0) return 'text-ledger-red';
   if (n < 0) return 'text-lobster-light';
-  return 'text-gray-500';
+  return 'text-ledger-faint';
 }
 
 function commitFreshness(days: number): string {
-  if (days <= 7) return 'text-biolum';
-  if (days <= 30) return 'text-gray-300';
-  return 'text-gray-600';
+  if (days <= 7) return 'text-ledger-red';
+  if (days <= 30) return 'text-ledger-muted';
+  return 'text-ledger-whisper';
 }
 
 function healthDot(ratio: number): string {
-  if (ratio < 0.01) return 'text-biolum';
-  if (ratio < 0.05) return 'text-yellow-400';
+  if (ratio < 0.01) return 'text-ledger-red';
+  if (ratio < 0.05) return 'text-amber-700';
   return 'text-coral';
 }
 
-const langColors: Record<string, string> = {
-  typescript: 'bg-blue-500/20 text-blue-300',
-  rust: 'bg-orange-500/20 text-orange-300',
-  python: 'bg-yellow-500/20 text-yellow-300',
-  go: 'bg-cyan-500/20 text-cyan-300',
-  c: 'bg-gray-500/20 text-gray-300',
-  bash: 'bg-green-500/20 text-green-300',
-  zig: 'bg-amber-500/20 text-amber-300',
-  multi: 'bg-purple-500/20 text-purple-300',
+const langDot: Record<string, string> = {
+  typescript: 'bg-blue-500', rust: 'bg-orange-500', python: 'bg-yellow-500',
+  go: 'bg-cyan-600', c: 'bg-gray-500', bash: 'bg-green-600',
+  zig: 'bg-amber-500', javascript: 'bg-yellow-400', kotlin: 'bg-purple-500',
+  multi: 'bg-ledger-faint',
 };
 ---
 
@@ -115,15 +111,15 @@ const langColors: Record<string, string> = {
     <div class="mb-10">
       <div class="flex items-center gap-3 mb-4">
         <span class="text-3xl">🏆</span>
-        <h1 class="text-3xl sm:text-4xl font-display font-bold text-white">
+        <h1 class="text-3xl sm:text-4xl font-display font-bold text-ledger-text">
           Leaderboard
         </h1>
       </div>
-      <p class="text-gray-400 max-w-2xl">
+      <p class="text-ledger-faint max-w-2xl">
         OpenClaw ecosystem ranked by GitHub stars, with growth trends and project health indicators.
       </p>
       {hasData && (
-        <p class="text-xs text-gray-600 mt-2 font-mono">
+        <p class="text-xs text-ledger-whisper mt-2 font-mono">
           Updated {new Date(leaderboard.generated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           &middot; {leaderboard.count} projects
         </p>
@@ -132,19 +128,19 @@ const langColors: Record<string, string> = {
 
     {!hasData ? (
       <!-- Empty state -->
-      <div class="text-center py-20 border border-white/5 rounded-2xl bg-ocean-card">
+      <div class="text-center py-20 border border-ledger-border rounded-2xl bg-ledger-surface">
         <span class="text-5xl mb-4 block">📊</span>
-        <h2 class="text-xl font-display font-semibold text-white mb-2">Leaderboard data is being refreshed</h2>
-        <p class="text-gray-400">Check back shortly — rankings update daily.</p>
+        <h2 class="text-xl font-display font-semibold text-ledger-text mb-2">Leaderboard data is being refreshed</h2>
+        <p class="text-ledger-faint">Check back shortly — rankings update daily.</p>
       </div>
     ) : (
       <>
         <!-- Sort controls -->
         <div class="flex items-center gap-3 mb-6">
-          <label for="lb-sort" class="text-sm text-gray-400">Sort by:</label>
+          <label for="lb-sort" class="text-sm text-ledger-faint">Sort by:</label>
           <select
             id="lb-sort"
-            class="bg-ocean-lighter border border-white/10 text-gray-200 text-sm rounded-lg px-3 py-1.5 focus:border-biolum/50 focus:outline-none"
+            class="bg-ledger-surfaceer border border-ledger-border text-ledger-muted text-sm rounded-lg px-3 py-1.5 focus:border-ledger-red/50 focus:outline-none"
           >
             <option value="stars">Stars</option>
             <option value="growth">7-day Growth</option>
@@ -156,25 +152,25 @@ const langColors: Record<string, string> = {
         </div>
 
         <!-- ─── Desktop table ─────────────────────────────────────────────── -->
-        <div class="hidden md:block overflow-x-auto rounded-xl border border-white/5 bg-ocean-card/50">
+        <div class="hidden md:block overflow-x-auto rounded-xl border border-ledger-border bg-ledger-surface/80">
           <table class="w-full text-left" id="lb-table">
             <thead>
-              <tr class="border-b border-white/10 text-xs uppercase tracking-wider text-gray-500">
+              <tr class="border-b border-ledger-border text-xs uppercase tracking-wider text-ledger-faint">
                 <th class="py-3 px-4 w-12">#</th>
                 <th class="py-3 px-4">Project</th>
-                <th class="py-3 px-4 text-right cursor-pointer hover:text-biolum transition-colors" data-sort="stars">Stars&nbsp;↕</th>
-                <th class="py-3 px-4 text-right cursor-pointer hover:text-biolum transition-colors" data-sort="growth">7d&nbsp;↕</th>
+                <th class="py-3 px-4 text-right cursor-pointer hover:text-ledger-red transition-colors" data-sort="stars">Stars&nbsp;↕</th>
+                <th class="py-3 px-4 text-right cursor-pointer hover:text-ledger-red transition-colors" data-sort="growth">7d&nbsp;↕</th>
                 <th class="py-3 px-4">Lang</th>
-                <th class="py-3 px-4 text-right cursor-pointer hover:text-biolum transition-colors" data-sort="forks">Forks&nbsp;↕</th>
+                <th class="py-3 px-4 text-right cursor-pointer hover:text-ledger-red transition-colors" data-sort="forks">Forks&nbsp;↕</th>
                 <th class="py-3 px-4">Release</th>
-                <th class="py-3 px-4 text-right cursor-pointer hover:text-biolum transition-colors" data-sort="recent">Commit&nbsp;↕</th>
+                <th class="py-3 px-4 text-right cursor-pointer hover:text-ledger-red transition-colors" data-sort="recent">Commit&nbsp;↕</th>
                 <th class="py-3 px-4 text-center" title="Issues/Stars health ratio">Health</th>
               </tr>
             </thead>
             <tbody id="lb-body">
               {leaderboard.entries.map((e) => (
                 <tr
-                  class="border-b border-white/5 hover:bg-ocean-lighter/50 transition-colors lb-row"
+                  class="border-b border-ledger-border hover:bg-ledger-surfaceer/50 transition-colors lb-row"
                   data-stars={e.stars}
                   data-growth={e.star_growth_7d ?? -999999}
                   data-name={e.name.toLowerCase()}
@@ -182,31 +178,32 @@ const langColors: Record<string, string> = {
                   data-issues={e.open_issues}
                   data-last-commit={e.last_commit || '1970-01-01'}
                 >
-                  <td class="py-3 px-4 text-gray-500 font-mono text-sm lb-rank">{e.rank}</td>
+                  <td class="py-3 px-4 text-ledger-faint font-mono text-sm lb-rank">{e.rank}</td>
                   <td class="py-3 px-4">
                     <a href={`/projects/${e.slug}/`} class="group flex items-center gap-2">
                       <span class="text-lg">{e.emoji}</span>
-                      <span class="text-white font-medium group-hover:text-biolum transition-colors">{e.name}</span>
+                      <span class="text-ledger-text font-medium group-hover:text-ledger-red transition-colors">{e.name}</span>
                     </a>
                   </td>
-                  <td class="py-3 px-4 text-right font-mono text-sm text-yellow-300">
+                  <td class="py-3 px-4 text-right font-mono text-sm text-yellow-700">
                     ★ {formatStars(e.stars)}
                   </td>
                   <td class={`py-3 px-4 text-right font-mono text-sm ${growthClass(e.star_growth_7d)}`}>
                     {formatGrowth(e.star_growth_7d)}
                   </td>
                   <td class="py-3 px-4">
-                    <span class={`badge-language ${langColors[e.language] || 'bg-gray-500/20 text-gray-300'}`}>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text">
+                      <span class={`w-1.5 h-1.5 rounded-full ${langDot[e.language] || 'bg-ledger-faint'}`}></span>
                       {e.language}
                     </span>
                   </td>
-                  <td class="py-3 px-4 text-right font-mono text-sm text-gray-400">
+                  <td class="py-3 px-4 text-right font-mono text-sm text-ledger-faint">
                     {formatStars(e.forks)}
                   </td>
-                  <td class="py-3 px-4 text-sm text-gray-400">
+                  <td class="py-3 px-4 text-sm text-ledger-faint">
                     {e.latest_release
                       ? <span class="font-mono">{e.latest_release}</span>
-                      : <span class="text-gray-600">&mdash;</span>}
+                      : <span class="text-ledger-whisper">&mdash;</span>}
                   </td>
                   <td class={`py-3 px-4 text-right text-sm ${commitFreshness(e.health.days_since_last_commit)}`}>
                     {e.health.days_since_last_commit < 999
@@ -230,7 +227,7 @@ const langColors: Record<string, string> = {
           {leaderboard.entries.map((e) => (
             <a
               href={`/projects/${e.slug}/`}
-              class="block bg-ocean-card border border-white/5 rounded-xl p-4 hover:border-biolum/20 transition-all lb-card"
+              class="block bg-ledger-surface border border-ledger-border rounded-xl p-4 hover:border-ledger-red/20 transition-all lb-card"
               data-stars={e.stars}
               data-growth={e.star_growth_7d ?? -999999}
               data-name={e.name.toLowerCase()}
@@ -240,14 +237,15 @@ const langColors: Record<string, string> = {
             >
               <div class="flex items-center justify-between mb-2">
                 <div class="flex items-center gap-2">
-                  <span class="text-gray-500 font-mono text-xs lb-rank">#{e.rank}</span>
+                  <span class="text-ledger-faint font-mono text-xs lb-rank">#{e.rank}</span>
                   <span class="text-lg">{e.emoji}</span>
-                  <span class="text-white font-medium">{e.name}</span>
+                  <span class="text-ledger-text font-medium">{e.name}</span>
                 </div>
-                <span class="font-mono text-sm text-yellow-300">★ {formatStars(e.stars)}</span>
+                <span class="font-mono text-sm text-yellow-700">★ {formatStars(e.stars)}</span>
               </div>
               <div class="flex flex-wrap items-center gap-3 text-xs">
-                <span class={`badge-language ${langColors[e.language] || 'bg-gray-500/20 text-gray-300'}`}>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text">
+                  <span class={`w-1.5 h-1.5 rounded-full ${langDot[e.language] || 'bg-ledger-faint'}`}></span>
                   {e.language}
                 </span>
                 {e.star_growth_7d !== null && (
@@ -256,7 +254,7 @@ const langColors: Record<string, string> = {
                   </span>
                 )}
                 {e.latest_release && (
-                  <span class="text-gray-500 font-mono">{e.latest_release}</span>
+                  <span class="text-ledger-faint font-mono">{e.latest_release}</span>
                 )}
                 <span class={`${commitFreshness(e.health.days_since_last_commit)}`}>
                   {e.health.days_since_last_commit < 999
@@ -269,12 +267,12 @@ const langColors: Record<string, string> = {
         </div>
 
         <!-- Legend -->
-        <div class="mt-8 flex flex-wrap gap-6 text-xs text-gray-500">
+        <div class="mt-8 flex flex-wrap gap-6 text-xs text-ledger-faint">
           <div class="flex items-center gap-1.5">
-            <span class="text-biolum">●</span> Healthy (&lt;1% issues/stars)
+            <span class="text-ledger-red">●</span> Healthy (&lt;1% issues/stars)
           </div>
           <div class="flex items-center gap-1.5">
-            <span class="text-yellow-400">●</span> Moderate (1–5%)
+            <span class="text-amber-700">●</span> Moderate (1–5%)
           </div>
           <div class="flex items-center gap-1.5">
             <span class="text-coral">●</span> Needs attention (&gt;5%)

@@ -18,3 +18,31 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: derivative
 added: 2026-03-05T00:00:00.000Z
+github_data:
+  stars: 382
+  forks: 0
+  open_issues: 0
+  license: MIT
+  topics:
+    - agentic
+    - ai-agent
+    - ai-assistant
+    - automation
+    - bash
+    - claude
+    - cowork
+    - docker-compose
+    - golang
+    - lightweight
+    - llm
+    - minimax
+    - openclaw
+    - openrouter
+    - personal-assistant
+    - productivity
+    - self-hosted
+  last_commit: "2026-03-08T22:24:49Z"
+  latest_release: v0.0.7
+  latest_release_date: "2026-03-08T22:05:08Z"
+  star_growth_7d: 0
+  last_enriched: "2026-03-09T03:59:32.986Z"

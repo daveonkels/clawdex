@@ -8,20 +8,20 @@ const tracked = projects.filter(p => p.slug !== 'openclaw' && p.github);
 
 <Layout title="Shelldex Badges — Add a Badge to Your README" description="Add a Shelldex badge to your project's README. Show visitors where to find your project profile, comparisons, and ecosystem context." robots="noindex, follow">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="font-display text-4xl font-bold text-white mb-4">Shelldex Badges</h1>
-    <p class="text-lg text-gray-400 mb-10">Add a badge to your project's README to help users discover your Shelldex profile, comparisons, and ecosystem context.</p>
+    <h1 class="font-display text-4xl font-bold text-ledger-text mb-4">Shelldex Badges</h1>
+    <p class="text-lg text-ledger-faint mb-10">Add a badge to your project's README to help users discover your Shelldex profile, comparisons, and ecosystem context.</p>
 
     <!-- Generic badge -->
     <section class="mb-12">
-      <h2 class="font-display text-xl font-bold text-white mb-4">Generic Badge</h2>
-      <div class="bg-ocean-card border border-white/5 rounded-xl p-5 space-y-4">
+      <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Generic Badge</h2>
+      <div class="bg-ledger-surface border border-ledger-border rounded-xl p-5 space-y-4">
         <div>
-          <p class="text-xs text-gray-500 mb-2">Preview:</p>
+          <p class="text-xs text-ledger-faint mb-2">Preview:</p>
           <img src="/badges/shelldex-badge.svg" alt="Listed on Shelldex" class="h-5" />
         </div>
         <div>
-          <p class="text-xs text-gray-500 mb-2">Markdown:</p>
-          <div class="bg-black/30 rounded-lg px-4 py-3 font-mono text-xs text-gray-300 overflow-x-auto select-all">
+          <p class="text-xs text-ledger-faint mb-2">Markdown:</p>
+          <div class="bg-ledger-border/60 rounded-lg px-4 py-3 font-mono text-xs text-ledger-muted overflow-x-auto select-all">
             [![Listed on Shelldex](https://shelldex.com/badges/shelldex-badge.svg)](https://shelldex.com/projects/YOUR-SLUG/)
           </div>
         </div>
@@ -30,20 +30,20 @@ const tracked = projects.filter(p => p.slug !== 'openclaw' && p.github);
 
     <!-- Per-project snippets -->
     <section>
-      <h2 class="font-display text-xl font-bold text-white mb-4">Per-Project Snippets</h2>
-      <p class="text-sm text-gray-400 mb-6">Copy the markdown for your project:</p>
+      <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Per-Project Snippets</h2>
+      <p class="text-sm text-ledger-faint mb-6">Copy the markdown for your project:</p>
       <div class="space-y-3">
         {tracked.map(p => (
-          <details class="group rounded-xl border border-white/5 bg-ocean-card">
-            <summary class="flex items-center justify-between cursor-pointer px-5 py-3 text-white text-sm hover:text-biolum transition-colors">
+          <details class="group rounded-xl border border-ledger-border bg-ledger-surface">
+            <summary class="flex items-center justify-between cursor-pointer px-5 py-3 text-ledger-text text-sm hover:text-ledger-red transition-colors">
               <span class="flex items-center gap-2">
                 <span>{p.emoji}</span>
                 <span class="font-medium">{p.name}</span>
               </span>
-              <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              <svg class="w-4 h-4 text-ledger-faint group-open:rotate-180 transition-transform flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </summary>
-            <div class="px-5 pb-4 border-t border-white/5 pt-3">
-              <div class="bg-black/30 rounded-lg px-4 py-3 font-mono text-xs text-gray-300 overflow-x-auto select-all">
+            <div class="px-5 pb-4 border-t border-ledger-border pt-3">
+              <div class="bg-ledger-border/60 rounded-lg px-4 py-3 font-mono text-xs text-ledger-muted overflow-x-auto select-all">
                 [![Listed on Shelldex](https://shelldex.com/badges/shelldex-badge.svg)](https://shelldex.com/projects/{p.slug}/)
               </div>
             </div>

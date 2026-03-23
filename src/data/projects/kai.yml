@@ -18,3 +18,23 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: derivative
 added: 2026-03-05T00:00:00.000Z
+github_data:
+  stars: 129
+  forks: 6
+  open_issues: 4
+  license: Apache-2.0
+  topics:
+    - ai
+    - ai-assistant
+    - android
+    - chatbot
+    - ios
+    - jetpack-compose
+    - kotlin-multiplatform
+    - openai-compatible
+    - openclaw
+  last_commit: "2026-03-08T12:10:43Z"
+  latest_release: v1.8.2
+  latest_release_date: "2026-03-08T12:09:33Z"
+  star_growth_7d: 0
+  last_enriched: "2026-03-09T04:42:13.675Z"

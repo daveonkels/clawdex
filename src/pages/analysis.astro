@@ -60,10 +60,10 @@ function license(slug: string): string {
 
 function healthDot(slug: string): string {
   const entry = leaderboard.find(e => e.slug === slug);
-  if (!entry) return 'text-gray-500';
+  if (!entry) return 'text-ledger-faint';
   const ratio = entry.health.issues_stars_ratio;
-  if (ratio < 0.01) return 'text-biolum';
-  if (ratio < 0.05) return 'text-yellow-400';
+  if (ratio < 0.01) return 'text-ledger-red';
+  if (ratio < 0.05) return 'text-amber-700';
   return 'text-coral';
 }
 
@@ -77,23 +77,23 @@ const ocRelease = oc?.latest_release ?? '';
 
 // Language color helper
 const langColorMap: Record<string, { bg: string; text: string }> = {
-  typescript: { bg: 'bg-blue-500/20', text: 'text-blue-300' },
-  python: { bg: 'bg-yellow-500/20', text: 'text-yellow-300' },
-  rust: { bg: 'bg-orange-500/20', text: 'text-orange-300' },
-  go: { bg: 'bg-cyan-500/20', text: 'text-cyan-300' },
-  c: { bg: 'bg-gray-500/20', text: 'text-gray-300' },
-  zig: { bg: 'bg-amber-500/20', text: 'text-amber-300' },
-  bash: { bg: 'bg-green-500/20', text: 'text-green-300' },
+  typescript: { bg: 'bg-blue-100', text: 'text-blue-700' },
+  python: { bg: 'bg-yellow-100', text: 'text-yellow-700' },
+  rust: { bg: 'bg-orange-100', text: 'text-orange-700' },
+  go: { bg: 'bg-cyan-100', text: 'text-cyan-700' },
+  c: { bg: 'bg-gray-100', text: 'text-ledger-muted' },
+  zig: { bg: 'bg-amber-100', text: 'text-amber-700' },
+  bash: { bg: 'bg-green-100', text: 'text-green-700' },
 };
 function langColor(lang: string): { bg: string; text: string } {
-  return langColorMap[lang.toLowerCase()] ?? { bg: 'bg-gray-500/20', text: 'text-gray-300' };
+  return langColorMap[lang.toLowerCase()] ?? { bg: 'bg-gray-100', text: 'text-ledger-muted' };
 }
 
 // Bar chart colors for growth chart
 const growthBarColors = [
-  'from-biolum/80 to-biolum',   // 1st
-  'from-biolum/80 to-biolum',   // 2nd
-  'from-biolum/80 to-biolum',   // 3rd
+  'from-ledger-red/80 to-ledger-red',   // 1st
+  'from-ledger-red/80 to-ledger-red',   // 2nd
+  'from-ledger-red/80 to-ledger-red',   // 3rd
   'from-coral/80 to-coral',     // 4th
   'from-coral/80 to-coral',     // 5th
   'from-lobster/80 to-lobster', // 6th
@@ -103,13 +103,13 @@ const growthBarColors = [
 
 // Language chart colors
 const langBarColors: Record<string, string> = {
-  typescript: 'bg-blue-500/60',
-  python: 'bg-yellow-500/60',
-  rust: 'bg-orange-500/60',
-  go: 'bg-cyan-500/60',
+  typescript: 'bg-blue-400',
+  python: 'bg-yellow-400',
+  rust: 'bg-orange-400',
+  go: 'bg-cyan-400',
   c: 'bg-gray-500/60',
-  zig: 'bg-amber-500/60',
-  bash: 'bg-green-500/60',
+  zig: 'bg-amber-400',
+  bash: 'bg-green-400',
 };
 
 const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
@@ -134,47 +134,47 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
     <!-- TITLE -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <header class="mb-16">
-      <h1 class="font-display text-4xl sm:text-5xl font-bold text-white leading-tight mb-6">
+      <h1 class="font-display text-4xl sm:text-5xl font-bold text-ledger-text leading-tight mb-6">
         OpenClaw Ecosystem Analysis:<br class="hidden sm:block" />
-        <span class="text-biolum">{projectCount} Projects</span> Compared
+        <span class="text-ledger-red">{projectCount} Projects</span> Compared
       </h1>
-      <div class="h-px bg-gradient-to-r from-biolum/40 via-lobster/30 to-transparent"></div>
+      <div class="h-px bg-gradient-to-r from-ledger-red/40 via-ledger-coral/30 to-transparent"></div>
     </header>
 
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <!-- 1. EXECUTIVE SUMMARY -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <section class="mb-16">
-      <h2 class="font-display text-3xl font-bold text-white mb-6">1. Executive Summary</h2>
+      <h2 class="font-display text-3xl font-bold text-ledger-text mb-6">1. Executive Summary</h2>
 
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <div class="rounded-xl bg-ocean-card border border-white/5 p-5 text-center">
-          <p class="text-3xl font-bold text-biolum font-mono">{projectCount}</p>
-          <p class="text-xs text-gray-500 mt-1">Projects Tracked</p>
+        <div class="rounded-xl bg-ledger-surface border border-ledger-border p-5 text-center">
+          <p class="text-3xl font-bold text-ledger-red font-mono">{projectCount}</p>
+          <p class="text-xs text-ledger-faint mt-1">Projects Tracked</p>
         </div>
-        <div class="rounded-xl bg-ocean-card border border-white/5 p-5 text-center">
-          <p class="text-3xl font-bold text-yellow-300 font-mono">{formatStars(totalStars)}</p>
-          <p class="text-xs text-gray-500 mt-1">Total Stars</p>
+        <div class="rounded-xl bg-ledger-surface border border-ledger-border p-5 text-center">
+          <p class="text-3xl font-bold text-yellow-700 font-mono">{formatStars(totalStars)}</p>
+          <p class="text-xs text-ledger-faint mt-1">Total Stars</p>
         </div>
-        <div class="rounded-xl bg-ocean-card border border-white/5 p-5 text-center">
+        <div class="rounded-xl bg-ledger-surface border border-ledger-border p-5 text-center">
           <p class="text-3xl font-bold text-coral font-mono">{formatStars(totalForks)}</p>
-          <p class="text-xs text-gray-500 mt-1">Total Forks</p>
+          <p class="text-xs text-ledger-faint mt-1">Total Forks</p>
         </div>
-        <div class="rounded-xl bg-ocean-card border border-white/5 p-5 text-center">
+        <div class="rounded-xl bg-ledger-surface border border-ledger-border p-5 text-center">
           <p class="text-3xl font-bold text-lobster font-mono">{langCount}</p>
-          <p class="text-xs text-gray-500 mt-1">Languages</p>
+          <p class="text-xs text-ledger-faint mt-1">Languages</p>
         </div>
       </div>
 
-      <div class="prose prose-invert max-w-none space-y-5 text-gray-300 leading-relaxed">
+      <div class="prose prose-invert max-w-none space-y-5 text-ledger-muted leading-relaxed">
         <p>
-          In less than two months, the <a href="/projects/openclaw/" class="text-biolum hover:text-biolum-light">OpenClaw</a> personal AI agent framework has spawned an ecosystem of {projectCount} distinct projects spanning {langCount} programming languages, four continents of contributors, and wildly divergent philosophies about what a personal AI agent should be. With a combined {totalStars.toLocaleString()} GitHub stars and over {totalForks.toLocaleString()} forks, the ecosystem has achieved a scale that most open-source communities take years to build. OpenClaw alone sits at {stars('openclaw')} stars, making it one of the fastest-growing repositories in GitHub history, but the real story is not the flagship project -- it is the constellation of clones, rewrites, and opinionated alternatives orbiting around it.
+          In less than two months, the <a href="/projects/openclaw/" class="text-ledger-red hover:text-ledger-coral">OpenClaw</a> personal AI agent framework has spawned an ecosystem of {projectCount} distinct projects spanning {langCount} programming languages, four continents of contributors, and wildly divergent philosophies about what a personal AI agent should be. With a combined {totalStars.toLocaleString()} GitHub stars and over {totalForks.toLocaleString()} forks, the ecosystem has achieved a scale that most open-source communities take years to build. OpenClaw alone sits at {stars('openclaw')} stars, making it one of the fastest-growing repositories in GitHub history, but the real story is not the flagship project -- it is the constellation of clones, rewrites, and opinionated alternatives orbiting around it.
         </p>
         <p>
-          The growth trajectory is striking. This week alone, <a href="/projects/openfang/" class="text-biolum hover:text-biolum-light">OpenFang</a> added {growth7d('openfang').replace('+', '')} stars, <a href="/projects/nullclaw/" class="text-biolum hover:text-biolum-light">NullClaw</a> gained {growth7d('nullclaw').replace('+', '')}, and <a href="/projects/zeroclaw/" class="text-biolum hover:text-biolum-light">ZeroClaw</a> picked up {growth7d('zeroclaw').replace('+', '')}. These are not marginal hobby projects coasting on reflected glory -- they are active codebases with daily commits, regular releases, and growing contributor bases. The ecosystem has passed the critical threshold where network effects begin to compound: developers are building tools for these clones, writing comparison guides, and choosing between them for production workloads.
+          The growth trajectory is striking. This week alone, <a href="/projects/openfang/" class="text-ledger-red hover:text-ledger-coral">OpenFang</a> added {growth7d('openfang').replace('+', '')} stars, <a href="/projects/nullclaw/" class="text-ledger-red hover:text-ledger-coral">NullClaw</a> gained {growth7d('nullclaw').replace('+', '')}, and <a href="/projects/zeroclaw/" class="text-ledger-red hover:text-ledger-coral">ZeroClaw</a> picked up {growth7d('zeroclaw').replace('+', '')}. These are not marginal hobby projects coasting on reflected glory -- they are active codebases with daily commits, regular releases, and growing contributor bases. The ecosystem has passed the critical threshold where network effects begin to compound: developers are building tools for these clones, writing comparison guides, and choosing between them for production workloads.
         </p>
         <p>
-          This analysis draws on live GitHub data collected by Shelldex's automated enrichment pipeline. Every number in this report comes from the <a href="/leaderboard/" class="text-biolum hover:text-biolum-light">leaderboard</a> dataset, updated daily. The goal is not to declare winners -- it is to map the terrain so that developers, teams, and organizations can make informed choices about which project fits their needs. Whether you want raw performance, security-hardened sandboxing, enterprise cloud deployment, or a learning agent that grows with you, there is now a project for that. The question is no longer "should I use OpenClaw?" but "which shell fits best?"
+          This analysis draws on live GitHub data collected by Shelldex's automated enrichment pipeline. Every number in this report comes from the <a href="/leaderboard/" class="text-ledger-red hover:text-ledger-coral">leaderboard</a> dataset, updated daily. The goal is not to declare winners -- it is to map the terrain so that developers, teams, and organizations can make informed choices about which project fits their needs. Whether you want raw performance, security-hardened sandboxing, enterprise cloud deployment, or a learning agent that grows with you, there is now a project for that. The question is no longer "should I use OpenClaw?" but "which shell fits best?"
         </p>
       </div>
     </section>
@@ -183,166 +183,166 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
     <!-- 2. TAXONOMY -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <section class="mb-16">
-      <h2 class="font-display text-3xl font-bold text-white mb-6">2. Taxonomy -- Categories of Clones</h2>
+      <h2 class="font-display text-3xl font-bold text-ledger-text mb-6">2. Taxonomy -- Categories of Clones</h2>
 
-      <p class="text-gray-300 leading-relaxed mb-8">
+      <p class="text-ledger-muted leading-relaxed mb-8">
         Not all OpenClaw derivatives are trying to do the same thing. Some want to be smaller. Some want to be safer. Some want to run on Cloudflare Workers. To make sense of the landscape, we have grouped the {projectCount} tracked projects into six categories based on their primary design philosophy. A project can appear in multiple categories if its goals overlap, but each is listed under its most defining trait.
       </p>
 
       <!-- Tiny Claws -->
-      <div class="rounded-xl bg-ocean-card border border-white/5 p-6 mb-6">
-        <h3 class="font-display text-xl font-bold text-white mb-2">Tiny Claws -- Minimal & Lightweight</h3>
-        <p class="text-gray-400 text-sm mb-4">
-          These projects strip OpenClaw to its essentials. The premise is simple: the original codebase does too much. A personal AI agent should be a thin loop -- read context, call an LLM, execute tools, repeat. Everything else is overhead. The "tiny claws" category ranges from <a href="/projects/bashobot/" class="text-biolum hover:text-biolum-light">BashoBot</a>'s audacious Bash-only implementation to <a href="/projects/nanoclaw/" class="text-biolum hover:text-biolum-light">NanoClaw</a>'s {stars('nanoclaw')}-star TypeScript rewrite that proves minimalism can still attract a crowd. <a href="/projects/picoclaw/" class="text-biolum hover:text-biolum-light">PicoClaw</a>, written in Go, takes the embedded approach -- designed for edge devices and constrained environments where every megabyte counts.
+      <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6 mb-6">
+        <h3 class="font-display text-xl font-bold text-ledger-text mb-2">Tiny Claws -- Minimal & Lightweight</h3>
+        <p class="text-ledger-faint text-sm mb-4">
+          These projects strip OpenClaw to its essentials. The premise is simple: the original codebase does too much. A personal AI agent should be a thin loop -- read context, call an LLM, execute tools, repeat. Everything else is overhead. The "tiny claws" category ranges from <a href="/projects/bashobot/" class="text-ledger-red hover:text-ledger-coral">BashoBot</a>'s audacious Bash-only implementation to <a href="/projects/nanoclaw/" class="text-ledger-red hover:text-ledger-coral">NanoClaw</a>'s {stars('nanoclaw')}-star TypeScript rewrite that proves minimalism can still attract a crowd. <a href="/projects/picoclaw/" class="text-ledger-red hover:text-ledger-coral">PicoClaw</a>, written in Go, takes the embedded approach -- designed for edge devices and constrained environments where every megabyte counts.
         </p>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="border-b border-white/10 text-xs uppercase tracking-wider text-gray-500">
+              <tr class="border-b border-ledger-border text-xs uppercase tracking-wider text-ledger-faint">
                 <th class="py-2 px-3 text-left">Project</th>
                 <th class="py-2 px-3 text-left">Language</th>
                 <th class="py-2 px-3 text-right">Stars</th>
                 <th class="py-2 px-3 text-left">Philosophy</th>
               </tr>
             </thead>
-            <tbody class="text-gray-300">
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/nanoclaw/" class="text-biolum hover:text-biolum-light">NanoClaw</a></td><td class="py-2 px-3"><span class="bg-blue-500/20 text-blue-300 text-xs px-2 py-0.5 rounded-full">TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('nanoclaw')}</td><td class="py-2 px-3 text-gray-400">Minimal core, maximum extensibility</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/picoclaw/" class="text-biolum hover:text-biolum-light">PicoClaw</a></td><td class="py-2 px-3"><span class="bg-cyan-500/20 text-cyan-300 text-xs px-2 py-0.5 rounded-full">Go</span></td><td class="py-2 px-3 text-right font-mono">{stars('picoclaw')}</td><td class="py-2 px-3 text-gray-400">Edge-first, embedded-ready</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/microclaw/" class="text-biolum hover:text-biolum-light">MicroClaw</a></td><td class="py-2 px-3"><span class="bg-orange-500/20 text-orange-300 text-xs px-2 py-0.5 rounded-full">Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('microclaw')}</td><td class="py-2 px-3 text-gray-400">Tiny binary, single-file config</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/tinyclaw/" class="text-biolum hover:text-biolum-light">TinyClaw</a></td><td class="py-2 px-3"><span class="bg-blue-500/20 text-blue-300 text-xs px-2 py-0.5 rounded-full">TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('tinyclaw')}</td><td class="py-2 px-3 text-gray-400">Community-driven simplicity</td></tr>
-              <tr><td class="py-2 px-3"><a href="/projects/bashobot/" class="text-biolum hover:text-biolum-light">BashoBot</a></td><td class="py-2 px-3"><span class="bg-green-500/20 text-green-300 text-xs px-2 py-0.5 rounded-full">Bash</span></td><td class="py-2 px-3 text-right font-mono">{stars('bashobot')}</td><td class="py-2 px-3 text-gray-400">Pure shell, zero dependencies</td></tr>
+            <tbody class="text-ledger-muted">
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/nanoclaw/" class="text-ledger-red hover:text-ledger-coral">NanoClaw</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('nanoclaw')}</td><td class="py-2 px-3 text-ledger-faint">Minimal core, maximum extensibility</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/picoclaw/" class="text-ledger-red hover:text-ledger-coral">PicoClaw</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-cyan-600"></span>Go</span></td><td class="py-2 px-3 text-right font-mono">{stars('picoclaw')}</td><td class="py-2 px-3 text-ledger-faint">Edge-first, embedded-ready</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/microclaw/" class="text-ledger-red hover:text-ledger-coral">MicroClaw</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('microclaw')}</td><td class="py-2 px-3 text-ledger-faint">Tiny binary, single-file config</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/tinyclaw/" class="text-ledger-red hover:text-ledger-coral">TinyClaw</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('tinyclaw')}</td><td class="py-2 px-3 text-ledger-faint">Community-driven simplicity</td></tr>
+              <tr><td class="py-2 px-3"><a href="/projects/bashobot/" class="text-ledger-red hover:text-ledger-coral">BashoBot</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-green-600"></span>Bash</span></td><td class="py-2 px-3 text-right font-mono">{stars('bashobot')}</td><td class="py-2 px-3 text-ledger-faint">Pure shell, zero dependencies</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <!-- Security-First -->
-      <div class="rounded-xl bg-ocean-card border border-white/5 p-6 mb-6">
-        <h3 class="font-display text-xl font-bold text-white mb-2">Security-First</h3>
-        <p class="text-gray-400 text-sm mb-4">
-          Giving an AI agent shell access to your machine is inherently dangerous. These projects treat security as the primary design constraint rather than an afterthought. <a href="/projects/ironclaw/" class="text-biolum hover:text-biolum-light">IronClaw</a> builds a Rust-based sandbox with capability-based permissions. <a href="/projects/safeclaw/" class="text-biolum hover:text-biolum-light">SafeClaw</a> wraps the Python ecosystem in guardrails. <a href="/projects/secure-openclaw/" class="text-biolum hover:text-biolum-light">Secure-OpenClaw</a> is a hardened fork of the original. And <a href="/projects/carapace/" class="text-biolum hover:text-biolum-light">Carapace</a> takes the Rust sandbox concept further with a full audit trail.
+      <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6 mb-6">
+        <h3 class="font-display text-xl font-bold text-ledger-text mb-2">Security-First</h3>
+        <p class="text-ledger-faint text-sm mb-4">
+          Giving an AI agent shell access to your machine is inherently dangerous. These projects treat security as the primary design constraint rather than an afterthought. <a href="/projects/ironclaw/" class="text-ledger-red hover:text-ledger-coral">IronClaw</a> builds a Rust-based sandbox with capability-based permissions. <a href="/projects/safeclaw/" class="text-ledger-red hover:text-ledger-coral">SafeClaw</a> wraps the Python ecosystem in guardrails. <a href="/projects/secure-openclaw/" class="text-ledger-red hover:text-ledger-coral">Secure-OpenClaw</a> is a hardened fork of the original. And <a href="/projects/carapace/" class="text-ledger-red hover:text-ledger-coral">Carapace</a> takes the Rust sandbox concept further with a full audit trail.
         </p>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="border-b border-white/10 text-xs uppercase tracking-wider text-gray-500">
+              <tr class="border-b border-ledger-border text-xs uppercase tracking-wider text-ledger-faint">
                 <th class="py-2 px-3 text-left">Project</th>
                 <th class="py-2 px-3 text-left">Language</th>
                 <th class="py-2 px-3 text-right">Stars</th>
                 <th class="py-2 px-3 text-left">Security Model</th>
               </tr>
             </thead>
-            <tbody class="text-gray-300">
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/ironclaw/" class="text-biolum hover:text-biolum-light">IronClaw</a></td><td class="py-2 px-3"><span class="bg-orange-500/20 text-orange-300 text-xs px-2 py-0.5 rounded-full">Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('ironclaw')}</td><td class="py-2 px-3 text-gray-400">Capability-based sandboxing</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/secure-openclaw/" class="text-biolum hover:text-biolum-light">Secure-OpenClaw</a></td><td class="py-2 px-3"><span class="bg-blue-500/20 text-blue-300 text-xs px-2 py-0.5 rounded-full">TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('secure-openclaw')}</td><td class="py-2 px-3 text-gray-400">Hardened fork with permission layers</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/safeclaw/" class="text-biolum hover:text-biolum-light">SafeClaw</a></td><td class="py-2 px-3"><span class="bg-yellow-500/20 text-yellow-300 text-xs px-2 py-0.5 rounded-full">Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('safeclaw')}</td><td class="py-2 px-3 text-gray-400">Python guardrails and sandboxing</td></tr>
-              <tr><td class="py-2 px-3"><a href="/projects/carapace/" class="text-biolum hover:text-biolum-light">Carapace</a></td><td class="py-2 px-3"><span class="bg-orange-500/20 text-orange-300 text-xs px-2 py-0.5 rounded-full">Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('carapace')}</td><td class="py-2 px-3 text-gray-400">Full audit trail, Rust sandbox</td></tr>
+            <tbody class="text-ledger-muted">
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/ironclaw/" class="text-ledger-red hover:text-ledger-coral">IronClaw</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('ironclaw')}</td><td class="py-2 px-3 text-ledger-faint">Capability-based sandboxing</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/secure-openclaw/" class="text-ledger-red hover:text-ledger-coral">Secure-OpenClaw</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('secure-openclaw')}</td><td class="py-2 px-3 text-ledger-faint">Hardened fork with permission layers</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/safeclaw/" class="text-ledger-red hover:text-ledger-coral">SafeClaw</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('safeclaw')}</td><td class="py-2 px-3 text-ledger-faint">Python guardrails and sandboxing</td></tr>
+              <tr><td class="py-2 px-3"><a href="/projects/carapace/" class="text-ledger-red hover:text-ledger-coral">Carapace</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('carapace')}</td><td class="py-2 px-3 text-ledger-faint">Full audit trail, Rust sandbox</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <!-- Enterprise & Cloud -->
-      <div class="rounded-xl bg-ocean-card border border-white/5 p-6 mb-6">
-        <h3 class="font-display text-xl font-bold text-white mb-2">Enterprise & Cloud</h3>
-        <p class="text-gray-400 text-sm mb-4">
-          While most OpenClaw derivatives are designed for individual developers running agents on their laptops, this cluster targets teams and organizations. <a href="/projects/moltworker/" class="text-biolum hover:text-biolum-light">Moltworker</a>, built by Cloudflare, runs agents on Workers -- serverless, globally distributed, and managed. <a href="/projects/aionui/" class="text-biolum hover:text-biolum-light">AionUi</a> provides a full desktop and web interface for enterprise deployments. <a href="/projects/clawwork/" class="text-biolum hover:text-biolum-light">ClawWork</a> focuses on multi-agent orchestration for production workflows, and <a href="/projects/langbot/" class="text-biolum hover:text-biolum-light">LangBot</a> bridges the gap between AI agents and team messaging platforms.
+      <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6 mb-6">
+        <h3 class="font-display text-xl font-bold text-ledger-text mb-2">Enterprise & Cloud</h3>
+        <p class="text-ledger-faint text-sm mb-4">
+          While most OpenClaw derivatives are designed for individual developers running agents on their laptops, this cluster targets teams and organizations. <a href="/projects/moltworker/" class="text-ledger-red hover:text-ledger-coral">Moltworker</a>, built by Cloudflare, runs agents on Workers -- serverless, globally distributed, and managed. <a href="/projects/aionui/" class="text-ledger-red hover:text-ledger-coral">AionUi</a> provides a full desktop and web interface for enterprise deployments. <a href="/projects/clawwork/" class="text-ledger-red hover:text-ledger-coral">ClawWork</a> focuses on multi-agent orchestration for production workflows, and <a href="/projects/langbot/" class="text-ledger-red hover:text-ledger-coral">LangBot</a> bridges the gap between AI agents and team messaging platforms.
         </p>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="border-b border-white/10 text-xs uppercase tracking-wider text-gray-500">
+              <tr class="border-b border-ledger-border text-xs uppercase tracking-wider text-ledger-faint">
                 <th class="py-2 px-3 text-left">Project</th>
                 <th class="py-2 px-3 text-left">Language</th>
                 <th class="py-2 px-3 text-right">Stars</th>
                 <th class="py-2 px-3 text-left">Target</th>
               </tr>
             </thead>
-            <tbody class="text-gray-300">
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/aionui/" class="text-biolum hover:text-biolum-light">AionUi</a></td><td class="py-2 px-3"><span class="bg-blue-500/20 text-blue-300 text-xs px-2 py-0.5 rounded-full">TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('aionui')}</td><td class="py-2 px-3 text-gray-400">Enterprise UI platform</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/langbot/" class="text-biolum hover:text-biolum-light">LangBot</a></td><td class="py-2 px-3"><span class="bg-yellow-500/20 text-yellow-300 text-xs px-2 py-0.5 rounded-full">Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('langbot')}</td><td class="py-2 px-3 text-gray-400">Team messaging integration</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/moltworker/" class="text-biolum hover:text-biolum-light">Moltworker</a></td><td class="py-2 px-3"><span class="bg-blue-500/20 text-blue-300 text-xs px-2 py-0.5 rounded-full">TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('moltworker')}</td><td class="py-2 px-3 text-gray-400">Cloudflare Workers serverless</td></tr>
-              <tr><td class="py-2 px-3"><a href="/projects/clawwork/" class="text-biolum hover:text-biolum-light">ClawWork</a></td><td class="py-2 px-3"><span class="bg-yellow-500/20 text-yellow-300 text-xs px-2 py-0.5 rounded-full">Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('clawwork')}</td><td class="py-2 px-3 text-gray-400">Multi-agent orchestration</td></tr>
+            <tbody class="text-ledger-muted">
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/aionui/" class="text-ledger-red hover:text-ledger-coral">AionUi</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('aionui')}</td><td class="py-2 px-3 text-ledger-faint">Enterprise UI platform</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/langbot/" class="text-ledger-red hover:text-ledger-coral">LangBot</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('langbot')}</td><td class="py-2 px-3 text-ledger-faint">Team messaging integration</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/moltworker/" class="text-ledger-red hover:text-ledger-coral">Moltworker</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('moltworker')}</td><td class="py-2 px-3 text-ledger-faint">Cloudflare Workers serverless</td></tr>
+              <tr><td class="py-2 px-3"><a href="/projects/clawwork/" class="text-ledger-red hover:text-ledger-coral">ClawWork</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('clawwork')}</td><td class="py-2 px-3 text-ledger-faint">Multi-agent orchestration</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <!-- Research & Memory -->
-      <div class="rounded-xl bg-ocean-card border border-white/5 p-6 mb-6">
-        <h3 class="font-display text-xl font-bold text-white mb-2">Research & Memory</h3>
-        <p class="text-gray-400 text-sm mb-4">
-          The most philosophically interesting corner of the ecosystem. These projects argue that a personal AI agent is only as good as its memory. <a href="/projects/nanobot/" class="text-biolum hover:text-biolum-light">Nanobot</a>, the second-most-starred project in the ecosystem at {stars('nanobot')} stars, is a research-grade agentic framework from HKUDS. <a href="/projects/memu/" class="text-biolum hover:text-biolum-light">memU</a> introduces multi-level persistent memory, and <a href="/projects/memos/" class="text-biolum hover:text-biolum-light">MemOS</a> takes the operating-system metaphor literally -- treating memory as a first-class managed resource. The newest entrant, <a href="/projects/hermes/" class="text-biolum hover:text-biolum-light">Hermes Agent</a> by Nous Research, builds self-authored skills and a growing knowledge base.
+      <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6 mb-6">
+        <h3 class="font-display text-xl font-bold text-ledger-text mb-2">Research & Memory</h3>
+        <p class="text-ledger-faint text-sm mb-4">
+          The most philosophically interesting corner of the ecosystem. These projects argue that a personal AI agent is only as good as its memory. <a href="/projects/nanobot/" class="text-ledger-red hover:text-ledger-coral">Nanobot</a>, the second-most-starred project in the ecosystem at {stars('nanobot')} stars, is a research-grade agentic framework from HKUDS. <a href="/projects/memu/" class="text-ledger-red hover:text-ledger-coral">memU</a> introduces multi-level persistent memory, and <a href="/projects/memos/" class="text-ledger-red hover:text-ledger-coral">MemOS</a> takes the operating-system metaphor literally -- treating memory as a first-class managed resource. The newest entrant, <a href="/projects/hermes/" class="text-ledger-red hover:text-ledger-coral">Hermes Agent</a> by Nous Research, builds self-authored skills and a growing knowledge base.
         </p>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="border-b border-white/10 text-xs uppercase tracking-wider text-gray-500">
+              <tr class="border-b border-ledger-border text-xs uppercase tracking-wider text-ledger-faint">
                 <th class="py-2 px-3 text-left">Project</th>
                 <th class="py-2 px-3 text-left">Language</th>
                 <th class="py-2 px-3 text-right">Stars</th>
                 <th class="py-2 px-3 text-left">Memory Approach</th>
               </tr>
             </thead>
-            <tbody class="text-gray-300">
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/nanobot/" class="text-biolum hover:text-biolum-light">Nanobot</a></td><td class="py-2 px-3"><span class="bg-yellow-500/20 text-yellow-300 text-xs px-2 py-0.5 rounded-full">Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('nanobot')}</td><td class="py-2 px-3 text-gray-400">Research-grade agentic framework</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/memu/" class="text-biolum hover:text-biolum-light">memU</a></td><td class="py-2 px-3"><span class="bg-yellow-500/20 text-yellow-300 text-xs px-2 py-0.5 rounded-full">Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('memu')}</td><td class="py-2 px-3 text-gray-400">Multi-level persistent memory</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/memos/" class="text-biolum hover:text-biolum-light">MemOS</a></td><td class="py-2 px-3"><span class="bg-yellow-500/20 text-yellow-300 text-xs px-2 py-0.5 rounded-full">Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('memos')}</td><td class="py-2 px-3 text-gray-400">Memory as managed OS resource</td></tr>
-              <tr><td class="py-2 px-3"><a href="/projects/hermes/" class="text-biolum hover:text-biolum-light">Hermes Agent</a></td><td class="py-2 px-3"><span class="bg-yellow-500/20 text-yellow-300 text-xs px-2 py-0.5 rounded-full">Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('hermes')}</td><td class="py-2 px-3 text-gray-400">Self-authored skills, growing knowledge</td></tr>
+            <tbody class="text-ledger-muted">
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/nanobot/" class="text-ledger-red hover:text-ledger-coral">Nanobot</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('nanobot')}</td><td class="py-2 px-3 text-ledger-faint">Research-grade agentic framework</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/memu/" class="text-ledger-red hover:text-ledger-coral">memU</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('memu')}</td><td class="py-2 px-3 text-ledger-faint">Multi-level persistent memory</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/memos/" class="text-ledger-red hover:text-ledger-coral">MemOS</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('memos')}</td><td class="py-2 px-3 text-ledger-faint">Memory as managed OS resource</td></tr>
+              <tr><td class="py-2 px-3"><a href="/projects/hermes/" class="text-ledger-red hover:text-ledger-coral">Hermes Agent</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('hermes')}</td><td class="py-2 px-3 text-ledger-faint">Self-authored skills, growing knowledge</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <!-- Faithful Ports -->
-      <div class="rounded-xl bg-ocean-card border border-white/5 p-6 mb-6">
-        <h3 class="font-display text-xl font-bold text-white mb-2">Faithful Ports</h3>
-        <p class="text-gray-400 text-sm mb-4">
-          These projects aim to replicate OpenClaw's behavior faithfully but in a different language. The motivation is usually performance, safety, or ecosystem preference. <a href="/projects/zeroclaw/" class="text-biolum hover:text-biolum-light">ZeroClaw</a> is the Rust port that started the trend and now sits at {stars('zeroclaw')} stars. <a href="/projects/nullclaw/" class="text-biolum hover:text-biolum-light">NullClaw</a> targets Zig for compile-time safety and minimal runtime overhead. <a href="/projects/clawgo/" class="text-biolum hover:text-biolum-light">ClawGo</a> is the official Go implementation, <a href="/projects/mimiclaw/" class="text-biolum hover:text-biolum-light">MimicLaw</a> does it in bare C, and <a href="/projects/openfang/" class="text-biolum hover:text-biolum-light">OpenFang</a> is a second Rust implementation with a different architectural philosophy -- and it is currently the fastest-growing project in the entire ecosystem.
+      <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6 mb-6">
+        <h3 class="font-display text-xl font-bold text-ledger-text mb-2">Faithful Ports</h3>
+        <p class="text-ledger-faint text-sm mb-4">
+          These projects aim to replicate OpenClaw's behavior faithfully but in a different language. The motivation is usually performance, safety, or ecosystem preference. <a href="/projects/zeroclaw/" class="text-ledger-red hover:text-ledger-coral">ZeroClaw</a> is the Rust port that started the trend and now sits at {stars('zeroclaw')} stars. <a href="/projects/nullclaw/" class="text-ledger-red hover:text-ledger-coral">NullClaw</a> targets Zig for compile-time safety and minimal runtime overhead. <a href="/projects/clawgo/" class="text-ledger-red hover:text-ledger-coral">ClawGo</a> is the official Go implementation, <a href="/projects/mimiclaw/" class="text-ledger-red hover:text-ledger-coral">MimicLaw</a> does it in bare C, and <a href="/projects/openfang/" class="text-ledger-red hover:text-ledger-coral">OpenFang</a> is a second Rust implementation with a different architectural philosophy -- and it is currently the fastest-growing project in the entire ecosystem.
         </p>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="border-b border-white/10 text-xs uppercase tracking-wider text-gray-500">
+              <tr class="border-b border-ledger-border text-xs uppercase tracking-wider text-ledger-faint">
                 <th class="py-2 px-3 text-left">Project</th>
                 <th class="py-2 px-3 text-left">Language</th>
                 <th class="py-2 px-3 text-right">Stars</th>
                 <th class="py-2 px-3 text-right">7d Growth</th>
               </tr>
             </thead>
-            <tbody class="text-gray-300">
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/zeroclaw/" class="text-biolum hover:text-biolum-light">ZeroClaw</a></td><td class="py-2 px-3"><span class="bg-orange-500/20 text-orange-300 text-xs px-2 py-0.5 rounded-full">Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('zeroclaw')}</td><td class="py-2 px-3 text-right font-mono text-biolum">{growth7d('zeroclaw')}</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/openfang/" class="text-biolum hover:text-biolum-light">OpenFang</a></td><td class="py-2 px-3"><span class="bg-orange-500/20 text-orange-300 text-xs px-2 py-0.5 rounded-full">Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('openfang')}</td><td class="py-2 px-3 text-right font-mono text-biolum">{growth7d('openfang')}</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/mimiclaw/" class="text-biolum hover:text-biolum-light">MimicLaw</a></td><td class="py-2 px-3"><span class="bg-gray-500/20 text-gray-300 text-xs px-2 py-0.5 rounded-full">C</span></td><td class="py-2 px-3 text-right font-mono">{stars('mimiclaw')}</td><td class="py-2 px-3 text-right font-mono text-biolum">{growth7d('mimiclaw')}</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/nullclaw/" class="text-biolum hover:text-biolum-light">NullClaw</a></td><td class="py-2 px-3"><span class="bg-amber-500/20 text-amber-300 text-xs px-2 py-0.5 rounded-full">Zig</span></td><td class="py-2 px-3 text-right font-mono">{stars('nullclaw')}</td><td class="py-2 px-3 text-right font-mono text-biolum">{growth7d('nullclaw')}</td></tr>
-              <tr><td class="py-2 px-3"><a href="/projects/clawgo/" class="text-biolum hover:text-biolum-light">ClawGo</a></td><td class="py-2 px-3"><span class="bg-cyan-500/20 text-cyan-300 text-xs px-2 py-0.5 rounded-full">Go</span></td><td class="py-2 px-3 text-right font-mono">{stars('clawgo')}</td><td class="py-2 px-3 text-right font-mono text-biolum">{growth7d('clawgo')}</td></tr>
+            <tbody class="text-ledger-muted">
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/zeroclaw/" class="text-ledger-red hover:text-ledger-coral">ZeroClaw</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('zeroclaw')}</td><td class="py-2 px-3 text-right font-mono text-ledger-red">{growth7d('zeroclaw')}</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/openfang/" class="text-ledger-red hover:text-ledger-coral">OpenFang</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('openfang')}</td><td class="py-2 px-3 text-right font-mono text-ledger-red">{growth7d('openfang')}</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/mimiclaw/" class="text-ledger-red hover:text-ledger-coral">MimicLaw</a></td><td class="py-2 px-3"><span class="bg-gray-100 text-ledger-muted text-xs px-2 py-0.5 rounded-full">C</span></td><td class="py-2 px-3 text-right font-mono">{stars('mimiclaw')}</td><td class="py-2 px-3 text-right font-mono text-ledger-red">{growth7d('mimiclaw')}</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/nullclaw/" class="text-ledger-red hover:text-ledger-coral">NullClaw</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Zig</span></td><td class="py-2 px-3 text-right font-mono">{stars('nullclaw')}</td><td class="py-2 px-3 text-right font-mono text-ledger-red">{growth7d('nullclaw')}</td></tr>
+              <tr><td class="py-2 px-3"><a href="/projects/clawgo/" class="text-ledger-red hover:text-ledger-coral">ClawGo</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-cyan-600"></span>Go</span></td><td class="py-2 px-3 text-right font-mono">{stars('clawgo')}</td><td class="py-2 px-3 text-right font-mono text-ledger-red">{growth7d('clawgo')}</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <!-- Opinionated Alternatives -->
-      <div class="rounded-xl bg-ocean-card border border-white/5 p-6">
-        <h3 class="font-display text-xl font-bold text-white mb-2">Opinionated Alternatives</h3>
-        <p class="text-gray-400 text-sm mb-4">
-          These projects are not trying to be OpenClaw. They looked at the agent loop, decided they disagreed with fundamental architectural choices, and built something different. <a href="/projects/moltis/" class="text-biolum hover:text-biolum-light">Moltis</a> rethinks tool orchestration from scratch using Rust. <a href="/projects/clawra/" class="text-biolum hover:text-biolum-light">Clawra</a> adds a persona and emotional-context layer. <a href="/projects/freeclaw/" class="text-biolum hover:text-biolum-light">FreeClaw</a> strips away vendor-specific LLM integrations for true provider agnosticism. <a href="/projects/astrbot/" class="text-biolum hover:text-biolum-light">AstrBot</a> targets multi-platform messaging bots with rich plugin systems. And <a href="/projects/openbrowserclaw/" class="text-biolum hover:text-biolum-light">OpenBrowserClaw</a> takes the agent out of the terminal and into the browser.
+      <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6">
+        <h3 class="font-display text-xl font-bold text-ledger-text mb-2">Opinionated Alternatives</h3>
+        <p class="text-ledger-faint text-sm mb-4">
+          These projects are not trying to be OpenClaw. They looked at the agent loop, decided they disagreed with fundamental architectural choices, and built something different. <a href="/projects/moltis/" class="text-ledger-red hover:text-ledger-coral">Moltis</a> rethinks tool orchestration from scratch using Rust. <a href="/projects/clawra/" class="text-ledger-red hover:text-ledger-coral">Clawra</a> adds a persona and emotional-context layer. <a href="/projects/freeclaw/" class="text-ledger-red hover:text-ledger-coral">FreeClaw</a> strips away vendor-specific LLM integrations for true provider agnosticism. <a href="/projects/astrbot/" class="text-ledger-red hover:text-ledger-coral">AstrBot</a> targets multi-platform messaging bots with rich plugin systems. And <a href="/projects/openbrowserclaw/" class="text-ledger-red hover:text-ledger-coral">OpenBrowserClaw</a> takes the agent out of the terminal and into the browser.
         </p>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="border-b border-white/10 text-xs uppercase tracking-wider text-gray-500">
+              <tr class="border-b border-ledger-border text-xs uppercase tracking-wider text-ledger-faint">
                 <th class="py-2 px-3 text-left">Project</th>
                 <th class="py-2 px-3 text-left">Language</th>
                 <th class="py-2 px-3 text-right">Stars</th>
                 <th class="py-2 px-3 text-left">Differentiator</th>
               </tr>
             </thead>
-            <tbody class="text-gray-300">
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/astrbot/" class="text-biolum hover:text-biolum-light">AstrBot</a></td><td class="py-2 px-3"><span class="bg-yellow-500/20 text-yellow-300 text-xs px-2 py-0.5 rounded-full">Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('astrbot')}</td><td class="py-2 px-3 text-gray-400">Multi-platform messaging with plugins</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/moltis/" class="text-biolum hover:text-biolum-light">Moltis</a></td><td class="py-2 px-3"><span class="bg-orange-500/20 text-orange-300 text-xs px-2 py-0.5 rounded-full">Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('moltis')}</td><td class="py-2 px-3 text-gray-400">Rethought tool orchestration</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/clawra/" class="text-biolum hover:text-biolum-light">Clawra</a></td><td class="py-2 px-3"><span class="bg-blue-500/20 text-blue-300 text-xs px-2 py-0.5 rounded-full">TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('clawra')}</td><td class="py-2 px-3 text-gray-400">Persona and emotional context</td></tr>
-              <tr class="border-b border-white/5"><td class="py-2 px-3"><a href="/projects/openbrowserclaw/" class="text-biolum hover:text-biolum-light">OpenBrowserClaw</a></td><td class="py-2 px-3"><span class="bg-blue-500/20 text-blue-300 text-xs px-2 py-0.5 rounded-full">TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('openbrowserclaw')}</td><td class="py-2 px-3 text-gray-400">Browser-based agent interface</td></tr>
-              <tr><td class="py-2 px-3"><a href="/projects/freeclaw/" class="text-biolum hover:text-biolum-light">FreeClaw</a></td><td class="py-2 px-3"><span class="bg-yellow-500/20 text-yellow-300 text-xs px-2 py-0.5 rounded-full">Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('freeclaw')}</td><td class="py-2 px-3 text-gray-400">Provider-agnostic, no vendor lock-in</td></tr>
+            <tbody class="text-ledger-muted">
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/astrbot/" class="text-ledger-red hover:text-ledger-coral">AstrBot</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('astrbot')}</td><td class="py-2 px-3 text-ledger-faint">Multi-platform messaging with plugins</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/moltis/" class="text-ledger-red hover:text-ledger-coral">Moltis</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>Rust</span></td><td class="py-2 px-3 text-right font-mono">{stars('moltis')}</td><td class="py-2 px-3 text-ledger-faint">Rethought tool orchestration</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/clawra/" class="text-ledger-red hover:text-ledger-coral">Clawra</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('clawra')}</td><td class="py-2 px-3 text-ledger-faint">Persona and emotional context</td></tr>
+              <tr class="border-b border-ledger-border"><td class="py-2 px-3"><a href="/projects/openbrowserclaw/" class="text-ledger-red hover:text-ledger-coral">OpenBrowserClaw</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>TypeScript</span></td><td class="py-2 px-3 text-right font-mono">{stars('openbrowserclaw')}</td><td class="py-2 px-3 text-ledger-faint">Browser-based agent interface</td></tr>
+              <tr><td class="py-2 px-3"><a href="/projects/freeclaw/" class="text-ledger-red hover:text-ledger-coral">FreeClaw</a></td><td class="py-2 px-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>Python</span></td><td class="py-2 px-3 text-right font-mono">{stars('freeclaw')}</td><td class="py-2 px-3 text-ledger-faint">Provider-agnostic, no vendor lock-in</td></tr>
             </tbody>
           </table>
         </div>
@@ -353,16 +353,16 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
     <!-- 3. COMPARATIVE METRICS TABLE -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <section class="mb-16">
-      <h2 class="font-display text-3xl font-bold text-white mb-6">3. Comparative Metrics -- All {projectCount} Projects</h2>
+      <h2 class="font-display text-3xl font-bold text-ledger-text mb-6">3. Comparative Metrics -- All {projectCount} Projects</h2>
 
-      <p class="text-gray-300 leading-relaxed mb-6">
-        The table below presents every project tracked by Shelldex, ordered by GitHub stars. Health is measured by the ratio of open issues to total stars -- a lower ratio indicates a healthier project that is either well-maintained or not yet large enough to accumulate issue debt. Seven-day growth figures are pulled from our daily snapshots and reflect net new stars gained in the trailing week. For live, sortable data, visit the <a href="/leaderboard/" class="text-biolum hover:text-biolum-light">full leaderboard</a>.
+      <p class="text-ledger-muted leading-relaxed mb-6">
+        The table below presents every project tracked by Shelldex, ordered by GitHub stars. Health is measured by the ratio of open issues to total stars -- a lower ratio indicates a healthier project that is either well-maintained or not yet large enough to accumulate issue debt. Seven-day growth figures are pulled from our daily snapshots and reflect net new stars gained in the trailing week. For live, sortable data, visit the <a href="/leaderboard/" class="text-ledger-red hover:text-ledger-coral">full leaderboard</a>.
       </p>
 
-      <div class="overflow-x-auto rounded-xl border border-white/5 bg-ocean-card/50">
+      <div class="overflow-x-auto rounded-xl border border-ledger-border bg-ledger-surface/80">
         <table class="w-full text-sm text-left">
           <thead>
-            <tr class="border-b border-white/10 text-xs uppercase tracking-wider text-gray-500">
+            <tr class="border-b border-ledger-border text-xs uppercase tracking-wider text-ledger-faint">
               <th class="py-3 px-3">#</th>
               <th class="py-3 px-3">Project</th>
               <th class="py-3 px-3">Language</th>
@@ -372,29 +372,29 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
               <th class="py-3 px-3">License</th>
             </tr>
           </thead>
-          <tbody class="text-gray-300">
+          <tbody class="text-ledger-muted">
             {leaderboard.map((entry, i) => {
               const lc = langColor(entry.language);
               const g = entry.star_growth_7d;
               const growthStr = g === null || g === undefined ? '--' : g > 0 ? `+${g.toLocaleString()}` : String(g);
-              const growthColor = g && g > 0 ? 'text-biolum' : 'text-gray-500';
+              const growthColor = g && g > 0 ? 'text-ledger-red' : 'text-ledger-faint';
               return (
-                <tr class={`${i < leaderboard.length - 1 ? 'border-b border-white/5' : ''} hover:bg-ocean-lighter/50`}>
-                  <td class="py-2.5 px-3 font-mono text-gray-500">{i + 1}</td>
-                  <td class="py-2.5 px-3"><a href={`/projects/${entry.slug}/`} class="text-white font-medium hover:text-biolum">{entry.name}</a></td>
+                <tr class={`${i < leaderboard.length - 1 ? 'border-b border-ledger-border' : ''} hover:bg-ledger-surfaceer/50`}>
+                  <td class="py-2.5 px-3 font-mono text-ledger-faint">{i + 1}</td>
+                  <td class="py-2.5 px-3"><a href={`/projects/${entry.slug}/`} class="text-ledger-text font-medium hover:text-ledger-red">{entry.name}</a></td>
                   <td class="py-2.5 px-3"><span class={`${lc.bg} ${lc.text} text-xs px-2 py-0.5 rounded-full`}>{entry.language}</span></td>
-                  <td class="py-2.5 px-3 text-right font-mono text-yellow-300">{entry.stars.toLocaleString()}</td>
+                  <td class="py-2.5 px-3 text-right font-mono text-yellow-700">{entry.stars.toLocaleString()}</td>
                   <td class={`py-2.5 px-3 text-right font-mono ${growthColor}`}>{growthStr}</td>
                   <td class={`py-2.5 px-3 text-center ${healthDot(entry.slug)}`}>&#9679;</td>
-                  <td class="py-2.5 px-3 text-gray-500">{entry.license ?? '--'}</td>
+                  <td class="py-2.5 px-3 text-ledger-faint">{entry.license ?? '--'}</td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
-      <p class="text-xs text-gray-600 mt-3 font-mono">
-        Health: <span class="text-biolum">&#9679;</span> &lt;1% issues/stars &nbsp; <span class="text-yellow-400">&#9679;</span> 1-5% &nbsp; <span class="text-coral">&#9679;</span> &gt;5%
+      <p class="text-xs text-ledger-whisper mt-3 font-mono">
+        Health: <span class="text-ledger-red">&#9679;</span> &lt;1% issues/stars &nbsp; <span class="text-amber-700">&#9679;</span> 1-5% &nbsp; <span class="text-coral">&#9679;</span> &gt;5%
       </p>
     </section>
 
@@ -402,25 +402,25 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
     <!-- 4. GROWTH ANALYSIS -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <section class="mb-16">
-      <h2 class="font-display text-3xl font-bold text-white mb-6">4. Growth Analysis -- Who Is Gaining Stars Fastest?</h2>
+      <h2 class="font-display text-3xl font-bold text-ledger-text mb-6">4. Growth Analysis -- Who Is Gaining Stars Fastest?</h2>
 
-      <p class="text-gray-300 leading-relaxed mb-8">
-        Raw star counts tell you about cumulative popularity, but seven-day growth rates tell you about momentum. The chart below shows the top star gainers in the trailing week. <a href="/projects/openfang/" class="text-biolum hover:text-biolum-light">OpenFang</a>'s explosive {growth7d('openfang')} reflects growing demand for a Rust-native alternative that breaks from ZeroClaw's more conservative design. <a href="/projects/openclaw/" class="text-biolum hover:text-biolum-light">OpenClaw</a> continues its steady accumulation at {growth7d('openclaw')}, though its growth rate as a percentage of its base is far lower than the smaller projects. Most striking is <a href="/projects/nullclaw/" class="text-biolum hover:text-biolum-light">NullClaw</a> at {growth7d('nullclaw')}, which represents significant week-over-week growth -- the kind of momentum that, if sustained, could rapidly change its ranking.
+      <p class="text-ledger-muted leading-relaxed mb-8">
+        Raw star counts tell you about cumulative popularity, but seven-day growth rates tell you about momentum. The chart below shows the top star gainers in the trailing week. <a href="/projects/openfang/" class="text-ledger-red hover:text-ledger-coral">OpenFang</a>'s explosive {growth7d('openfang')} reflects growing demand for a Rust-native alternative that breaks from ZeroClaw's more conservative design. <a href="/projects/openclaw/" class="text-ledger-red hover:text-ledger-coral">OpenClaw</a> continues its steady accumulation at {growth7d('openclaw')}, though its growth rate as a percentage of its base is far lower than the smaller projects. Most striking is <a href="/projects/nullclaw/" class="text-ledger-red hover:text-ledger-coral">NullClaw</a> at {growth7d('nullclaw')}, which represents significant week-over-week growth -- the kind of momentum that, if sustained, could rapidly change its ranking.
       </p>
 
-      <div class="rounded-xl bg-ocean-card border border-white/5 p-6">
-        <h3 class="font-display text-lg font-bold text-white mb-6">7-Day Star Growth Leaders</h3>
+      <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6">
+        <h3 class="font-display text-lg font-bold text-ledger-text mb-6">7-Day Star Growth Leaders</h3>
         <div class="space-y-4">
           {growthLeaders.slice(0, 8).map((entry, i) => {
             const pct = ((entry.star_growth_7d ?? 0) / maxGrowth * 100).toFixed(1);
             const barColor = growthBarColors[Math.min(i, growthBarColors.length - 1)];
-            const textColor = i < 3 ? 'text-ocean' : 'text-white';
+            const textColor = i < 3 ? 'text-ledger-surface' : 'text-ledger-text';
             return (
               <div class="flex items-center gap-3">
                 <div class="w-36 sm:w-44 text-sm text-right">
-                  <a href={`/projects/${entry.slug}/`} class="text-white hover:text-biolum transition-colors">{entry.name}</a>
+                  <a href={`/projects/${entry.slug}/`} class="text-ledger-text hover:text-ledger-red transition-colors">{entry.name}</a>
                 </div>
-                <div class="flex-1 h-8 rounded-lg bg-ocean-lighter overflow-hidden">
+                <div class="flex-1 h-8 rounded-lg bg-ledger-surfaceer overflow-hidden">
                   <div class={`h-full rounded-lg bg-gradient-to-r ${barColor} flex items-center px-3`} style={`width: ${pct}%`}>
                     <span class={`text-xs font-mono ${textColor} font-bold`}>+{(entry.star_growth_7d ?? 0).toLocaleString()}</span>
                   </div>
@@ -431,8 +431,8 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
         </div>
       </div>
 
-      <p class="text-gray-400 text-sm mt-6 leading-relaxed">
-        Projects with zero weekly growth are omitted from this chart. The remaining {projectCount - growthLeaders.length} projects either had no net star gain or are too new to have meaningful trailing-week data. Notably, <a href="/projects/secure-openclaw/" class="text-biolum hover:text-biolum-light">Secure-OpenClaw</a> and <a href="/projects/openbrowserclaw/" class="text-biolum hover:text-biolum-light">OpenBrowserClaw</a> both showed zero growth this week despite having over 400 stars each -- a pattern that may indicate they have reached a plateau in their current audience or are between release cycles. Comparing growth trajectories is one of the most useful features of the <a href="/leaderboard/" class="text-biolum hover:text-biolum-light">leaderboard</a>.
+      <p class="text-ledger-faint text-sm mt-6 leading-relaxed">
+        Projects with zero weekly growth are omitted from this chart. The remaining {projectCount - growthLeaders.length} projects either had no net star gain or are too new to have meaningful trailing-week data. Notably, <a href="/projects/secure-openclaw/" class="text-ledger-red hover:text-ledger-coral">Secure-OpenClaw</a> and <a href="/projects/openbrowserclaw/" class="text-ledger-red hover:text-ledger-coral">OpenBrowserClaw</a> both showed zero growth this week despite having over 400 stars each -- a pattern that may indicate they have reached a plateau in their current audience or are between release cycles. Comparing growth trajectories is one of the most useful features of the <a href="/leaderboard/" class="text-ledger-red hover:text-ledger-coral">leaderboard</a>.
       </p>
     </section>
 
@@ -440,17 +440,17 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
     <!-- 5. SECURITY COMPARISON -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <section class="mb-16">
-      <h2 class="font-display text-3xl font-bold text-white mb-6">5. Security Comparison</h2>
+      <h2 class="font-display text-3xl font-bold text-ledger-text mb-6">5. Security Comparison</h2>
 
-      <div class="prose prose-invert max-w-none space-y-5 text-gray-300 leading-relaxed">
+      <div class="prose prose-invert max-w-none space-y-5 text-ledger-muted leading-relaxed">
         <p>
-          Security is perhaps the most consequential differentiator in the ecosystem. An AI agent with shell access can read your private keys, delete your files, and exfiltrate data to remote servers. OpenClaw's approach to this problem has always been pragmatic rather than principled: it asks for permission before executing commands, maintains a list of approved tools, and trusts the user to make good decisions. This works for experienced developers who understand what <code class="text-biolum bg-biolum/10 px-1.5 py-0.5 rounded text-sm">rm -rf /</code> means, but it falls apart when agents become powerful enough to chain together dozens of tool calls in complex workflows where the security implications of any single step are not obvious in isolation.
+          Security is perhaps the most consequential differentiator in the ecosystem. An AI agent with shell access can read your private keys, delete your files, and exfiltrate data to remote servers. OpenClaw's approach to this problem has always been pragmatic rather than principled: it asks for permission before executing commands, maintains a list of approved tools, and trusts the user to make good decisions. This works for experienced developers who understand what <code class="text-ledger-red bg-ledger-red-bg px-1.5 py-0.5 rounded text-sm">rm -rf /</code> means, but it falls apart when agents become powerful enough to chain together dozens of tool calls in complex workflows where the security implications of any single step are not obvious in isolation.
         </p>
         <p>
-          The security-first projects in the ecosystem take fundamentally different approaches to this problem. <a href="/projects/ironclaw/" class="text-biolum hover:text-biolum-light">IronClaw</a> ({stars('ironclaw')} stars, Rust) implements capability-based security modeled after systems like Capsicum and seL4. Rather than asking "should this agent be allowed to run commands?", IronClaw asks "what specific capabilities does this agent hold?" Capabilities are unforgeable tokens that grant access to specific resources -- a file path, a network endpoint, a subprocess. An agent cannot escalate its own privileges because the capability system is enforced at the Rust type level, not at runtime. This is the most rigorous security model in the ecosystem, but it comes with real usability costs: setting up capability policies requires understanding the capability model, and many OpenClaw skills simply will not work without modification. See how it compares directly in the <a href="/compare/ironclaw-vs-openclaw/" class="text-biolum hover:text-biolum-light">IronClaw vs OpenClaw</a> comparison.
+          The security-first projects in the ecosystem take fundamentally different approaches to this problem. <a href="/projects/ironclaw/" class="text-ledger-red hover:text-ledger-coral">IronClaw</a> ({stars('ironclaw')} stars, Rust) implements capability-based security modeled after systems like Capsicum and seL4. Rather than asking "should this agent be allowed to run commands?", IronClaw asks "what specific capabilities does this agent hold?" Capabilities are unforgeable tokens that grant access to specific resources -- a file path, a network endpoint, a subprocess. An agent cannot escalate its own privileges because the capability system is enforced at the Rust type level, not at runtime. This is the most rigorous security model in the ecosystem, but it comes with real usability costs: setting up capability policies requires understanding the capability model, and many OpenClaw skills simply will not work without modification. See how it compares directly in the <a href="/compare/ironclaw-vs-openclaw/" class="text-ledger-red hover:text-ledger-coral">IronClaw vs OpenClaw</a> comparison.
         </p>
         <p>
-          <a href="/projects/carapace/" class="text-biolum hover:text-biolum-light">Carapace</a> ({stars('carapace')} stars, Rust) takes IronClaw's ideas further by adding a full audit trail. Every tool invocation, every file access, every network request is logged to an append-only ledger. This makes Carapace particularly interesting for regulated environments where you need to prove, after the fact, exactly what an AI agent did and why. The project is still in early preview, but its architecture is sound. <a href="/projects/secure-openclaw/" class="text-biolum hover:text-biolum-light">Secure-OpenClaw</a> ({stars('secure-openclaw')} stars) takes a more conservative approach: it is a fork of the original TypeScript codebase with additional permission layers bolted on. Think of it as OpenClaw with the safety switches turned on by default rather than off. This makes it the easiest migration path for existing OpenClaw users who want better security without switching languages. <a href="/projects/safeclaw/" class="text-biolum hover:text-biolum-light">SafeClaw</a> ({stars('safeclaw')} stars, Python) provides Python-specific guardrails including subprocess sandboxing, file system access controls, and network egress filtering. Its approach is less formally rigorous than IronClaw's but more practical for the Python ecosystem where most AI/ML tooling lives. For a full breakdown, explore the <a href="/compare/safeclaw-vs-ironclaw/" class="text-biolum hover:text-biolum-light">SafeClaw vs IronClaw</a> comparison.
+          <a href="/projects/carapace/" class="text-ledger-red hover:text-ledger-coral">Carapace</a> ({stars('carapace')} stars, Rust) takes IronClaw's ideas further by adding a full audit trail. Every tool invocation, every file access, every network request is logged to an append-only ledger. This makes Carapace particularly interesting for regulated environments where you need to prove, after the fact, exactly what an AI agent did and why. The project is still in early preview, but its architecture is sound. <a href="/projects/secure-openclaw/" class="text-ledger-red hover:text-ledger-coral">Secure-OpenClaw</a> ({stars('secure-openclaw')} stars) takes a more conservative approach: it is a fork of the original TypeScript codebase with additional permission layers bolted on. Think of it as OpenClaw with the safety switches turned on by default rather than off. This makes it the easiest migration path for existing OpenClaw users who want better security without switching languages. <a href="/projects/safeclaw/" class="text-ledger-red hover:text-ledger-coral">SafeClaw</a> ({stars('safeclaw')} stars, Python) provides Python-specific guardrails including subprocess sandboxing, file system access controls, and network egress filtering. Its approach is less formally rigorous than IronClaw's but more practical for the Python ecosystem where most AI/ML tooling lives. For a full breakdown, explore the <a href="/compare/safeclaw-vs-ironclaw/" class="text-ledger-red hover:text-ledger-coral">SafeClaw vs IronClaw</a> comparison.
         </p>
       </div>
     </section>
@@ -459,14 +459,14 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
     <!-- 6. LANGUAGE DISTRIBUTION -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <section class="mb-16">
-      <h2 class="font-display text-3xl font-bold text-white mb-6">6. Language Distribution</h2>
+      <h2 class="font-display text-3xl font-bold text-ledger-text mb-6">6. Language Distribution</h2>
 
-      <p class="text-gray-300 leading-relaxed mb-8">
-        The ecosystem spans {langCount} programming languages, but the distribution is far from even. TypeScript and Python together account for more than half of all projects, which makes sense given the ecosystem's origins: OpenClaw is TypeScript, and most AI/ML tooling is Python. But the Rust cohort is the most interesting story -- {langCounts.get('rust') ?? 0} projects have chosen Rust, and several of them (<a href="/projects/zeroclaw/" class="text-biolum hover:text-biolum-light">ZeroClaw</a>, <a href="/projects/openfang/" class="text-biolum hover:text-biolum-light">OpenFang</a>, <a href="/projects/ironclaw/" class="text-biolum hover:text-biolum-light">IronClaw</a>) are among the fastest-growing in the ecosystem. Rust's appeal for AI agents is obvious: memory safety without garbage collection, fearless concurrency, and the ability to produce single statically-linked binaries. For a tool that runs with root-equivalent access on your machine, these properties matter.
+      <p class="text-ledger-muted leading-relaxed mb-8">
+        The ecosystem spans {langCount} programming languages, but the distribution is far from even. TypeScript and Python together account for more than half of all projects, which makes sense given the ecosystem's origins: OpenClaw is TypeScript, and most AI/ML tooling is Python. But the Rust cohort is the most interesting story -- {langCounts.get('rust') ?? 0} projects have chosen Rust, and several of them (<a href="/projects/zeroclaw/" class="text-ledger-red hover:text-ledger-coral">ZeroClaw</a>, <a href="/projects/openfang/" class="text-ledger-red hover:text-ledger-coral">OpenFang</a>, <a href="/projects/ironclaw/" class="text-ledger-red hover:text-ledger-coral">IronClaw</a>) are among the fastest-growing in the ecosystem. Rust's appeal for AI agents is obvious: memory safety without garbage collection, fearless concurrency, and the ability to produce single statically-linked binaries. For a tool that runs with root-equivalent access on your machine, these properties matter.
       </p>
 
-      <div class="rounded-xl bg-ocean-card border border-white/5 p-6">
-        <h3 class="font-display text-lg font-bold text-white mb-6">Projects per Language</h3>
+      <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6">
+        <h3 class="font-display text-lg font-bold text-ledger-text mb-6">Projects per Language</h3>
         <div class="space-y-4">
           {langCountsSorted.map(([lang, count]) => {
             const pct = (count / maxLangCount * 100).toFixed(1);
@@ -474,10 +474,10 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
             const label = count === 1 ? '1 project' : `${count} projects`;
             return (
               <div class="flex items-center gap-3">
-                <div class="w-28 text-sm text-right text-gray-300">{lang}</div>
-                <div class="flex-1 h-8 rounded-lg bg-ocean-lighter overflow-hidden">
+                <div class="w-28 text-sm text-right text-ledger-muted">{lang}</div>
+                <div class="flex-1 h-8 rounded-lg bg-ledger-surfaceer overflow-hidden">
                   <div class={`h-full rounded-lg ${barCls} flex items-center px-3`} style={`width: ${pct}%`}>
-                    <span class="text-xs font-mono text-white font-bold">{label}</span>
+                    <span class="text-xs font-mono text-ledger-text font-bold">{label}</span>
                   </div>
                 </div>
               </div>
@@ -486,8 +486,8 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
         </div>
       </div>
 
-      <p class="text-gray-400 text-sm mt-6 leading-relaxed">
-        TypeScript dominates because OpenClaw itself is TypeScript, and many derivatives start as forks with incremental modifications. Python's strong showing reflects the AI/ML community's preference -- projects like <a href="/projects/nanobot/" class="text-biolum hover:text-biolum-light">Nanobot</a>, <a href="/projects/memu/" class="text-biolum hover:text-biolum-light">memU</a>, and <a href="/projects/clawwork/" class="text-biolum hover:text-biolum-light">ClawWork</a> leverage Python's deep ecosystem of AI libraries. Rust's {langCounts.get('rust') ?? 0}-project cohort is disproportionately influential relative to its count, representing some of the most technically ambitious and fastest-growing projects. The lone Zig project, <a href="/projects/nullclaw/" class="text-biolum hover:text-biolum-light">NullClaw</a>, is particularly noteworthy -- it gained {growth7d('nullclaw').replace('+', '')} stars this week, suggesting significant appetite for systems-language alternatives beyond Rust. The Go, C, and Bash entries round out the ecosystem with niche but dedicated communities.
+      <p class="text-ledger-faint text-sm mt-6 leading-relaxed">
+        TypeScript dominates because OpenClaw itself is TypeScript, and many derivatives start as forks with incremental modifications. Python's strong showing reflects the AI/ML community's preference -- projects like <a href="/projects/nanobot/" class="text-ledger-red hover:text-ledger-coral">Nanobot</a>, <a href="/projects/memu/" class="text-ledger-red hover:text-ledger-coral">memU</a>, and <a href="/projects/clawwork/" class="text-ledger-red hover:text-ledger-coral">ClawWork</a> leverage Python's deep ecosystem of AI libraries. Rust's {langCounts.get('rust') ?? 0}-project cohort is disproportionately influential relative to its count, representing some of the most technically ambitious and fastest-growing projects. The lone Zig project, <a href="/projects/nullclaw/" class="text-ledger-red hover:text-ledger-coral">NullClaw</a>, is particularly noteworthy -- it gained {growth7d('nullclaw').replace('+', '')} stars this week, suggesting significant appetite for systems-language alternatives beyond Rust. The Go, C, and Bash entries round out the ecosystem with niche but dedicated communities.
       </p>
     </section>
 
@@ -495,82 +495,82 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
     <!-- 7. HOW TO CHOOSE -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <section class="mb-16">
-      <h2 class="font-display text-3xl font-bold text-white mb-6">7. How to Choose -- A Decision Tree</h2>
+      <h2 class="font-display text-3xl font-bold text-ledger-text mb-6">7. How to Choose -- A Decision Tree</h2>
 
-      <p class="text-gray-300 leading-relaxed mb-8">
+      <p class="text-ledger-muted leading-relaxed mb-8">
         {projectCount} projects is a lot. The taxonomy in Section 2 helps narrow the field by philosophy, but most people start with a specific need. Here is a practical decision tree based on the most common questions we see. Each recommendation links to the relevant project page and, where applicable, to head-to-head comparison pages so you can evaluate the tradeoffs yourself.
       </p>
 
       <div class="space-y-4">
-        <div class="rounded-xl bg-ocean-card border border-white/5 p-6">
-          <h3 class="font-display text-lg font-bold text-white mb-2">"I want the most mature, battle-tested option"</h3>
-          <p class="text-gray-400 mb-3">
-            Go with <a href="/projects/openclaw/" class="text-biolum hover:text-biolum-light">OpenClaw</a>. At {ocStars} stars and {ocForks} forks, it has the largest community, the most tools, the most documentation, and the most contributors. Its issue count is high ({ocIssues}), but that is a function of scale, not neglect -- the issues-to-stars ratio of {ocIssueRatio}% is moderate. It releases frequently{ocRelease ? ` (latest: ${ocRelease})` : ''} and has daily commits. Nothing else in the ecosystem comes close to its maturity. If you are starting from scratch and have no strong opinions about language or architecture, this is the default choice.
+        <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6">
+          <h3 class="font-display text-lg font-bold text-ledger-text mb-2">"I want the most mature, battle-tested option"</h3>
+          <p class="text-ledger-faint mb-3">
+            Go with <a href="/projects/openclaw/" class="text-ledger-red hover:text-ledger-coral">OpenClaw</a>. At {ocStars} stars and {ocForks} forks, it has the largest community, the most tools, the most documentation, and the most contributors. Its issue count is high ({ocIssues}), but that is a function of scale, not neglect -- the issues-to-stars ratio of {ocIssueRatio}% is moderate. It releases frequently{ocRelease ? ` (latest: ${ocRelease})` : ''} and has daily commits. Nothing else in the ecosystem comes close to its maturity. If you are starting from scratch and have no strong opinions about language or architecture, this is the default choice.
           </p>
           <div class="flex flex-wrap gap-2">
-            <a href="/projects/openclaw/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View OpenClaw</a>
-            <a href="/compare/openclaw-vs-zeroclaw/" class="text-xs bg-white/5 text-gray-400 px-3 py-1 rounded-full hover:bg-white/10 transition-colors">vs ZeroClaw</a>
-            <a href="/compare/openclaw-vs-nanoclaw/" class="text-xs bg-white/5 text-gray-400 px-3 py-1 rounded-full hover:bg-white/10 transition-colors">vs NanoClaw</a>
+            <a href="/projects/openclaw/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View OpenClaw</a>
+            <a href="/compare/openclaw-vs-zeroclaw/" class="text-xs bg-ledger-red-bg/50 text-ledger-faint px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">vs ZeroClaw</a>
+            <a href="/compare/openclaw-vs-nanoclaw/" class="text-xs bg-ledger-red-bg/50 text-ledger-faint px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">vs NanoClaw</a>
           </div>
         </div>
 
-        <div class="rounded-xl bg-ocean-card border border-white/5 p-6">
-          <h3 class="font-display text-lg font-bold text-white mb-2">"I want maximum performance"</h3>
-          <p class="text-gray-400 mb-3">
-            Look at <a href="/projects/zeroclaw/" class="text-biolum hover:text-biolum-light">ZeroClaw</a> (Rust, {stars('zeroclaw')} stars) or <a href="/projects/nullclaw/" class="text-biolum hover:text-biolum-light">NullClaw</a> (Zig, {stars('nullclaw')} stars). ZeroClaw is more mature and has a larger community. NullClaw offers even lower overhead and compile-time safety guarantees that appeal to the systems programming crowd. Both produce single-binary distributions with no runtime dependencies. For raw startup speed, NullClaw claims sub-10ms cold starts. ZeroClaw counters with more robust tool compatibility and a larger plugin ecosystem.
+        <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6">
+          <h3 class="font-display text-lg font-bold text-ledger-text mb-2">"I want maximum performance"</h3>
+          <p class="text-ledger-faint mb-3">
+            Look at <a href="/projects/zeroclaw/" class="text-ledger-red hover:text-ledger-coral">ZeroClaw</a> (Rust, {stars('zeroclaw')} stars) or <a href="/projects/nullclaw/" class="text-ledger-red hover:text-ledger-coral">NullClaw</a> (Zig, {stars('nullclaw')} stars). ZeroClaw is more mature and has a larger community. NullClaw offers even lower overhead and compile-time safety guarantees that appeal to the systems programming crowd. Both produce single-binary distributions with no runtime dependencies. For raw startup speed, NullClaw claims sub-10ms cold starts. ZeroClaw counters with more robust tool compatibility and a larger plugin ecosystem.
           </p>
           <div class="flex flex-wrap gap-2">
-            <a href="/projects/zeroclaw/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View ZeroClaw</a>
-            <a href="/projects/nullclaw/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View NullClaw</a>
-            <a href="/compare/zeroclaw-vs-nullclaw/" class="text-xs bg-white/5 text-gray-400 px-3 py-1 rounded-full hover:bg-white/10 transition-colors">ZeroClaw vs NullClaw</a>
+            <a href="/projects/zeroclaw/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View ZeroClaw</a>
+            <a href="/projects/nullclaw/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View NullClaw</a>
+            <a href="/compare/zeroclaw-vs-nullclaw/" class="text-xs bg-ledger-red-bg/50 text-ledger-faint px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">ZeroClaw vs NullClaw</a>
           </div>
         </div>
 
-        <div class="rounded-xl bg-ocean-card border border-white/5 p-6">
-          <h3 class="font-display text-lg font-bold text-white mb-2">"I want enterprise-ready with managed infrastructure"</h3>
-          <p class="text-gray-400 mb-3">
-            <a href="/projects/moltworker/" class="text-biolum hover:text-biolum-light">Moltworker</a> ({stars('moltworker')} stars) runs on Cloudflare Workers, giving you global edge deployment with zero infrastructure management. <a href="/projects/aionui/" class="text-biolum hover:text-biolum-light">AionUi</a> ({stars('aionui')} stars) provides a full UI platform with team collaboration features. If your need is more about workflow orchestration than user-facing interfaces, <a href="/projects/clawwork/" class="text-biolum hover:text-biolum-light">ClawWork</a> ({stars('clawwork')} stars) specializes in multi-agent pipelines for production environments.
+        <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6">
+          <h3 class="font-display text-lg font-bold text-ledger-text mb-2">"I want enterprise-ready with managed infrastructure"</h3>
+          <p class="text-ledger-faint mb-3">
+            <a href="/projects/moltworker/" class="text-ledger-red hover:text-ledger-coral">Moltworker</a> ({stars('moltworker')} stars) runs on Cloudflare Workers, giving you global edge deployment with zero infrastructure management. <a href="/projects/aionui/" class="text-ledger-red hover:text-ledger-coral">AionUi</a> ({stars('aionui')} stars) provides a full UI platform with team collaboration features. If your need is more about workflow orchestration than user-facing interfaces, <a href="/projects/clawwork/" class="text-ledger-red hover:text-ledger-coral">ClawWork</a> ({stars('clawwork')} stars) specializes in multi-agent pipelines for production environments.
           </p>
           <div class="flex flex-wrap gap-2">
-            <a href="/projects/moltworker/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View Moltworker</a>
-            <a href="/projects/aionui/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View AionUi</a>
-            <a href="/compare/moltworker-vs-aionui/" class="text-xs bg-white/5 text-gray-400 px-3 py-1 rounded-full hover:bg-white/10 transition-colors">Moltworker vs AionUi</a>
+            <a href="/projects/moltworker/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View Moltworker</a>
+            <a href="/projects/aionui/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View AionUi</a>
+            <a href="/compare/moltworker-vs-aionui/" class="text-xs bg-ledger-red-bg/50 text-ledger-faint px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">Moltworker vs AionUi</a>
           </div>
         </div>
 
-        <div class="rounded-xl bg-ocean-card border border-white/5 p-6">
-          <h3 class="font-display text-lg font-bold text-white mb-2">"I want security-first with minimal attack surface"</h3>
-          <p class="text-gray-400 mb-3">
-            <a href="/projects/ironclaw/" class="text-biolum hover:text-biolum-light">IronClaw</a> ({stars('ironclaw')} stars, Rust) is the gold standard for capability-based sandboxing. If you need audit trails for compliance, look at <a href="/projects/carapace/" class="text-biolum hover:text-biolum-light">Carapace</a> ({stars('carapace')} stars, still in preview but architecturally solid). If you want to stay in the TypeScript/OpenClaw ecosystem but with better defaults, <a href="/projects/secure-openclaw/" class="text-biolum hover:text-biolum-light">Secure-OpenClaw</a> ({stars('secure-openclaw')} stars) is the least disruptive migration path. And for Python shops, <a href="/projects/safeclaw/" class="text-biolum hover:text-biolum-light">SafeClaw</a> ({stars('safeclaw')} stars) provides Python-native guardrails.
+        <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6">
+          <h3 class="font-display text-lg font-bold text-ledger-text mb-2">"I want security-first with minimal attack surface"</h3>
+          <p class="text-ledger-faint mb-3">
+            <a href="/projects/ironclaw/" class="text-ledger-red hover:text-ledger-coral">IronClaw</a> ({stars('ironclaw')} stars, Rust) is the gold standard for capability-based sandboxing. If you need audit trails for compliance, look at <a href="/projects/carapace/" class="text-ledger-red hover:text-ledger-coral">Carapace</a> ({stars('carapace')} stars, still in preview but architecturally solid). If you want to stay in the TypeScript/OpenClaw ecosystem but with better defaults, <a href="/projects/secure-openclaw/" class="text-ledger-red hover:text-ledger-coral">Secure-OpenClaw</a> ({stars('secure-openclaw')} stars) is the least disruptive migration path. And for Python shops, <a href="/projects/safeclaw/" class="text-ledger-red hover:text-ledger-coral">SafeClaw</a> ({stars('safeclaw')} stars) provides Python-native guardrails.
           </p>
           <div class="flex flex-wrap gap-2">
-            <a href="/projects/ironclaw/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View IronClaw</a>
-            <a href="/projects/safeclaw/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View SafeClaw</a>
-            <a href="/compare/ironclaw-vs-secure-openclaw/" class="text-xs bg-white/5 text-gray-400 px-3 py-1 rounded-full hover:bg-white/10 transition-colors">IronClaw vs Secure-OpenClaw</a>
+            <a href="/projects/ironclaw/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View IronClaw</a>
+            <a href="/projects/safeclaw/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View SafeClaw</a>
+            <a href="/compare/ironclaw-vs-secure-openclaw/" class="text-xs bg-ledger-red-bg/50 text-ledger-faint px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">IronClaw vs Secure-OpenClaw</a>
           </div>
         </div>
 
-        <div class="rounded-xl bg-ocean-card border border-white/5 p-6">
-          <h3 class="font-display text-lg font-bold text-white mb-2">"I want minimal and lightweight -- just the agent loop"</h3>
-          <p class="text-gray-400 mb-3">
-            <a href="/projects/tinyclaw/" class="text-biolum hover:text-biolum-light">TinyClaw</a> ({stars('tinyclaw')} stars, TypeScript) strips the agent to its absolute core. <a href="/projects/microclaw/" class="text-biolum hover:text-biolum-light">MicroClaw</a> ({stars('microclaw')} stars, Rust) does the same in a compiled language. For the truly adventurous, <a href="/projects/bashobot/" class="text-biolum hover:text-biolum-light">BashoBot</a> ({stars('bashobot')} stars, Bash) implements the entire agent loop in shell scripts with zero dependencies beyond curl and jq. It is impractical for production use but an excellent teaching tool for understanding what an AI agent actually does at the system call level.
+        <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6">
+          <h3 class="font-display text-lg font-bold text-ledger-text mb-2">"I want minimal and lightweight -- just the agent loop"</h3>
+          <p class="text-ledger-faint mb-3">
+            <a href="/projects/tinyclaw/" class="text-ledger-red hover:text-ledger-coral">TinyClaw</a> ({stars('tinyclaw')} stars, TypeScript) strips the agent to its absolute core. <a href="/projects/microclaw/" class="text-ledger-red hover:text-ledger-coral">MicroClaw</a> ({stars('microclaw')} stars, Rust) does the same in a compiled language. For the truly adventurous, <a href="/projects/bashobot/" class="text-ledger-red hover:text-ledger-coral">BashoBot</a> ({stars('bashobot')} stars, Bash) implements the entire agent loop in shell scripts with zero dependencies beyond curl and jq. It is impractical for production use but an excellent teaching tool for understanding what an AI agent actually does at the system call level.
           </p>
           <div class="flex flex-wrap gap-2">
-            <a href="/projects/tinyclaw/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View TinyClaw</a>
-            <a href="/projects/microclaw/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View MicroClaw</a>
-            <a href="/projects/bashobot/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View BashoBot</a>
+            <a href="/projects/tinyclaw/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View TinyClaw</a>
+            <a href="/projects/microclaw/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View MicroClaw</a>
+            <a href="/projects/bashobot/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View BashoBot</a>
           </div>
         </div>
 
-        <div class="rounded-xl bg-ocean-card border border-white/5 p-6">
-          <h3 class="font-display text-lg font-bold text-white mb-2">"I want an agent that learns and remembers"</h3>
-          <p class="text-gray-400 mb-3">
-            <a href="/projects/memu/" class="text-biolum hover:text-biolum-light">memU</a> ({stars('memu')} stars) pioneered multi-level persistent memory for personal AI agents. <a href="/projects/hermes/" class="text-biolum hover:text-biolum-light">Hermes Agent</a> ({stars('hermes')} stars) by Nous Research goes further with self-authored skills -- the agent writes reusable SKILL.md documents as it solves problems, building a growing knowledge base over time. <a href="/projects/memos/" class="text-biolum hover:text-biolum-light">MemOS</a> ({stars('memos')} stars) treats memory as an operating system resource, giving you the most control over how context is stored, retrieved, and expired.
+        <div class="rounded-xl bg-ledger-surface border border-ledger-border p-6">
+          <h3 class="font-display text-lg font-bold text-ledger-text mb-2">"I want an agent that learns and remembers"</h3>
+          <p class="text-ledger-faint mb-3">
+            <a href="/projects/memu/" class="text-ledger-red hover:text-ledger-coral">memU</a> ({stars('memu')} stars) pioneered multi-level persistent memory for personal AI agents. <a href="/projects/hermes/" class="text-ledger-red hover:text-ledger-coral">Hermes Agent</a> ({stars('hermes')} stars) by Nous Research goes further with self-authored skills -- the agent writes reusable SKILL.md documents as it solves problems, building a growing knowledge base over time. <a href="/projects/memos/" class="text-ledger-red hover:text-ledger-coral">MemOS</a> ({stars('memos')} stars) treats memory as an operating system resource, giving you the most control over how context is stored, retrieved, and expired.
           </p>
           <div class="flex flex-wrap gap-2">
-            <a href="/projects/memu/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View memU</a>
-            <a href="/projects/hermes/" class="text-xs bg-biolum/10 text-biolum px-3 py-1 rounded-full hover:bg-biolum/20 transition-colors">View Hermes Agent</a>
-            <a href="/compare/memu-vs-memos/" class="text-xs bg-white/5 text-gray-400 px-3 py-1 rounded-full hover:bg-white/10 transition-colors">memU vs MemOS</a>
+            <a href="/projects/memu/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View memU</a>
+            <a href="/projects/hermes/" class="text-xs bg-ledger-red-bg text-ledger-red px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">View Hermes Agent</a>
+            <a href="/compare/memu-vs-memos/" class="text-xs bg-ledger-red-bg/50 text-ledger-faint px-3 py-1 rounded-full hover:bg-ledger-red-bg transition-colors">memU vs MemOS</a>
           </div>
         </div>
       </div>
@@ -580,74 +580,74 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
     <!-- 8. ECOSYSTEM TIMELINE -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <section class="mb-16">
-      <h2 class="font-display text-3xl font-bold text-white mb-6">8. Ecosystem Timeline</h2>
+      <h2 class="font-display text-3xl font-bold text-ledger-text mb-6">8. Ecosystem Timeline</h2>
 
-      <p class="text-gray-300 leading-relaxed mb-8">
-        The OpenClaw ecosystem did not emerge gradually. It detonated. What began as a WhatsApp relay bot in November 2025 became a {starsK('openclaw')}-star framework with {projectCount - 1} derivatives in under four months. Here is the full timeline, including the naming drama that became the ecosystem's founding mythology. For the abbreviated version, see the <a href="/about/" class="text-biolum hover:text-biolum-light">About page</a>.
+      <p class="text-ledger-muted leading-relaxed mb-8">
+        The OpenClaw ecosystem did not emerge gradually. It detonated. What began as a WhatsApp relay bot in November 2025 became a {starsK('openclaw')}-star framework with {projectCount - 1} derivatives in under four months. Here is the full timeline, including the naming drama that became the ecosystem's founding mythology. For the abbreviated version, see the <a href="/about/" class="text-ledger-red hover:text-ledger-coral">About page</a>.
       </p>
 
-      <div class="relative border-l-2 border-biolum/30 ml-4 space-y-8 pl-8">
+      <div class="relative border-l-2 border-ledger-red/30 ml-4 space-y-8 pl-8">
         <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-biolum/20 border-2 border-biolum"></div>
-          <p class="text-sm text-biolum font-mono mb-1">November 2025</p>
-          <h3 class="font-display text-lg font-bold text-white">WhatsApp Relay</h3>
-          <p class="text-gray-400 text-sm">Peter Steinberger builds a WhatsApp bot that connects to Claude. It is private, personal, and has no grand ambitions. The bot can manage his calendar, draft messages, and look things up. Nobody outside his circle knows about it. The primordial soup of the ecosystem forms in a private repository with a handful of commits.</p>
+          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
+          <p class="text-sm text-ledger-red font-mono mb-1">November 2025</p>
+          <h3 class="font-display text-lg font-bold text-ledger-text">WhatsApp Relay</h3>
+          <p class="text-ledger-faint text-sm">Peter Steinberger builds a WhatsApp bot that connects to Claude. It is private, personal, and has no grand ambitions. The bot can manage his calendar, draft messages, and look things up. Nobody outside his circle knows about it. The primordial soup of the ecosystem forms in a private repository with a handful of commits.</p>
         </div>
 
         <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-biolum/20 border-2 border-biolum"></div>
-          <p class="text-sm text-biolum font-mono mb-1">November 2025</p>
-          <h3 class="font-display text-lg font-bold text-white">Clawd</h3>
-          <p class="text-gray-400 text-sm">The project gets a real name -- a portmanteau of "claw" and "Claude." The lobster identity begins. Steinberger open-sources the repository and it starts gaining traction on Hacker News and Twitter. Early adopters are iOS developers and indie hackers who want a personal AI agent that runs locally rather than through a web interface.</p>
+          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
+          <p class="text-sm text-ledger-red font-mono mb-1">November 2025</p>
+          <h3 class="font-display text-lg font-bold text-ledger-text">Clawd</h3>
+          <p class="text-ledger-faint text-sm">The project gets a real name -- a portmanteau of "claw" and "Claude." The lobster identity begins. Steinberger open-sources the repository and it starts gaining traction on Hacker News and Twitter. Early adopters are iOS developers and indie hackers who want a personal AI agent that runs locally rather than through a web interface.</p>
         </div>
 
         <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-biolum/20 border-2 border-biolum"></div>
-          <p class="text-sm text-biolum font-mono mb-1">December 2025</p>
-          <h3 class="font-display text-lg font-bold text-white">Clawdis</h3>
-          <p class="text-gray-400 text-sm">A brief identity crisis. The project is renamed Clawdis to differentiate from a similarly named project. Most people who star the repo during this period do not even notice the name change. The feature set expands rapidly: file system access, shell command execution, MCP server integration. The foundation for the tool-use agent loop is laid.</p>
+          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
+          <p class="text-sm text-ledger-red font-mono mb-1">December 2025</p>
+          <h3 class="font-display text-lg font-bold text-ledger-text">Clawdis</h3>
+          <p class="text-ledger-faint text-sm">A brief identity crisis. The project is renamed Clawdis to differentiate from a similarly named project. Most people who star the repo during this period do not even notice the name change. The feature set expands rapidly: file system access, shell command execution, MCP server integration. The foundation for the tool-use agent loop is laid.</p>
         </div>
 
         <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-biolum/20 border-2 border-biolum"></div>
-          <p class="text-sm text-biolum font-mono mb-1">January 2026</p>
-          <h3 class="font-display text-lg font-bold text-white">Clawdbot</h3>
-          <p class="text-gray-400 text-sm">The name that caught fire on GitHub. Stars begin compounding as the project hits the front page of Hacker News multiple times. The community grows to thousands of daily active users. But Anthropic's legal team notices that "Clawd" sounds a lot like "Claude." A polite but firm request arrives. The first rebrand is forced, not chosen.</p>
+          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
+          <p class="text-sm text-ledger-red font-mono mb-1">January 2026</p>
+          <h3 class="font-display text-lg font-bold text-ledger-text">Clawdbot</h3>
+          <p class="text-ledger-faint text-sm">The name that caught fire on GitHub. Stars begin compounding as the project hits the front page of Hacker News multiple times. The community grows to thousands of daily active users. But Anthropic's legal team notices that "Clawd" sounds a lot like "Claude." A polite but firm request arrives. The first rebrand is forced, not chosen.</p>
         </div>
 
         <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-biolum/20 border-2 border-biolum"></div>
-          <p class="text-sm text-biolum font-mono mb-1">January 27, 2026</p>
-          <h3 class="font-display text-lg font-bold text-white">Moltbot</h3>
-          <p class="text-gray-400 text-sm">The trademark-compliant name. "Molt" references crustacean molting -- shedding an old shell to grow. It lasted 72 hours. Steinberger admitted publicly that the name "never quite rolled off the tongue." The community agreed. The GitHub repo URL changed again, breaking hundreds of install scripts and bookmarks. Migration fatigue set in.</p>
+          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
+          <p class="text-sm text-ledger-red font-mono mb-1">January 27, 2026</p>
+          <h3 class="font-display text-lg font-bold text-ledger-text">Moltbot</h3>
+          <p class="text-ledger-faint text-sm">The trademark-compliant name. "Molt" references crustacean molting -- shedding an old shell to grow. It lasted 72 hours. Steinberger admitted publicly that the name "never quite rolled off the tongue." The community agreed. The GitHub repo URL changed again, breaking hundreds of install scripts and bookmarks. Migration fatigue set in.</p>
         </div>
 
         <div class="relative">
           <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-lobster/20 border-2 border-lobster"></div>
           <p class="text-sm text-lobster font-mono mb-1">January 30, 2026</p>
-          <h3 class="font-display text-lg font-bold text-white">OpenClaw</h3>
-          <p class="text-gray-400 text-sm">The final form. "Open" signals the open-source commitment. "Claw" preserves the crustacean heritage without referencing Claude. The community exhales. The GitHub repo settles at openclaw/openclaw and the project crosses 100,000 stars within days. The "open" prefix also signals a philosophical commitment to transparency and community governance that distinguishes it from corporate AI agent products.</p>
+          <h3 class="font-display text-lg font-bold text-ledger-text">OpenClaw</h3>
+          <p class="text-ledger-faint text-sm">The final form. "Open" signals the open-source commitment. "Claw" preserves the crustacean heritage without referencing Claude. The community exhales. The GitHub repo settles at openclaw/openclaw and the project crosses 100,000 stars within days. The "open" prefix also signals a philosophical commitment to transparency and community governance that distinguishes it from corporate AI agent products.</p>
         </div>
 
         <div class="relative">
           <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-coral/20 border-2 border-coral"></div>
           <p class="text-sm text-coral font-mono mb-1">Early February 2026</p>
-          <h3 class="font-display text-lg font-bold text-white">The First Clones Appear</h3>
-          <p class="text-gray-400 text-sm">Within days of the OpenClaw rebrand, the first serious alternatives emerge. ZeroClaw ports the agent to Rust. NanoClaw strips it down to a minimal TypeScript core. IronClaw reimagines the security model from scratch. The Cambrian explosion has begun. Developers who were waiting for the naming to stabilize now start building in earnest, confident that the "OpenClaw" identity is permanent.</p>
+          <h3 class="font-display text-lg font-bold text-ledger-text">The First Clones Appear</h3>
+          <p class="text-ledger-faint text-sm">Within days of the OpenClaw rebrand, the first serious alternatives emerge. ZeroClaw ports the agent to Rust. NanoClaw strips it down to a minimal TypeScript core. IronClaw reimagines the security model from scratch. The Cambrian explosion has begun. Developers who were waiting for the naming to stabilize now start building in earnest, confident that the "OpenClaw" identity is permanent.</p>
         </div>
 
         <div class="relative">
           <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-coral/20 border-2 border-coral"></div>
           <p class="text-sm text-coral font-mono mb-1">Mid February 2026</p>
-          <h3 class="font-display text-lg font-bold text-white">Ecosystem Explosion</h3>
-          <p class="text-gray-400 text-sm">The pace accelerates. Cloudflare ships Moltworker. Nous Research launches Hermes Agent. PicoClaw targets embedded devices. MimicLaw does it in C. NullClaw does it in Zig. AstrBot builds a multi-platform messaging bridge. By mid-February, the ecosystem has more than 20 distinct projects and the need for a directory becomes undeniable. The conversation shifts from "should there be alternatives?" to "which alternative should I use?"</p>
+          <h3 class="font-display text-lg font-bold text-ledger-text">Ecosystem Explosion</h3>
+          <p class="text-ledger-faint text-sm">The pace accelerates. Cloudflare ships Moltworker. Nous Research launches Hermes Agent. PicoClaw targets embedded devices. MimicLaw does it in C. NullClaw does it in Zig. AstrBot builds a multi-platform messaging bridge. By mid-February, the ecosystem has more than 20 distinct projects and the need for a directory becomes undeniable. The conversation shifts from "should there be alternatives?" to "which alternative should I use?"</p>
         </div>
 
         <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-biolum/20 border-2 border-biolum"></div>
-          <p class="text-sm text-biolum font-mono mb-1">February 27, 2026</p>
-          <h3 class="font-display text-lg font-bold text-white">Shelldex Launches</h3>
-          <p class="text-gray-400 text-sm">Originally "Clawdex" (at theclawdex.com), the directory itself undergoes a rebrand to "Shelldex" -- because apparently nothing in this ecosystem can keep a name for more than a week. Shelldex launches at shelldex.com with automated GitHub enrichment, head-to-head comparisons, and daily-updated rankings. The irony of a directory named after shells tracking projects named after claws is not lost on anyone.</p>
+          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
+          <p class="text-sm text-ledger-red font-mono mb-1">February 27, 2026</p>
+          <h3 class="font-display text-lg font-bold text-ledger-text">Shelldex Launches</h3>
+          <p class="text-ledger-faint text-sm">Originally "Clawdex" (at theclawdex.com), the directory itself undergoes a rebrand to "Shelldex" -- because apparently nothing in this ecosystem can keep a name for more than a week. Shelldex launches at shelldex.com with automated GitHub enrichment, head-to-head comparisons, and daily-updated rankings. The irony of a directory named after shells tracking projects named after claws is not lost on anyone.</p>
         </div>
       </div>
     </section>
@@ -656,28 +656,28 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
     <!-- 9. CONCLUSION -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <section class="mb-16">
-      <h2 class="font-display text-3xl font-bold text-white mb-6">9. Conclusion</h2>
+      <h2 class="font-display text-3xl font-bold text-ledger-text mb-6">9. Conclusion</h2>
 
-      <div class="prose prose-invert max-w-none space-y-5 text-gray-300 leading-relaxed">
+      <div class="prose prose-invert max-w-none space-y-5 text-ledger-muted leading-relaxed">
         <p>
           The OpenClaw ecosystem is not just growing -- it is differentiating. The early phase, where every new project was a direct fork with minor tweaks, has given way to genuine architectural diversity. You can now choose between capability-based security in Rust, serverless deployment on Cloudflare, self-improving agents with persistent memory, bare-metal implementations in C and Zig, and opinionated alternatives that rethink the agent loop from first principles. The ecosystem has matured past the "clone everything" stage into something more interesting: a competitive marketplace of ideas about what personal AI agents should be.
         </p>
         <p>
-          The numbers tell one part of the story. At {totalStars.toLocaleString()} combined stars and {totalForks.toLocaleString()} forks, the ecosystem has reached the scale where it attracts serious engineering talent and corporate investment (Cloudflare's Moltworker, Nous Research's Hermes Agent, NearAI's IronClaw). But the numbers miss the qualitative shift: projects like <a href="/projects/openfang/" class="text-biolum hover:text-biolum-light">OpenFang</a> and <a href="/projects/nullclaw/" class="text-biolum hover:text-biolum-light">NullClaw</a> are not just gaining stars -- they are gaining stars faster than projects ten times their size, suggesting that developers are actively seeking out alternatives rather than defaulting to the flagship.
+          The numbers tell one part of the story. At {totalStars.toLocaleString()} combined stars and {totalForks.toLocaleString()} forks, the ecosystem has reached the scale where it attracts serious engineering talent and corporate investment (Cloudflare's Moltworker, Nous Research's Hermes Agent, NearAI's IronClaw). But the numbers miss the qualitative shift: projects like <a href="/projects/openfang/" class="text-ledger-red hover:text-ledger-coral">OpenFang</a> and <a href="/projects/nullclaw/" class="text-ledger-red hover:text-ledger-coral">NullClaw</a> are not just gaining stars -- they are gaining stars faster than projects ten times their size, suggesting that developers are actively seeking out alternatives rather than defaulting to the flagship.
         </p>
         <p>
-          If you are new to the ecosystem, start with the <a href="/" class="text-biolum hover:text-biolum-light">directory</a> for a visual overview, the <a href="/leaderboard/" class="text-biolum hover:text-biolum-light">leaderboard</a> for live rankings, and the <a href="/compare/" class="text-biolum hover:text-biolum-light">comparison tool</a> for head-to-head evaluations. If you are building something that belongs in this directory, <a href="/submit/" class="text-biolum hover:text-biolum-light">submit it</a>. The ecosystem is young, the taxonomy is still forming, and the best project in the family might be the one that does not exist yet.
+          If you are new to the ecosystem, start with the <a href="/" class="text-ledger-red hover:text-ledger-coral">directory</a> for a visual overview, the <a href="/leaderboard/" class="text-ledger-red hover:text-ledger-coral">leaderboard</a> for live rankings, and the <a href="/compare/" class="text-ledger-red hover:text-ledger-coral">comparison tool</a> for head-to-head evaluations. If you are building something that belongs in this directory, <a href="/submit/" class="text-ledger-red hover:text-ledger-coral">submit it</a>. The ecosystem is young, the taxonomy is still forming, and the best project in the family might be the one that does not exist yet.
         </p>
       </div>
 
       <div class="mt-10 flex flex-wrap gap-3">
-        <a href="/" class="inline-flex items-center gap-2 bg-biolum/10 text-biolum px-5 py-2.5 rounded-xl hover:bg-biolum/20 transition-colors font-medium text-sm">
+        <a href="/" class="inline-flex items-center gap-2 bg-ledger-red-bg text-ledger-red px-5 py-2.5 rounded-xl hover:bg-ledger-red-bg transition-colors font-medium text-sm">
           Browse the Directory
         </a>
-        <a href="/leaderboard/" class="inline-flex items-center gap-2 bg-white/5 text-gray-300 px-5 py-2.5 rounded-xl hover:bg-white/10 transition-colors font-medium text-sm">
+        <a href="/leaderboard/" class="inline-flex items-center gap-2 bg-ledger-red-bg/50 text-ledger-muted px-5 py-2.5 rounded-xl hover:bg-ledger-red-bg transition-colors font-medium text-sm">
           View Leaderboard
         </a>
-        <a href="/compare/" class="inline-flex items-center gap-2 bg-white/5 text-gray-300 px-5 py-2.5 rounded-xl hover:bg-white/10 transition-colors font-medium text-sm">
+        <a href="/compare/" class="inline-flex items-center gap-2 bg-ledger-red-bg/50 text-ledger-muted px-5 py-2.5 rounded-xl hover:bg-ledger-red-bg transition-colors font-medium text-sm">
           Compare Projects
         </a>
         <a href="/submit/" class="inline-flex items-center gap-2 bg-lobster/10 text-lobster px-5 py-2.5 rounded-xl hover:bg-lobster/20 transition-colors font-medium text-sm">
@@ -689,10 +689,10 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <!-- FOOTER META -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
-    <footer class="border-t border-white/5 pt-8 mt-16">
-      <div class="text-xs text-gray-600">
+    <footer class="border-t border-ledger-border pt-8 mt-16">
+      <div class="text-xs text-ledger-whisper">
         <p>
-          Data sourced from the <a href="/leaderboard/" class="text-gray-500 hover:text-biolum transition-colors">Shelldex leaderboard</a>, updated on each build via GitHub API enrichment.
+          Data sourced from the <a href="/leaderboard/" class="text-ledger-faint hover:text-ledger-red transition-colors">Shelldex leaderboard</a>, updated on each build via GitHub API enrichment.
         </p>
       </div>
     </footer>

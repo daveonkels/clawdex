@@ -19,3 +19,20 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: alternative
 added: "2026-03-06"
+github_data:
+  stars: 56
+  forks: 10
+  open_issues: 2
+  license: MIT
+  topics:
+    - ai-agents
+    - anthropic
+    - assistant
+    - llm
+    - openclaw
+    - personal
+  last_commit: "2026-03-04T22:33:54Z"
+  latest_release: v0.3.0
+  latest_release_date: "2026-03-04T18:15:49Z"
+  star_growth_7d: 0
+  last_enriched: "2026-03-09T03:59:32.871Z"
