@@ -1,0 +1,21 @@
+name: RT-Claw
+slug: rt-claw
+tagline: Making AI assistants cheap again
+description: A C-based agent runtime built for minimal cost and maximum efficiency. Systems-language approach targeting the low-cost, local-first segment of the ecosystem.
+language: c
+category:
+  - lightweight
+  - local-first
+github: zevorn/rt-claw
+website: https://www.rt-claw.com
+status: active
+tier: 2
+highlight: Written in C, $0/low-cost angle
+emoji: 💰
+platform:
+  - server
+  - embedded
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
+added: 2026-03-28T00:00:00.000Z

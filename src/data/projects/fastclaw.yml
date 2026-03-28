@@ -1,0 +1,19 @@
+name: FastClaw
+slug: fastclaw
+tagline: Faster and better, written in Go
+description: A Go-based OpenClaw alternative focused on speed and simplicity. Built from scratch with performance as the primary design constraint.
+language: go
+category:
+  - performance
+  - lightweight
+github: fastclaw-ai/fastclaw
+status: active
+tier: 3
+highlight: Go-based, speed-first alternative
+emoji: ⚡
+platform:
+  - server
+requires_llm: true
+mcp_support: false
+ecosystem_role: alternative
+added: 2026-03-28T00:00:00.000Z
