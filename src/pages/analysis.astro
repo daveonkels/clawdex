@@ -113,11 +113,13 @@ const langBarColors: Record<string, string> = {
 };
 
 const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
+const analysisTitle = `OpenClaw Ecosystem Analysis: ${projectCount} Alternatives, Forks & Trends (${new Date().getFullYear()}) | Shelldex`;
+const analysisDescription = `Data-driven analysis of ${projectCount} OpenClaw alternatives, forks, and inspired projects. Compare stars, growth trends, languages, security models, and the biggest competitors to OpenClaw.`;
 ---
 
 <Layout
-  title={`OpenClaw Ecosystem: ${projectCount} Projects, ${langCount} Languages — Stats & Trends (${new Date().getFullYear()}) | Shelldex`}
-  description={`A comprehensive data-driven analysis of ${projectCount} projects in the OpenClaw ecosystem. Compare stars, growth, languages, security models, and more across every clone, fork, and alternative.`}
+  title={analysisTitle}
+  description={analysisDescription}
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -175,6 +177,9 @@ const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
         </p>
         <p>
           This analysis draws on live GitHub data collected by Shelldex's automated enrichment pipeline. Every number in this report comes from the <a href="/leaderboard/" class="text-ledger-red hover:text-ledger-coral">leaderboard</a> dataset, updated daily. The goal is not to declare winners -- it is to map the terrain so that developers, teams, and organizations can make informed choices about which project fits their needs. Whether you want raw performance, security-hardened sandboxing, enterprise cloud deployment, or a learning agent that grows with you, there is now a project for that. The question is no longer "should I use OpenClaw?" but "which shell fits best?"
+        </p>
+        <p>
+          If you are evaluating one of the head terms already showing up in search, start with the direct comparisons: <a href="/compare/hermes-vs-openclaw/" class="text-ledger-red hover:text-ledger-coral">Hermes Agent vs OpenClaw</a> and <a href="/compare/astrbot-vs-openclaw/" class="text-ledger-red hover:text-ledger-coral">AstrBot vs OpenClaw</a>. Those pages are the shortest path from ecosystem overview to an actual decision.
         </p>
       </div>
     </section>

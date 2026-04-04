@@ -207,11 +207,29 @@ const breadcrumbJsonLd = {
 };
 
 const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : null;
+const compareToOpenClawHref = slug !== 'openclaw' ? buildComparisonHref(slug, 'openclaw', indexableCompareSlugs) : null;
+
+function buildProjectTitle(): string {
+  if (slug === 'openclaw') {
+    return `${name} — ${tagline} | Shelldex`;
+  }
+  if (slug === 'hermes') {
+    return `Hermes Agent: OpenClaw Alternative, Stats & Comparison | Shelldex`;
+  }
+  return `${name}: ${tagline} — OpenClaw Alternative (${formatStars(projectStars)} Stars) | Shelldex`;
+}
+
+function buildProjectDescription(): string {
+  if (slug === 'hermes') {
+    return `${description} Compare Hermes Agent vs OpenClaw, review ${formatStars(projectStars)} GitHub stars, and see MCP support, health signals, and deployment fit.`;
+  }
+  return `${description} ${langName} project with ${formatStars(projectStars)} GitHub stars.${requires_llm === false ? ' No LLM API needed.' : ''}${mcp_support ? ' MCP support included.' : ''} See stats, health score, and comparisons.`;
+}
 ---
 
 <Layout
-  title={slug === 'openclaw' ? `${name} — ${tagline} | Shelldex` : `${name}: ${tagline} — OpenClaw Alternative (${formatStars(projectStars)} Stars) | Shelldex`}
-  description={`${description} ${langName} project with ${formatStars(projectStars)} GitHub stars.${requires_llm === false ? ' No LLM API needed.' : ''}${mcp_support ? ' MCP support included.' : ''} See stats, health score, and comparisons.`}
+  title={buildProjectTitle()}
+  description={buildProjectDescription()}
 >
   <script type="application/ld+json" set:html={JSON.stringify(softwareJsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
@@ -473,6 +491,15 @@ const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year
         <p class="text-ledger-faint leading-relaxed">
           {name} is an <a href="/projects/openclaw/" class="text-ledger-red hover:underline">OpenClaw</a>-inspired project — part of the growing ecosystem of personal AI agent frameworks that trace their lineage to Peter Steinberger's original self-hosted assistant.
         </p>
+        {compareToOpenClawHref && (
+          <a
+            href={compareToOpenClawHref}
+            class="inline-flex items-center gap-2 mt-4 text-sm text-ledger-faint hover:text-ledger-red transition-colors"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+            Compare {name} vs OpenClaw
+          </a>
+        )}
       </section>
     )}
 

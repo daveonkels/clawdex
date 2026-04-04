@@ -28,6 +28,14 @@ const directory = projects.slice(5);
 const totalStars = projects.reduce((sum, p) => sum + (p.stars ?? 0), 0);
 const uniqueLangs = new Set(projects.map(p => p.language)).size;
 const topGrowth = movers[0];
+const homepageTitle = `OpenClaw Alternatives, Forks & Comparisons (${projects.length} Projects) | Shelldex`;
+const homepageDescription = `Compare ${projects.length} OpenClaw alternatives, forks, and inspired projects by stars, growth, language, and health. Find the best OpenClaw alternative for self-hosted agents, including Hermes Agent, AstrBot, ZeroClaw, and more.`;
+const growthShortcutPairs = [
+  { slug: 'hermes-vs-openclaw', label: 'Hermes Agent vs OpenClaw' },
+  { slug: 'astrbot-vs-openclaw', label: 'AstrBot vs OpenClaw' },
+  { slug: 'nanoclaw-vs-nemoclaw', label: 'NanoClaw vs NemoClaw' },
+  { slug: 'openclaw-vs-openfang', label: 'OpenClaw vs OpenFang' },
+].filter((entry) => indexablePairs.some((pair) => pair.canonical === entry.slug));
 
 // Updated label
 const now = new Date();
@@ -50,7 +58,7 @@ const langDot: Record<string, string> = {
 };
 ---
 
-<Layout title={`OpenClaw Ecosystem: ${projects.length} Projects Compared | Shelldex`}>
+<Layout title={homepageTitle} description={homepageDescription}>
 
   {/* ── Trending Bar ── */}
   {movers.length > 0 && (
@@ -91,6 +99,21 @@ const langDot: Record<string, string> = {
         <p class="text-lg sm:text-xl text-ledger-muted max-w-lg leading-relaxed mb-8">
           The complete registry of OpenClaw clones, forks, and alternatives. {projects.length} projects tracked by stars, growth, and health.
         </p>
+        {growthShortcutPairs.length > 0 && (
+          <div class="mb-8">
+            <p class="text-xs font-mono uppercase tracking-[0.22em] text-ledger-faint mb-3">Most searched comparisons</p>
+            <div class="flex flex-wrap gap-2.5">
+              {growthShortcutPairs.map((pair) => (
+                <a
+                  href={`/compare/${pair.slug}/`}
+                  class="inline-flex items-center gap-2 rounded-full border border-ledger-border bg-ledger-surface px-3 py-1.5 text-sm text-ledger-faint hover:text-ledger-red hover:border-ledger-red/20 transition-all"
+                >
+                  {pair.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
         <div class="flex flex-wrap items-center gap-3">
           <a
             href="#directory"

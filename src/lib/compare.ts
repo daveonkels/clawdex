@@ -505,10 +505,16 @@ export function generateFAQItems(a: Project, b: Project, aEntry: LeaderboardEntr
 
 export function getRelatedComparisons(slugA: string, slugB: string, allPairs: PairEntry[], limit = 8): PairEntry[] {
   const currentCanonical = makeCanonicalSlug(slugA, slugB);
+  const includesOpenClaw = slugA === 'openclaw' || slugB === 'openclaw';
   const related = allPairs.filter(p =>
     p.canonical !== currentCanonical &&
     p.pair === p.canonical && // only canonical versions
     (p.slugA === slugA || p.slugB === slugA || p.slugA === slugB || p.slugB === slugB)
   );
-  return related.slice(0, limit);
+
+  const prioritized = includesOpenClaw
+    ? related
+    : related.filter((p) => p.slugA !== 'openclaw' && p.slugB !== 'openclaw');
+
+  return prioritized.slice(0, limit);
 }

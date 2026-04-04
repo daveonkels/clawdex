@@ -102,11 +102,29 @@ const bLang = languageColors[b.language] || languageColors.multi;
 const year = new Date().getFullYear();
 const aLangName = languageLabel[a.language] ?? a.language;
 const bLangName = languageLabel[b.language] ?? b.language;
+const includesOpenClaw = a.slug === 'openclaw' || b.slug === 'openclaw';
+const nonOpenClawProject = a.slug === 'openclaw' ? b : b.slug === 'openclaw' ? a : null;
 // Title: front-load the matchup for mobile truncation (keep under 55 chars before " | Shelldex")
-const pageTitle = `${a.name} vs ${b.name} (${year}) — Full Comparison | Shelldex`;
+const pageTitle = includesOpenClaw && nonOpenClawProject
+  ? `${nonOpenClawProject.name} vs OpenClaw (${year}) — Alternative Comparison | Shelldex`
+  : `${a.name} vs ${b.name} (${year}) — Full Comparison | Shelldex`;
 
 // Description: lead with the key differentiator, then a hook
 function buildCompareDescription(): string {
+  if (includesOpenClaw && nonOpenClawProject) {
+    const challengerStars = nonOpenClawProject.github_data?.stars ?? nonOpenClawProject.stars ?? 0;
+    const challengerLang = languageLabel[nonOpenClawProject.language] ?? nonOpenClawProject.language;
+    const parts = [
+      `Compare ${nonOpenClawProject.name} vs OpenClaw side by side.`,
+      challengerStars > 0 ? `${nonOpenClawProject.name} has ${formatStars(challengerStars)} GitHub stars and is built in ${challengerLang}.` : `${nonOpenClawProject.name} is built in ${challengerLang}.`,
+    ];
+    if (nonOpenClawProject.mcp_support !== undefined) {
+      parts.push(nonOpenClawProject.mcp_support ? `${nonOpenClawProject.name} includes MCP support.` : `${nonOpenClawProject.name} skips MCP in favor of a narrower design.`);
+    }
+    parts.push('See the direct OpenClaw alternative comparison: features, health signals, and which one fits your stack.');
+    return parts.join(' ');
+  }
+
   const parts: string[] = [];
 
   // Lead with the most interesting differentiator

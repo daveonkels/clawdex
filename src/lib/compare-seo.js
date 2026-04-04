@@ -8,6 +8,12 @@ const MAX_INDEXABLE_COMPARE_PAGES = 120;
 const TOP_PROJECT_POOL = 12;
 const FEATURED_COMPARE_LIMIT = 24;
 
+const EXCLUDED_COMPARE_SLUGS = new Set([
+  'astrbot-vs-openbrowserclaw',
+  'hermes-vs-safeclaw',
+  'hermes-vs-tinyclaw',
+]);
+
 const PROMOTED_COMPARE_SLUGS = new Set(
   [
     ['safeclaw', 'ironclaw'],
@@ -15,10 +21,6 @@ const PROMOTED_COMPARE_SLUGS = new Set(
     ['zeroclaw', 'nullclaw'],
     ['ironclaw', 'secure-openclaw'],
     ['memu', 'memos'],
-    // GSC-driven promotions: these pages are already ranking and driving traffic
-    ['astrbot', 'openbrowserclaw'],
-    ['hermes', 'safeclaw'],
-    ['hermes', 'tinyclaw'],
     ['ironclaw', 'moltis'],
     ['kai', 'secure-openclaw'],
   ].map(([a, b]) => makeCanonicalSlug(a, b)),
@@ -140,6 +142,7 @@ export function getIndexableComparePairs(projects) {
 
   const scoredPairs = getCanonicalPairs(projects)
     .map((pair) => scorePair(projectMap.get(pair.slugA), projectMap.get(pair.slugB), topSlugs))
+    .filter((pair) => !EXCLUDED_COMPARE_SLUGS.has(pair.canonical))
     .sort((left, right) => right.score - left.score || left.canonical.localeCompare(right.canonical));
 
   const selected = new Map();
