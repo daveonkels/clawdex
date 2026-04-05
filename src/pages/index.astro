@@ -20,9 +20,9 @@ const indexablePairs = getIndexableComparePairs(projects);
 const projectMap = new Map(projects.map(p => [p.slug, p]));
 const topComparePairs = indexablePairs.slice(0, 12);
 
-// Tiers
+// Homepage sections
 const featured = projects.slice(0, 5);
-const directory = projects.slice(5);
+const directory = projects;
 
 // Stats for hero
 const totalStars = projects.reduce((sum, p) => sum + (p.stars ?? 0), 0);
@@ -189,7 +189,7 @@ const langDot: Record<string, string> = {
   <section id="directory" class="max-w-[72rem] mx-auto px-5 sm:px-8 pb-16">
     <div class="flex items-baseline gap-3 mb-5">
       <h2 class="font-display text-sm font-bold text-ledger-red uppercase tracking-widest">Full Registry</h2>
-      <span class="text-xs text-ledger-faint font-mono" id="v2-results-count">{directory.length} more</span>
+      <span class="text-xs text-ledger-faint font-mono" id="v2-results-count">{directory.length}</span>
       <div class="flex-1 border-t border-ledger-border"></div>
     </div>
 
@@ -350,7 +350,7 @@ const langDot: Record<string, string> = {
         row.style.display = show ? '' : 'none';
         if (show) visible++;
       });
-      if (countEl) countEl.textContent = `${visible} more`;
+      if (countEl) countEl.textContent = String(visible);
     }
 
     function sortRows() {
