@@ -32,3 +32,6 @@ src/data/generated/
 
 # claude code
 CLAUDE.md
+
+# local agent scratch
+.hermes/
