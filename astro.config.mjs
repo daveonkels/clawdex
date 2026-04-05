@@ -1,19 +1,10 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
-import fs from 'node:fs';
-import path from 'node:path';
-import yaml from 'js-yaml';
 import { getIndexableCompareSlugSet } from './src/lib/compare-seo.js';
+import { loadProjects } from './src/lib/project-loader.js';
 
-function loadProjectsForSitemap() {
-  const projectDir = path.join(process.cwd(), 'src', 'data', 'projects');
-  return fs.readdirSync(projectDir)
-    .filter((file) => file.endsWith('.yml') || file.endsWith('.yaml'))
-    .map((file) => yaml.load(fs.readFileSync(path.join(projectDir, file), 'utf-8')));
-}
-
-const sitemapProjects = loadProjectsForSitemap();
+const sitemapProjects = await loadProjects();
 const indexableCompareSlugs = getIndexableCompareSlugSet(sitemapProjects);
 
 export default defineConfig({

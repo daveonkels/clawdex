@@ -8,6 +8,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "validate": "node scripts/validate-yaml.mjs",
+    "check:sitemap": "node scripts/check-sitemap-noindex.mjs",
     "enrich": "tsx scripts/enrich-github-data.ts",
     "generate-images": "tsx scripts/generate-images.ts"
   },
