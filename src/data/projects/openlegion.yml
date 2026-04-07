@@ -13,7 +13,7 @@ github: openlegion-ai/openlegion
 status: active
 tier: 2
 highlight: Security-first agent fleet — blast-radius containment per agent, vault-proxied credentials agents never see, built-in stealth browser, per-agent budget caps
-emoji: 🛡️
+emoji: 🪖
 platform:
   - server
   - messaging
