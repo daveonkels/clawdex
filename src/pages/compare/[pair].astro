@@ -405,9 +405,12 @@ const metrics = [
   canonicalUrl={isIndexable ? canonicalUrl : redirectCanonicalUrl}
   robots={isIndexable ? 'index, follow' : 'noindex, follow'}
 >
-  {/* Non-indexable pairs: no meta refresh redirect — just noindex + canonical.
-       This avoids "Page with redirect" errors in Search Console while keeping
-       the canonical signal pointing to the right destination. */}
+  {/* Alias and non-indexable pairs: meta refresh redirect to the canonical when the
+       canonical IS in the indexable set. This consolidates Google signals fast.
+       When canonical is not indexable (generic /compare/ hub), keep soft redirect. */}
+  {isIndexable ? null : redirectCanonicalUrl !== 'https://shelldex.com/compare/' ? (
+    <meta http-equiv="refresh" content={`0;url=${redirectCanonicalUrl}`} />
+  ) : null}
   {isIndexable && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />}
   {isIndexable && <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />}
   {isIndexable && faqJsonLd && <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}
