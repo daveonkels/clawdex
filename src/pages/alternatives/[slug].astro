@@ -24,6 +24,13 @@ const { name, slug, language, category, emoji, stars } = project;
 const year = new Date().getFullYear();
 const { entries: leaderboard } = loadLeaderboard();
 
+// GSC-validated slugs that should be indexed; all others stay noindex.
+const INDEXABLE_ALTERNATIVE_SLUGS = new Set([
+  'secure-openclaw',
+  'openfang',
+]);
+const isIndexable = INDEXABLE_ALTERNATIVE_SLUGS.has(slug);
+
 const langName = languageLabel[language] ?? language;
 
 // All other projects, scored by similarity then sorted by stars
@@ -87,7 +94,7 @@ const breadcrumbJsonLd = {
 };
 ---
 
-<Layout title={pageTitle} description={pageDescription} robots="noindex, follow">
+<Layout title={pageTitle} description={pageDescription} robots={isIndexable ? 'index, follow' : 'noindex, follow'} canonicalUrl={isIndexable ? `https://shelldex.com/alternatives/${slug}/` : undefined}>
   <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 

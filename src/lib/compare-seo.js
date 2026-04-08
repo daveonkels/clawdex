@@ -4,14 +4,13 @@
  * allowing the compare hub to handle ad-hoc pairs interactively.
  */
 
-const MAX_INDEXABLE_COMPARE_PAGES = 120;
+const MAX_INDEXABLE_COMPARE_PAGES = 80;
 const TOP_PROJECT_POOL = 12;
 const FEATURED_COMPARE_LIMIT = 24;
 
 const EXCLUDED_COMPARE_SLUGS = new Set([
-  'astrbot-vs-openbrowserclaw',
-  'hermes-vs-safeclaw',
-  'hermes-vs-tinyclaw',
+  // Previously excluded high-demand pages have been re-enabled.
+  // Only add slugs here if they serve zero search demand.
 ]);
 
 const PROMOTED_COMPARE_SLUGS = new Set(
@@ -23,6 +22,12 @@ const PROMOTED_COMPARE_SLUGS = new Set(
     ['memu', 'memos'],
     ['ironclaw', 'moltis'],
     ['kai', 'secure-openclaw'],
+    // GSC-validated high-demand pages (Apr 2026)
+    ['hermes', 'safeclaw'],            // 1,214 impressions — "hermes agent vs openclaw" (safeclaw-vs-hermes-agent URL)
+    ['astrbot', 'openbrowserclaw'],    // 580 impressions — "astrbot vs openclaw" (Google prefers this)
+    ['hermes', 'tinyclaw'],            // 476 impressions — "hermes agent vs openclaw" variant
+    ['nullclaw', 'openclaw'],          // 118 impressions — "nullclaw vs openclaw"
+    ['aionui', 'openbrowserclaw'],     // 54 impressions — "aionui vs openclaw"
   ].map(([a, b]) => makeCanonicalSlug(a, b)),
 );
 

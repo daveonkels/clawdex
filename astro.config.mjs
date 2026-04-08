@@ -7,6 +7,13 @@ import { loadProjects } from './src/lib/project-loader.js';
 const sitemapProjects = await loadProjects();
 const indexableCompareSlugs = getIndexableCompareSlugSet(sitemapProjects);
 
+// Alternatives pages with validated search demand (GSC, Apr 2026).
+// Only index these — rest stay noindex to conserve crawl budget.
+const INDEXABLE_ALTERNATIVE_SLUGS = new Set([
+  'secure-openclaw',  // "openclaw alternative" queries
+  'openfang',         // "openfang alternatives" queries
+]);
+
 export default defineConfig({
   site: 'https://shelldex.com',
   trailingSlash: 'always',
@@ -21,7 +28,8 @@ export default defineConfig({
         }
 
         if (pathname.startsWith('/alternatives/')) {
-          return false;
+          const slug = pathname.split('/').filter(Boolean)[1];
+          return INDEXABLE_ALTERNATIVE_SLUGS.has(slug);
         }
 
         if (pathname.startsWith('/compare/')) {
@@ -37,6 +45,10 @@ export default defineConfig({
         // Editorial pages get highest priority
         if (item.url.includes('/analysis') || item.url.includes('/faq') || item.url.includes('/best-alternatives')) {
           item.priority = 0.9;
+        }
+        // Indexable alternatives pages
+        else if (item.url.includes('/alternatives/')) {
+          item.priority = 0.8;
         }
         // Project detail pages
         else if (item.url.includes('/projects/')) {
