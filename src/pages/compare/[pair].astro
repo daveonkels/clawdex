@@ -155,7 +155,9 @@ function buildCompareDescription(): string {
 }
 
 const pageDescription = buildCompareDescription();
-const redirectCanonicalUrl = redirectUrl.includes('?') ? 'https://shelldex.com/compare/' : redirectUrl;
+const redirectCanonicalUrl = redirectUrl.includes('?')
+  ? 'https://shelldex.com/compare/'
+  : `https://shelldex.com${redirectUrl}`;
 
 function chooseReasons(project: Project, other: Project, projectHealth: number, otherHealth: number): string[] {
   const reasons: string[] = [];
