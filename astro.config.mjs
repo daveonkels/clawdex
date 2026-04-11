@@ -10,6 +10,7 @@ const indexableCompareSlugs = getIndexableCompareSlugSet(sitemapProjects);
 // Alternatives pages with validated search demand (GSC, Apr 2026).
 // Only index these — rest stay noindex to conserve crawl budget.
 const INDEXABLE_ALTERNATIVE_SLUGS = new Set([
+  'hermes',          // "hermes agent alternatives" / OpenClaw-adjacent alternatives intent
   'secure-openclaw',  // "openclaw alternative" queries
   'openfang',         // "openfang alternatives" queries
 ]);

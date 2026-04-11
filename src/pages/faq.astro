@@ -56,6 +56,7 @@ const faqSchemaItems = [
   { q: "How do OpenClaw alternatives handle permissions?", a: "Models vary: OpenClaw uses skill-based permissions, NanoClaw uses OS-level containers, Moltis logs to an immutable audit trail, Carapace requires signed WASM modules, and SafeClaw uses no LLM at all for deterministic rule-based logic." },
   { q: "OpenClaw vs NanoClaw — which is better?", a: `OpenClaw (${stars('openclaw')} stars) is the full-featured reference with the largest community. NanoClaw (${starsNum('nanoclaw')} stars) strips it to five files with OS-level container isolation, trading features for security. Both are TypeScript/MIT.` },
   { q: "OpenClaw vs ZeroClaw — which should I choose?", a: `Choose OpenClaw for broadest plugin support and community. Choose ZeroClaw for raw performance: sub-10ms startup, 3.4MB binary, under 5MB RAM. ZeroClaw is written in Rust; OpenClaw in TypeScript.` },
+  { q: "How does Hermes Agent compare to OpenClaw?", a: `Hermes Agent (${stars('hermes')}) focuses on self-authored skills, memory, and a Python-centric workflow, while OpenClaw (${stars('openclaw')}) is the larger TypeScript reference implementation with a broader plugin ecosystem. If you want a direct side-by-side decision page, use the Hermes Agent vs OpenClaw comparison on Shelldex.` },
   { q: "What's the difference between OpenClaw and its forks?", a: "True forks like Secure-OpenClaw and Moltworker share OpenClaw's codebase. Most alternatives are reimplementations in different languages (Rust, Python, Go, C, Zig) that share the concept but not the code." },
   { q: "What is Shelldex?", a: "Shelldex is a community-maintained directory cataloging every project in the OpenClaw ecosystem. It tracks clones, forks, and reimplementations, comparing them by GitHub stars, language, activity, and health. Formerly known as Clawdex." },
   { q: "How do I submit a project to Shelldex?", a: "Open a pull request on the GitHub repository adding a YAML file to src/data/projects/ with the project's name, description, language, and GitHub URL. A human reviews every submission before merging." },
@@ -381,6 +382,22 @@ const faqSchemaItems = [
 
         <!-- Q16 -->
         <div>
+          <h3 class="font-display text-xl font-semibold text-ledger-text mb-4">How does Hermes Agent compare to OpenClaw?</h3>
+          <div class="text-ledger-muted leading-relaxed space-y-4">
+            <p>
+              <a href="/projects/hermes/" class="text-ledger-red hover:text-ledger-coral transition-colors">Hermes Agent</a> is a Python-based alternative that leans into self-authored skills, memory, and a narrower agent workflow. <a href="/projects/openclaw/" class="text-ledger-red hover:text-ledger-coral transition-colors">OpenClaw</a> is still the larger TypeScript reference implementation with the broadest community, plugin surface, and documentation footprint.
+            </p>
+            <p>
+              Choose Hermes if you want a more opinionated memory-first agent and are comfortable with its smaller ecosystem. Choose OpenClaw if you value maturity, breadth of integrations, and the strongest community proof. Hermes has {starsNum('hermes')} GitHub stars, while OpenClaw leads the ecosystem at {starsNum('openclaw')}.
+            </p>
+            <p>
+              For the direct side-by-side breakdown, go to <a href="/compare/hermes-vs-openclaw/" class="text-ledger-red hover:text-ledger-coral transition-colors">Hermes Agent vs OpenClaw</a>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Q17 -->
+        <div>
           <h3 class="font-display text-xl font-semibold text-ledger-text mb-4">What's the difference between OpenClaw and its forks?</h3>
           <div class="text-ledger-muted leading-relaxed space-y-4">
             <p>
@@ -404,7 +421,7 @@ const faqSchemaItems = [
       <h2 class="font-display text-3xl font-bold text-ledger-text mb-10 pb-4 border-b border-ledger-border">Ecosystem &amp; Shelldex</h2>
 
       <div class="space-y-12">
-        <!-- Q17 -->
+        <!-- Q18 -->
         <div>
           <h3 class="font-display text-xl font-semibold text-ledger-text mb-4">What is Shelldex?</h3>
           <div class="text-ledger-muted leading-relaxed space-y-4">

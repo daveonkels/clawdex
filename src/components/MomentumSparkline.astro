@@ -1,0 +1,135 @@
+---
+import { formatStars } from '../lib/projects';
+import {
+  getMomentumRatio,
+  getProjectMomentum,
+  getProjectMomentumSnapshots,
+} from '../lib/momentum.js';
+
+interface Props {
+  project: any;
+  averageGrowth7d?: number;
+  compact?: boolean;
+  label?: string;
+}
+
+const {
+  project,
+  averageGrowth7d = 0,
+  compact = false,
+  label = compact ? 'Momentum' : 'Momentum vs ecosystem average',
+} = Astro.props;
+
+const snapshots = getProjectMomentumSnapshots(project, undefined, compact ? 10 : 12);
+const growth7d = getProjectMomentum(project);
+const ratio = getMomentumRatio(project, averageGrowth7d);
+
+const width = compact ? 96 : 136;
+const height = compact ? 28 : 40;
+const padding = compact ? 3 : 4;
+const values = snapshots.length > 0
+  ? snapshots.map((snapshot) => snapshot.stars)
+  : [project?.github_data?.stars ?? project?.stars ?? 0];
+const minValue = Math.min(...values);
+const maxValue = Math.max(...values);
+const range = Math.max(maxValue - minValue, 1);
+
+function pointY(value: number): number {
+  return height - padding - ((value - minValue) / range) * (height - padding * 2);
+}
+
+const points = values.map((value, index) => {
+  const x = values.length === 1
+    ? width / 2
+    : padding + (index * (width - padding * 2)) / (values.length - 1);
+  return `${x},${pointY(value)}`;
+});
+
+const linePoints = points.join(' ');
+const areaPoints = [
+  `${padding},${height - padding}`,
+  ...points,
+  `${width - padding},${height - padding}`,
+].join(' ');
+const lastPoint = points[points.length - 1]?.split(',').map(Number) ?? [width - padding, height / 2];
+
+const paceTone = ratio === null
+  ? 'muted'
+  : ratio >= 1.25
+    ? 'hot'
+    : ratio >= 0.85
+      ? 'steady'
+      : 'cool';
+
+const paceLabel = ratio === null
+  ? 'No recent 7d lift'
+  : ratio >= 1.25
+    ? `${ratio.toFixed(ratio >= 10 ? 0 : 1)}x ecosystem avg`
+    : ratio >= 0.85
+      ? 'Tracking near avg'
+      : `${Math.round(ratio * 100)}% of avg`;
+
+const metaClass = paceTone === 'hot'
+  ? 'text-ledger-red'
+  : paceTone === 'steady'
+    ? 'text-amber-700'
+    : 'text-ledger-faint';
+const stroke = paceTone === 'hot'
+  ? '#dc2626'
+  : paceTone === 'steady'
+    ? '#b45309'
+    : '#9ca3af';
+const fill = paceTone === 'hot'
+  ? 'rgba(220, 38, 38, 0.12)'
+  : paceTone === 'steady'
+    ? 'rgba(180, 83, 9, 0.10)'
+    : 'rgba(156, 163, 175, 0.08)';
+---
+
+<div class={`flex items-center ${compact ? 'gap-3' : 'gap-4'} min-w-0`}>
+  <div class="min-w-0">
+    <p class={`font-mono uppercase tracking-[0.2em] ${compact ? 'text-[9px]' : 'text-[10px]'} text-ledger-whisper`}>
+      {label}
+    </p>
+    <div class="flex items-baseline gap-2 mt-1">
+      <span class={`font-mono ${compact ? 'text-sm' : 'text-lg'} ${growth7d > 0 ? 'text-ledger-text' : 'text-ledger-faint'}`}>
+        {growth7d > 0 ? `+${formatStars(growth7d)}` : '0'}
+      </span>
+      <span class={`text-xs ${metaClass}`}>{paceLabel}</span>
+    </div>
+    {!compact && snapshots.length > 1 && (
+      <p class="text-xs text-ledger-whisper mt-1">
+        {snapshots[0].date} to {snapshots[snapshots.length - 1].date}
+      </p>
+    )}
+  </div>
+
+  <svg
+    width={width}
+    height={height}
+    viewBox={`0 0 ${width} ${height}`}
+    class="shrink-0 overflow-visible"
+    role="img"
+    aria-label={`${project?.name ?? 'Project'} momentum sparkline`}
+  >
+    <polygon
+      points={areaPoints}
+      fill={fill}
+      stroke="none"
+    />
+    <polyline
+      points={linePoints}
+      fill="none"
+      stroke={stroke}
+      stroke-width={compact ? '2' : '2.4'}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <circle
+      cx={lastPoint[0]}
+      cy={lastPoint[1]}
+      r={compact ? '2.4' : '3'}
+      fill={stroke}
+    />
+  </svg>
+</div>

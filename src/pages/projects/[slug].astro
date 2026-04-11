@@ -1,9 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import MomentumSparkline from '../../components/MomentumSparkline.astro';
 import { loadProjects, formatStars } from '../../lib/projects';
 import type { Project } from '../../lib/projects';
 import { languageLabel, languageColors, statusColors } from '../../lib/constants';
 import { buildComparisonHref, getIndexableCompareSlugSet } from '../../lib/compare-seo.js';
+import { getAverageGrowth7d } from '../../lib/momentum.js';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -81,6 +83,7 @@ const otherProjects = allProjects.filter(p => p.slug !== slug);
 const indexableCompareSlugs = getIndexableCompareSlugSet(allProjects);
 const openclawProject = allProjects.find(p => p.slug === 'openclaw');
 const openclawStars = openclawProject?.github_data?.stars ?? openclawProject?.stars ?? 0;
+const averageGrowth7d = getAverageGrowth7d(allProjects);
 
 // Similar projects: share categories or language, sorted by most categories in common then by stars
 const similarProjects = otherProjects
@@ -280,6 +283,18 @@ function buildProjectDescription(): string {
           <span class="inline-flex items-center px-3 py-1 rounded-full bg-ledger-surface border border-ledger-border text-sm text-ledger-muted">{cat}</span>
         ))}
       </div>
+      {slug === 'hermes' && compareToOpenClawHref && (
+        <div class="mt-6 rounded-xl border border-ledger-red/20 bg-ledger-red/5 px-5 py-4">
+          <p class="text-xs font-mono uppercase tracking-[0.18em] text-ledger-faint mb-2">Most Searched Comparison</p>
+          <a
+            href={compareToOpenClawHref}
+            class="inline-flex items-center gap-2 text-ledger-red hover:text-ledger-coral transition-colors font-medium"
+          >
+            Compare Hermes Agent vs OpenClaw
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          </a>
+        </div>
+      )}
     </header>
 
     <!-- Description -->
@@ -432,6 +447,9 @@ function buildProjectDescription(): string {
             <span>Latest release: <span class="text-ledger-faint font-mono">{github_data.latest_release}</span></span>
           )}
         </div>
+        <div class="mt-4 rounded-xl border border-ledger-border bg-white/60 px-4 py-4">
+          <MomentumSparkline project={project} averageGrowth7d={averageGrowth7d} label={`${name} momentum`} />
+        </div>
       </section>
     )}
 
@@ -494,7 +512,7 @@ function buildProjectDescription(): string {
         {compareToOpenClawHref && (
           <a
             href={compareToOpenClawHref}
-            class="inline-flex items-center gap-2 mt-4 text-sm text-ledger-faint hover:text-ledger-red transition-colors"
+            class={`inline-flex items-center gap-2 mt-4 transition-colors ${slug === 'hermes' ? 'text-ledger-red font-medium' : 'text-sm text-ledger-faint hover:text-ledger-red'}`}
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
             Compare {name} vs OpenClaw

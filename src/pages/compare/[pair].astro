@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import MomentumSparkline from '../../components/MomentumSparkline.astro';
 import { loadProjects, formatStars } from '../../lib/projects';
 import { languageLabel, languageColors } from '../../lib/constants';
 import {
@@ -15,6 +16,7 @@ import {
 import type { PairEntry, LeaderboardEntry, FAQItem } from '../../lib/compare';
 import type { Project } from '../../lib/projects';
 import { buildComparisonHref } from '../../lib/compare-seo.js';
+import { getAverageGrowth7d } from '../../lib/momentum.js';
 
 export async function getStaticPaths() {
   const projects = await loadProjects();
@@ -95,6 +97,7 @@ const aRank = aEntry?.rank ?? null;
 const bRank = bEntry?.rank ?? null;
 const lb = loadLeaderboard();
 const lbTotal = lb.count;
+const averageGrowth7d = getAverageGrowth7d(lb.entries);
 
 const aLang = languageColors[a.language] || languageColors.multi;
 const bLang = languageColors[b.language] || languageColors.multi;
@@ -104,6 +107,7 @@ const aLangName = languageLabel[a.language] ?? a.language;
 const bLangName = languageLabel[b.language] ?? b.language;
 const includesOpenClaw = a.slug === 'openclaw' || b.slug === 'openclaw';
 const nonOpenClawProject = a.slug === 'openclaw' ? b : b.slug === 'openclaw' ? a : null;
+const isAstrbotVsOpenBrowserClaw = [a.slug, b.slug].sort().join('-vs-') === 'astrbot-vs-openbrowserclaw';
 // Title: front-load the matchup for mobile truncation (keep under 55 chars before " | Shelldex")
 const pageTitle = includesOpenClaw && nonOpenClawProject
   ? `${nonOpenClawProject.name} vs OpenClaw (${year}) — Alternative Comparison | Shelldex`
@@ -456,6 +460,11 @@ const metrics = [
       <p class="text-ledger-faint mt-4 max-w-2xl mx-auto">
         Side-by-side comparison of {a.name} and {b.name} — two projects in the OpenClaw ecosystem.
       </p>
+      {isAstrbotVsOpenBrowserClaw && (
+        <p class="mt-4 max-w-2xl mx-auto rounded-xl border border-ledger-red/15 bg-ledger-red/5 px-4 py-3 text-sm text-ledger-muted">
+          Looking for <a href="/compare/astrbot-vs-openclaw/" class="text-ledger-red hover:text-ledger-coral transition-colors">AstrBot vs OpenClaw</a>? That is the direct comparison page most people mean when they search this matchup.
+        </p>
+      )}
     </header>
 
     <section class="mb-12">
@@ -467,6 +476,19 @@ const metrics = [
         <p class="text-ledger-faint leading-relaxed">
           Use the score table for the hard numbers, then use the decision notes below to figure out which tradeoffs matter for your team.
         </p>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="rounded-xl border border-ledger-border bg-white/70 p-5">
+          <p class="text-sm font-semibold text-ledger-text mb-3">{a.emoji} {a.name}</p>
+          <MomentumSparkline project={a} averageGrowth7d={averageGrowth7d} label={`${a.name} momentum`} />
+        </div>
+        <div class="rounded-xl border border-ledger-border bg-white/70 p-5">
+          <p class="text-sm font-semibold text-ledger-text mb-3">{b.emoji} {b.name}</p>
+          <MomentumSparkline project={b} averageGrowth7d={averageGrowth7d} label={`${b.name} momentum`} />
+        </div>
       </div>
     </section>
 

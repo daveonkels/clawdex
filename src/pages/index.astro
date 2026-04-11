@@ -1,7 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import MomentumSparkline from '../components/MomentumSparkline.astro';
 import { loadProjects, getUniqueLanguages, formatStars } from '../lib/projects';
 import { loadLeaderboard, getIndexableComparePairs } from '../lib/compare';
+import { getAverageGrowth7d } from '../lib/momentum.js';
 import fs from 'node:fs';
 
 const projects = await loadProjects();
@@ -12,13 +14,20 @@ const leaderboard = loadLeaderboard();
 const movers = leaderboard.entries
   .filter(e => e.star_growth_7d && e.star_growth_7d > 0)
   .sort((a, b) => (b.star_growth_7d ?? 0) - (a.star_growth_7d ?? 0));
+const averageGrowth7d = getAverageGrowth7d(leaderboard.entries);
 const lbRaw = JSON.parse(fs.readFileSync('src/data/generated/leaderboard.json', 'utf-8'));
 const generatedDate = new Date(lbRaw.generated);
 
 // Top comparison pairs
 const indexablePairs = getIndexableComparePairs(projects);
 const projectMap = new Map(projects.map(p => [p.slug, p]));
-const topComparePairs = indexablePairs.slice(0, 12);
+const topOpenClawPairs = indexablePairs
+  .filter((pair) => pair.slugA === 'openclaw' || pair.slugB === 'openclaw')
+  .slice(0, 6);
+const topEditorialPairs = indexablePairs
+  .filter((pair) => pair.slugA !== 'openclaw' && pair.slugB !== 'openclaw')
+  .slice(0, 6);
+const topComparePairs = [...topOpenClawPairs, ...topEditorialPairs];
 
 // Homepage sections
 const featured = projects.slice(0, 5);
@@ -63,26 +72,39 @@ const langDot: Record<string, string> = {
   {/* ── Trending Bar ── */}
   {movers.length > 0 && (
     <div class="border-b border-ledger-border bg-ledger-surface">
-      <div class="max-w-[72rem] mx-auto px-5 sm:px-8 py-3">
-        <div class="flex items-center gap-3">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-ledger-faint shrink-0">Trending</span>
-          <div class="relative flex-1 min-w-0">
-            <div class="absolute inset-y-0 right-0 w-12 z-10 pointer-events-none bg-gradient-to-l from-ledger-surface to-transparent"></div>
-            <div class="flex gap-2 overflow-x-auto trending-scroll pr-12">
-              {movers.slice(0, 8).map(m => {
-                const proj = projects.find(p => p.name === m.name);
-                return (
-                  <a
-                    href={proj ? `/projects/${proj.slug}/` : '#'}
-                    class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-ledger-border bg-ledger-hover hover:border-ledger-border-strong transition-colors text-sm"
-                  >
-                    {proj?.emoji && <span>{proj.emoji}</span>}
-                    <span class="font-medium text-ledger-text">{m.name}</span>
-                    <span class="font-mono text-ledger-red text-xs font-bold">+{formatStars(m.star_growth_7d ?? 0)}</span>
-                  </a>
-                );
-              })}
-            </div>
+      <div class="max-w-[72rem] mx-auto px-5 sm:px-8 py-4">
+        <div class="flex items-end justify-between gap-4 mb-3">
+          <div>
+            <p class="text-[10px] font-mono uppercase tracking-[0.24em] text-ledger-faint">Momentum Watch</p>
+            <p class="text-sm text-ledger-whisper mt-1">7-day GitHub star velocity against the ecosystem average.</p>
+          </div>
+          <span class="text-[10px] font-mono uppercase tracking-[0.18em] text-ledger-whisper hidden sm:inline">Updated {updatedLabel}</span>
+        </div>
+        <div class="relative min-w-0">
+          <div class="absolute inset-y-0 right-0 w-12 z-10 pointer-events-none bg-gradient-to-l from-ledger-surface to-transparent"></div>
+          <div class="flex gap-3 overflow-x-auto trending-scroll pr-12 pb-1">
+            {movers.slice(0, 8).map((m) => {
+              const proj = projectMap.get(m.slug);
+              if (!proj) return null;
+
+              return (
+                <a
+                  href={`/projects/${proj.slug}/`}
+                  class="shrink-0 w-[250px] rounded-2xl border border-ledger-border bg-white/70 px-4 py-3 hover:border-ledger-red/20 hover:bg-ledger-red-bg transition-colors"
+                >
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span class="text-xl">{proj.emoji}</span>
+                    <div class="min-w-0">
+                      <p class="font-semibold text-ledger-text truncate">{proj.name}</p>
+                      <p class="text-xs text-ledger-faint truncate">{proj.tagline}</p>
+                    </div>
+                  </div>
+                  <div class="mt-3">
+                    <MomentumSparkline project={proj} averageGrowth7d={averageGrowth7d} compact={true} label="7d pace" />
+                  </div>
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>

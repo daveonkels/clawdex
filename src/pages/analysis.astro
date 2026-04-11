@@ -113,8 +113,8 @@ const langBarColors: Record<string, string> = {
 };
 
 const maxLangCount = langCountsSorted.length > 0 ? langCountsSorted[0][1] : 1;
-const analysisTitle = `OpenClaw Ecosystem Analysis: ${projectCount} Alternatives, Forks & Trends (${new Date().getFullYear()}) | Shelldex`;
-const analysisDescription = `Data-driven analysis of ${projectCount} OpenClaw alternatives, forks, and inspired projects. Compare stars, growth trends, languages, security models, and the biggest competitors to OpenClaw.`;
+const analysisTitle = `Best OpenClaw Alternatives Ranked (${new Date().getFullYear()}) — Stars, Growth & Health | Shelldex`;
+const analysisDescription = `${projectCount} OpenClaw alternatives ranked by GitHub stars, growth momentum, and health score. See which forks are fastest-growing, which are safest, and which match your stack.`;
 ---
 
 <Layout
@@ -124,8 +124,8 @@ const analysisDescription = `Data-driven analysis of ${projectCount} OpenClaw al
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": `OpenClaw Ecosystem Analysis: ${projectCount} Projects Compared`,
-    "description": `A comprehensive data-driven analysis of ${projectCount} projects in the OpenClaw ecosystem. Compare stars, growth, languages, security models, and more across every clone, fork, and alternative.`,
+    "name": `Best OpenClaw Alternatives Ranked (${new Date().getFullYear()})`,
+    "description": `${projectCount} OpenClaw alternatives ranked by GitHub stars, growth momentum, and health score.`,
     "url": "https://shelldex.com/analysis/",
     "publisher": { "@type": "Organization", "name": "Shelldex", "url": "https://shelldex.com" }
   })} />
