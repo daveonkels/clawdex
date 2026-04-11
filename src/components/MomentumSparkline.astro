@@ -10,6 +10,7 @@ interface Props {
   project: any;
   averageGrowth7d?: number;
   compact?: boolean;
+  inline?: boolean;
   label?: string;
 }
 
@@ -17,6 +18,7 @@ const {
   project,
   averageGrowth7d = 0,
   compact = false,
+  inline = false,
   label = compact ? 'Momentum' : 'Momentum vs ecosystem average',
 } = Astro.props;
 
@@ -24,9 +26,9 @@ const snapshots = getProjectMomentumSnapshots(project, undefined, compact ? 10 :
 const growth7d = getProjectMomentum(project);
 const ratio = getMomentumRatio(project, averageGrowth7d);
 
-const width = compact ? 96 : 136;
-const height = compact ? 28 : 40;
-const padding = compact ? 3 : 4;
+const width = inline ? 84 : compact ? 88 : 136;
+const height = inline ? 18 : compact ? 26 : 40;
+const padding = inline ? 2 : compact ? 3 : 4;
 const values = snapshots.length > 0
   ? snapshots.map((snapshot) => snapshot.stars)
   : [project?.github_data?.stars ?? project?.stars ?? 0];
@@ -62,12 +64,12 @@ const paceTone = ratio === null
       : 'cool';
 
 const paceLabel = ratio === null
-  ? 'No recent 7d lift'
+  ? compact ? 'No lift' : 'No recent 7d lift'
   : ratio >= 1.25
-    ? `${ratio.toFixed(ratio >= 10 ? 0 : 1)}x ecosystem avg`
+    ? compact ? `${ratio.toFixed(ratio >= 10 ? 0 : 1)}x avg` : `${ratio.toFixed(ratio >= 10 ? 0 : 1)}x ecosystem avg`
     : ratio >= 0.85
-      ? 'Tracking near avg'
-      : `${Math.round(ratio * 100)}% of avg`;
+      ? compact ? 'Near avg' : 'Tracking near avg'
+      : compact ? `${Math.round(ratio * 100)}% avg` : `${Math.round(ratio * 100)}% of avg`;
 
 const metaClass = paceTone === 'hot'
   ? 'text-ledger-red'
@@ -86,16 +88,17 @@ const fill = paceTone === 'hot'
     : 'rgba(156, 163, 175, 0.08)';
 ---
 
-<div class={`flex items-center ${compact ? 'gap-3' : 'gap-4'} min-w-0`}>
+{!inline ? (
+<div class={`flex items-center ${compact ? 'gap-2' : 'gap-4'} min-w-0`}>
   <div class="min-w-0">
     <p class={`font-mono uppercase tracking-[0.2em] ${compact ? 'text-[9px]' : 'text-[10px]'} text-ledger-whisper`}>
       {label}
     </p>
-    <div class="flex items-baseline gap-2 mt-1">
+    <div class={`flex items-baseline mt-1 ${compact ? 'gap-1.5 whitespace-nowrap' : 'gap-2'}`}>
       <span class={`font-mono ${compact ? 'text-sm' : 'text-lg'} ${growth7d > 0 ? 'text-ledger-text' : 'text-ledger-faint'}`}>
         {growth7d > 0 ? `+${formatStars(growth7d)}` : '0'}
       </span>
-      <span class={`text-xs ${metaClass}`}>{paceLabel}</span>
+      <span class={`shrink-0 ${compact ? 'text-[11px]' : 'text-xs'} ${metaClass}`}>{paceLabel}</span>
     </div>
     {!compact && snapshots.length > 1 && (
       <p class="text-xs text-ledger-whisper mt-1">
@@ -133,3 +136,33 @@ const fill = paceTone === 'hot'
     />
   </svg>
 </div>
+ ) : (
+<svg
+  width={width}
+  height={height}
+  viewBox={`0 0 ${width} ${height}`}
+  class="shrink-0 overflow-visible"
+  role="img"
+  aria-label={`${project?.name ?? 'Project'} momentum sparkline`}
+>
+  <polygon
+    points={areaPoints}
+    fill={fill}
+    stroke="none"
+  />
+  <polyline
+    points={linePoints}
+    fill="none"
+    stroke={stroke}
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <circle
+    cx={lastPoint[0]}
+    cy={lastPoint[1]}
+    r="2.2"
+    fill={stroke}
+  />
+</svg>
+)}
