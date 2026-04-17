@@ -39,8 +39,8 @@ added: 2026-02-25
 
 - [Astro](https://astro.build) — static site generator
 - [Tailwind CSS](https://tailwindcss.com) — styling
-- GitHub Pages — hosting
-- GitHub Actions — CI/CD
+- [ploi.io](https://ploi.io) — server management; builds on push and serves `dist/` via nginx
+- GitHub Actions — CI (schema validation on PRs)
 
 ## Development
 

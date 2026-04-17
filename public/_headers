@@ -1,6 +1,8 @@
 # Netlify/Cloudflare Pages _headers file.
-# GitHub Pages ignores this; included so a future move to a headers-aware host
-# picks up RFC 8288 Link headers + correct content types automatically.
+# The production deploy (ploi.io + nginx) ignores this; the canonical header
+# config lives in the ploi-managed nginx site. This file documents the intended
+# headers and auto-configures any headers-aware static host (Netlify, Cloudflare
+# Pages, etc.) if the site is ever mirrored there.
 
 /*
   Link: </.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json;version=3.1", </AGENTS.md>; rel="service-doc"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"

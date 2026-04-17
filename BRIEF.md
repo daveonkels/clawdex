@@ -57,7 +57,7 @@ Runner-ups:
 - **Static site generator:** Astro (fast, modern, great for content sites)
 - **Styling:** Tailwind CSS
 - **Data:** YAML/JSON files in `/data/projects/` — each project is a file
-- **Deployment:** GitHub Pages (free)
+- **Deployment:** self-hosted via ploi.io (pulls repo on push, runs `npm run build`, serves `dist/` via nginx)
 - **PR workflow:** Add a YAML file to `/data/projects/your-project.yml`, CI validates schema, maintainer reviews and merges
 
 ## Project YAML Schema
@@ -100,7 +100,7 @@ added: 2026-02-25
 
 ## CI/CD
 - GitHub Action validates YAML schema on PR
-- Builds and deploys to GitHub Pages on merge to main
+- ploi.io rebuilds and deploys on merge to main
 - Optional: auto-fetch GitHub stars on build
 
 ## The Name History Easter Egg
