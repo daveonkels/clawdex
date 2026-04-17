@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Shelldex",
+  "name_for_model": "shelldex",
+  "description_for_human": "The OpenClaw ecosystem registry — clones, forks, derivatives, and alternatives cataloged with stars, growth, and health metrics.",
+  "description_for_model": "Shelldex is a read-only registry of personal AI agent frameworks derived from or alternative to OpenClaw. Use this plugin to search projects by name/language/category, fetch GitHub metadata (stars, forks, issues, last commit, 7-day growth), compare two projects side-by-side, and retrieve the ranked leaderboard. All data is static JSON refreshed at build time. There is no authentication, rate limit, or write interface. Slugs are lowercase, hyphen-separated. Canonical comparison slugs are alphabetical (e.g., `hermes-vs-openclaw`, not `openclaw-vs-hermes`).",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://shelldex.com/openapi.json",
+    "has_user_authentication": false
+  },
+  "logo_url": "https://shelldex.com/favicon.svg",
+  "contact_email": "hello@shelldex.com",
+  "legal_info_url": "https://shelldex.com/about/"
+}

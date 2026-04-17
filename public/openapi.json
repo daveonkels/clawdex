@@ -1,0 +1,279 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Shelldex Registry API",
+    "version": "2026.04.17",
+    "summary": "Read-only JSON API for the OpenClaw ecosystem registry at shelldex.com.",
+    "description": "Static JSON endpoints describing the OpenClaw ecosystem: personal AI agent frameworks, their GitHub health, and side-by-side comparisons. No authentication. No rate limit. All endpoints regenerate on each deploy. Slugs are lowercase, hyphen-separated. Comparison pair slugs must be alphabetical (e.g., `hermes-vs-openclaw`, never `openclaw-vs-hermes`).",
+    "license": {
+      "name": "CC-BY-4.0",
+      "identifier": "CC-BY-4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "contact": {
+      "name": "Dave Onkels",
+      "url": "https://onk.io",
+      "email": "hello@shelldex.com"
+    }
+  },
+  "servers": [
+    { "url": "https://shelldex.com", "description": "Production" }
+  ],
+  "externalDocs": {
+    "url": "https://shelldex.com/AGENTS.md",
+    "description": "AGENTS.md — full machine-readable index"
+  },
+  "tags": [
+    { "name": "projects", "description": "Read project metadata" },
+    { "name": "leaderboard", "description": "Ranked projects with health scores" },
+    { "name": "compare", "description": "Pairwise comparisons" }
+  ],
+  "paths": {
+    "/api/projects.json": {
+      "get": {
+        "tags": ["projects"],
+        "operationId": "listProjects",
+        "summary": "List every project in the registry.",
+        "responses": {
+          "200": {
+            "description": "Full project registry.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProjectList" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{slug}.json": {
+      "get": {
+        "tags": ["projects"],
+        "operationId": "getProject",
+        "summary": "Retrieve a single project by its canonical slug.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+            "description": "Canonical project slug (lowercase, hyphen-separated). Example: `hermes`, `openclaw`.",
+            "example": "hermes"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single project detail.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProjectDetail" }
+              }
+            }
+          },
+          "404": {
+            "description": "Slug not found."
+          }
+        }
+      }
+    },
+    "/api/leaderboard.json": {
+      "get": {
+        "tags": ["leaderboard"],
+        "operationId": "getLeaderboard",
+        "summary": "Ranked leaderboard with health scores.",
+        "responses": {
+          "200": {
+            "description": "Ordered leaderboard entries.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Leaderboard" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/compare/{pair}.json": {
+      "get": {
+        "tags": ["compare"],
+        "operationId": "getComparison",
+        "summary": "Pairwise comparison of two projects.",
+        "description": "Returns both projects' metadata plus computed key differences. The `pair` path parameter must be the canonical, alphabetically-ordered pair slug (`{slugA}-vs-{slugB}` where slugA < slugB lexicographically).",
+        "parameters": [
+          {
+            "name": "pair",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "pattern": "^[a-z0-9-]+-vs-[a-z0-9-]+$" },
+            "description": "Canonical pair slug (alphabetical). Example: `hermes-vs-openclaw`.",
+            "example": "hermes-vs-openclaw"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comparison data.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Comparison" }
+              }
+            }
+          },
+          "404": {
+            "description": "Pair is not in the indexable comparison set."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Project": {
+        "type": "object",
+        "required": ["name", "slug", "tagline", "language", "status"],
+        "properties": {
+          "name": { "type": "string" },
+          "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "slug_aliases": { "type": "array", "items": { "type": "string" } },
+          "tagline": { "type": "string" },
+          "description": { "type": "string" },
+          "language": { "type": "string" },
+          "category": { "type": "array", "items": { "type": "string" } },
+          "status": { "type": "string", "enum": ["active", "experimental", "archived"] },
+          "highlight": { "type": "string" },
+          "emoji": { "type": "string" },
+          "added": { "type": "string", "format": "date" },
+          "tier": { "type": ["integer", "null"] },
+          "github": { "type": ["string", "null"], "description": "owner/repo" },
+          "website": { "type": ["string", "null"], "format": "uri" },
+          "platform": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["server", "browser", "embedded", "serverless", "messaging", "desktop"] }
+          },
+          "requires_llm": { "type": ["boolean", "null"] },
+          "mcp_support": { "type": "boolean" },
+          "integration_count": { "type": ["integer", "null"] },
+          "perf": {
+            "type": ["object", "null"],
+            "properties": {
+              "binary_size": { "type": "string" },
+              "startup_time": { "type": "string" },
+              "ram": { "type": "string" }
+            }
+          },
+          "ecosystem_role": {
+            "type": ["string", "null"],
+            "enum": ["reference", "fork", "reimplementation", "derivative", "infrastructure", "alternative", null]
+          },
+          "stars": { "type": ["integer", "null"] },
+          "github_data": { "$ref": "#/components/schemas/GitHubData" },
+          "urls": { "$ref": "#/components/schemas/ProjectUrls" }
+        }
+      },
+      "GitHubData": {
+        "type": ["object", "null"],
+        "properties": {
+          "stars": { "type": "integer" },
+          "forks": { "type": "integer" },
+          "open_issues": { "type": "integer" },
+          "license": { "type": ["string", "null"] },
+          "topics": { "type": "array", "items": { "type": "string" } },
+          "last_commit": { "type": "string", "format": "date-time" },
+          "latest_release": { "type": ["string", "null"] },
+          "latest_release_date": { "type": ["string", "null"], "format": "date-time" },
+          "star_growth_7d": { "type": ["integer", "null"] },
+          "last_enriched": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ProjectUrls": {
+        "type": "object",
+        "properties": {
+          "page": { "type": "string", "format": "uri" },
+          "json": { "type": "string", "format": "uri" },
+          "markdown": { "type": "string", "format": "uri" }
+        }
+      },
+      "ProjectList": {
+        "type": "object",
+        "required": ["generated", "count", "projects"],
+        "properties": {
+          "generated": { "type": "string", "format": "date-time" },
+          "source": { "type": "string", "format": "uri" },
+          "license": { "type": "string" },
+          "count": { "type": "integer" },
+          "projects": { "type": "array", "items": { "$ref": "#/components/schemas/Project" } }
+        }
+      },
+      "ProjectDetail": {
+        "type": "object",
+        "required": ["generated", "project"],
+        "properties": {
+          "generated": { "type": "string", "format": "date-time" },
+          "source": { "type": "string", "format": "uri" },
+          "license": { "type": "string" },
+          "project": { "$ref": "#/components/schemas/Project" }
+        }
+      },
+      "LeaderboardEntry": {
+        "type": "object",
+        "properties": {
+          "rank": { "type": "integer" },
+          "name": { "type": "string" },
+          "slug": { "type": "string" },
+          "emoji": { "type": "string" },
+          "language": { "type": "string" },
+          "github": { "type": "string" },
+          "stars": { "type": "integer" },
+          "forks": { "type": "integer" },
+          "open_issues": { "type": "integer" },
+          "star_growth_7d": { "type": ["integer", "null"] },
+          "latest_release": { "type": ["string", "null"] },
+          "latest_release_date": { "type": ["string", "null"] },
+          "last_commit": { "type": "string" },
+          "license": { "type": ["string", "null"] },
+          "health_score": { "type": "integer", "minimum": 0, "maximum": 100 },
+          "health": {
+            "type": "object",
+            "properties": {
+              "issues_stars_ratio": { "type": "number" },
+              "days_since_last_release": { "type": ["integer", "null"] },
+              "days_since_last_commit": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "Leaderboard": {
+        "type": "object",
+        "properties": {
+          "generated": { "type": "string", "format": "date-time" },
+          "source": { "type": "string", "format": "uri" },
+          "license": { "type": "string" },
+          "count": { "type": "integer" },
+          "entries": { "type": "array", "items": { "$ref": "#/components/schemas/LeaderboardEntry" } }
+        }
+      },
+      "Comparison": {
+        "type": "object",
+        "properties": {
+          "generated": { "type": "string", "format": "date-time" },
+          "source": { "type": "string", "format": "uri" },
+          "license": { "type": "string" },
+          "pair": {
+            "type": "object",
+            "properties": {
+              "canonical": { "type": "string" },
+              "slugA": { "type": "string" },
+              "slugB": { "type": "string" }
+            }
+          },
+          "projects": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": { "$ref": "#/components/schemas/Project" }
+          },
+          "key_differences": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

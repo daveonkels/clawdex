@@ -39,6 +39,56 @@ const uniqueLangs = new Set(projects.map(p => p.language)).size;
 const topGrowth = movers[0];
 const homepageTitle = `OpenClaw Alternatives, Forks & Comparisons (${projects.length} Projects) | Shelldex`;
 const homepageDescription = `Compare ${projects.length} OpenClaw alternatives, forks, and inspired projects by stars, growth, language, and health. Find the best OpenClaw alternative for self-hosted agents, including Hermes Agent, AstrBot, ZeroClaw, and more.`;
+
+const homepageJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': 'https://shelldex.com/#website',
+    url: 'https://shelldex.com/',
+    name: 'Shelldex',
+    alternateName: 'The OpenClaw Ecosystem Registry',
+    description: homepageDescription,
+    inLanguage: 'en',
+    publisher: { '@type': 'Person', name: 'Dave Onkels', url: 'https://onk.io' },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://shelldex.com/?q={search_term_string}',
+      'query-input': 'required name=search_term_string',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    '@id': 'https://shelldex.com/#dataset',
+    name: 'Shelldex — OpenClaw Ecosystem Registry',
+    description: `Registry of ${projects.length} personal AI agent frameworks derived from or alternative to OpenClaw, with GitHub metadata, health metrics, and 7-day star growth.`,
+    url: 'https://shelldex.com/',
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    creator: { '@type': 'Person', name: 'Dave Onkels', url: 'https://onk.io' },
+    keywords: ['OpenClaw', 'agents', 'AI', 'personal AI', 'self-hosted', 'registry'],
+    distribution: [
+      { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: 'https://shelldex.com/api/projects.json' },
+      { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: 'https://shelldex.com/api/leaderboard.json' },
+      { '@type': 'DataDownload', encodingFormat: 'text/plain', contentUrl: 'https://shelldex.com/llms-full.txt' },
+      { '@type': 'DataDownload', encodingFormat: 'text/markdown', contentUrl: 'https://shelldex.com/md/index.md' },
+    ],
+    variableMeasured: ['stars', 'forks', 'open_issues', 'star_growth_7d', 'last_commit', 'license', 'language'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Top OpenClaw projects by stars',
+    numberOfItems: Math.min(10, projects.length),
+    itemListOrder: 'https://schema.org/ItemListOrderDescending',
+    itemListElement: projects.slice(0, 10).map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://shelldex.com/projects/${p.slug}/`,
+      name: p.name,
+    })),
+  },
+];
 const growthShortcutPairs = [
   { slug: 'hermes-vs-openclaw', label: 'Hermes Agent vs OpenClaw' },
   { slug: 'astrbot-vs-openclaw', label: 'AstrBot vs OpenClaw' },
@@ -67,7 +117,13 @@ const langDot: Record<string, string> = {
 };
 ---
 
-<Layout title={homepageTitle} description={homepageDescription}>
+<Layout
+  title={homepageTitle}
+  description={homepageDescription}
+  markdownUrl="https://shelldex.com/md/index.md"
+  jsonUrl="https://shelldex.com/api/projects.json"
+  jsonLd={homepageJsonLd}
+>
 
   {/* ── Trending Bar ── */}
   {movers.length > 0 && (

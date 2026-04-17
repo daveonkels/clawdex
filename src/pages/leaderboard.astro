@@ -90,6 +90,8 @@ const langDot: Record<string, string> = {
 <Layout
   title={`OpenClaw Alternatives Ranked by Stars, Growth & Health (${new Date().getFullYear()}) | Shelldex`}
   description="GitHub stars leaderboard for OpenClaw ecosystem projects. Ranked by stars with growth trends and health indicators."
+  markdownUrl="https://shelldex.com/md/leaderboard.md"
+  jsonUrl="https://shelldex.com/api/leaderboard.json"
 >
   {hasData && (
     <script type="application/ld+json" set:html={JSON.stringify({

@@ -6,6 +6,9 @@ interface Props {
   ogImageAlt?: string;
   canonicalUrl?: string;
   robots?: string;
+  markdownUrl?: string;
+  jsonUrl?: string;
+  jsonLd?: Record<string, any> | Record<string, any>[];
 }
 
 const {
@@ -15,6 +18,9 @@ const {
   ogImageAlt = 'Shelldex social preview image',
   canonicalUrl,
   robots = 'index, follow',
+  markdownUrl,
+  jsonUrl,
+  jsonLd,
 } = Astro.props;
 
 const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathname}`;
@@ -43,6 +49,16 @@ const ogImageType = inferImageType(ogImage);
     <link rel="prefetch" as="font" type="font/woff2" href="/fonts/titan-one-latin.woff2" crossorigin />
     <link rel="canonical" href={resolvedCanonical} />
 
+    <!-- Agent-facing discovery: RFC 8288 link relations -->
+    {markdownUrl && <link rel="alternate" type="text/markdown" href={markdownUrl} title="Markdown version" />}
+    {jsonUrl && <link rel="alternate" type="application/json" href={jsonUrl} title="JSON version" />}
+    <link rel="api-catalog" href="https://shelldex.com/.well-known/api-catalog" />
+    <link rel="service-desc" type="application/vnd.oai.openapi+json;version=3.1" href="https://shelldex.com/openapi.json" />
+    <link rel="service-doc" type="text/markdown" href="https://shelldex.com/AGENTS.md" />
+    <link rel="describedby" href="https://shelldex.com/llms.txt" />
+    <link rel="author" href="https://onk.io" />
+    <link rel="license" href="https://creativecommons.org/licenses/by/4.0/" />
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={resolvedCanonical} />
@@ -70,6 +86,12 @@ const ogImageType = inferImageType(ogImage);
     <meta name="robots" content={robots} />
 
     <title>{title}</title>
+    {jsonLd && (
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(jsonLd)}
+      />
+    )}
     <slot name="head" />
     <script is:inline>
       window.addEventListener('load', function() {

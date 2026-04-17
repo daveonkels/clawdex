@@ -1,15 +1,51 @@
 # Shelldex
 
-> The OpenClaw ecosystem, cataloged — clones, forks, derivatives, and alternatives.
+> The OpenClaw ecosystem, cataloged — clones, forks, derivatives, and alternatives. Shelldex is a community-maintained registry of personal AI agent frameworks that trace their lineage to Peter Steinberger's original self-hosted assistant, OpenClaw. Every entry tracks GitHub stars, forks, issues, commit activity, language, and project health.
 
-Shelldex is a community-maintained directory of every project in the OpenClaw ecosystem. It tracks personal AI agent frameworks that trace their lineage to Peter Steinberger's original self-hosted assistant, OpenClaw.
+Shelldex is built for both humans and agents. All data is available as JSON, Markdown, and structured pages. The site is static, openly licensed, and safe to scrape.
+
+## Key entry points for agents
+
+- [AGENTS.md](https://shelldex.com/AGENTS.md): Human-readable index of every machine-readable resource on this site
+- [llms-full.txt](https://shelldex.com/llms-full.txt): Entire registry flattened to plain text in one file
+- [OpenAPI spec](https://shelldex.com/openapi.json): OpenAPI 3.1 description of the JSON API
+- [API catalog](https://shelldex.com/.well-known/api-catalog): RFC 9727 catalog listing every JSON endpoint
+- [MCP manifest](https://shelldex.com/.well-known/mcp.json): MCP server pointers and schema URLs
+- [Plugin manifest](https://shelldex.com/.well-known/ai-plugin.json): Legacy ChatGPT plugin manifest
+
+## JSON API
+
+- [/api/projects.json](https://shelldex.com/api/projects.json): Full project registry with stars, language, categories, health metrics
+- [/api/projects/{slug}.json](https://shelldex.com/api/projects/hermes.json): Individual project detail (example: hermes)
+- [/api/leaderboard.json](https://shelldex.com/api/leaderboard.json): Ranked leaderboard with health scores
+- [/api/compare/{pair}.json](https://shelldex.com/api/compare/hermes-vs-openclaw.json): Side-by-side comparison data
+
+## Markdown mirrors (HTML pages in markdown form)
+
+- [Homepage as markdown](https://shelldex.com/md/index.md): The directory page in markdown
+- [Project pages as markdown](https://shelldex.com/md/projects/hermes.md): Individual project (example: hermes)
+- [Comparison pages as markdown](https://shelldex.com/md/compare/hermes-vs-openclaw.md): Pairwise comparisons
+
+## Primary pages
+
+- [Homepage / Directory](https://shelldex.com/): Full registry of tracked projects
+- [Leaderboard](https://shelldex.com/leaderboard/): Ranked by GitHub stars with health scores
+- [Compare index](https://shelldex.com/compare/): All pairwise comparisons
+- [Analysis](https://shelldex.com/analysis/): Ecosystem trends, distributions, and narrative
+- [Best alternatives](https://shelldex.com/best-alternatives/): Curated picks with pros and cons
+- [FAQ](https://shelldex.com/faq/): Common questions about the ecosystem
+- [About](https://shelldex.com/about/): Background, scope, and licensing
+- [Submit a project](https://shelldex.com/submit/): How to add a project to the registry
 
 ## What Shelldex tracks
 
 - OpenClaw clones, forks, reimplementations, and inspired projects
-- GitHub stars, forks, open issues, and commit activity
-- Programming language (TypeScript, Rust, Python, Go, C, Bash, Zig)
-- Project status (active, experimental, archived)
+- GitHub stars, forks, open issues, license, and topics
+- Commit activity, last release, and 7-day star growth
+- Programming language (TypeScript, Rust, Python, Go, C, Bash, Zig, others)
+- Project status (active, experimental, archived) and ecosystem role (fork, reimplementation, derivative, alternative, reference, infrastructure)
+- Platform targets (server, browser, embedded, serverless, messaging, desktop)
+- MCP support, LLM requirements, performance profiles
 
 ## What Shelldex does NOT track
 
@@ -18,22 +54,10 @@ Shelldex is a community-maintained directory of every project in the OpenClaw ec
 - Security scanners for OpenClaw skills
 - Commercial-only products
 
-## Pages
-
-- Homepage / Directory: https://shelldex.com/
-- Leaderboard (ranked by GitHub stars): https://shelldex.com/leaderboard/
-- Compare projects: https://shelldex.com/compare/
-- Ecosystem analysis: https://shelldex.com/analysis/
-- FAQ: https://shelldex.com/faq/
-- About: https://shelldex.com/about/
-- Submit a project: https://shelldex.com/submit/
-- Individual project pages: https://shelldex.com/projects/{slug}/
-- Comparison pages: https://shelldex.com/compare/{project-a}-vs-{project-b}/
-
-## Key facts
+## Attribution and licensing
 
 - Created by Dave Onkels (https://onk.io)
 - Inspired by OpenClaw by Peter Steinberger
 - Formerly known as Clawdex (theclawdex.com)
 - Built with Astro and Tailwind CSS
-- Open source: https://github.com/daveonkels/clawdex
+- Registry content is openly licensed; source: https://github.com/daveonkels/clawdex

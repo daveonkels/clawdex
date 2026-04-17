@@ -1,0 +1,69 @@
+{
+  "@context": "https://www.w3.org/ns/dx/apiregistry",
+  "linkset": [
+    {
+      "anchor": "https://shelldex.com/",
+      "service-desc": [
+        {
+          "href": "https://shelldex.com/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1",
+          "title": "Shelldex OpenAPI 3.1 specification"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://shelldex.com/AGENTS.md",
+          "type": "text/markdown",
+          "title": "Shelldex agent-facing documentation"
+        },
+        {
+          "href": "https://shelldex.com/llms.txt",
+          "type": "text/plain",
+          "title": "Shelldex llms.txt navigation hub"
+        }
+      ],
+      "service-meta": [
+        {
+          "href": "https://shelldex.com/.well-known/mcp.json",
+          "type": "application/json",
+          "title": "MCP manifest"
+        },
+        {
+          "href": "https://shelldex.com/.well-known/ai-plugin.json",
+          "type": "application/json",
+          "title": "AI plugin manifest"
+        }
+      ],
+      "item": [
+        {
+          "href": "https://shelldex.com/api/projects.json",
+          "type": "application/json",
+          "title": "Full project registry",
+          "hreflang": ["en"]
+        },
+        {
+          "href": "https://shelldex.com/api/leaderboard.json",
+          "type": "application/json",
+          "title": "Ranked leaderboard with health scores"
+        },
+        {
+          "href": "https://shelldex.com/api/projects/{slug}.json",
+          "type": "application/json",
+          "title": "Individual project detail (templated)",
+          "templated": true
+        },
+        {
+          "href": "https://shelldex.com/api/compare/{pair}.json",
+          "type": "application/json",
+          "title": "Pairwise comparison data (templated)",
+          "templated": true
+        },
+        {
+          "href": "https://shelldex.com/llms-full.txt",
+          "type": "text/plain",
+          "title": "Entire registry as flat plain text"
+        }
+      ]
+    }
+  ]
+}

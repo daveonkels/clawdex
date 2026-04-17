@@ -410,6 +410,8 @@ const metrics = [
   description={isIndexable ? pageDescription : `Redirecting to the current comparison experience for ${a.name} and ${b.name}.`}
   canonicalUrl={isIndexable ? canonicalUrl : redirectCanonicalUrl}
   robots={isIndexable ? 'index, follow' : 'noindex, follow'}
+  markdownUrl={isIndexable ? canonicalUrl.replace('/compare/', '/md/compare/').replace(/\/$/, '.md') : undefined}
+  jsonUrl={isIndexable ? canonicalUrl.replace('/compare/', '/api/compare/').replace(/\/$/, '.json') : undefined}
 >
   {/* Alias and non-indexable pairs: meta refresh redirect to the canonical when the
        canonical IS in the indexable set. This consolidates Google signals fast.

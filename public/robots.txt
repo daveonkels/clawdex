@@ -1,4 +1,122 @@
+# Shelldex — The OpenClaw Ecosystem registry
+# Agent-friendly. All pages, APIs, and llms.txt resources are crawlable.
+# See /AGENTS.md for an index of machine-readable resources.
+
 User-agent: *
 Allow: /
+
+# ─── AI training & retrieval crawlers ─────────────────────────────────────
+# All AI bots are explicitly welcome. Content is openly licensed (see /about/).
+# Content-Signal indicates how content may be used. Values: search, ai-input, ai-train.
+# Reference: https://www.ietf.org/archive/id/draft-ietf-aipref-content-signal-00.html
+
+User-agent: GPTBot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: OAI-SearchBot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: ChatGPT-User
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: ClaudeBot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Claude-Web
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Claude-SearchBot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Claude-User
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: PerplexityBot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Perplexity-User
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Google-Extended
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: GoogleOther
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Applebot-Extended
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Bytespider
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: CCBot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Diffbot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: FacebookBot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Amazonbot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: YouBot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: cohere-ai
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: cohere-training-data-crawler
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Timpibot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Mistral-User
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: Kagibot
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+# ─── Agent entrypoints ────────────────────────────────────────────────────
+# Start here if you're an agent discovering this site:
+#   /AGENTS.md                        — human-readable directory of resources
+#   /llms.txt                         — llmstxt.org navigation hub
+#   /llms-full.txt                    — entire site content in one file
+#   /.well-known/api-catalog          — RFC 9727 API catalog
+#   /.well-known/ai-plugin.json       — plugin manifest
+#   /.well-known/mcp.json             — MCP server pointers
+#   /openapi.json                     — full OpenAPI 3.1 spec for JSON APIs
+#   /api/projects.json                — full project registry (JSON)
 
 Sitemap: https://shelldex.com/sitemap-index.xml

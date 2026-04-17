@@ -1,0 +1,56 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/mcp-site-manifest.json",
+  "name": "shelldex",
+  "display_name": "Shelldex — OpenClaw Ecosystem Registry",
+  "description": "Read-only MCP resources for the OpenClaw ecosystem registry. No server endpoint is hosted; all resources are static JSON and markdown that MCP clients can fetch directly.",
+  "version": "2026.04.17",
+  "homepage": "https://shelldex.com/",
+  "documentation": "https://shelldex.com/AGENTS.md",
+  "contact": "hello@shelldex.com",
+  "license": "CC-BY-4.0",
+  "resources": [
+    {
+      "uri": "https://shelldex.com/api/projects.json",
+      "name": "projects",
+      "description": "Full project registry as JSON",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "https://shelldex.com/api/leaderboard.json",
+      "name": "leaderboard",
+      "description": "Ranked leaderboard with health scores",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "https://shelldex.com/llms-full.txt",
+      "name": "llms-full",
+      "description": "Entire site content concatenated as plain text",
+      "mimeType": "text/plain"
+    }
+  ],
+  "resource_templates": [
+    {
+      "uriTemplate": "https://shelldex.com/api/projects/{slug}.json",
+      "name": "project",
+      "description": "Individual project detail by slug",
+      "mimeType": "application/json"
+    },
+    {
+      "uriTemplate": "https://shelldex.com/api/compare/{pair}.json",
+      "name": "comparison",
+      "description": "Pairwise comparison by canonical pair slug (alphabetical: `{a}-vs-{b}`)",
+      "mimeType": "application/json"
+    },
+    {
+      "uriTemplate": "https://shelldex.com/md/projects/{slug}.md",
+      "name": "project-markdown",
+      "description": "Individual project detail as markdown",
+      "mimeType": "text/markdown"
+    }
+  ],
+  "related_specs": {
+    "openapi": "https://shelldex.com/openapi.json",
+    "api_catalog": "https://shelldex.com/.well-known/api-catalog",
+    "llms_txt": "https://shelldex.com/llms.txt"
+  }
+}

@@ -233,6 +233,8 @@ function buildProjectDescription(): string {
 <Layout
   title={buildProjectTitle()}
   description={buildProjectDescription()}
+  markdownUrl={`https://shelldex.com/md/projects/${slug}.md`}
+  jsonUrl={`https://shelldex.com/api/projects/${slug}.json`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(softwareJsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
