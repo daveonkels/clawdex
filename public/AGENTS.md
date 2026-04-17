@@ -20,7 +20,10 @@ Contact: hello@shelldex.com
 | [/.well-known/api-catalog](https://shelldex.com/.well-known/api-catalog) | RFC 9727 API catalog |
 | [/.well-known/ai-plugin.json](https://shelldex.com/.well-known/ai-plugin.json) | Legacy plugin manifest |
 | [/.well-known/mcp.json](https://shelldex.com/.well-known/mcp.json) | MCP resource manifest |
+| [/.well-known/mcp/server-card.json](https://shelldex.com/.well-known/mcp/server-card.json) | MCP Server Card (SEP-1649) — describes Shelldex as a static-resource MCP site |
+| [/.well-known/agent-skills/index.json](https://shelldex.com/.well-known/agent-skills/index.json) | Agent Skills Discovery index (RFC v0.2.0) |
 | [/.well-known/agent-skills/shelldex-lookup/SKILL.md](https://shelldex.com/.well-known/agent-skills/shelldex-lookup/SKILL.md) | Skill definition for querying the registry |
+| [/.well-known/oauth-protected-resource](https://shelldex.com/.well-known/oauth-protected-resource) | RFC 9728 declaration that the API is public (empty `authorization_servers`) |
 | [/openapi.json](https://shelldex.com/openapi.json) | OpenAPI 3.1 spec for the JSON API |
 
 ## JSON API
@@ -60,12 +63,24 @@ Every page embeds JSON-LD:
 - Compare pages: `ItemList` of the two projects
 - Leaderboard: `ItemList` with ordered projects
 
+## WebMCP (in-browser)
+
+Every HTML page calls `navigator.modelContext.provideContext()` (when the API is present) to register four browser-callable tools:
+
+- `shelldex_search_projects(query, language, limit)`
+- `shelldex_get_project(slug)`
+- `shelldex_get_leaderboard(limit)`
+- `shelldex_compare_projects(slugA, slugB)`
+
+Each tool hits the JSON API endpoints listed above. The script feature-detects `navigator.modelContext` and silently no-ops on browsers without it.
+
 ## What's NOT here
 
-- Authenticated endpoints (the registry is fully public)
+- Authenticated endpoints (the registry is fully public — see `/.well-known/oauth-protected-resource` for the formal declaration)
 - Write operations (submissions go through the GitHub repo; see `/submit/`)
 - Rate limiting or billing (x402 / UCP / ACP do not apply)
-- A hosted MCP server (the `.well-known/mcp.json` points to static resources; consumers can wrap them in their own MCP server)
+- A persistent MCP transport (HTTP+SSE or stdio). The `.well-known/mcp/server-card.json` declares `transport.type: "static-resources"` — clients consume the enumerated resources directly over HTTPS
+- OAuth/OIDC authorization server metadata (`openid-configuration`, `oauth-authorization-server`). Shelldex is not an IdP; those files are intentionally absent
 
 ## Quick start for agents
 

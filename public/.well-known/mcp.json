@@ -1,6 +1,10 @@
 {
   "$schema": "https://modelcontextprotocol.io/schemas/mcp-site-manifest.json",
   "name": "shelldex",
+  "serverInfo": {
+    "name": "shelldex",
+    "version": "2026.04.17"
+  },
   "display_name": "Shelldex — OpenClaw Ecosystem Registry",
   "description": "Read-only MCP resources for the OpenClaw ecosystem registry. No server endpoint is hosted; all resources are static JSON and markdown that MCP clients can fetch directly.",
   "version": "2026.04.17",
@@ -51,6 +55,7 @@
   "related_specs": {
     "openapi": "https://shelldex.com/openapi.json",
     "api_catalog": "https://shelldex.com/.well-known/api-catalog",
-    "llms_txt": "https://shelldex.com/llms.txt"
+    "llms_txt": "https://shelldex.com/llms.txt",
+    "server_card": "https://shelldex.com/.well-known/mcp/server-card.json"
   }
 }

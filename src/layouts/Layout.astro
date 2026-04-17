@@ -103,6 +103,102 @@ const ogImageType = inferImageType(ogImage);
         }, 2000);
       });
     </script>
+    <script is:inline>
+      // WebMCP: expose Shelldex as browser-callable tools for agents.
+      // Feature-detected; silently no-ops in browsers without navigator.modelContext.
+      (function() {
+        if (typeof navigator === 'undefined' || !navigator.modelContext) return;
+        async function fetchJson(url) {
+          var res = await fetch(url, { headers: { Accept: 'application/json' } });
+          if (!res.ok) throw new Error('Shelldex fetch failed: ' + res.status + ' ' + url);
+          return await res.json();
+        }
+        var tools = [
+          {
+            name: 'shelldex_search_projects',
+            description: "Search the Shelldex registry of OpenClaw alternatives, forks, and derivatives. Filters by free-text query (matches name, tagline, description, categories) and by language. Returns an array of project objects with stars, GitHub stats, and metadata.",
+            inputSchema: {
+              type: 'object',
+              properties: {
+                query: { type: 'string', description: 'Free-text search (case-insensitive)' },
+                language: { type: 'string', description: 'Filter to one language slug (rust, python, typescript, go, c, bash, zig, javascript, kotlin, multi)' },
+                limit: { type: 'integer', default: 20, minimum: 1, maximum: 100 }
+              }
+            },
+            execute: async function(args) {
+              args = args || {};
+              var data = await fetchJson('/api/projects.json');
+              var results = data.projects;
+              if (args.language) {
+                var lang = String(args.language).toLowerCase();
+                results = results.filter(function(p) { return p.language === lang; });
+              }
+              if (args.query) {
+                var q = String(args.query).toLowerCase();
+                results = results.filter(function(p) {
+                  return p.name.toLowerCase().indexOf(q) !== -1
+                    || p.slug.toLowerCase().indexOf(q) !== -1
+                    || (p.tagline || '').toLowerCase().indexOf(q) !== -1
+                    || (p.description || '').toLowerCase().indexOf(q) !== -1
+                    || (p.category || []).some(function(c) { return c.toLowerCase().indexOf(q) !== -1; });
+                });
+              }
+              var limit = Math.max(1, Math.min(100, args.limit || 20));
+              return results.slice(0, limit);
+            }
+          },
+          {
+            name: 'shelldex_get_project',
+            description: "Fetch the full detail record for one OpenClaw-ecosystem project by its canonical slug (lowercase, hyphen-separated; e.g., 'hermes', 'openclaw', 'zeroclaw'). Returns project metadata, GitHub stats, health score, and leaderboard rank.",
+            inputSchema: {
+              type: 'object',
+              required: ['slug'],
+              properties: { slug: { type: 'string' } }
+            },
+            execute: async function(args) {
+              return await fetchJson('/api/projects/' + encodeURIComponent(args.slug) + '.json');
+            }
+          },
+          {
+            name: 'shelldex_get_leaderboard',
+            description: "Fetch the ranked Shelldex leaderboard. Entries include stars, 7-day growth, license, and a 0-100 health score computed from commit recency, issue-to-star ratio, release cadence, and growth.",
+            inputSchema: {
+              type: 'object',
+              properties: { limit: { type: 'integer', default: 20, minimum: 1, maximum: 100 } }
+            },
+            execute: async function(args) {
+              args = args || {};
+              var data = await fetchJson('/api/leaderboard.json');
+              var limit = Math.max(1, Math.min(100, args.limit || 20));
+              return Object.assign({}, data, { entries: data.entries.slice(0, limit) });
+            }
+          },
+          {
+            name: 'shelldex_compare_projects',
+            description: "Compare two OpenClaw-ecosystem projects side-by-side. Returns both project records plus computed key differences. Slug order does not matter — they are normalized to alphabetical canonical form internally.",
+            inputSchema: {
+              type: 'object',
+              required: ['slugA', 'slugB'],
+              properties: {
+                slugA: { type: 'string' },
+                slugB: { type: 'string' }
+              }
+            },
+            execute: async function(args) {
+              var pair = [args.slugA, args.slugB].sort().join('-vs-');
+              return await fetchJson('/api/compare/' + encodeURIComponent(pair) + '.json');
+            }
+          }
+        ];
+        try {
+          if (typeof navigator.modelContext.provideContext === 'function') {
+            navigator.modelContext.provideContext({ tools: tools });
+          } else if (typeof navigator.modelContext.registerTools === 'function') {
+            navigator.modelContext.registerTools(tools);
+          }
+        } catch (e) { /* incompatible WebMCP shape; ignore */ }
+      })();
+    </script>
   </head>
   <body class="bg-ledger-bg text-ledger-text font-body antialiased min-h-screen flex flex-col overflow-x-hidden">
     <nav class="sticky top-0 z-50 bg-ledger-bg/90 backdrop-blur-md border-b border-ledger-border">

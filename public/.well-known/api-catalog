@@ -29,6 +29,21 @@
           "title": "MCP manifest"
         },
         {
+          "href": "https://shelldex.com/.well-known/mcp/server-card.json",
+          "type": "application/json",
+          "title": "MCP Server Card (SEP-1649)"
+        },
+        {
+          "href": "https://shelldex.com/.well-known/agent-skills/index.json",
+          "type": "application/json",
+          "title": "Agent Skills Discovery index"
+        },
+        {
+          "href": "https://shelldex.com/.well-known/oauth-protected-resource",
+          "type": "application/json",
+          "title": "OAuth Protected Resource metadata (RFC 9728)"
+        },
+        {
           "href": "https://shelldex.com/.well-known/ai-plugin.json",
           "type": "application/json",
           "title": "AI plugin manifest"

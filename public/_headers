@@ -5,8 +5,9 @@
 # Pages, etc.) if the site is ever mirrored there.
 
 /*
-  Link: </.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json;version=3.1", </AGENTS.md>; rel="service-doc"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+  Link: </.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json;version=3.1", </AGENTS.md>; rel="service-doc"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain", </.well-known/mcp/server-card.json>; rel="mcp-server-card"; type="application/json", </.well-known/agent-skills/index.json>; rel="agent-skills"; type="application/json"
   Vary: Accept
+  Access-Control-Allow-Origin: *
 
 /AGENTS.md
   Content-Type: text/markdown; charset=utf-8

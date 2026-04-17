@@ -1,0 +1,10 @@
+{
+  "resource": "https://shelldex.com/api",
+  "authorization_servers": [],
+  "scopes_supported": [],
+  "bearer_methods_supported": [],
+  "resource_documentation": "https://shelldex.com/AGENTS.md",
+  "resource_policy_uri": "https://shelldex.com/about/",
+  "resource_name": "Shelldex Registry API",
+  "note": "This resource is publicly readable. An empty authorization_servers array declares that no OAuth access token is required for any endpoint under https://shelldex.com/api/ or related well-known resources. All data is CC-BY-4.0 licensed."
+}

@@ -1,0 +1,89 @@
+{
+  "$schema": "https://raw.githubusercontent.com/modelcontextprotocol/modelcontextprotocol/main/schema/mcp-server-card.json",
+  "name": "shelldex",
+  "serverInfo": {
+    "name": "shelldex",
+    "version": "2026.04.17",
+    "title": "Shelldex — OpenClaw Ecosystem Registry"
+  },
+  "description": "Read-only registry of personal AI agent frameworks in the OpenClaw ecosystem. Exposed as static resources and resource templates — agents fetch directly over HTTPS without a persistent MCP transport.",
+  "homepage": "https://shelldex.com/",
+  "documentation": "https://shelldex.com/AGENTS.md",
+  "contact": "hello@shelldex.com",
+  "license": "CC-BY-4.0",
+  "transport": {
+    "type": "static-resources",
+    "base_url": "https://shelldex.com/",
+    "note": "No persistent MCP transport is hosted. Clients consume the enumerated resources and resource_templates directly over HTTPS. No authentication."
+  },
+  "capabilities": {
+    "resources": {
+      "listChanged": false,
+      "subscribe": false
+    },
+    "tools": false,
+    "prompts": false,
+    "logging": false,
+    "experimental": {
+      "staticResources": true
+    }
+  },
+  "resources": [
+    {
+      "uri": "https://shelldex.com/api/projects.json",
+      "name": "projects",
+      "description": "Full OpenClaw project registry",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "https://shelldex.com/api/leaderboard.json",
+      "name": "leaderboard",
+      "description": "Ranked leaderboard with health scores",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "https://shelldex.com/llms-full.txt",
+      "name": "llms-full",
+      "description": "Entire registry as flat plain text",
+      "mimeType": "text/plain"
+    },
+    {
+      "uri": "https://shelldex.com/openapi.json",
+      "name": "openapi",
+      "description": "OpenAPI 3.1 spec for the JSON API",
+      "mimeType": "application/vnd.oai.openapi+json;version=3.1"
+    }
+  ],
+  "resourceTemplates": [
+    {
+      "uriTemplate": "https://shelldex.com/api/projects/{slug}.json",
+      "name": "project",
+      "description": "Individual project detail as JSON",
+      "mimeType": "application/json"
+    },
+    {
+      "uriTemplate": "https://shelldex.com/api/compare/{pair}.json",
+      "name": "comparison",
+      "description": "Pairwise comparison (pair = alphabetical `{a}-vs-{b}`)",
+      "mimeType": "application/json"
+    },
+    {
+      "uriTemplate": "https://shelldex.com/md/projects/{slug}.md",
+      "name": "project-markdown",
+      "description": "Project detail as markdown",
+      "mimeType": "text/markdown"
+    },
+    {
+      "uriTemplate": "https://shelldex.com/md/compare/{pair}.md",
+      "name": "comparison-markdown",
+      "description": "Pairwise comparison as markdown",
+      "mimeType": "text/markdown"
+    }
+  ],
+  "relatedDocuments": {
+    "openapi": "https://shelldex.com/openapi.json",
+    "apiCatalog": "https://shelldex.com/.well-known/api-catalog",
+    "agentSkills": "https://shelldex.com/.well-known/agent-skills/index.json",
+    "llmsTxt": "https://shelldex.com/llms.txt"
+  }
+}

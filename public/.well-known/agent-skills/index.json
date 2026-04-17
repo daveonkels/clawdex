@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agentskills.io/schemas/agent-skills-discovery-v0.2.0.json",
+  "version": "0.2.0",
+  "publisher": {
+    "name": "Shelldex",
+    "url": "https://shelldex.com/",
+    "contact": "hello@shelldex.com"
+  },
+  "license": "CC-BY-4.0",
+  "skills": [
+    {
+      "name": "shelldex-lookup",
+      "type": "skill.md",
+      "description": "Query the Shelldex OpenClaw ecosystem registry — fetch project metadata, stars, health, and compare two projects. Use when a user asks about any OpenClaw clone, fork, derivative, or alternative.",
+      "url": "https://shelldex.com/.well-known/agent-skills/shelldex-lookup/SKILL.md",
+      "sha256": "de4aefaacd4b58f4f9de1a7a3ec66592c861bb1910a7224d91f7464fd20d7240",
+      "tags": ["registry", "github", "openclaw", "comparison", "leaderboard"]
+    }
+  ]
+}
