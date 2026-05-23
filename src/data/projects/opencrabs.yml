@@ -19,15 +19,26 @@ mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-03-20T00:00:00.000Z
 github_data:
-  stars: 543
-  forks: 51
+  stars: 756
+  forks: 71
   open_issues: 0
   license: MIT
   topics:
+    - agent-orchestration
+    - agentic-ai
     - agentic-framework
+    - autonomous-agents
+    - harness
+    - harness-framework
     - open-source
-    - opencrab
+    - opencrabs
     - orchestration-framework
-  last_commit: "2026-03-20T05:26:41Z"
-  latest_release: null
-  latest_release_date: null
+    - recursive-self-improvement
+    - rsi
+    - self-healing
+    - self-learning
+  last_commit: "2026-05-23T01:34:16Z"
+  latest_release: v0.3.27
+  latest_release_date: "2026-05-23T01:17:43Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:50.335Z"

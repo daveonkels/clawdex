@@ -21,8 +21,8 @@ integration_count: 100
 ecosystem_role: alternative
 added: "2026-03-01"
 github_data:
-  stars: 26
-  forks: 7
+  stars: 28
+  forks: 6
   open_issues: 0
   license: MIT
   topics:
@@ -40,8 +40,8 @@ github_data:
     - telegram
     - tools
     - zai
-  last_commit: "2026-03-05T13:36:45Z"
+  last_commit: "2026-04-24T22:08:46Z"
   latest_release: v0.4
   latest_release_date: "2026-02-28T07:42:14Z"
-  star_growth_7d: 3
-  last_enriched: "2026-03-09T03:59:31.653Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:29.071Z"

@@ -62,6 +62,11 @@
           "title": "Ranked leaderboard with health scores"
         },
         {
+          "href": "https://shelldex.com/api/compare.json",
+          "type": "application/json",
+          "title": "Curated comparison index"
+        },
+        {
           "href": "https://shelldex.com/api/projects/{slug}.json",
           "type": "application/json",
           "title": "Individual project detail (templated)",

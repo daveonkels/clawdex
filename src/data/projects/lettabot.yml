@@ -18,11 +18,13 @@ mcp_support: false
 ecosystem_role: alternative
 added: 2026-03-20T00:00:00.000Z
 github_data:
-  stars: 277
-  forks: 67
-  open_issues: 68
+  stars: 328
+  forks: 87
+  open_issues: 85
   license: Apache-2.0
   topics: []
-  last_commit: "2026-03-20T16:49:51Z"
-  latest_release: null
-  latest_release_date: null
+  last_commit: "2026-05-22T02:45:37Z"
+  latest_release: v0.2.0-alpha.12
+  latest_release_date: "2026-03-10T22:43:22Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:41.004Z"

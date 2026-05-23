@@ -18,13 +18,33 @@ mcp_support: false
 ecosystem_role: alternative
 added: 2026-02-27T00:00:00.000Z
 github_data:
-  stars: 41
-  forks: 5
-  open_issues: 4
+  stars: 45
+  forks: 7
+  open_issues: 16
   license: Apache-2.0
-  topics: []
-  last_commit: "2026-03-09T03:33:47Z"
-  latest_release: v0.1.0
-  latest_release_date: "2026-03-03T20:55:50Z"
-  star_growth_7d: 1
-  last_enriched: "2026-03-09T03:59:32.014Z"
+  topics:
+    - ai-assistant
+    - anthropic
+    - chatbot
+    - discord-bot
+    - gemini
+    - llm
+    - llm-agent
+    - local-first
+    - ollama
+    - openai
+    - privacy
+    - security
+    - self-hosted
+    - signal
+    - slack-bot
+    - telegram-bot
+    - venice-ai
+    - vertex-ai
+    - wasm
+    - wasm-plugin
+  last_commit: "2026-05-23T04:07:32Z"
+  latest_release: v0.8.0
+  latest_release_date: "2026-05-01T22:18:48Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:30.689Z"

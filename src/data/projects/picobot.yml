@@ -19,11 +19,13 @@ mcp_support: false
 ecosystem_role: alternative
 added: 2026-03-20T00:00:00.000Z
 github_data:
-  stars: 1165
-  forks: 155
-  open_issues: 9
+  stars: 1242
+  forks: 158
+  open_issues: 13
   license: MIT
   topics: []
-  last_commit: "2026-03-18T18:44:18Z"
-  latest_release: null
-  latest_release_date: null
+  last_commit: "2026-03-28T15:42:55Z"
+  latest_release: v0.2.0
+  latest_release_date: "2026-03-18T18:34:38Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:53.629Z"

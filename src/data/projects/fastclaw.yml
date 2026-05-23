@@ -17,3 +17,19 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: alternative
 added: 2026-03-28T00:00:00.000Z
+github_data:
+  stars: 629
+  forks: 95
+  open_issues: 18
+  license: NOASSERTION
+  topics:
+    - agent-factory
+    - agent-runtime
+    - fastclaw
+    - multi-agent
+    - openclaw-alternative
+  last_commit: "2026-05-21T10:33:19Z"
+  latest_release: v0.42.6
+  latest_release_date: "2026-05-21T02:42:05Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:35.154Z"

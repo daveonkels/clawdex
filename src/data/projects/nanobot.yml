@@ -39,13 +39,26 @@ mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 30775
-  forks: 5058
-  open_issues: 964
+  stars: 43011
+  forks: 7575
+  open_issues: 861
   license: MIT
-  topics: []
-  last_commit: "2026-03-08T17:00:49Z"
-  latest_release: v0.1.4.post4
-  latest_release_date: "2026-03-08T16:49:40Z"
-  star_growth_7d: 2986
-  last_enriched: "2026-03-09T04:42:16.306Z"
+  topics:
+    - ai
+    - ai-agent
+    - ai-agents
+    - anthropic
+    - chatgpt
+    - claude
+    - claude-code
+    - codex
+    - codex-cli
+    - llm
+    - nanobot
+    - openai
+    - openclaw
+  last_commit: "2026-05-22T18:16:19Z"
+  latest_release: v0.2.0
+  latest_release_date: "2026-05-16T13:53:26Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:45.412Z"

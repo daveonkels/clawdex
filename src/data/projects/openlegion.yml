@@ -22,9 +22,9 @@ mcp_support: true
 ecosystem_role: alternative
 added: "2026-03-07"
 github_data:
-  stars: 66
-  forks: 6
-  open_issues: 2
+  stars: 96
+  forks: 18
+  open_issues: 1
   license: NOASSERTION
   topics:
     - agent-framework
@@ -44,8 +44,8 @@ github_data:
     - openclaw-alternative
     - self-hosted
     - zeroclaw
-  last_commit: "2026-03-09T00:58:39Z"
+  last_commit: "2026-05-22T17:38:36Z"
   latest_release: null
   latest_release_date: null
   star_growth_7d: 0
-  last_enriched: "2026-03-09T04:42:17.962Z"
+  last_enriched: "2026-05-23T04:10:51.500Z"

@@ -21,3 +21,14 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: derivative
 added: "2026-03-15"
+github_data:
+  stars: 215
+  forks: 32
+  open_issues: 3
+  license: MIT
+  topics: []
+  last_commit: "2026-05-23T03:59:52Z"
+  latest_release: v0.19.14-desktop.1
+  latest_release_date: "2026-05-19T12:28:17Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:47.587Z"

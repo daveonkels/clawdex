@@ -17,6 +17,7 @@ mentions:
     url: https://build.nvidia.com/nemoclaw
     author: NVIDIA
     title: NemoClaw on NVIDIA Build
+    date: "2026-03-19"
     source: NVIDIA
 platform:
   - server
@@ -25,3 +26,14 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: fork
 added: 2026-03-19T00:00:00.000Z
+github_data:
+  stars: 20606
+  forks: 2720
+  open_issues: 469
+  license: Apache-2.0
+  topics: []
+  last_commit: "2026-05-23T04:04:29Z"
+  latest_release: null
+  latest_release_date: null
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:47.094Z"

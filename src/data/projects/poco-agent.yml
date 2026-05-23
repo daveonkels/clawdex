@@ -19,8 +19,8 @@ mcp_support: false
 ecosystem_role: derivative
 added: 2026-03-05T00:00:00.000Z
 github_data:
-  stars: 1116
-  forks: 104
+  stars: 1326
+  forks: 122
   open_issues: 1
   license: MIT
   topics:
@@ -31,8 +31,8 @@ github_data:
     - clawdbot
     - manus
     - openclaw
-  last_commit: "2026-03-09T02:30:06Z"
-  latest_release: v0.2.1
-  latest_release_date: "2026-03-03T16:34:02Z"
+  last_commit: "2026-05-18T07:27:47Z"
+  latest_release: v0.5.2
+  latest_release_date: "2026-05-18T07:27:47Z"
   star_growth_7d: 0
-  last_enriched: "2026-03-09T04:42:18.772Z"
+  last_enriched: "2026-05-23T04:10:54.737Z"

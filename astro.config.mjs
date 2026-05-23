@@ -6,6 +6,7 @@ import { loadProjects } from './src/lib/project-loader.js';
 
 const sitemapProjects = await loadProjects();
 const indexableCompareSlugs = getIndexableCompareSlugSet(sitemapProjects);
+const sitemapBuildTime = new Date().toISOString();
 
 // Alternatives pages with validated search demand (GSC, Apr 2026).
 // Only index these — rest stay noindex to conserve crawl budget.
@@ -43,6 +44,8 @@ export default defineConfig({
       },
       priority: 0.7,
       serialize(item) {
+        item.lastmod = sitemapBuildTime;
+
         // Editorial pages get highest priority
         if (item.url.includes('/analysis') || item.url.includes('/faq') || item.url.includes('/best-alternatives')) {
           item.priority = 0.9;

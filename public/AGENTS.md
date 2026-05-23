@@ -35,6 +35,7 @@ No auth. No rate limit. All responses are static JSON regenerated on each deploy
 | `GET /api/projects.json` | Array of every tracked project |
 | `GET /api/projects/{slug}.json` | Single project by canonical slug |
 | `GET /api/leaderboard.json` | Ranked projects with health scores |
+| `GET /api/compare.json` | Index of curated comparison pages |
 | `GET /api/compare/{slugA}-vs-{slugB}.json` | Two projects side-by-side (slugs alphabetical) |
 
 Slug conventions: lowercase, hyphen-separated. Comparison pairs must be alphabetical (`hermes-vs-openclaw`, not `openclaw-vs-hermes`).
@@ -86,6 +87,7 @@ Each tool hits the JSON API endpoints listed above. The script feature-detects `
 
 ```
 curl -s https://shelldex.com/api/projects.json | jq '.[] | select(.slug=="hermes")'
+curl -s https://shelldex.com/api/compare.json | jq '.pairs[0]'
 curl -s https://shelldex.com/api/compare/hermes-vs-openclaw.json | jq .
 curl -s https://shelldex.com/llms-full.txt | head -40
 ```

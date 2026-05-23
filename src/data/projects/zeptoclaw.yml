@@ -19,15 +19,17 @@ mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-03-20T00:00:00.000Z
 github_data:
-  stars: 524
-  forks: 73
-  open_issues: 34
+  stars: 631
+  forks: 96
+  open_issues: 44
   license: Apache-2.0
   topics:
     - ai
     - ai-assistant
     - open-source
     - rust
-  last_commit: "2026-03-18T05:28:31Z"
-  latest_release: null
-  latest_release_date: null
+  last_commit: "2026-05-19T19:54:07Z"
+  latest_release: v0.9.2
+  latest_release_date: "2026-04-07T15:45:01Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:58.882Z"

@@ -19,9 +19,9 @@ mcp_support: false
 ecosystem_role: derivative
 added: 2026-03-05T00:00:00.000Z
 github_data:
-  stars: 382
-  forks: 0
-  open_issues: 0
+  stars: 121
+  forks: 9
+  open_issues: 2
   license: MIT
   topics:
     - agentic
@@ -41,8 +41,8 @@ github_data:
     - personal-assistant
     - productivity
     - self-hosted
-  last_commit: "2026-03-08T22:24:49Z"
-  latest_release: v0.0.7
-  latest_release_date: "2026-03-08T22:05:08Z"
+  last_commit: "2026-03-21T17:15:25Z"
+  latest_release: v0.1.0
+  latest_release_date: "2026-03-21T17:27:11Z"
   star_growth_7d: 0
-  last_enriched: "2026-03-09T03:59:32.986Z"
+  last_enriched: "2026-05-23T04:10:37.037Z"

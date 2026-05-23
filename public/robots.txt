@@ -118,5 +118,6 @@ Allow: /
 #   /.well-known/mcp.json             — MCP server pointers
 #   /openapi.json                     — full OpenAPI 3.1 spec for JSON APIs
 #   /api/projects.json                — full project registry (JSON)
+#   /api/compare.json                 — curated comparison index (JSON)
 
 Sitemap: https://shelldex.com/sitemap-index.xml

@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Shelldex Registry API",
-    "version": "2026.04.17",
+    "version": "2026.05.23",
     "summary": "Read-only JSON API for the OpenClaw ecosystem registry at shelldex.com.",
     "description": "Static JSON endpoints describing the OpenClaw ecosystem: personal AI agent frameworks, their GitHub health, and side-by-side comparisons. No authentication. No rate limit. All endpoints regenerate on each deploy. Slugs are lowercase, hyphen-separated. Comparison pair slugs must be alphabetical (e.g., `hermes-vs-openclaw`, never `openclaw-vs-hermes`).",
     "license": {
@@ -93,6 +93,23 @@
         }
       }
     },
+    "/api/compare.json": {
+      "get": {
+        "tags": ["compare"],
+        "operationId": "listComparisons",
+        "summary": "List every curated comparison page.",
+        "responses": {
+          "200": {
+            "description": "Curated comparison index.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ComparisonIndex" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/compare/{pair}.json": {
       "get": {
         "tags": ["compare"],
@@ -147,7 +164,7 @@
           "website": { "type": ["string", "null"], "format": "uri" },
           "platform": {
             "type": "array",
-            "items": { "type": "string", "enum": ["server", "browser", "embedded", "serverless", "messaging", "desktop"] }
+            "items": { "type": "string", "enum": ["browser", "cli", "cloud", "desktop", "edge", "embedded", "messaging", "mobile", "sdk", "server", "serverless", "web"] }
           },
           "requires_llm": { "type": ["boolean", "null"] },
           "mcp_support": { "type": "boolean" },
@@ -249,6 +266,37 @@
           "license": { "type": "string" },
           "count": { "type": "integer" },
           "entries": { "type": "array", "items": { "$ref": "#/components/schemas/LeaderboardEntry" } }
+        }
+      },
+      "ComparisonIndex": {
+        "type": "object",
+        "properties": {
+          "generated": { "type": "string", "format": "date-time" },
+          "source": { "type": "string", "format": "uri" },
+          "license": { "type": "string" },
+          "count": { "type": "integer" },
+          "pairs": { "type": "array", "items": { "$ref": "#/components/schemas/ComparisonPair" } }
+        }
+      },
+      "ComparisonPair": {
+        "type": "object",
+        "properties": {
+          "canonical": { "type": "string" },
+          "slugA": { "type": "string" },
+          "slugB": { "type": "string" },
+          "title": { "type": "string" },
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slug": { "type": "string" },
+                "name": { "type": "string" },
+                "emoji": { "type": ["string", "null"] }
+              }
+            }
+          },
+          "urls": { "$ref": "#/components/schemas/ProjectUrls" }
         }
       },
       "Comparison": {

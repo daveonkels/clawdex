@@ -20,9 +20,9 @@ integration_count: 500
 ecosystem_role: fork
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 1418
-  forks: 227
-  open_issues: 3
+  stars: 1209
+  forks: 168
+  open_issues: 4
   license: MIT
   topics:
     - clawdbot
@@ -34,8 +34,8 @@ github_data:
     - openclaw-security
     - openclaw-skills
     - openclawd
-  last_commit: "2026-02-11T03:33:36Z"
+  last_commit: "2026-05-08T01:24:30Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 16
-  last_enriched: "2026-03-09T04:42:19.327Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:56.787Z"

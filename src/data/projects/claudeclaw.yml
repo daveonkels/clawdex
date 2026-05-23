@@ -17,3 +17,14 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-03-15T00:00:00.000Z
+github_data:
+  stars: 1124
+  forks: 203
+  open_issues: 21
+  license: MIT
+  topics: []
+  last_commit: "2026-05-20T15:25:12Z"
+  latest_release: null
+  latest_release_date: null
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:31.855Z"

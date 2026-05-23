@@ -18,3 +18,22 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-03-18T00:00:00.000Z
+github_data:
+  stars: 34
+  forks: 9
+  open_issues: 1
+  license: MIT
+  topics:
+    - agent
+    - agent-framework
+    - agentic
+    - agentic-ai
+    - agentic-workflow
+    - openclaw
+    - openclaw-alternative
+    - openmolt
+  last_commit: "2026-04-20T04:47:53Z"
+  latest_release: null
+  latest_release_date: null
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:52.014Z"

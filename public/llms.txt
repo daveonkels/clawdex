@@ -18,6 +18,7 @@ Shelldex is built for both humans and agents. All data is available as JSON, Mar
 - [/api/projects.json](https://shelldex.com/api/projects.json): Full project registry with stars, language, categories, health metrics
 - [/api/projects/{slug}.json](https://shelldex.com/api/projects/hermes.json): Individual project detail (example: hermes)
 - [/api/leaderboard.json](https://shelldex.com/api/leaderboard.json): Ranked leaderboard with health scores
+- [/api/compare.json](https://shelldex.com/api/compare.json): Index of curated comparison pages
 - [/api/compare/{pair}.json](https://shelldex.com/api/compare/hermes-vs-openclaw.json): Side-by-side comparison data
 
 ## Markdown mirrors (HTML pages in markdown form)

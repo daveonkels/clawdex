@@ -19,9 +19,9 @@ mcp_support: false
 ecosystem_role: alternative
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 15495
-  forks: 1333
-  open_issues: 116
+  stars: 16095
+  forks: 1425
+  open_issues: 119
   license: Apache-2.0
   topics:
     - agent
@@ -44,8 +44,8 @@ github_data:
     - rag
     - telegram
     - wechat
-  last_commit: "2026-03-09T04:24:09Z"
-  latest_release: v4.8.7
-  latest_release_date: "2026-03-04T10:34:53Z"
-  star_growth_7d: 55
-  last_enriched: "2026-03-09T04:42:13.984Z"
+  last_commit: "2026-05-22T19:23:05Z"
+  latest_release: v4.9.7
+  latest_release_date: "2026-05-12T15:54:26Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:40.485Z"

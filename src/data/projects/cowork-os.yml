@@ -19,3 +19,34 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: alternative
 added: "2026-03-15"
+github_data:
+  stars: 318
+  forks: 52
+  open_issues: 6
+  license: MIT
+  topics:
+    - ai-assistants
+    - ai-automation
+    - claude
+    - desktop-app
+    - discord-bot
+    - electron
+    - gemini
+    - guardrails
+    - llm
+    - local-first
+    - macos
+    - mcp
+    - model-context-protocol
+    - openai
+    - personal-ai
+    - security
+    - self-hosted
+    - slack-bot
+    - telegram
+    - whatsapp-bot
+  last_commit: "2026-05-22T09:25:09Z"
+  latest_release: v0.5.47
+  latest_release_date: "2026-05-21T20:07:46Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:34.640Z"

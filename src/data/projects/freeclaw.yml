@@ -18,13 +18,13 @@ mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-02-27T00:00:00.000Z
 github_data:
-  stars: 37
-  forks: 6
-  open_issues: 0
+  stars: 58
+  forks: 10
+  open_issues: 2
   license: null
   topics: []
   last_commit: "2026-02-22T17:20:21Z"
   latest_release: 0.1.0
   latest_release_date: "2026-02-22T17:20:21Z"
-  star_growth_7d: 4
-  last_enriched: "2026-03-09T03:59:32.761Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:35.620Z"

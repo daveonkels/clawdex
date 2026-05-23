@@ -19,3 +19,21 @@ requires_llm: true
 mcp_support: false
 ecosystem_role: alternative
 added: 2026-03-28T00:00:00.000Z
+github_data:
+  stars: 650
+  forks: 48
+  open_issues: 4
+  license: MIT
+  topics:
+    - ai
+    - assistant
+    - cheap
+    - clawdbot
+    - ironclaw
+    - openclaw
+    - picoclaw
+  last_commit: "2026-05-13T17:32:45Z"
+  latest_release: v0.2.0
+  latest_release_date: "2026-03-21T01:16:41Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:55.235Z"

@@ -18,9 +18,9 @@ mcp_support: false
 ecosystem_role: derivative
 added: 2026-03-20T00:00:00.000Z
 github_data:
-  stars: 732
-  forks: 152
-  open_issues: 31
+  stars: 1011
+  forks: 205
+  open_issues: 57
   license: MIT
   topics:
     - ai-agent
@@ -36,3 +36,5 @@ github_data:
   last_commit: "2026-03-14T01:41:27Z"
   latest_release: null
   latest_release_date: null
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:31.273Z"

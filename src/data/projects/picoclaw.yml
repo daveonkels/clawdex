@@ -42,13 +42,13 @@ perf:
   startup_time: 1s
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 23002
-  forks: 3029
-  open_issues: 486
+  stars: 29133
+  forks: 4175
+  open_issues: 93
   license: MIT
   topics: []
-  last_commit: "2026-03-09T04:37:31Z"
-  latest_release: v0.2.0
-  latest_release_date: "2026-02-28T12:08:31Z"
-  star_growth_7d: 1370
-  last_enriched: "2026-03-09T04:42:18.507Z"
+  last_commit: "2026-05-23T01:21:08Z"
+  latest_release: v0.2.8
+  latest_release_date: "2026-04-30T15:15:51Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:54.191Z"

@@ -1,6 +1,18 @@
 import { loadProjects as loadProjectsData } from './project-loader.js';
 
-export type Platform = 'server' | 'browser' | 'embedded' | 'serverless' | 'messaging' | 'desktop';
+export type Platform =
+  | 'browser'
+  | 'cli'
+  | 'cloud'
+  | 'desktop'
+  | 'edge'
+  | 'embedded'
+  | 'messaging'
+  | 'mobile'
+  | 'sdk'
+  | 'server'
+  | 'serverless'
+  | 'web';
 
 export type EcosystemRole = 'reference' | 'fork' | 'reimplementation' | 'derivative' | 'infrastructure' | 'alternative';
 

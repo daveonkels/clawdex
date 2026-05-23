@@ -19,25 +19,25 @@ mcp_support: true
 ecosystem_role: infrastructure
 added: "2025-02-25"
 github_data:
-  stars: 12730
-  forks: 936
-  open_issues: 79
+  stars: 13687
+  forks: 1027
+  open_issues: 109
   license: NOASSERTION
   topics:
     - agent-memory
     - agentic-workflow
     - claude
     - claude-skills
-    - clawdbot
-    - clawdbot-skill
     - mcp
     - memory
+    - openclaw
+    - openclaw-skills
     - proactive
     - proactive-ai
     - sandbox
     - skills
-  last_commit: "2026-03-01T03:20:20Z"
-  latest_release: v1.4.0
-  latest_release_date: "2026-02-06T00:55:10Z"
-  star_growth_7d: 372
-  last_enriched: "2026-03-09T04:42:14.852Z"
+  last_commit: "2026-04-22T12:36:17Z"
+  latest_release: v1.5.1
+  latest_release_date: "2026-03-23T07:38:28Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:42.578Z"

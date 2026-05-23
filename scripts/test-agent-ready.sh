@@ -147,6 +147,9 @@ assert_json_path "$BASE/api/projects/hermes.json" '.project.slug' 'hermes'
 assert_json_path "$BASE/api/projects/hermes.json" '.project.urls.markdown' 'https://shelldex.com/md/projects/hermes.md'
 assert_status "$BASE/api/leaderboard.json" 200
 assert_json_path "$BASE/api/leaderboard.json" '.entries[0].rank' '1'
+assert_status "$BASE/api/compare.json" 200
+assert_json_valid "$BASE/api/compare.json"
+assert_json_path "$BASE/api/compare.json" '(.pairs | length) > 0' 'true'
 assert_status "$BASE/api/compare/hermes-vs-openclaw.json" 200
 assert_json_path "$BASE/api/compare/hermes-vs-openclaw.json" '.pair.canonical' 'hermes-vs-openclaw'
 assert_json_path "$BASE/api/compare/hermes-vs-openclaw.json" '(.projects | length)' '2'
@@ -163,6 +166,7 @@ assert_status "$BASE/openapi.json" 200
 assert_header "$BASE/openapi.json" 'content-type' 'openapi'
 assert_json_path "$BASE/openapi.json" '.openapi' '3.1.0'
 assert_json_path "$BASE/openapi.json" '.paths."/api/projects.json".get.operationId' 'listProjects'
+assert_json_path "$BASE/openapi.json" '.paths."/api/compare.json".get.operationId' 'listComparisons'
 
 section '.well-known manifests'
 assert_json_valid "$BASE/.well-known/api-catalog"

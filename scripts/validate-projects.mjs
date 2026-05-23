@@ -3,9 +3,9 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 
 const REQUIRED_FIELDS = ['name', 'slug', 'tagline', 'description', 'language', 'category', 'status', 'highlight', 'emoji', 'added'];
-const VALID_LANGUAGES = ['typescript', 'rust', 'python', 'go', 'c', 'bash', 'zig', 'multi'];
+const VALID_LANGUAGES = ['typescript', 'rust', 'python', 'go', 'c', 'bash', 'zig', 'javascript', 'kotlin', 'multi'];
 const VALID_STATUSES = ['active', 'experimental', 'archived'];
-const VALID_PLATFORMS = ['server', 'browser', 'embedded', 'serverless', 'messaging', 'desktop'];
+const VALID_PLATFORMS = ['browser', 'cli', 'cloud', 'desktop', 'edge', 'embedded', 'messaging', 'mobile', 'sdk', 'server', 'serverless', 'web'];
 const VALID_ECOSYSTEM_ROLES = ['reference', 'fork', 'reimplementation', 'derivative', 'infrastructure', 'alternative'];
 const VALID_MENTION_TYPES = ['tweet', 'article', 'video', 'post'];
 

@@ -18,9 +18,9 @@ mcp_support: true
 ecosystem_role: reimplementation
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 1990
-  forks: 217
-  open_issues: 134
+  stars: 2700
+  forks: 315
+  open_issues: 63
   license: MIT
   topics:
     - ai-agent
@@ -35,8 +35,8 @@ github_data:
     - single-binary
     - telegram-bot
     - voice-assistant
-  last_commit: "2026-03-09T03:34:27Z"
-  latest_release: v0.10.17
-  latest_release_date: "2026-03-06T00:28:08Z"
-  star_growth_7d: 224
-  last_enriched: "2026-03-09T04:42:15.808Z"
+  last_commit: "2026-05-22T21:15:49Z"
+  latest_release: "20260518.01"
+  latest_release_date: "2026-05-18T22:53:10Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:44.287Z"

@@ -20,9 +20,9 @@ mcp_support: true
 ecosystem_role: alternative
 added: "2026-03-07"
 github_data:
-  stars: 54
+  stars: 70
   forks: 20
-  open_issues: 0
+  open_issues: 1
   license: MIT
   topics:
     - ai
@@ -34,4 +34,4 @@ github_data:
   latest_release: null
   latest_release_date: null
   star_growth_7d: 0
-  last_enriched: "2026-03-09T03:59:32.460Z"
+  last_enriched: "2026-05-23T04:10:33.576Z"

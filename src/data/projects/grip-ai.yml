@@ -19,13 +19,13 @@ mcp_support: false
 ecosystem_role: alternative
 added: 2026-02-27T00:00:00.000Z
 github_data:
-  stars: 5
-  forks: 1
+  stars: 7
+  forks: 2
   open_issues: 1
   license: null
   topics: []
-  last_commit: "2026-03-05T07:06:07Z"
-  latest_release: v1.3.0
-  latest_release_date: "2026-03-05T06:50:44Z"
-  star_growth_7d: 3
-  last_enriched: "2026-03-09T03:59:33.290Z"
+  last_commit: "2026-03-24T06:34:31Z"
+  latest_release: v1.5.3
+  latest_release_date: "2026-03-24T06:34:31Z"
+  star_growth_7d: 0
+  last_enriched: "2026-05-23T04:10:38.046Z"
