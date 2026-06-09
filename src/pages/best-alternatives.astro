@@ -28,6 +28,7 @@ const oclawStars = formatStars(openclaw?.stars ?? 0);
 
 // Build a map of each project's top non-OpenClaw comparison pages
 const indexablePairs = getIndexableComparePairs(projects);
+const indexableCompareSlugs = new Set(indexablePairs.map((pair) => pair.canonical));
 const projectCompareMap = new Map<string, Array<{slug: string; name: string; canonical: string}>>();
 const projectNameMap = new Map(projects.map(p => [p.slug, p.name]));
 for (const pair of indexablePairs) {
@@ -98,6 +99,13 @@ function bestFor(p: typeof projects[0]): string {
   if (p.platform?.includes('browser')) return 'Browser-based deployments';
   if (p.platform?.includes('serverless')) return 'Serverless and edge computing';
   return 'General-purpose AI agent use cases';
+}
+
+function compareHref(slugA: string, slugB: string): string {
+  const canonical = makeCanonicalSlug(slugA, slugB);
+  if (indexableCompareSlugs.has(canonical)) return `/compare/${canonical}/`;
+  const params = new URLSearchParams({ a: slugA, b: slugB });
+  return `/compare/?${params.toString()}`;
 }
 
 const itemListJsonLd = {
@@ -172,7 +180,6 @@ const breadcrumbJsonLd = {
         const langName = languageLabel[p.language] ?? p.language;
         const pros = getPros(p);
         const cons = getCons(p);
-        const compareSlug = makeCanonicalSlug('openclaw', p.slug);
         const health = getHealthScore(p.slug);
 
         return (
@@ -269,7 +276,7 @@ const breadcrumbJsonLd = {
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
               </a>
               <a
-                href={`/compare/${compareSlug}/`}
+                href={compareHref('openclaw', p.slug)}
                 class="inline-flex items-center gap-1.5 text-sm text-ledger-faint hover:text-ledger-red transition-colors"
               >
                 Compare {p.name} vs OpenClaw

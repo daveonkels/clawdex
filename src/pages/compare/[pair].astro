@@ -4,7 +4,6 @@ import MomentumSparkline from '../../components/MomentumSparkline.astro';
 import { loadProjects, formatStars } from '../../lib/projects';
 import { languageLabel, languageColors } from '../../lib/constants';
 import {
-  generateAllPairs,
   getIndexableComparePairs,
   generateKeyDifferences,
   generateRecommendation,
@@ -15,36 +14,31 @@ import {
 } from '../../lib/compare';
 import type { PairEntry, LeaderboardEntry, FAQItem } from '../../lib/compare';
 import type { Project } from '../../lib/projects';
-import { buildComparisonHref } from '../../lib/compare-seo.js';
 import { getAverageGrowth7d } from '../../lib/momentum.js';
 
 export async function getStaticPaths() {
   const projects = await loadProjects();
-  const allPairs = generateAllPairs(projects);
   const indexablePairs = getIndexableComparePairs(projects);
-  const indexableCompareSlugs = new Set(indexablePairs.map((entry) => entry.canonical));
   const projectMap = new Map(projects.map(p => [p.slug, p]));
   const lb = loadLeaderboard();
   const lbMap = new Map(lb.entries.map(e => [e.slug, e]));
 
-  return allPairs.map(entry => {
+  return indexablePairs.map(entry => {
     const a = projectMap.get(entry.slugA)!;
     const b = projectMap.get(entry.slugB)!;
     const aEntry = lbMap.get(entry.slugA) ?? null;
     const bEntry = lbMap.get(entry.slugB) ?? null;
-    const isIndexable = entry.pair === entry.canonical && indexableCompareSlugs.has(entry.canonical);
-    const redirectUrl = buildComparisonHref(entry.slugA, entry.slugB, indexableCompareSlugs);
 
     return {
-      params: { pair: entry.pair },
+      params: { pair: entry.canonical },
       props: {
         a,
         b,
         aEntry,
         bEntry,
-        isIndexable,
+        isIndexable: true,
         canonicalUrl: `https://shelldex.com/compare/${entry.canonical}/`,
-        redirectUrl,
+        redirectUrl: `/compare/${entry.canonical}/`,
         keyDifferences: generateKeyDifferences(a, b, aEntry, bEntry),
         recommendation: generateRecommendation(a, b, aEntry, bEntry),
         faqItems: generateFAQItems(a, b, aEntry, bEntry),

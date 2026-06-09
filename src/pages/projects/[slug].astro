@@ -6,6 +6,7 @@ import type { Project } from '../../lib/projects';
 import { languageLabel, languageColors, statusColors } from '../../lib/constants';
 import { buildComparisonHref, getIndexableCompareSlugSet } from '../../lib/compare-seo.js';
 import { getAverageGrowth7d } from '../../lib/momentum.js';
+import { INDEXABLE_ALTERNATIVE_SLUGS } from '../../lib/seo-sets.js';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -211,6 +212,10 @@ const breadcrumbJsonLd = {
 
 const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : null;
 const compareToOpenClawHref = slug !== 'openclaw' ? buildComparisonHref(slug, 'openclaw', indexableCompareSlugs) : null;
+const alternativesHref = INDEXABLE_ALTERNATIVE_SLUGS.has(slug) ? `/alternatives/${slug}/` : '/best-alternatives/';
+const alternativesLinkLabel = INDEXABLE_ALTERNATIVE_SLUGS.has(slug)
+  ? `See all ${name} alternatives`
+  : 'See ranked OpenClaw alternatives';
 
 function buildProjectTitle(): string {
   if (slug === 'openclaw') {
@@ -545,10 +550,10 @@ function buildProjectDescription(): string {
     <!-- Alternatives page link -->
     <section class="mb-8">
       <a
-        href={`/alternatives/${slug}/`}
+        href={alternativesHref}
         class="inline-flex items-center gap-3 px-5 py-3 rounded-xl border border-ledger-border bg-ledger-surface hover:border-ledger-red/30 transition-all group"
       >
-        <span class="text-ledger-red font-medium group-hover:text-ledger-coral transition-colors">See all {name} alternatives</span>
+        <span class="text-ledger-red font-medium group-hover:text-ledger-coral transition-colors">{alternativesLinkLabel}</span>
         <svg class="w-4 h-4 text-ledger-faint group-hover:text-ledger-red transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
       </a>
     </section>

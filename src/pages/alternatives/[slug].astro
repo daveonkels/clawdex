@@ -4,14 +4,17 @@ import { loadProjects, formatStars } from '../../lib/projects';
 import { loadLeaderboard, computeHealthScore } from '../../lib/compare';
 import { buildComparisonHref, getIndexableCompareSlugSet } from '../../lib/compare-seo.js';
 import { languageLabel, languageColors } from '../../lib/constants';
+import { INDEXABLE_ALTERNATIVE_SLUGS } from '../../lib/seo-sets.js';
 import type { Project } from '../../lib/projects';
 
 export async function getStaticPaths() {
   const projects = await loadProjects();
-  return projects.map(project => ({
-    params: { slug: project.slug },
-    props: { project, allProjects: projects },
-  }));
+  return projects
+    .filter(project => INDEXABLE_ALTERNATIVE_SLUGS.has(project.slug))
+    .map(project => ({
+      params: { slug: project.slug },
+      props: { project, allProjects: projects },
+    }));
 }
 
 interface Props {
@@ -23,14 +26,6 @@ const { project, allProjects } = Astro.props;
 const { name, slug, language, category, emoji, stars } = project;
 const year = new Date().getFullYear();
 const { entries: leaderboard } = loadLeaderboard();
-
-// GSC-validated slugs that should be indexed; all others stay noindex.
-const INDEXABLE_ALTERNATIVE_SLUGS = new Set([
-  'hermes',
-  'secure-openclaw',
-  'openfang',
-]);
-const isIndexable = INDEXABLE_ALTERNATIVE_SLUGS.has(slug);
 
 const langName = languageLabel[language] ?? language;
 
@@ -95,7 +90,7 @@ const breadcrumbJsonLd = {
 };
 ---
 
-<Layout title={pageTitle} description={pageDescription} robots={isIndexable ? 'index, follow' : 'noindex, follow'} canonicalUrl={isIndexable ? `https://shelldex.com/alternatives/${slug}/` : undefined}>
+<Layout title={pageTitle} description={pageDescription} robots="index, follow" canonicalUrl={`https://shelldex.com/alternatives/${slug}/`}>
   <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 
@@ -155,7 +150,7 @@ const breadcrumbJsonLd = {
                         Full profile
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                       </a>
-                      <a href={`/alternatives/${p.slug}/`} class="inline-flex items-center gap-1.5 text-xs text-ledger-faint hover:text-ledger-red transition-colors">
+                      <a href={INDEXABLE_ALTERNATIVE_SLUGS.has(p.slug) ? `/alternatives/${p.slug}/` : '/best-alternatives/'} class="inline-flex items-center gap-1.5 text-xs text-ledger-faint hover:text-ledger-red transition-colors">
                         {p.name} alternatives
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                       </a>

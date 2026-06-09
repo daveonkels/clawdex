@@ -3,18 +3,11 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import { getIndexableCompareSlugSet } from './src/lib/compare-seo.js';
 import { loadProjects } from './src/lib/project-loader.js';
+import { INDEXABLE_ALTERNATIVE_SLUGS } from './src/lib/seo-sets.js';
 
 const sitemapProjects = await loadProjects();
 const indexableCompareSlugs = getIndexableCompareSlugSet(sitemapProjects);
 const sitemapBuildTime = new Date().toISOString();
-
-// Alternatives pages with validated search demand (GSC, Apr 2026).
-// Only index these — rest stay noindex to conserve crawl budget.
-const INDEXABLE_ALTERNATIVE_SLUGS = new Set([
-  'hermes',          // "hermes agent alternatives" / OpenClaw-adjacent alternatives intent
-  'secure-openclaw',  // "openclaw alternative" queries
-  'openfang',         // "openfang alternatives" queries
-]);
 
 export default defineConfig({
   site: 'https://shelldex.com',
