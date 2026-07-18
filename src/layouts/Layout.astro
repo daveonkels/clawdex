@@ -94,16 +94,6 @@ const ogImageType = inferImageType(ogImage);
     )}
     <slot name="head" />
     <script is:inline>
-      window.addEventListener('load', function() {
-        setTimeout(function() {
-          var s = document.createElement('script');
-          s.src = 'https://metrics.dv.nu/api/script.js';
-          s.setAttribute('data-site-id', '044ff383a31e');
-          document.head.appendChild(s);
-        }, 2000);
-      });
-    </script>
-    <script is:inline>
       // WebMCP: expose Shelldex as browser-callable tools for agents.
       // Feature-detected; silently no-ops in browsers without navigator.modelContext.
       (function() {
