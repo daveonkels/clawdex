@@ -39,7 +39,7 @@ added: 2026-02-25
 
 - [Astro](https://astro.build) — static site generator
 - [Tailwind CSS](https://tailwindcss.com) — styling
-- [ploi.io](https://ploi.io) — server management; builds on push and serves `dist/` via nginx
+- Cloudflare Workers Static Assets — `npm run deploy` builds and publishes `dist/` to `shelldex.com`
 - GitHub Actions — CI (schema validation on PRs)
 
 ## Development

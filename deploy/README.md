@@ -1,7 +1,7 @@
-# Deploy config
+# Legacy server config
 
-Server runs via ploi.io (nginx on the user's own box). This folder holds
-config snippets the ploi site references.
+ShellDex now runs on Cloudflare Workers Static Assets. Nothing in this folder
+is used by the production deployment; it is retained only as migration history.
 
 ## `nginx/agent-headers.conf`
 
@@ -9,9 +9,8 @@ Emits RFC 8288 Link response headers, enables `Accept: text/markdown`
 content negotiation to the `/md/` mirrors, and sets correct content
 types for agent-facing files.
 
-Install once via ploi Site → Manage → Nginx Configuration. Paste the
-contents inside the main `server { ... }` block, or `include` it if
-the file is on disk:
+The former Ploi/nginx deployment included this snippet inside its `server`
+block:
 
 ```nginx
 server {
@@ -20,7 +19,8 @@ server {
 }
 ```
 
-Reload nginx (ploi: Site → Restart Nginx) after changes.
+Do not edit these files for current production changes. Cloudflare header rules
+live in `public/_headers`, and deployment instructions live in `DEPLOYMENT.md`.
 
 Verify with:
 

@@ -1,8 +1,6 @@
-# Netlify/Cloudflare Pages _headers file.
-# The production deploy (ploi.io + nginx) ignores this; the canonical header
-# config lives in the ploi-managed nginx site. This file documents the intended
-# headers and auto-configures any headers-aware static host (Netlify, Cloudflare
-# Pages, etc.) if the site is ever mirrored there.
+# Cloudflare Workers Static Assets _headers file.
+# Wrangler publishes this file with dist/ and Cloudflare applies the rules to
+# the production site.
 
 /*
   Link: </.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json;version=3.1", </AGENTS.md>; rel="service-doc"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain", </.well-known/mcp/server-card.json>; rel="mcp-server-card"; type="application/json", </.well-known/agent-skills/index.json>; rel="agent-skills"; type="application/json"
