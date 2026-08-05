@@ -1,0 +1,25 @@
+name: QwenPaw
+slug: qwenpaw
+tagline: Works for you, grows with you
+description: Personal AI assistant from Alibaba's AgentScope team. An Agent OS architecture gives every agent its own workspace, governance policy, and OS-level sandbox, backed by a three-layer self-evolving memory, multi-agent collaboration over ACP, and a three-panel coding IDE.
+language: python
+category:
+  - agent-os
+  - self-hosted
+  - memory
+  - chinese-ecosystem
+github: agentscope-ai/QwenPaw
+website: https://qwenpaw.agentscope.io/
+status: active
+tier: 1
+highlight: Agent OS with three-layer ReMe memory, sandbox and guards on by default, and native DingTalk/Feishu/WeChat channels
+emoji: 🐾
+platform:
+  - server
+  - desktop
+  - messaging
+  - cli
+requires_llm: true
+mcp_support: true
+ecosystem_role: alternative
+added: 2026-08-05T00:00:00.000Z
