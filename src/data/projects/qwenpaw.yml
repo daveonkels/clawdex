@@ -7,7 +7,7 @@ category:
   - agent-os
   - self-hosted
   - memory
-  - chinese-ecosystem
+  - messaging
 github: agentscope-ai/QwenPaw
 website: https://qwenpaw.agentscope.io/
 status: active
