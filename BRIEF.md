@@ -57,7 +57,7 @@ Runner-ups:
 - **Static site generator:** Astro (fast, modern, great for content sites)
 - **Styling:** Tailwind CSS
 - **Data:** YAML/JSON files in `/data/projects/` — each project is a file
-- **Deployment:** Cloudflare Workers Static Assets (`npm run deploy` builds and publishes `dist/`)
+- **Deployment:** Cloudflare Workers Static Assets (`pnpm run deploy` builds and publishes `dist/`)
 - **PR workflow:** Add a YAML file to `/data/projects/your-project.yml`, CI validates schema, maintainer reviews and merges
 
 ## Project YAML Schema
@@ -100,7 +100,7 @@ added: 2026-02-25
 
 ## CI/CD
 - GitHub Action validates YAML schema on PR
-- Production deploys are explicit with `npm run deploy` after validation on `main`
+- Production deploys are explicit with `pnpm run deploy` after validation on `main`
 - Optional: auto-fetch GitHub stars on build
 
 ## The Name History Easter Egg

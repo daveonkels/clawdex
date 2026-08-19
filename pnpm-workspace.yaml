@@ -1,0 +1,19 @@
+allowBuilds:
+  esbuild@0.25.12: true
+  esbuild@0.27.3: true
+  esbuild@0.28.1: true
+  fsevents@2.3.3: true
+  sharp@0.34.5: true
+  workerd@1.20260714.1: true
+blockExoticSubdeps: true
+dangerouslyAllowAllBuilds: false
+minimumReleaseAge: 10080
+minimumReleaseAgeIgnoreMissingTime: false
+minimumReleaseAgeStrict: true
+saveExact: true
+strictDepBuilds: true
+trustLockfile: false
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  - vite@6.4.1
+verifyDepsBeforeRun: error

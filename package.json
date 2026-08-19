@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "build:refresh": "npm run enrich && astro build",
-    "deploy": "npm run build && env -u CF_API_TOKEN -u CLOUDFLARE_API_TOKEN wrangler deploy",
-    "deploy:dry-run": "npm run build && env -u CF_API_TOKEN -u CLOUDFLARE_API_TOKEN wrangler deploy --dry-run",
-    "deploy:refresh": "npm run build:refresh && env -u CF_API_TOKEN -u CLOUDFLARE_API_TOKEN wrangler deploy",
+    "build:refresh": "pnpm run enrich && astro build",
+    "deploy": "pnpm run build && env -u CF_API_TOKEN -u CLOUDFLARE_API_TOKEN wrangler deploy",
+    "deploy:dry-run": "pnpm run build && env -u CF_API_TOKEN -u CLOUDFLARE_API_TOKEN wrangler deploy --dry-run",
+    "deploy:refresh": "pnpm run build:refresh && env -u CF_API_TOKEN -u CLOUDFLARE_API_TOKEN wrangler deploy",
     "preview": "astro preview",
     "astro": "astro",
     "validate": "node scripts/validate-projects.mjs",
@@ -27,5 +27,6 @@
     "astro": "^5.17.1",
     "js-yaml": "^4.1.0",
     "tailwindcss": "^3.4.17"
-  }
+  },
+  "packageManager": "pnpm@11.19.0"
 }

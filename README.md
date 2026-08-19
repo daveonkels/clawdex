@@ -39,15 +39,15 @@ added: 2026-02-25
 
 - [Astro](https://astro.build) — static site generator
 - [Tailwind CSS](https://tailwindcss.com) — styling
-- Cloudflare Workers Static Assets — `npm run deploy` builds and publishes `dist/` to `shelldex.com`
+- Cloudflare Workers Static Assets — `pnpm run deploy` builds and publishes `dist/` to `shelldex.com`
 - GitHub Actions — CI (schema validation on PRs)
 
 ## Development
 
 ```bash
-npm install
-npm run dev     # http://localhost:4321
-npm run build   # builds to dist/
+pnpm install --frozen-lockfile
+pnpm run dev     # http://localhost:4321
+pnpm run build   # builds to dist/
 ```
 
 ## License

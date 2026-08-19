@@ -39,7 +39,7 @@ function extractRobots(html) {
 }
 
 if (!fs.existsSync(SITEMAP_INDEX)) {
-  fail('dist/sitemap-index.xml is missing. Run `npx astro build` first.');
+  fail('dist/sitemap-index.xml is missing. Run `pnpm exec astro build` first.');
 }
 
 const sitemapFiles = extractLocs(readFile(SITEMAP_INDEX)).map(toDistPath);

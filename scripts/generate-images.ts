@@ -2,7 +2,7 @@
  * Generate OG images for editorial pages using fal.ai
  *
  * Usage:
- *   FAL_KEY=your_key npm run generate-images
+ *   FAL_KEY=your_key pnpm run generate-images
  *
  * Generates:
  *   - public/images/og-analysis.jpg (1200x630)

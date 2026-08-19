@@ -65,7 +65,7 @@ Drive significantly more organic traffic to shelldex.com by fixing the CTR probl
 - FAQ schema validates at https://search.google.com/test/rich-results for at least 3 compare pages and the FAQ page
 - The `/best-alternatives` page renders correctly with all projects, internal links resolve, and ItemList schema validates
 - Badge SVGs render correctly at multiple sizes and the markdown snippets produce working badge images when pasted into a GitHub README
-- `npx astro build` completes without errors after all changes
+- `pnpm exec astro build` completes without errors after all changes
 - Google Search Console shows no new crawl errors after deployment
 
 ## Potential Risks and Mitigations

@@ -2,7 +2,7 @@
  * Generate PR-ready badge markdown snippets for all tracked projects.
  * Output: dist/badge-prs/<slug>.md + dist/badge-prs/checklist.md
  *
- * Usage: npx tsx scripts/generate-badge-prs.ts
+ * Usage: pnpm exec tsx scripts/generate-badge-prs.ts
  */
 
 import fs from 'node:fs';

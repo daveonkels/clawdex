@@ -59,9 +59,9 @@ Edit the relevant `.yml` file and open a PR, or [file an issue](https://github.c
 ## Development
 
 ```bash
-npm install
-npm run dev          # http://localhost:4321
-npm run build        # builds to dist/
+pnpm install --frozen-lockfile
+pnpm run dev          # http://localhost:4321
+pnpm run build        # builds to dist/
 node scripts/validate-projects.mjs   # validate all YAML
 ```
 
