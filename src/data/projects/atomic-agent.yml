@@ -1,0 +1,22 @@
+name: Atomic Agent
+slug: atomic-agent
+tagline: "Local-first agent with a desktop app and approvals"
+description: "Open-source AI agent with a desktop app and a terminal version. Runs local models through llama.cpp or cloud models via OpenRouter, asks for approval before risky actions, and can import sessions and cron jobs from OpenClaw and Hermes."
+language: typescript
+category:
+  - self-hosted
+  - security
+  - developer-tools
+github: AtomicBot-ai/atomic-agent
+website: https://atomicagent.io
+status: active
+highlight: "Approvals before risky actions, and a first-run import of OpenClaw sessions and cron jobs"
+emoji: ⚛️
+platform:
+  - desktop
+  - cli
+  - messaging
+requires_llm: true
+mcp_support: true
+ecosystem_role: alternative
+added: "2026-10-21"
