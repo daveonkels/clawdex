@@ -3,12 +3,14 @@ import Layout from '../../layouts/Layout.astro';
 import MomentumSparkline from '../../components/MomentumSparkline.astro';
 import { loadProjects, formatStars } from '../../lib/projects';
 import type { Project } from '../../lib/projects';
-import { languageLabel, languageColors, statusColors } from '../../lib/constants';
+import { languageLabel } from '../../lib/constants';
 import { buildComparisonHref, getIndexableCompareSlugSet } from '../../lib/compare-seo.js';
 import { getAverageGrowth7d } from '../../lib/momentum.js';
 import { INDEXABLE_ALTERNATIVE_SLUGS } from '../../lib/seo-sets.js';
-import fs from 'node:fs';
-import path from 'node:path';
+import DataStamp from '../../components/DataStamp.astro';
+import { profileNotes } from '../../lib/profile-editorial';
+import { computeHealthScore, loadLeaderboard } from '../../lib/compare';
+import { archiveNotice, firstTask, licenseLabel, modelAccess, publicStatus, quickStartUrl, sharedTraits, verifiedSetup } from '../../lib/agent-choice';
 
 export async function getStaticPaths() {
   const projects = await loadProjects();
@@ -24,52 +26,39 @@ interface Props {
 }
 
 const { project, allProjects } = Astro.props;
-const { name, slug, tagline, description, language, category, github, status, highlight, emoji, stars, added, github_data, platform, requires_llm, mcp_support, integration_count, perf, ecosystem_role, mentions } = project;
+const { name, slug, language, category, github: repository, status, emoji, stars, added, github_data, platform, requires_llm, mcp_support, integration_count, perf, ecosystem_role, mentions } = project;
+const notes = profileNotes(project);
+const tagline = notes?.tagline ?? project.tagline;
+const description = notes?.about ?? project.description;
+const github = github_data?.availability === 'unavailable' ? undefined : repository;
 
 const platformLabels: Record<string, string> = {
-  server: 'Server / VPS / Docker',
-  browser: 'Browser (PWA / WASM)',
-  embedded: 'Embedded / IoT / RPi',
-  serverless: 'Serverless (Workers / Lambda)',
-  messaging: 'Messaging (Telegram / Discord)',
+  server: 'Server',
+  browser: 'Browser',
+  embedded: 'Embedded device',
+  serverless: 'Serverless',
+  messaging: 'Messaging apps',
   desktop: 'Desktop App',
 };
 
 const ecosystemRoleLabels: Record<string, string> = {
-  reference: 'Reference Implementation',
+  reference: 'Original project',
   fork: 'Fork',
   reimplementation: 'Reimplementation',
   derivative: 'Derivative',
-  infrastructure: 'Infrastructure',
-  alternative: 'Alternative',
+  alternative: 'Independent option',
 };
 
 const sortedMentions = mentions?.slice().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
 
-// Load leaderboard to get this project's rank
-let leaderboardRank: number | null = null;
-let leaderboardTotal: number | null = null;
-try {
-  const lbPath = path.join(process.cwd(), 'src', 'data', 'generated', 'leaderboard.json');
-  const lb = JSON.parse(fs.readFileSync(lbPath, 'utf-8'));
-  leaderboardTotal = lb.count;
-  const entry = lb.entries.find((e: any) => e.slug === slug);
-  if (entry) leaderboardRank = entry.rank;
-} catch {}
-
-function daysSince(dateStr: string | null | undefined): number | null {
-  if (!dateStr) return null;
-  return Math.floor((Date.now() - new Date(dateStr).getTime()) / (24 * 60 * 60 * 1000));
-}
-
-function formatCount(n: number): string {
-  if (n >= 10000) return `${Math.round(n / 1000)}k`;
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
-  return String(n);
-}
-
-const lang = languageColors[language] || languageColors.multi;
-const langName = languageLabel[language] ?? language;
+const {entries, generated} = loadLeaderboard();
+const entry = entries.find(e => e.slug === slug) ?? null;
+const leaderboardRank = entry?.rank;
+const leaderboardTotal = entries.filter(e=>e.rank != null).length;
+const score = computeHealthScore(entry);
+const archive = archiveNotice(project);
+const setup = verifiedSetup(project);
+const startUrl = quickStartUrl(project);
 
 const langDot: Record<string, string> = {
   typescript: 'bg-blue-500', rust: 'bg-orange-500', python: 'bg-yellow-500',
@@ -80,106 +69,29 @@ const langDot: Record<string, string> = {
 const projectStars = github_data?.stars ?? stars ?? 0;
 
 // Other projects for comparison links
-const otherProjects = allProjects.filter(p => p.slug !== slug);
+const otherProjects = allProjects.filter(p => p.slug !== slug && !archiveNotice(p));
 const indexableCompareSlugs = getIndexableCompareSlugSet(allProjects);
-const openclawProject = allProjects.find(p => p.slug === 'openclaw');
-const openclawStars = openclawProject?.github_data?.stars ?? openclawProject?.stars ?? 0;
 const averageGrowth7d = getAverageGrowth7d(allProjects);
 
-// Similar projects: share categories or language, sorted by most categories in common then by stars
+// Match by cataloged platforms and use cases.
 const similarProjects = otherProjects
   .map(p => ({
     project: p,
-    shared: p.category.filter(c => category.includes(c)).length + (p.language === language ? 1 : 0),
+    shared: sharedTraits(project, p).length,
   }))
   .filter(x => x.shared > 0)
   .sort((a, b) => b.shared - a.shared || (b.project.stars ?? 0) - (a.project.stars ?? 0))
   .slice(0, 6)
   .map(x => x.project);
 
-function similarityScore(other: Project): number {
-  const sharedCategories = other.category.filter(c => category.includes(c)).length;
-  const sharedPlatform = (other.platform ?? []).filter(value => (platform ?? []).includes(value)).length;
-  const sameLanguage = other.language === language ? 1 : 0;
-  return (sharedCategories * 3) + (sharedPlatform * 2) + sameLanguage;
-}
-
 const compareCandidates = otherProjects
   .filter((other) => indexableCompareSlugs.has([slug, other.slug].sort().join('-vs-')))
   .sort((left, right) => {
-    const similarityDelta = similarityScore(right) - similarityScore(left);
+    const similarityDelta = sharedTraits(project, right).length - sharedTraits(project, left).length;
     if (similarityDelta !== 0) return similarityDelta;
     return (right.github_data?.stars ?? right.stars ?? 0) - (left.github_data?.stars ?? left.stars ?? 0);
   })
   .slice(0, 20);
-
-const isDerivative = slug !== 'openclaw';
-
-function bestForLabel(): string {
-  if (category.includes('security') || category.includes('privacy')) return 'Security-sensitive deployments';
-  if (category.includes('research')) return 'Research and experimentation';
-  if (category.includes('lightweight') || category.includes('performance')) return 'Minimal-footprint environments';
-  if ((platform ?? []).includes('embedded')) return 'Edge and embedded deployments';
-  if ((platform ?? []).includes('browser')) return 'Browser-first deployments';
-  if ((platform ?? []).includes('messaging')) return 'Message-driven assistant workflows';
-  if (category.includes('memory')) return 'Long-lived agents with memory-heavy workflows';
-  return 'General self-hosted agent deployments';
-}
-
-function strengths(): string[] {
-  const items: string[] = [];
-  if (projectStars >= 10000) items.push(`A large GitHub footprint (${formatStars(projectStars)} stars) gives it more tutorials, contributors, and social proof than most projects in the ecosystem.`);
-  else if (projectStars >= 1000) items.push(`It already has meaningful community validation at ${formatStars(projectStars)} GitHub stars.`);
-  if (requires_llm === false) items.push('It can run without a paid LLM API, which materially changes the operating cost profile.');
-  if (mcp_support) items.push('MCP support makes it easier to integrate external tools and data sources without custom glue code.');
-  if ((platform ?? []).includes('embedded')) items.push('Its platform story explicitly includes constrained hardware, not just servers and laptops.');
-  if ((platform ?? []).includes('browser')) items.push('It supports browser-native usage, which lowers the operational burden for lightweight deployments.');
-  if (integration_count) items.push(`${integration_count}+ integrations give it a broader out-of-the-box workflow surface than most peer projects.`);
-  if (perf?.binary_size || perf?.startup_time || perf?.ram) items.push('The published performance profile suggests a deliberate focus on runtime efficiency rather than feature sprawl.');
-  if (items.length < 3 && category.length > 0) items.push(`Its category focus on ${category.slice(0, 2).join(' and ')} makes the product direction easier to understand than generic agent frameworks.`);
-  return items.slice(0, 4);
-}
-
-function tradeoffs(): string[] {
-  const items: string[] = [];
-  if (projectStars < 1000) items.push('The smaller community means fewer battle-tested examples, integrations, and third-party writeups.');
-  if (status === 'experimental') items.push('Experimental status usually means faster iteration but more volatility in APIs, docs, and deployment assumptions.');
-  if (requires_llm !== false) items.push('It still depends on an external LLM provider, so token spend and vendor reliability remain part of the operating model.');
-  if (!mcp_support && mcp_support !== undefined) items.push('Teams standardizing on MCP will need custom integration work or a different tool choice.');
-  if (!(platform ?? []).includes('server') && (platform ?? []).length > 0) items.push('Its deployment focus is opinionated, so it may not fit teams that want a conventional server-first setup.');
-  if (items.length < 3 && category.length > 0) items.push(`Its specialization around ${category[0]} can be a limitation if you need a broader, more general-purpose assistant runtime.`);
-  return items.slice(0, 4);
-}
-
-function editorialOverview(): string[] {
-  const paragraphs: string[] = [];
-  const relationship = isDerivative
-    ? `${name} sits in the OpenClaw family as a ${ecosystemRoleLabels[ecosystem_role ?? 'alternative']?.toLowerCase() ?? 'project'} rather than a generic AI agent tool.`
-    : `${name} is the reference point for the rest of the ecosystem and remains the benchmark every other project is measured against.`;
-
-  paragraphs.push(
-    `${relationship} It is written in ${langName}${projectStars > 0 ? ` and currently shows ${formatStars(projectStars)} GitHub stars` : ''}, which gives a quick sense of where it fits between experimentation and mainstream adoption.`
-  );
-
-  if (slug !== 'openclaw' && openclawStars > 0) {
-    const ratio = projectStars > 0 ? Math.max(1, Math.round(openclawStars / Math.max(projectStars, 1))) : null;
-    paragraphs.push(
-      `${name} is best understood as a response to the tradeoffs in OpenClaw itself. Compared with the flagship project${ratio ? `, its community is roughly ${ratio}x smaller` : ''}, but that smaller scope often exists because the project is optimizing for a sharper use case: ${bestForLabel().toLowerCase()}.`
-    );
-  } else {
-    paragraphs.push(
-      `${name} is still the broadest and most battle-tested option in this directory. It earns that position through sheer ecosystem gravity, but that breadth also creates room for smaller projects to specialize where the original is intentionally general.`
-    );
-  }
-
-  if ((platform ?? []).length > 0 || requires_llm !== undefined || mcp_support !== undefined) {
-    paragraphs.push(
-      `Operationally, this project targets ${bestForLabel().toLowerCase()}. ${requires_llm === false ? 'Because it does not require an external LLM provider, cost control is a real advantage. ' : ''}${mcp_support ? 'MCP support improves interoperability with modern tool ecosystems. ' : ''}${(platform ?? []).length > 0 ? `Its deployment surface spans ${(platform ?? []).map((value) => platformLabels[value] ?? value).join(', ')}.` : ''}`
-    );
-  }
-
-  return paragraphs;
-}
 
 const softwareJsonLd = {
   "@context": "https://schema.org",
@@ -187,18 +99,16 @@ const softwareJsonLd = {
   "name": name,
   "description": description,
   "url": `https://shelldex.com/projects/${slug}/`,
-  "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "Linux, macOS, Windows",
+  ...(setup.devices ? {operatingSystem: setup.devices} : {}),
   ...(language !== 'multi' ? { "programmingLanguage": languageLabel[language] ?? language } : {}),
   ...(github ? { "codeRepository": `https://github.com/${github}` } : {}),
-  ...(isDerivative ? {
+  ...(ecosystem_role === "fork" ? {
     "isBasedOn": {
       "@type": "SoftwareApplication",
       "name": "OpenClaw",
       "url": "https://github.com/openclaw/openclaw"
     }
   } : {}),
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
 };
 
 const breadcrumbJsonLd = {
@@ -210,7 +120,7 @@ const breadcrumbJsonLd = {
   ],
 };
 
-const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : null;
+const formattedDate = added ? new Date(added).toLocaleDateString('en-US', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' }) : null;
 const compareToOpenClawHref = slug !== 'openclaw' ? buildComparisonHref(slug, 'openclaw', indexableCompareSlugs) : null;
 const alternativesHref = INDEXABLE_ALTERNATIVE_SLUGS.has(slug) ? `/alternatives/${slug}/` : '/best-alternatives/';
 const alternativesLinkLabel = INDEXABLE_ALTERNATIVE_SLUGS.has(slug)
@@ -218,6 +128,7 @@ const alternativesLinkLabel = INDEXABLE_ALTERNATIVE_SLUGS.has(slug)
   : 'See ranked OpenClaw alternatives';
 
 function buildProjectTitle(): string {
+  if (archive) return name + " (historical listing) | Shelldex";
   if (slug === 'openclaw') {
     return `${name} — ${tagline} | Shelldex`;
   }
@@ -227,24 +138,18 @@ function buildProjectTitle(): string {
   return `${name}: ${tagline} — OpenClaw Alternative (${formatStars(projectStars)} Stars) | Shelldex`;
 }
 
-function buildProjectDescription(): string {
-  if (slug === 'hermes') {
-    return `${description} Compare Hermes Agent vs OpenClaw, review ${formatStars(projectStars)} GitHub stars, and see MCP support, health signals, and deployment fit.`;
-  }
-  return `${description} ${langName} project with ${formatStars(projectStars)} GitHub stars.${requires_llm === false ? ' No LLM API needed.' : ''}${mcp_support ? ' MCP support included.' : ''} See stats, health score, and comparisons.`;
-}
 ---
 
 <Layout
   title={buildProjectTitle()}
-  description={buildProjectDescription()}
+  description={archive || description}
   markdownUrl={`https://shelldex.com/md/projects/${slug}.md`}
   jsonUrl={`https://shelldex.com/api/projects/${slug}.json`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(softwareJsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="max-w-[72rem] mx-auto px-5 sm:px-8 py-12">
 
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 text-sm text-ledger-whisper mb-10" aria-label="Breadcrumb">
@@ -254,7 +159,7 @@ function buildProjectDescription(): string {
     </nav>
 
     <!-- Header -->
-    <header class="mb-10">
+    <header class="mb-8">
       <div class="flex items-start gap-5 mb-6">
         <span class="text-5xl leading-none mt-1">{emoji}</span>
         <div>
@@ -272,8 +177,8 @@ function buildProjectDescription(): string {
           </span>
         )}
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-ledger-surface border border-ledger-border text-sm font-medium text-ledger-text">
-          <span class={`w-2 h-2 rounded-full ${status === 'active' ? 'bg-emerald-500' : status === 'experimental' ? 'bg-amber-500' : 'bg-gray-400'}`}></span>
-          {status}
+          <span class={`w-2 h-2 rounded-full ${!archive && status === 'active' ? 'bg-emerald-500' : status === 'experimental' ? 'bg-amber-500' : 'bg-gray-400'}`}></span>
+          {publicStatus(project)}
         </span>
         {stars !== undefined && stars > 0 && github && (
           <a
@@ -292,7 +197,7 @@ function buildProjectDescription(): string {
       </div>
       {slug === 'hermes' && compareToOpenClawHref && (
         <div class="mt-6 rounded-xl border border-ledger-red/20 bg-ledger-red/5 px-5 py-4">
-          <p class="text-xs font-mono uppercase tracking-[0.18em] text-ledger-faint mb-2">Most Searched Comparison</p>
+          <p class="text-xs font-mono uppercase tracking-[0.18em] text-ledger-faint mb-2">Compare with the original</p>
           <a
             href={compareToOpenClawHref}
             class="inline-flex items-center gap-2 text-ledger-red hover:text-ledger-coral transition-colors font-medium"
@@ -302,12 +207,14 @@ function buildProjectDescription(): string {
           </a>
         </div>
       )}
+      <DataStamp date={github_data?.last_checked || generated}>{archive}</DataStamp>
     </header>
 
     <!-- Description -->
     <section class="mb-8">
       <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">About</h2>
-      <p class="text-ledger-muted leading-relaxed text-lg">{description}</p>
+      <p class="text-ledger-muted leading-relaxed text-lg max-w-3xl">{description}</p>
+      {github && <a href={'https://github.com/'+github+'#readme'} class="inline-block text-sm underline mt-2">Read the project documentation ↗</a>}
     </section>
 
     <!-- At a Glance -->
@@ -317,7 +224,7 @@ function buildProjectDescription(): string {
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {platform && platform.length > 0 && (
             <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
-              <p class="text-xs text-ledger-faint mb-1.5">Runs On</p>
+              <p class="text-xs text-ledger-faint mb-1.5">Runs on or connects through</p>
               <div class="flex flex-wrap gap-1">
                 {platform.map((p: string) => (
                   <span class="text-xs text-ledger-muted bg-white/[0.06] rounded px-1.5 py-0.5">{platformLabels[p] ?? p}</span>
@@ -325,37 +232,37 @@ function buildProjectDescription(): string {
               </div>
             </div>
           )}
-          {requires_llm !== undefined && (
+          {!archive && (
             <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
-              <p class="text-xs text-ledger-faint mb-1.5">LLM Required</p>
+              <p class="text-xs text-ledger-faint mb-1.5">AI model</p>
               <p class={`text-sm font-medium ${requires_llm ? 'text-ledger-muted' : 'text-emerald-700'}`}>
-                {requires_llm ? 'Yes — needs API key' : 'No — zero LLM cost'}
+                {modelAccess(project)}
               </p>
             </div>
           )}
-          {mcp_support !== undefined && (
+          {mcp_support && (
             <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
-              <p class="text-xs text-ledger-faint mb-1.5">MCP Support</p>
+              <p class="text-xs text-ledger-faint mb-1.5">External tools (MCP)</p>
               <p class={`text-sm font-medium ${mcp_support ? 'text-purple-700' : 'text-ledger-faint'}`}>
-                {mcp_support ? 'Yes' : 'No'}
+                Connects tools using the Model Context Protocol.
               </p>
             </div>
           )}
           {integration_count && (
             <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
-              <p class="text-xs text-ledger-faint mb-1.5">Integrations</p>
+              <p class="text-xs text-ledger-faint mb-1.5">Integrations reported by the project</p>
               <p class="text-lg font-mono text-ledger-muted">{integration_count}+</p>
             </div>
           )}
           {ecosystem_role && (
             <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
-              <p class="text-xs text-ledger-faint mb-1.5">Ecosystem Role</p>
+              <p class="text-xs text-ledger-faint mb-1.5">Relation to OpenClaw</p>
               <p class="text-sm font-medium text-ledger-muted">{ecosystemRoleLabels[ecosystem_role] ?? ecosystem_role}</p>
             </div>
           )}
           {perf && (
             <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
-              <p class="text-xs text-ledger-faint mb-1.5">Performance</p>
+              <p class="text-xs text-ledger-faint mb-1.5">Performance reported by the project</p>
               <div class="space-y-0.5">
                 {perf.binary_size && <p class="text-xs text-ledger-muted"><span class="text-ledger-faint">Binary:</span> {perf.binary_size}</p>}
                 {perf.startup_time && <p class="text-xs text-ledger-muted"><span class="text-ledger-faint">Startup:</span> {perf.startup_time}</p>}
@@ -367,49 +274,39 @@ function buildProjectDescription(): string {
       </section>
     )}
 
-    <!-- Highlight -->
-    <section class="mb-8 rounded-xl bg-ledger-red/5 border border-ledger-red/15 px-6 py-5">
-      <p class="text-ledger-red font-medium leading-relaxed">{highlight}</p>
-    </section>
+    {notes && (
+      <>
+        <aside class="mb-8 rounded-xl bg-ledger-red/5 border border-ledger-red/15 px-6 py-5">
+          <p class="text-ledger-red font-medium leading-relaxed">{notes.highlight}</p>
+        </aside>
 
-    <section class="mb-8">
-      <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">Editorial Take</h2>
-      <div class="space-y-4 text-ledger-muted leading-relaxed">
-        {editorialOverview().map((paragraph) => (
-          <p>{paragraph}</p>
-        ))}
-      </div>
-    </section>
+        <section class="mb-8">
+          <h2 class="font-display text-lg font-bold text-ledger-text mb-3">Editorial Take</h2>
+          <p class="max-w-3xl text-ledger-muted leading-relaxed">{notes.take}</p>
+          {notes.source && <a class="inline-block mt-2 underline text-sm" href={notes.source.url}>{notes.source.text} ↗</a>}
+        </section>
 
-    <section class="mb-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
-          <h2 class="font-display text-lg font-bold text-ledger-text mb-3">Best For</h2>
-          <p class="text-sm text-ledger-muted leading-relaxed mb-4">{bestForLabel()}</p>
-          <ul class="space-y-2">
-            {strengths().map((item) => (
-              <li class="flex items-start gap-3 text-sm text-ledger-muted leading-relaxed">
-                <span class="text-ledger-red mt-0.5 flex-shrink-0">+</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+        <div class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <section class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
+            <h2 class="font-display text-lg font-bold text-ledger-text mb-3">Best For</h2>
+            <p class="text-ledger-muted leading-relaxed">{notes.bestFor}</p>
+          </section>
+          <section class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
+            <h2 class="font-display text-lg font-bold text-ledger-text mb-3">Tradeoffs</h2>
+            <p class="text-ledger-muted leading-relaxed">{notes.tradeoff}</p>
+          </section>
         </div>
-        <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
-          <h2 class="font-display text-lg font-bold text-ledger-text mb-3">Tradeoffs</h2>
-          <p class="text-sm text-ledger-faint leading-relaxed mb-4">What to understand before choosing {name} over another project in the ecosystem.</p>
-          <ul class="space-y-2">
-            {tradeoffs().map((item) => (
-              <li class="flex items-start gap-3 text-sm text-ledger-muted leading-relaxed">
-                <span class="text-coral mt-0.5 flex-shrink-0">-</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
+      </>
+    )}
 
+    {!archive && startUrl && <section class="mb-8 rounded-xl bg-ledger-surface border border-ledger-border px-6 py-5">
+      <h2 class="font-display text-xl font-bold mb-3">Try {name}</h2>
+      {setup.devices && <p><strong>Devices:</strong> {setup.devices}.</p>}
+      {setup.setup && <p><strong>One setup option:</strong> {setup.setup}.</p>}
+      <p class="my-3 text-ledger-muted"><strong>Suggested first task:</strong> {firstTask(project)}</p>
+      <a href={startUrl} class="sd-primary">Open the project’s setup instructions ↗</a>
+      {setup.source && setup.source !== startUrl && <a href={setup.source} class="underline ml-3">Model documentation ↗</a>}
+    </section>}
     <!-- GitHub Stats -->
     {github_data && (
       <section class="mb-8">
@@ -421,41 +318,47 @@ function buildProjectDescription(): string {
             </a>
           )}
         </div>
+        <p class="text-xs text-ledger-faint mb-3">
+          Metrics from {github_data.last_enriched.slice(0, 10)}.
+          {github_data.availability === 'unavailable' && ' Repository currently unavailable on GitHub; these are the last known figures.'}
+        </p>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
             <p class="text-xs text-ledger-faint mb-1">Stars</p>
-            <p class="text-lg font-mono text-yellow-700">★ {formatCount(github_data.stars)}</p>
+            <p class="text-lg font-mono text-yellow-700">★ {formatStars(github_data.stars)}</p>
             {github_data.star_growth_7d !== null && github_data.star_growth_7d !== 0 && (
               <p class={`text-xs font-mono mt-0.5 ${github_data.star_growth_7d > 0 ? 'text-ledger-red' : 'text-ledger-red'}`}>
-                {github_data.star_growth_7d > 0 ? '+' : ''}{formatCount(github_data.star_growth_7d)} this week
+                {github_data.star_growth_7d > 0 ? '+' : ''}{formatStars(github_data.star_growth_7d)} this week
               </p>
             )}
           </div>
           <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
             <p class="text-xs text-ledger-faint mb-1">Forks</p>
-            <p class="text-lg font-mono text-ledger-muted">{formatCount(github_data.forks)}</p>
+            <p class="text-lg font-mono text-ledger-muted">{formatStars(github_data.forks)}</p>
           </div>
           <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
-            <p class="text-xs text-ledger-faint mb-1">Open Issues</p>
-            <p class="text-lg font-mono text-ledger-muted">{formatCount(github_data.open_issues)}</p>
+            <p class="text-xs text-ledger-faint mb-1">Open issues + pull requests</p>
+            <p class="text-lg font-mono text-ledger-muted">{formatStars(github_data.open_issues)}</p>
           </div>
           <div class="rounded-lg border border-ledger-border bg-ledger-surface px-4 py-3">
-            <p class="text-xs text-ledger-faint mb-1">Last Commit</p>
-            <p class={`text-lg font-mono ${(daysSince(github_data.last_commit) ?? 999) <= 7 ? 'text-ledger-red' : (daysSince(github_data.last_commit) ?? 999) <= 30 ? 'text-ledger-muted' : 'text-ledger-whisper'}`}>
-              {daysSince(github_data.last_commit) !== null ? `${daysSince(github_data.last_commit)}d ago` : '—'}
-            </p>
+            <p class="text-xs text-ledger-faint mb-1">Last repository push (UTC)</p>
+            <p class="text-base font-mono text-ledger-text">{github_data.last_commit?.slice(0,10) || '—'}</p>
           </div>
         </div>
         <div class="flex flex-wrap gap-x-6 gap-y-1 mt-3 text-xs text-ledger-faint">
+          {score != null && <a class="underline" href="/methodology/">Health score {score}/100</a>}
           {github_data.license && (
-            <span>License: <span class="text-ledger-faint">{github_data.license}</span></span>
+            <span>License: <span class="text-ledger-faint">{licenseLabel(project)}</span></span>
           )}
           {github_data.latest_release && (
             <span>Latest release: <span class="text-ledger-faint font-mono">{github_data.latest_release}</span></span>
           )}
         </div>
         <div class="mt-4 rounded-xl border border-ledger-border bg-white/60 px-4 py-4">
-          <MomentumSparkline project={project} averageGrowth7d={averageGrowth7d} label={`${name} momentum`} />
+          <MomentumSparkline project={project} averageGrowth7d={averageGrowth7d} label={`${name} star activity`} />
+          {github_data.availability !== 'unavailable' && (
+            <a class="inline-block mt-2 text-xs text-ledger-red underline" href={`/api/projects/${slug}.json`}>Full daily history (JSON)</a>
+          )}
         </div>
       </section>
     )}
@@ -496,7 +399,7 @@ function buildProjectDescription(): string {
                 <div class="flex items-center gap-2 text-xs text-ledger-faint">
                   <span class="font-medium text-ledger-faint">{m.author}</span>
                   {m.source && <span>on {m.source}</span>}
-                  <span>{new Date(m.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  <span>{new Date(m.date).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric', year: 'numeric' })}</span>
                 </div>
               </div>
               {m.thumbnail && (
@@ -509,22 +412,16 @@ function buildProjectDescription(): string {
       </section>
     )}
 
-    <!-- Relation to OpenClaw -->
-    {isDerivative && (
+    {compareToOpenClawHref && slug !== 'hermes' && (
       <section class="mb-8">
-        <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">OpenClaw Relationship</h2>
-        <p class="text-ledger-faint leading-relaxed">
-          {name} is an <a href="/projects/openclaw/" class="text-ledger-red hover:underline">OpenClaw</a>-inspired project — part of the growing ecosystem of personal AI agent frameworks that trace their lineage to Peter Steinberger's original self-hosted assistant.
-        </p>
-        {compareToOpenClawHref && (
+
           <a
             href={compareToOpenClawHref}
             class={`inline-flex items-center gap-2 mt-4 transition-colors ${slug === 'hermes' ? 'text-ledger-red font-medium' : 'text-sm text-ledger-faint hover:text-ledger-red'}`}
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-            Compare {name} vs OpenClaw
+            Compare {name} with OpenClaw
           </a>
-        )}
       </section>
     )}
 
@@ -551,7 +448,7 @@ function buildProjectDescription(): string {
     <section class="mb-8">
       <a
         href={alternativesHref}
-        class="inline-flex items-center gap-3 px-5 py-3 rounded-xl border border-ledger-border bg-ledger-surface hover:border-ledger-red/30 transition-all group"
+        class="sd-secondary group"
       >
         <span class="text-ledger-red font-medium group-hover:text-ledger-coral transition-colors">{alternativesLinkLabel}</span>
         <svg class="w-4 h-4 text-ledger-faint group-hover:text-ledger-red transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
@@ -605,20 +502,6 @@ function buildProjectDescription(): string {
       </section>
     )}
 
-    <!-- Community -->
-    <section class="mb-10">
-      <h2 class="font-display text-sm font-semibold text-ledger-faint uppercase tracking-wider mb-3">Community</h2>
-      <a
-        href={`https://www.reddit.com/search/?q=${encodeURIComponent(name)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex items-center gap-2 text-sm text-ledger-faint hover:text-ledger-red transition-colors"
-      >
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
-        Search Reddit for {name}
-        <svg class="w-3.5 h-3.5 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-      </a>
-    </section>
 
     <!-- Back link -->
     <div class="border-t border-ledger-border pt-8 flex flex-wrap gap-6">

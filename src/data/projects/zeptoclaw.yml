@@ -1,35 +1,39 @@
 name: ZeptoClaw
 slug: zeptoclaw
-tagline: Ultra-lightweight Rust agent with container isolation
-description: One 6MB Rust binary with 32 tools, 9 channels, 9 providers, and container sandboxing. Studies OpenClaw, NanoClaw, and PicoClaw — keeps the integrations, drops the bloat.
+tagline: "A Rust assistant with container isolation"
+description: "ZeptoClaw is a Rust assistant with messaging channels and container sandboxing."
 language: rust
 category:
   - lightweight
   - security
 github: qhkm/zeptoclaw
 status: active
-tier: 2
+tier: 1
 highlight: 6MB binary, 50ms startup, 6MB RAM, container isolation + prompt injection detection
 emoji: ⚡
 platform:
   - server
   - edge
 requires_llm: true
-mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-03-20T00:00:00.000Z
 github_data:
-  stars: 631
-  forks: 96
-  open_issues: 44
+  repository_id: 1156147627
+  stars: 654
+  forks: 98
+  open_issues: 68
   license: Apache-2.0
   topics:
     - ai
     - ai-assistant
     - open-source
     - rust
-  last_commit: "2026-05-19T19:54:07Z"
+  last_commit: "2026-10-30T08:49:21Z"
   latest_release: v0.9.2
   latest_release_date: "2026-04-07T15:45:01Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:58.882Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/qhkm/zeptoclaw#quick-start"
+first_task: "In its terminal chat, put one short checklist in the test workspace and ask which items have deadlines. Have it quote each line and leave the original file alone."

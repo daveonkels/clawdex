@@ -2,10 +2,10 @@ import type { APIRoute } from 'astro';
 import { loadLeaderboard, computeHealthScore } from '../../lib/compare';
 
 export const GET: APIRoute = async () => {
-  const { entries, count } = loadLeaderboard();
+  const { entries, count, generated } = loadLeaderboard();
   const body = {
     $schema: 'https://shelldex.com/schemas/leaderboard.schema.json',
-    generated: new Date().toISOString(),
+    generated,
     source: 'https://shelldex.com/leaderboard/',
     license: 'CC-BY-4.0',
     count,

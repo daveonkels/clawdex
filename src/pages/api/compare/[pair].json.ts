@@ -7,6 +7,8 @@ import {
   getIndexableComparePairs,
 } from '../../../lib/compare';
 
+import { modelAccess, quickStartUrl } from '../../../lib/agent-choice';
+
 export const getStaticPaths: GetStaticPaths = async () => {
   const projects = await loadProjects();
   const pairs = getIndexableComparePairs(projects);
@@ -39,10 +41,18 @@ export const GET: APIRoute = async ({ props }) => {
     projects: [
       {
         ...a,
+        mcp_support: a.mcp_support ?? null,
+        model_options: modelAccess(a),
+        quick_start: quickStartUrl(a),
+        first_task: a.first_task ?? null,
         leaderboard: aEntry ? { rank: aEntry.rank, health_score: computeHealthScore(aEntry), health: aEntry.health } : null,
       },
       {
         ...b,
+        mcp_support: b.mcp_support ?? null,
+        model_options: modelAccess(b),
+        quick_start: quickStartUrl(b),
+        first_task: b.first_task ?? null,
         leaderboard: bEntry ? { rank: bEntry.rank, health_score: computeHealthScore(bEntry), health: bEntry.health } : null,
       },
     ],

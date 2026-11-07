@@ -1,28 +1,28 @@
 name: OpenBrowserClaw
 slug: openbrowserclaw
-tagline: Browser-native personal AI assistant — zero infrastructure, the browser is the server
+tagline: "A personal agent that runs in a browser tab"
 description: A browser-only reimagination of NanoClaw. Runs entirely in a browser tab as a PWA with no backend. Uses IndexedDB for storage, OPFS for files, Web Workers for the agent loop, and a WebVM (v86 Alpine Linux in WASM) for shell commands. Supports Telegram as an optional channel. Paste an Anthropic API key and go.
 language: typescript
 category:
   - browser
   - lightweight
   - minimal
-github: sachaa/openbrowserclaw
+github: wexare-ai/openbrowserclaw
 status: active
-tier: 2
+tier: 1
 highlight: Entire personal AI assistant running in a single browser tab — no server, no Docker, no Node.js
 emoji: 🌐
 platform:
   - browser
   - messaging
 requires_llm: true
-mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-02-28T00:00:00.000Z
 github_data:
-  stars: 597
-  forks: 80
-  open_issues: 10
+  repository_id: 1163577956
+  stars: 604
+  forks: 82
+  open_issues: 11
   license: MIT
   topics:
     - ai-agents
@@ -36,5 +36,9 @@ github_data:
   last_commit: "2026-02-26T00:56:03Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:49.113Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/wexare-ai/openbrowserclaw#quick-start"
+first_task: "In a fresh browser workspace, give it two sample notes about the same event. Ask it for a combined checklist, then reopen the tab and check what was saved."

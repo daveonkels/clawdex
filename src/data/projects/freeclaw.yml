@@ -14,17 +14,21 @@ emoji: 🆓
 platform:
   - server
 requires_llm: true
-mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-02-27T00:00:00.000Z
 github_data:
-  stars: 58
-  forks: 10
-  open_issues: 2
+  repository_id: 1158348112
+  stars: 62
+  forks: 12
+  open_issues: 3
   license: null
   topics: []
   last_commit: "2026-02-22T17:20:21Z"
   latest_release: 0.1.0
   latest_release_date: "2026-02-22T17:20:21Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:35.620Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/openconstruct/freeclaw#install"
+first_task: "Put a sample packing list in its workspace. Ask it to read the file and list duplicates, keeping the original untouched."

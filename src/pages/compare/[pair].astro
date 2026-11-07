@@ -1,658 +1,96 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import DataStamp from '../../components/DataStamp.astro';
 import MomentumSparkline from '../../components/MomentumSparkline.astro';
-import { loadProjects, formatStars } from '../../lib/projects';
-import { languageLabel, languageColors } from '../../lib/constants';
-import {
-  getIndexableComparePairs,
-  generateKeyDifferences,
-  generateRecommendation,
-  generateFAQItems,
-  getRelatedComparisons,
-  computeHealthScore,
-  loadLeaderboard,
-} from '../../lib/compare';
-import type { PairEntry, LeaderboardEntry, FAQItem } from '../../lib/compare';
+import { loadProjects } from '../../lib/projects';
 import type { Project } from '../../lib/projects';
-import { getAverageGrowth7d } from '../../lib/momentum.js';
+import { comparisonHighlights, comparisonRows, generateFAQItems, generateRecommendation, getIndexableComparePairs, getRelatedComparisons, loadLeaderboard } from '../../lib/compare';
+import { choiceNote, quickStartUrl } from '../../lib/agent-choice';
 
 export async function getStaticPaths() {
   const projects = await loadProjects();
-  const indexablePairs = getIndexableComparePairs(projects);
-  const projectMap = new Map(projects.map(p => [p.slug, p]));
-  const lb = loadLeaderboard();
-  const lbMap = new Map(lb.entries.map(e => [e.slug, e]));
-
-  return indexablePairs.map(entry => {
-    const a = projectMap.get(entry.slugA)!;
-    const b = projectMap.get(entry.slugB)!;
-    const aEntry = lbMap.get(entry.slugA) ?? null;
-    const bEntry = lbMap.get(entry.slugB) ?? null;
-
-    return {
-      params: { pair: entry.canonical },
-      props: {
-        a,
-        b,
-        aEntry,
-        bEntry,
-        isIndexable: true,
-        canonicalUrl: `https://shelldex.com/compare/${entry.canonical}/`,
-        redirectUrl: `/compare/${entry.canonical}/`,
-        keyDifferences: generateKeyDifferences(a, b, aEntry, bEntry),
-        recommendation: generateRecommendation(a, b, aEntry, bEntry),
-        faqItems: generateFAQItems(a, b, aEntry, bEntry),
-        related: getRelatedComparisons(entry.slugA, entry.slugB, indexablePairs),
-      },
-    };
-  });
+  const pairs = getIndexableComparePairs(projects);
+  const bySlug = new Map(projects.map(p => [p.slug,p]));
+  return pairs.map(pair => ({
+    params: { pair: pair.canonical },
+    props: { a: bySlug.get(pair.slugA)!, b: bySlug.get(pair.slugB)!,
+      related: getRelatedComparisons(pair.slugA, pair.slugB, pairs, 6).map(p => ({url: '/compare/'+p.canonical+'/', title: bySlug.get(p.slugA)!.name+' vs '+bySlug.get(p.slugB)!.name})) }
+  }));
 }
-
-interface Props {
-  a: Project;
-  b: Project;
-  aEntry: LeaderboardEntry | null;
-  bEntry: LeaderboardEntry | null;
-  isIndexable: boolean;
-  canonicalUrl: string;
-  redirectUrl: string;
-  keyDifferences: string[];
-  recommendation: string;
-  faqItems: FAQItem[];
-  related: PairEntry[];
-}
-
-const { a, b, aEntry, bEntry, isIndexable, canonicalUrl, redirectUrl, keyDifferences, recommendation, faqItems, related } = Astro.props;
-
-function daysSince(dateStr: string | null | undefined): number | null {
-  if (!dateStr) return null;
-  return Math.floor((Date.now() - new Date(dateStr).getTime()) / (24 * 60 * 60 * 1000));
-}
-
-function formatCount(n: number | null | undefined): string {
-  if (n === null || n === undefined) return '—';
-  if (n >= 10000) return `${Math.round(n / 1000)}k`;
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
-  return String(n);
-}
-
-function freshness(days: number | null): string {
-  if (days === null) return 'text-ledger-whisper';
-  if (days <= 7) return 'text-ledger-red';
-  if (days <= 30) return 'text-ledger-muted';
-  return 'text-ledger-whisper';
-}
-
-const aStars = a.github_data?.stars ?? a.stars ?? 0;
-const bStars = b.github_data?.stars ?? b.stars ?? 0;
-const aHealthScore = computeHealthScore(aEntry);
-const bHealthScore = computeHealthScore(bEntry);
-const aRank = aEntry?.rank ?? null;
-const bRank = bEntry?.rank ?? null;
-const lb = loadLeaderboard();
-const lbTotal = lb.count;
-const averageGrowth7d = getAverageGrowth7d(lb.entries);
-
-const aLang = languageColors[a.language] || languageColors.multi;
-const bLang = languageColors[b.language] || languageColors.multi;
-
-const year = new Date().getFullYear();
-const aLangName = languageLabel[a.language] ?? a.language;
-const bLangName = languageLabel[b.language] ?? b.language;
-const includesOpenClaw = a.slug === 'openclaw' || b.slug === 'openclaw';
-const nonOpenClawProject = a.slug === 'openclaw' ? b : b.slug === 'openclaw' ? a : null;
-const isAstrbotVsOpenBrowserClaw = [a.slug, b.slug].sort().join('-vs-') === 'astrbot-vs-openbrowserclaw';
-// Title: front-load the matchup for mobile truncation (keep under 55 chars before " | Shelldex")
-const pageTitle = includesOpenClaw && nonOpenClawProject
-  ? `${nonOpenClawProject.name} vs OpenClaw (${year}) — Alternative Comparison | Shelldex`
-  : `${a.name} vs ${b.name} (${year}) — Full Comparison | Shelldex`;
-
-// Description: lead with the key differentiator, then a hook
-function buildCompareDescription(): string {
-  if (includesOpenClaw && nonOpenClawProject) {
-    const challengerStars = nonOpenClawProject.github_data?.stars ?? nonOpenClawProject.stars ?? 0;
-    const challengerLang = languageLabel[nonOpenClawProject.language] ?? nonOpenClawProject.language;
-    const parts = [
-      `Compare ${nonOpenClawProject.name} vs OpenClaw side by side.`,
-      challengerStars > 0 ? `${nonOpenClawProject.name} has ${formatStars(challengerStars)} GitHub stars and is built in ${challengerLang}.` : `${nonOpenClawProject.name} is built in ${challengerLang}.`,
-    ];
-    if (nonOpenClawProject.mcp_support !== undefined) {
-      parts.push(nonOpenClawProject.mcp_support ? `${nonOpenClawProject.name} includes MCP support.` : `${nonOpenClawProject.name} skips MCP in favor of a narrower design.`);
-    }
-    parts.push('See the direct OpenClaw alternative comparison: features, health signals, and which one fits your stack.');
-    return parts.join(' ');
-  }
-
-  const parts: string[] = [];
-
-  // Lead with the most interesting differentiator
-  if (a.language !== b.language) {
-    parts.push(`${aLangName} vs ${bLangName}.`);
-  }
-  if (aStars > bStars * 2 && bStars > 0) {
-    parts.push(`${a.name} leads with ${formatStars(aStars)} stars vs ${formatStars(bStars)}.`);
-  } else if (bStars > aStars * 2 && aStars > 0) {
-    parts.push(`${b.name} leads with ${formatStars(bStars)} stars vs ${formatStars(aStars)}.`);
-  } else if (aStars > 0 && bStars > 0) {
-    parts.push(`${formatStars(aStars)} vs ${formatStars(bStars)} GitHub stars.`);
-  }
-  if (a.mcp_support !== b.mcp_support) {
-    const mcpProject = a.mcp_support ? a.name : b.name;
-    parts.push(`${mcpProject} has MCP support.`);
-  }
-  if (a.requires_llm !== b.requires_llm && a.requires_llm === false) {
-    parts.push(`${a.name} runs without an LLM API.`);
-  } else if (a.requires_llm !== b.requires_llm && b.requires_llm === false) {
-    parts.push(`${b.name} runs without an LLM API.`);
-  }
-
-  // Always end with the call-to-action hook
-  parts.push(`See the full breakdown — stats, health scores, and which one fits your stack.`);
-
-  return parts.join(' ');
-}
-
-const pageDescription = buildCompareDescription();
-const redirectCanonicalUrl = redirectUrl.includes('?')
-  ? 'https://shelldex.com/compare/'
-  : `https://shelldex.com${redirectUrl}`;
-
-function chooseReasons(project: Project, other: Project, projectHealth: number, otherHealth: number): string[] {
-  const reasons: string[] = [];
-  const projectStars = project.github_data?.stars ?? project.stars ?? 0;
-  const otherStars = other.github_data?.stars ?? other.stars ?? 0;
-  const projectLang = languageLabel[project.language] ?? project.language;
-
-  if (projectStars > otherStars * 2 && projectStars > 0) {
-    reasons.push(`You want the larger community footprint and stronger proof of adoption in the market.`);
-  }
-  if (project.language !== other.language) {
-    reasons.push(`Your team already builds in ${projectLang} and wants a stack-aligned codebase.`);
-  }
-  if (project.requires_llm === false && other.requires_llm !== false) {
-    reasons.push(`You want to avoid recurring LLM API costs and keep the deployment self-contained.`);
-  }
-  if (project.mcp_support === true && other.mcp_support !== true) {
-    reasons.push(`MCP connectivity matters for your workflow and you want a tool-friendly integration model.`);
-  }
-  if ((project.platform ?? []).includes('embedded') && !(other.platform ?? []).includes('embedded')) {
-    reasons.push(`You need something viable on constrained hardware or edge devices.`);
-  }
-  if ((project.platform ?? []).includes('browser') && !(other.platform ?? []).includes('browser')) {
-    reasons.push(`You prefer a browser-native experience over a server-heavy runtime.`);
-  }
-  if (projectHealth >= otherHealth + 15) {
-    reasons.push(`Maintenance signals look stronger right now, with healthier release and commit activity.`);
-  }
-  if (reasons.length < 3 && project.category.length > 0) {
-    reasons.push(`Its positioning around ${project.category.slice(0, 2).join(' and ')} is closer to what you need.`);
-  }
-  if (reasons.length < 3 && project.github_data?.star_growth_7d && (project.github_data.star_growth_7d ?? 0) > (other.github_data?.star_growth_7d ?? 0)) {
-    reasons.push(`It is gaining momentum faster this week, which can matter if you value ecosystem energy.`);
-  }
-
-  return reasons.slice(0, 4);
-}
-
-function matchupSummary(): string {
-  if (aStars > bStars * 4) {
-    return `${a.name} is the more established choice by community size, while ${b.name} is the more niche option for teams that care about its specific design tradeoffs.`;
-  }
-  if (bStars > aStars * 4) {
-    return `${b.name} is the more established choice by community size, while ${a.name} is the more niche option for teams that care about its specific design tradeoffs.`;
-  }
-  if (a.language !== b.language) {
-    return `This matchup is mostly about tradeoffs between ${aLangName} and ${bLangName}, plus the different product philosophies each project brings to the OpenClaw ecosystem.`;
-  }
-  return `${a.name} and ${b.name} target similar problems, so the decision comes down to ecosystem maturity, maintenance quality, and feature emphasis rather than raw category fit.`;
-}
-
-const chooseA = chooseReasons(a, b, aHealthScore, bHealthScore);
-const chooseB = chooseReasons(b, a, bHealthScore, aHealthScore);
-
-const breadcrumbJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Shelldex", "item": "https://shelldex.com" },
-    { "@type": "ListItem", "position": 2, "name": "Compare", "item": "https://shelldex.com/compare/" },
-    { "@type": "ListItem", "position": 3, "name": `${a.name} vs ${b.name}`, "item": canonicalUrl },
-  ],
-};
-
-const faqJsonLd = faqItems.length > 0 ? {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": faqItems.map(item => ({
-    "@type": "Question",
-    "name": item.question,
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": item.answer,
-    },
+interface Props { a: Project; b: Project; related: {url: string; title: string}[] }
+const { a, b, related } = Astro.props;
+const { entries, generated } = loadLeaderboard();
+const lookup = (p: Project) => entries.find(e => e.slug === p.slug) ?? null;
+const rows = comparisonRows(a, b, lookup(a), lookup(b));
+const highlights = comparisonHighlights(rows);
+const summary = generateRecommendation(a,b);
+const faqs = generateFAQItems(a,b);
+const title = `${a.name} vs ${b.name}`;
+const base = `https://shelldex.com/compare/${Astro.params.pair}/`;
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  name: title,
+  description: summary,
+  url: base,
+  about: [a, b].map(p => ({
+    '@type': 'SoftwareApplication', name: p.name, url: `https://shelldex.com/projects/${p.slug}/`,
   })),
-} : null;
-
-const webPageJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": pageTitle,
-  "description": pageDescription,
-  "url": canonicalUrl,
-  "about": [
-    {
-      "@type": "SoftwareApplication",
-      "name": a.name,
-      "url": `https://shelldex.com/projects/${a.slug}/`,
-      ...(a.github ? { "codeRepository": `https://github.com/${a.github}` } : {}),
-    },
-    {
-      "@type": "SoftwareApplication",
-      "name": b.name,
-      "url": `https://shelldex.com/projects/${b.slug}/`,
-      ...(b.github ? { "codeRepository": `https://github.com/${b.github}` } : {}),
-    },
-  ],
+  breadcrumb: {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Compare', item: 'https://shelldex.com/compare/' },
+      { '@type': 'ListItem', position: 2, name: title, item: base },
+    ],
+  },
+  mainEntity: faqs.map(q => ({
+    '@type': 'Question', name: q.question, acceptedAnswer: { '@type': 'Answer', text: q.answer },
+  })),
 };
-
-// Metrics rows for the comparison table
-const metrics = [
-  {
-    label: 'Stars',
-    aVal: aStars > 0 ? `★ ${formatCount(aStars)}` : '—',
-    bVal: bStars > 0 ? `★ ${formatCount(bStars)}` : '—',
-    aClass: 'text-yellow-700 font-mono',
-    bClass: 'text-yellow-700 font-mono',
-    aWins: aStars > bStars,
-    bWins: bStars > aStars,
-  },
-  {
-    label: '7d Growth',
-    aVal: a.github_data?.star_growth_7d !== null && a.github_data?.star_growth_7d !== undefined
-      ? (a.github_data.star_growth_7d > 0 ? `+${formatCount(a.github_data.star_growth_7d)}` : String(a.github_data.star_growth_7d))
-      : '—',
-    bVal: b.github_data?.star_growth_7d !== null && b.github_data?.star_growth_7d !== undefined
-      ? (b.github_data.star_growth_7d > 0 ? `+${formatCount(b.github_data.star_growth_7d)}` : String(b.github_data.star_growth_7d))
-      : '—',
-    aClass: (a.github_data?.star_growth_7d ?? 0) > 0 ? 'text-ledger-red font-mono' : 'text-ledger-faint font-mono',
-    bClass: (b.github_data?.star_growth_7d ?? 0) > 0 ? 'text-ledger-red font-mono' : 'text-ledger-faint font-mono',
-    aWins: (a.github_data?.star_growth_7d ?? 0) > (b.github_data?.star_growth_7d ?? 0),
-    bWins: (b.github_data?.star_growth_7d ?? 0) > (a.github_data?.star_growth_7d ?? 0),
-  },
-  {
-    label: 'Forks',
-    aVal: formatCount(a.github_data?.forks),
-    bVal: formatCount(b.github_data?.forks),
-    aClass: 'text-ledger-muted font-mono',
-    bClass: 'text-ledger-muted font-mono',
-    aWins: (a.github_data?.forks ?? 0) > (b.github_data?.forks ?? 0),
-    bWins: (b.github_data?.forks ?? 0) > (a.github_data?.forks ?? 0),
-  },
-  {
-    label: 'Open Issues',
-    aVal: formatCount(a.github_data?.open_issues),
-    bVal: formatCount(b.github_data?.open_issues),
-    aClass: 'text-ledger-muted font-mono',
-    bClass: 'text-ledger-muted font-mono',
-    aWins: (a.github_data?.open_issues ?? Infinity) < (b.github_data?.open_issues ?? Infinity),
-    bWins: (b.github_data?.open_issues ?? Infinity) < (a.github_data?.open_issues ?? Infinity),
-  },
-  {
-    label: 'Language',
-    aVal: languageLabel[a.language] ?? a.language,
-    bVal: languageLabel[b.language] ?? b.language,
-    aClass: `${aLang.text}`,
-    bClass: `${bLang.text}`,
-    aWins: false,
-    bWins: false,
-  },
-  {
-    label: 'Categories',
-    aVal: a.category.join(', '),
-    bVal: b.category.join(', '),
-    aClass: 'text-ledger-faint text-sm',
-    bClass: 'text-ledger-faint text-sm',
-    aWins: false,
-    bWins: false,
-  },
-  {
-    label: 'Platform',
-    aVal: a.platform?.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', ') ?? '—',
-    bVal: b.platform?.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', ') ?? '—',
-    aClass: 'text-ledger-faint text-sm',
-    bClass: 'text-ledger-faint text-sm',
-    aWins: false,
-    bWins: false,
-  },
-  {
-    label: 'LLM Required',
-    aVal: a.requires_llm === undefined ? '—' : a.requires_llm ? 'Yes' : 'No',
-    bVal: b.requires_llm === undefined ? '—' : b.requires_llm ? 'Yes' : 'No',
-    aClass: a.requires_llm === false ? 'text-emerald-700' : 'text-ledger-muted',
-    bClass: b.requires_llm === false ? 'text-emerald-700' : 'text-ledger-muted',
-    aWins: a.requires_llm === false && b.requires_llm !== false,
-    bWins: b.requires_llm === false && a.requires_llm !== false,
-  },
-  {
-    label: 'MCP Support',
-    aVal: a.mcp_support === undefined ? '—' : a.mcp_support ? 'Yes' : 'No',
-    bVal: b.mcp_support === undefined ? '—' : b.mcp_support ? 'Yes' : 'No',
-    aClass: a.mcp_support ? 'text-purple-700' : 'text-ledger-faint',
-    bClass: b.mcp_support ? 'text-purple-700' : 'text-ledger-faint',
-    aWins: a.mcp_support === true && !b.mcp_support,
-    bWins: b.mcp_support === true && !a.mcp_support,
-  },
-  {
-    label: 'Integrations',
-    aVal: a.integration_count ? `${a.integration_count}+` : '—',
-    bVal: b.integration_count ? `${b.integration_count}+` : '—',
-    aClass: 'text-ledger-muted font-mono',
-    bClass: 'text-ledger-muted font-mono',
-    aWins: (a.integration_count ?? 0) > (b.integration_count ?? 0),
-    bWins: (b.integration_count ?? 0) > (a.integration_count ?? 0),
-  },
-  {
-    label: 'License',
-    aVal: a.github_data?.license ?? '—',
-    bVal: b.github_data?.license ?? '—',
-    aClass: 'text-ledger-muted',
-    bClass: 'text-ledger-muted',
-    aWins: false,
-    bWins: false,
-  },
-  {
-    label: 'Last Commit',
-    aVal: daysSince(a.github_data?.last_commit) !== null ? `${daysSince(a.github_data?.last_commit)}d ago` : '—',
-    bVal: daysSince(b.github_data?.last_commit) !== null ? `${daysSince(b.github_data?.last_commit)}d ago` : '—',
-    aClass: freshness(daysSince(a.github_data?.last_commit)),
-    bClass: freshness(daysSince(b.github_data?.last_commit)),
-    aWins: (daysSince(a.github_data?.last_commit) ?? Infinity) < (daysSince(b.github_data?.last_commit) ?? Infinity),
-    bWins: (daysSince(b.github_data?.last_commit) ?? Infinity) < (daysSince(a.github_data?.last_commit) ?? Infinity),
-  },
-  {
-    label: 'Latest Release',
-    aVal: a.github_data?.latest_release ?? '—',
-    bVal: b.github_data?.latest_release ?? '—',
-    aClass: 'text-ledger-muted font-mono text-sm',
-    bClass: 'text-ledger-muted font-mono text-sm',
-    aWins: false,
-    bWins: false,
-  },
-  {
-    label: 'Health Score',
-    aVal: `${aHealthScore}/100`,
-    bVal: `${bHealthScore}/100`,
-    aClass: aHealthScore >= 70 ? 'text-ledger-red font-mono' : aHealthScore >= 40 ? 'text-amber-700 font-mono' : 'text-coral font-mono',
-    bClass: bHealthScore >= 70 ? 'text-ledger-red font-mono' : bHealthScore >= 40 ? 'text-amber-700 font-mono' : 'text-coral font-mono',
-    aWins: aHealthScore > bHealthScore,
-    bWins: bHealthScore > aHealthScore,
-  },
-  {
-    label: 'Leaderboard Rank',
-    aVal: aRank ? `#${aRank} of ${lbTotal}` : '—',
-    bVal: bRank ? `#${bRank} of ${lbTotal}` : '—',
-    aClass: 'text-ledger-muted font-mono',
-    bClass: 'text-ledger-muted font-mono',
-    aWins: aRank !== null && bRank !== null && aRank < bRank,
-    bWins: bRank !== null && aRank !== null && bRank < aRank,
-  },
-];
 ---
-
-<Layout
-  title={isIndexable ? pageTitle : `Redirecting ${a.name} vs ${b.name} — Shelldex`}
-  description={isIndexable ? pageDescription : `Redirecting to the current comparison experience for ${a.name} and ${b.name}.`}
-  canonicalUrl={isIndexable ? canonicalUrl : redirectCanonicalUrl}
-  robots={isIndexable ? 'index, follow' : 'noindex, follow'}
-  markdownUrl={isIndexable ? canonicalUrl.replace('/compare/', '/md/compare/').replace(/\/$/, '.md') : undefined}
-  jsonUrl={isIndexable ? canonicalUrl.replace('/compare/', '/api/compare/').replace(/\/$/, '.json') : undefined}
->
-  {/* Alias and non-indexable pairs: meta refresh redirect to the canonical when the
-       canonical IS in the indexable set. This consolidates Google signals fast.
-       When canonical is not indexable (generic /compare/ hub), keep soft redirect. */}
-  {isIndexable ? null : redirectCanonicalUrl !== 'https://shelldex.com/compare/' ? (
-    <meta http-equiv="refresh" content={`0;url=${redirectCanonicalUrl}`} />
-  ) : null}
-  {isIndexable && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />}
-  {isIndexable && <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />}
-  {isIndexable && faqJsonLd && <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}
-
-  {!isIndexable ? (
-    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-      <div class="rounded-2xl border border-ledger-border bg-ledger-surface p-8 text-center">
-        <h1 class="font-display text-3xl font-bold text-ledger-text mb-4">{a.name} vs {b.name}</h1>
-        <p class="text-ledger-faint leading-relaxed mb-6">
-          This comparison is available through our curated comparison library. Use the link below or the <a href="/compare/" class="text-ledger-red hover:underline">Compare tool</a> to explore this matchup.
-        </p>
-        <a
-          href={redirectUrl}
-          class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-ledger-red/30 bg-ledger-red-bg text-ledger-red font-semibold hover:bg-ledger-red-bg transition-colors"
-        >
-          View this comparison
-        </a>
+<Layout title={title+' | Shelldex'} description={summary} canonicalUrl={base}
+  markdownUrl={base.replace('/compare/','/md/compare/').replace(/\/$/,'.md')}
+  jsonUrl={base.replace('/compare/','/api/compare/').replace(/\/$/,'.json')}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <article class="max-w-[72rem] mx-auto px-5 sm:px-8 py-8 sm:py-12">
+    <nav aria-label="Breadcrumb" class="text-sm text-ledger-muted mb-5"><a href="/compare/" class="underline">Compare</a> / {title}</nav>
+    <h1 class="mb-3">{title}</h1>
+    <DataStamp date={generated} />
+    <p class="text-ledger-muted max-w-3xl mt-3">{summary}</p>
+    {highlights.length > 0 && <section aria-label="Differences at a glance" class="grid sm:grid-cols-3 gap-2 mt-6 mb-5">
+      {highlights.map(row => <div class="bg-ledger-surface border border-ledger-border rounded-xl py-3 px-4">
+        <h2 data-heading="label">{row.label}</h2>
+        <p class="text-xl font-mono font-semibold">{row.values[0]} <span class="text-sm text-ledger-muted">vs</span> {row.values[1]}</p>
+        <p class="text-sm text-ledger-muted">{row.difference}</p>
+      </div>)}
+    </section>}
+    <div class="grid sm:grid-cols-2 gap-3 mb-8">{[a,b].map(p => <section class="rounded-xl border border-ledger-border bg-ledger-surface p-4">
+      <h2 data-heading="card">{choiceNote(p) ? 'Choose '+p.name+' if…' : 'What '+p.name+' does'}</h2>
+      <p class="text-ledger-muted my-1">{choiceNote(p) ?? p.description}</p>
+      <a class="underline text-sm" href={'/projects/'+p.slug+'/'}>{p.name} profile</a>
+      {quickStartUrl(p) && <a class="underline text-sm ml-4" href={quickStartUrl(p)!}>Setup guide ↗</a>}
+    </section>)}</div>
+    <section aria-labelledby="compare-metrics">
+      <h2 id="compare-metrics" class="mb-3">Side by side</h2>
+      <div class="max-w-full overflow-x-auto rounded-xl border border-ledger-border bg-ledger-surface" tabindex="0" role="region" aria-label="Side-by-side metrics">
+        <table class="w-full text-left text-sm">
+          <thead><tr><th scope="col">Measure</th><th scope="col">{a.name}</th><th scope="col">{b.name}</th></tr></thead>
+          <tbody>{rows.map(r=><tr><th scope="row">{r.label}<small>{r.detail}</small>{r.difference && <small class="direction">{r.difference}</small>}</th>{r.values.map(v=><td>{v}</td>)}</tr>)}</tbody>
+        </table>
       </div>
-    </div>
-  ) : (
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
-    <!-- Breadcrumb -->
-    <nav class="flex items-center gap-2 text-sm text-ledger-whisper mb-10" aria-label="Breadcrumb">
-      <a href="/" class="hover:text-ledger-red transition-colors">Shelldex</a>
-      <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-      <a href="/compare/" class="hover:text-ledger-red transition-colors">Compare</a>
-      <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-      <span class="text-ledger-faint">{a.name} vs {b.name}</span>
-    </nav>
-
-    <!-- H1 -->
-    <header class="text-center mb-12">
-      <h1 class="font-display text-3xl sm:text-4xl font-bold text-ledger-text leading-tight">
-        <span class="text-4xl sm:text-5xl">{a.emoji}</span>
-        {a.name}
-        <span class="text-ledger-faint mx-2">vs</span>
-        {b.name}
-        <span class="text-4xl sm:text-5xl">{b.emoji}</span>
-      </h1>
-      <p class="text-ledger-faint mt-4 max-w-2xl mx-auto">
-        Side-by-side comparison of {a.name} and {b.name} — two projects in the OpenClaw ecosystem.
-      </p>
-      {isAstrbotVsOpenBrowserClaw && (
-        <p class="mt-4 max-w-2xl mx-auto rounded-xl border border-ledger-red/15 bg-ledger-red/5 px-4 py-3 text-sm text-ledger-muted">
-          Looking for <a href="/compare/astrbot-vs-openclaw/" class="text-ledger-red hover:text-ledger-coral transition-colors">AstrBot vs OpenClaw</a>? That is the direct comparison page most people mean when they search this matchup.
-        </p>
-      )}
-    </header>
-
-    <section class="mb-12">
-      <div class="rounded-2xl border border-ledger-border bg-ledger-surface p-6 sm:p-8">
-        <h2 class="font-display text-2xl font-bold text-ledger-text mb-4">Executive Summary</h2>
-        <p class="text-ledger-muted leading-relaxed mb-4">
-          {matchupSummary()}
-        </p>
-        <p class="text-ledger-faint leading-relaxed">
-          Use the score table for the hard numbers, then use the decision notes below to figure out which tradeoffs matter for your team.
-        </p>
-      </div>
+      <p class="text-sm text-ledger-muted mt-2"><a href="/methodology/" class="underline">How Shelldex measures repository activity</a>. A dash means no figure was available.</p>
     </section>
-
-    <section class="mb-12">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="rounded-xl border border-ledger-border bg-white/70 p-5">
-          <p class="text-sm font-semibold text-ledger-text mb-3">{a.emoji} {a.name}</p>
-          <MomentumSparkline project={a} averageGrowth7d={averageGrowth7d} label={`${a.name} momentum`} />
-        </div>
-        <div class="rounded-xl border border-ledger-border bg-white/70 p-5">
-          <p class="text-sm font-semibold text-ledger-text mb-3">{b.emoji} {b.name}</p>
-          <MomentumSparkline project={b} averageGrowth7d={averageGrowth7d} label={`${b.name} momentum`} />
-        </div>
-      </div>
+    <section class="my-8"><h2 class="mb-3">When did people add stars?</h2>
+      <div class="grid sm:grid-cols-2 gap-4">{[a,b].map(p=><div class="rounded-xl border border-ledger-border p-4 bg-ledger-surface"><h3>{p.name}</h3><MomentumSparkline project={p} averageGrowth7d={0} label="Daily star additions" /></div>)}</div>
     </section>
-
-    <section class="mb-12">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
-          <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Choose {a.name} If...</h2>
-          <ul class="space-y-3">
-            {chooseA.map(reason => (
-              <li class="flex items-start gap-3 text-sm text-ledger-muted leading-relaxed">
-                <span class="text-ledger-red mt-0.5 flex-shrink-0">+</span>
-                <span>{reason}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
-          <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Choose {b.name} If...</h2>
-          <ul class="space-y-3">
-            {chooseB.map(reason => (
-              <li class="flex items-start gap-3 text-sm text-ledger-muted leading-relaxed">
-                <span class="text-ledger-red mt-0.5 flex-shrink-0">+</span>
-                <span>{reason}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+    <section class="my-8"><h2 class="mb-3">Trying these agents</h2>
+      {faqs.map(q=><details class="border-b border-ledger-border py-2"><summary class="cursor-pointer font-semibold">{q.question}</summary><p class="my-2 text-ledger-muted">{q.answer}</p></details>)}
     </section>
-
-    <!-- Side-by-side metrics table -->
-    <section class="mb-12">
-      <div class="rounded-xl border border-ledger-border bg-ledger-surface overflow-hidden">
-        <!-- Table header -->
-        <div class="grid grid-cols-3 border-b border-ledger-border text-sm">
-          <div class="px-4 py-3 text-ledger-faint font-medium">Metric</div>
-          <div class="px-4 py-3 text-center">
-            <a href={`/projects/${a.slug}/`} class="text-ledger-text font-semibold hover:text-ledger-red transition-colors">
-              {a.emoji} {a.name}
-            </a>
-          </div>
-          <div class="px-4 py-3 text-center">
-            <a href={`/projects/${b.slug}/`} class="text-ledger-text font-semibold hover:text-ledger-red transition-colors">
-              {b.emoji} {b.name}
-            </a>
-          </div>
-        </div>
-
-        <!-- Metric rows -->
-        {metrics.map((m, i) => (
-          <div class={`grid grid-cols-3 ${i < metrics.length - 1 ? 'border-b border-ledger-border' : ''} text-sm`}>
-            <div class="px-4 py-3 text-ledger-faint">{m.label}</div>
-            <div class={`px-4 py-3 text-center ${m.aClass} ${m.aWins ? 'bg-ledger-red/5' : ''}`}>
-              {m.aVal}
-            </div>
-            <div class={`px-4 py-3 text-center ${m.bClass} ${m.bWins ? 'bg-ledger-red/5' : ''}`}>
-              {m.bVal}
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <!-- Key Differences -->
-    {keyDifferences.length > 0 && (
-      <section class="mb-12">
-        <h2 class="font-display text-2xl font-bold text-ledger-text mb-6">Key Differences</h2>
-        <ul class="space-y-4">
-          {keyDifferences.map(diff => (
-            <li class="flex items-start gap-3 text-ledger-muted leading-relaxed">
-              <span class="text-ledger-red mt-1 flex-shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-              </span>
-              <span>{diff}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
-
-    <!-- Which should you choose? -->
-    <section class="mb-12">
-      <h2 class="font-display text-2xl font-bold text-ledger-text mb-6">Which should you choose?</h2>
-      <div class="space-y-4 text-ledger-muted leading-relaxed">
-        {recommendation.split('\n\n').map(para => (
-          <p>{para}</p>
-        ))}
-      </div>
-    </section>
-
-    <!-- Project links (CTAs) -->
-    <section class="mb-12">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <a
-          href={`/projects/${a.slug}/`}
-          class="flex items-center gap-4 rounded-xl border border-ledger-border bg-ledger-surface p-5 hover:border-ledger-red/30 transition-all group"
-        >
-          <span class="text-3xl">{a.emoji}</span>
-          <div>
-            <p class="text-ledger-text font-semibold group-hover:text-ledger-red transition-colors">{a.name}</p>
-            <p class="text-sm text-ledger-faint">{a.tagline}</p>
-          </div>
-          <svg class="w-5 h-5 text-ledger-whisper ml-auto group-hover:text-ledger-red transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-        </a>
-        <a
-          href={`/projects/${b.slug}/`}
-          class="flex items-center gap-4 rounded-xl border border-ledger-border bg-ledger-surface p-5 hover:border-ledger-red/30 transition-all group"
-        >
-          <span class="text-3xl">{b.emoji}</span>
-          <div>
-            <p class="text-ledger-text font-semibold group-hover:text-ledger-red transition-colors">{b.name}</p>
-            <p class="text-sm text-ledger-faint">{b.tagline}</p>
-          </div>
-          <svg class="w-5 h-5 text-ledger-whisper ml-auto group-hover:text-ledger-red transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    {faqItems.length > 0 && (
-      <section class="mb-12">
-        <h2 class="font-display text-2xl font-bold text-ledger-text mb-6">Frequently Asked Questions</h2>
-        <div class="space-y-3">
-          {faqItems.map(item => (
-            <details class="group rounded-xl border border-ledger-border bg-ledger-surface">
-              <summary class="flex items-center justify-between cursor-pointer px-5 py-4 text-ledger-text font-medium text-sm hover:text-ledger-red transition-colors">
-                <span>{item.question}</span>
-                <svg class="w-4 h-4 text-ledger-faint group-open:rotate-180 transition-transform flex-shrink-0 ml-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-              </summary>
-              <div class="px-5 pb-4 text-sm text-ledger-faint leading-relaxed border-t border-ledger-border pt-3">
-                {item.answer}
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
-    )}
-
-    <!-- Related Comparisons -->
-    {related.length > 0 && (
-      <section class="mb-12">
-        <h2 class="font-display text-2xl font-bold text-ledger-text mb-6">Related Comparisons</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {related.map(r => (
-            <a
-              href={`/compare/${r.canonical}/`}
-              class="flex items-center gap-2 rounded-lg border border-ledger-border bg-ledger-surface/80 px-4 py-3 text-sm text-ledger-faint hover:text-ledger-red hover:border-ledger-red/20 transition-all"
-            >
-              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-              <span>{r.slugA.replace(/-/g, ' ')} vs {r.slugB.replace(/-/g, ' ')}</span>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
-
-    <!-- Back links -->
-    <div class="border-t border-ledger-border pt-8 flex flex-wrap gap-6">
-      <a href="/compare/" class="inline-flex items-center gap-2 text-sm text-ledger-faint hover:text-ledger-red transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        All comparisons
-      </a>
-      <a href="/" class="inline-flex items-center gap-2 text-sm text-ledger-faint hover:text-ledger-red transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Directory
-      </a>
-    </div>
-
-  </div>
-  )}
+    {related.length > 0 && <nav aria-label="Related comparisons"><h2 class="mb-2">Related comparisons</h2><div class="flex flex-wrap gap-4">{related.map(r=><a class="underline" href={r.url}>{r.title}</a>)}</div></nav>}
+  </article>
 </Layout>
+<style>
+th,td{padding:.7rem;border-bottom:1px solid #dfd7cb;vertical-align:top}
+th[scope=row]{width:38%}thead{background:#f7f3ec}small{display:block;font-weight:400;color:#6b5c4f}td{font-variant-numeric:tabular-nums}.direction{font-weight:600;color:#1c1410}
+@media(max-width:600px){th,td{padding:.45rem}th[scope=row]{width:36%}}
+</style>

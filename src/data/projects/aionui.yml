@@ -1,15 +1,15 @@
 name: AionUi
 slug: aionui
-tagline: 24/7 cowork app for coding agents
-description: Free, local, open-source cowork app and OpenClaw for Gemini CLI, Claude Code, Codex, OpenCode, and more
+tagline: Desktop assistant that works on local files
+description: A desktop AI assistant with a built-in agent engine. Give it a task to organize local files or generate documents without installing a separate coding agent.
 language: typescript
 category:
   - coding
   - productivity
 github: iOfficeAI/AionUi
 status: active
-tier: 1
-highlight: Universal agent UI — supports Gemini CLI, Claude Code, Codex, and more in one interface
+tier: 3
+highlight: The built-in agent can organize files and create editable documents.
 emoji: 🖥️
 platform:
   - desktop
@@ -18,9 +18,10 @@ mcp_support: true
 ecosystem_role: alternative
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 26197
-  forks: 2437
-  open_issues: 548
+  repository_id: 1033778670
+  stars: 34085
+  forks: 3566
+  open_issues: 888
   license: Apache-2.0
   topics:
     - acp
@@ -43,8 +44,12 @@ github_data:
     - opencode
     - skills
     - webui
-  last_commit: "2026-05-22T15:14:53Z"
-  latest_release: v1.9.25
-  latest_release_date: "2026-05-05T13:19:10Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:28.582Z"
+  last_commit: "2026-11-05T05:31:20Z"
+  latest_release: v2.2.2
+  latest_release_date: "2026-09-09T11:29:49Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/iOfficeAI/AionUi#-quick-start"
+first_task: "Give it a folder with two sample repair quotes. Ask it to read both, compare the totals, and name the file behind each figure. Keep the originals unchanged."

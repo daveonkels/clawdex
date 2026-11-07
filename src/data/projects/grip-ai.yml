@@ -1,6 +1,6 @@
 name: Grip AI
 slug: grip-ai
-tagline: OpenClaw-style multi-channel agent platform
+tagline: "A self-hosted assistant for messaging channels"
 description: Self-hostable Python platform marketed as a lightweight OpenClaw alternative with multi-channel routing and task orchestration.
 language: python
 category:
@@ -8,24 +8,29 @@ category:
   - messaging
 github: 5unnykum4r/grip-ai
 status: active
-tier: 1
+tier: 3
 highlight: Multi-channel routing and task orchestration — self-hostable, lightweight Python
 emoji: 🧠
 platform:
   - server
   - messaging
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: alternative
 added: 2026-02-27T00:00:00.000Z
 github_data:
-  stars: 7
-  forks: 2
+  repository_id: 1163810109
+  stars: 11
+  forks: 4
   open_issues: 1
   license: null
   topics: []
-  last_commit: "2026-03-24T06:34:31Z"
-  latest_release: v1.5.3
-  latest_release_date: "2026-03-24T06:34:31Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:38.046Z"
+  last_commit: "2026-10-17T12:02:03Z"
+  latest_release: v1.6.1
+  latest_release_date: "2026-05-28T20:05:30Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/5unnykum4r/grip-ai#quickstart"
+first_task: "After the setup wizard, send a private test message with three mock errands. Ask it to make an ordered checklist and flag anything that lacks a due date."

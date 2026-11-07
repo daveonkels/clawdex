@@ -1,7 +1,7 @@
 name: NullClaw
 slug: nullclaw
-tagline: Fastest, smallest, and fully autonomous AI assistant infrastructure written in Zig
-description: The smallest fully autonomous AI assistant infrastructure — a static Zig binary that fits on any $5 board, boots in milliseconds, and requires nothing but libc. 678 KB binary, <2 ms startup, 22+ providers, 17 channels, fully pluggable architecture.
+tagline: "A Zig agent for machines with limited memory"
+description: "NullClaw packages its personal assistant as a Zig binary for supported operating systems and devices."
 language: zig
 category:
   - performance
@@ -10,13 +10,13 @@ category:
 github: nullclaw/nullclaw
 status: active
 tier: 1
-highlight: 678 KB Zig binary — runs on $5 hardware, 22+ providers, 17 channels, fully pluggable everything
+highlight: "The project publishes size and startup measurements for particular builds."
 emoji: 🦞
 platform:
   - server
   - embedded
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: reimplementation
 perf:
   binary_size: 678KB
@@ -24,17 +24,22 @@ perf:
 integration_count: 22
 added: 2026-02-26T00:00:00.000Z
 github_data:
-  stars: 7614
-  forks: 884
-  open_issues: 71
+  repository_id: 1159542259
+  stars: 8206
+  forks: 961
+  open_issues: 109
   license: MIT
   topics:
     - ai
     - assistant
     - personal
     - zig
-  last_commit: "2026-05-19T14:19:57Z"
-  latest_release: v2026.5.4
-  latest_release_date: "2026-05-04T23:58:25Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:48.158Z"
+  last_commit: "2026-10-08T10:01:11Z"
+  latest_release: v2026.5.29
+  latest_release_date: "2026-05-29T13:41:10Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/nullclaw/nullclaw#quick-start"
+first_task: "In the local agent chat, paste a short mock delivery note. Ask for the delivery window and the sentence that supports it. Check whether your chosen model gets both right."

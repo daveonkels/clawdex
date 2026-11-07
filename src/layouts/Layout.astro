@@ -4,6 +4,8 @@ interface Props {
   description?: string;
   ogImage?: string;
   ogImageAlt?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
   canonicalUrl?: string;
   robots?: string;
   markdownUrl?: string;
@@ -13,9 +15,11 @@ interface Props {
 
 const {
   title,
-  description = 'Compare OpenClaw alternatives and forks side by side — GitHub stars, language, performance, and project health. The complete registry of the OpenClaw ecosystem.',
+  description = 'Compare OpenClaw alternatives and forks side by side — GitHub stars, language, performance, and project health. A directory of runnable AI agents.',
   ogImage = 'https://shelldex.com/images/og-default.jpg',
   ogImageAlt = 'Shelldex social preview image',
+  ogImageWidth = 1200,
+  ogImageHeight = 630,
   canonicalUrl,
   robots = 'index, follow',
   markdownUrl,
@@ -23,8 +27,18 @@ const {
   jsonLd,
 } = Astro.props;
 
-const resolvedCanonical = canonicalUrl || `https://shelldex.com${Astro.url.pathname}`;
+const resolvedCanonical = canonicalUrl === '' ? undefined : canonicalUrl || `https://shelldex.com${Astro.url.pathname}`;
 
+// Count whole UTC calendar days; the static value remains useful without JavaScript.
+const buildDay = new Date().toISOString().slice(0, 10);
+const daysSinceRename = Math.floor((Date.parse(buildDay) - Date.parse('2026-01-29')) / 86400000);
+const sectionParents: Record<string, string> = {projects:'/', alternatives:'/best-alternatives/', methodology:'/about/', badges:'/submit/'};
+function navCurrent(path: string) {
+  const here = Astro.url.pathname;
+  if (here === path) return 'page';
+  if ((path !== '/' && here.startsWith(path)) || sectionParents[here.split('/')[1]] === path) return 'location';
+  return undefined;
+}
 function inferImageType(url: string): string | undefined {
   const pathname = new URL(url).pathname.toLowerCase();
   if (pathname.endsWith('.png')) return 'image/png';
@@ -47,7 +61,7 @@ const ogImageType = inferImageType(ogImage);
     <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-latin.woff2" crossorigin />
     <link rel="prefetch" as="font" type="font/woff2" href="/fonts/titan-one-latin.woff2" crossorigin />
-    <link rel="canonical" href={resolvedCanonical} />
+    {resolvedCanonical && <link rel="canonical" href={resolvedCanonical} />}
 
     <!-- Agent-facing discovery: RFC 8288 link relations -->
     {markdownUrl && <link rel="alternate" type="text/markdown" href={markdownUrl} title="Markdown version" />}
@@ -68,8 +82,8 @@ const ogImageType = inferImageType(ogImage);
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:secure_url" content={ogImage} />
     {ogImageType && <meta property="og:image:type" content={ogImageType} />}
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:width" content={String(ogImageWidth)} />
+    <meta property="og:image:height" content={String(ogImageHeight)} />
     <meta property="og:image:alt" content={ogImageAlt} />
 
     <!-- Twitter -->
@@ -151,7 +165,7 @@ const ogImageType = inferImageType(ogImage);
           },
           {
             name: 'shelldex_get_leaderboard',
-            description: "Fetch the ranked Shelldex leaderboard. Entries include stars, 7-day growth, license, and a 0-100 health score computed from commit recency, issue-to-star ratio, release cadence, and growth.",
+            description: "Fetch the ranked Shelldex leaderboard. Entries include stars, 7-day growth, license, and a 0-100 health score computed from last push, open issues and pull requests relative to stars, last release and measured net star growth. Historical records have no current score or rank.",
             inputSchema: {
               type: 'object',
               properties: { limit: { type: 'integer', default: 20, minimum: 1, maximum: 100 } }
@@ -190,11 +204,12 @@ const ogImageType = inferImageType(ogImage);
       })();
     </script>
   </head>
-  <body class="bg-ledger-bg text-ledger-text font-body antialiased min-h-screen flex flex-col overflow-x-hidden">
-    <nav class="sticky top-0 z-50 bg-ledger-bg/90 backdrop-blur-md border-b border-ledger-border">
+  <body class="bg-ledger-bg text-ledger-text font-body antialiased min-h-screen flex flex-col overflow-x-clip">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <nav aria-label="Main navigation" class="site-nav sticky top-0 z-50 bg-ledger-bg/90 backdrop-blur-md border-b border-ledger-border">
       <div class="max-w-[72rem] mx-auto px-5 sm:px-8">
         <div class="flex items-center justify-between h-14 sm:h-16">
-          <a href="/" class="flex items-center gap-2.5 group">
+          <a href="/" aria-current={navCurrent('/')} aria-label="Shelldex home" class="brand-home no-underline flex items-center gap-2.5 group">
             <span class="text-2xl group-hover:rotate-12 transition-transform duration-300">🦞</span>
             <span
               style="font-family: 'Titan One', sans-serif; letter-spacing: 0.04em;"
@@ -202,19 +217,18 @@ const ogImageType = inferImageType(ogImage);
             >shelldex</span>
           </a>
           <div class="flex items-center gap-1">
-            <div class="hidden sm:flex items-center">
-              <a href="/" class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">Directory</a>
-              <a href="/leaderboard/" class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">Leaderboard</a>
-              <a href="/compare/" class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">Compare</a>
-              <a href="/analysis/" class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">Analysis</a>
-              <a href="/faq/" class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">FAQ</a>
-              <a href="/best-alternatives/" class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">Alternatives</a>
-              <a href="/about/" class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">About</a>
+            <div class="hidden lg:flex items-center">
+              <a href="/leaderboard/" aria-current={navCurrent('/leaderboard/')} class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">Leaderboard</a>
+              <a href="/compare/" aria-current={navCurrent('/compare/')} class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">Compare</a>
+              <a href="/analysis/" aria-current={navCurrent('/analysis/')} class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">Analysis</a>
+              <a href="/faq/" aria-current={navCurrent('/faq/')} class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">FAQ</a>
+              <a href="/best-alternatives/" aria-current={navCurrent('/best-alternatives/')} class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">Alternatives</a>
+              <a href="/about/" aria-current={navCurrent('/about/')} class="px-3 py-1.5 text-sm font-medium text-ledger-muted hover:text-ledger-red transition-colors rounded-md hover:bg-ledger-red-bg">About</a>
             </div>
             <div class="flex items-center gap-2 ml-2">
               <a
-                href="/submit/"
-                class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-semibold text-ledger-surface bg-ledger-red hover:bg-ledger-red-hover rounded-md transition-colors"
+                href="/submit/" aria-current={navCurrent('/submit/')}
+                class="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-semibold text-ledger-text border border-ledger-border-strong hover:bg-ledger-surface rounded-md transition-colors"
               >Submit</a>
               <a
                 href="https://x.com/everyshell"
@@ -230,8 +244,8 @@ const ogImageType = inferImageType(ogImage);
                 id="mobile-menu-btn"
                 type="button"
                 aria-label="Toggle menu"
-                aria-expanded="false"
-                class="sm:hidden flex items-center justify-center w-9 h-9 text-ledger-muted hover:text-ledger-red transition-colors"
+                aria-expanded="false" aria-controls="mobile-menu"
+                class="lg:hidden flex items-center justify-center w-11 h-11 text-ledger-muted hover:text-ledger-red transition-colors"
               >
                 <svg id="menu-icon-open" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 <svg id="menu-icon-close" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -240,15 +254,14 @@ const ogImageType = inferImageType(ogImage);
           </div>
         </div>
         <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden sm:hidden border-t border-ledger-border pb-3 pt-1.5">
-          <a href="/" class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">Directory</a>
-          <a href="/leaderboard/" class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">Leaderboard</a>
-          <a href="/compare/" class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">Compare</a>
-          <a href="/analysis/" class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">Analysis</a>
-          <a href="/faq/" class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">FAQ</a>
-          <a href="/best-alternatives/" class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">Alternatives</a>
-          <a href="/about/" class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">About</a>
-          <a href="/submit/" class="block px-3 py-2 text-sm font-semibold text-ledger-red hover:bg-ledger-red-bg rounded-md">Submit a Project</a>
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-ledger-border pb-3 pt-1.5">
+          <a href="/leaderboard/" aria-current={navCurrent('/leaderboard/')} class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">Leaderboard</a>
+          <a href="/compare/" aria-current={navCurrent('/compare/')} class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">Compare</a>
+          <a href="/analysis/" aria-current={navCurrent('/analysis/')} class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">Analysis</a>
+          <a href="/faq/" aria-current={navCurrent('/faq/')} class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">FAQ</a>
+          <a href="/best-alternatives/" aria-current={navCurrent('/best-alternatives/')} class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">Alternatives</a>
+          <a href="/about/" aria-current={navCurrent('/about/')} class="block px-3 py-2 text-sm text-ledger-muted hover:text-ledger-red hover:bg-ledger-red-bg rounded-md">About</a>
+          <a href="/submit/" aria-current={navCurrent('/submit/')} class="block px-3 py-2 text-sm font-semibold text-ledger-red hover:bg-ledger-red-bg rounded-md">Submit a Project</a>
         </div>
       </div>
       <script is:inline>
@@ -258,6 +271,9 @@ const ogImageType = inferImageType(ogImage);
           var iconOpen = document.getElementById('menu-icon-open');
           var iconClose = document.getElementById('menu-icon-close');
           if (btn && menu && iconOpen && iconClose) {
+            document.addEventListener('keydown', function(event) {
+              if (event.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {btn.click(); btn.focus();}
+            });
             btn.addEventListener('click', function() {
               var expanded = btn.getAttribute('aria-expanded') === 'true';
               btn.setAttribute('aria-expanded', String(!expanded));
@@ -270,7 +286,7 @@ const ogImageType = inferImageType(ogImage);
       </script>
     </nav>
 
-    <main class="flex-1">
+    <main id="main-content" tabindex="-1" class="flex-1 min-w-0">
       <slot />
     </main>
 
@@ -296,11 +312,13 @@ const ogImageType = inferImageType(ogImage);
               })();
             </script>
           </div>
-          <nav class="flex flex-wrap gap-x-6 gap-y-1.5 text-sm text-ledger-faint">
+          <nav aria-label="Footer" class="flex flex-wrap gap-x-6 gap-y-1.5 text-sm text-ledger-faint">
             <a href="/" class="hover:text-ledger-red transition-colors">Directory</a>
             <a href="/leaderboard/" class="hover:text-ledger-red transition-colors">Leaderboard</a>
             <a href="/compare/" class="hover:text-ledger-red transition-colors">Compare</a>
             <a href="/analysis/" class="hover:text-ledger-red transition-colors">Analysis</a>
+            <a href="/methodology/" class="hover:text-ledger-red">Methodology &amp; corrections</a>
+            <a href="/faq/" class="hover:text-ledger-red">FAQ</a>
             <a href="/about/" class="hover:text-ledger-red transition-colors">About</a>
             <a href="/submit/" class="hover:text-ledger-red transition-colors">Submit</a>
           </nav>
@@ -311,16 +329,11 @@ const ogImageType = inferImageType(ogImage);
             Inspired by <a href="https://github.com/openclaw/openclaw" class="underline decoration-ledger-border hover:text-ledger-red transition-colors">OpenClaw</a>.
           </p>
           <p class="text-xs text-ledger-whisper">
-            <span id="rebrand-days" class="text-ledger-red font-mono">?</span> days since OpenClaw's last identity crisis.
+            <span id="rebrand-days">{daysSinceRename}</span> days since the <a href="/about/#timeline" class="underline">OpenClaw rename</a>.
+            <script is:inline>
+              document.getElementById('rebrand-days').textContent = String(Math.floor((Date.now() - Date.parse('2026-01-29')) / 86400000));
+            </script>
           </p>
-          <script is:inline>
-            (function() {
-              var lastRebrand = new Date('2026-01-29');
-              var days = Math.floor((Date.now() - lastRebrand.getTime()) / 86400000);
-              var el = document.getElementById('rebrand-days');
-              if (el) el.textContent = days;
-            })();
-          </script>
         </div>
       </div>
     </footer>
@@ -329,6 +342,7 @@ const ogImageType = inferImageType(ogImage);
 
 <style is:global>
   @import '../styles/fonts.css';
+  @import '../styles/editorial-system.css';
   @tailwind base;
   @tailwind components;
   @tailwind utilities;
@@ -357,4 +371,11 @@ const ogImageType = inferImageType(ogImage);
   @media (prefers-reduced-motion: reduce) {
     .v2-ticker-track { animation-play-state: paused; }
   }
+.site-nav [aria-current]:not(.brand-home){text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.36em}
+  .site-nav a,.site-nav button{min-height:44px;align-content:center}
+  .skip-link{position:fixed;top:.4rem;left:.6rem;z-index:100;background:white;color:#1c1410;padding:.7rem;transform:translateY(-160%)}
+  .skip-link:focus{transform:none}
+  :is(a,button,input,select,summary,textarea,[tabindex]):focus-visible{outline:2px solid #1c1410!important;outline-offset:3px}
+  :where(main) [id]{scroll-margin-top:5rem}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>

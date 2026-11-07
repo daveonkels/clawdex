@@ -1,0 +1,26 @@
+---
+const paths = [
+  { id:'desk', choice:'I’ll use it at my desk', title:'Start on your laptop.', body:'For a job like comparing two files while you’re there, use the computer you already have. Choose a desktop agent if you want an installer rather than a page of commands.', trade:'You do the setup. Work pauses when that computer sleeps.' },
+  { id:'home', choice:'I have a spare computer', title:'Give it a home that stays awake.', body:'A spare computer can prepare tomorrow’s briefing while your laptop is closed. Keep the machine powered, give it the files it needs, and try one scheduled run after a restart.', trade:'You look after power, updates and backups. Some jobs also need a working internet connection.' },
+  { id:'hosted', choice:'I want someone else to run it', title:'Look for a managed agent.', body:'With a managed service, the provider runs the computer. Ask what it updates and backs up, how to export your work, and what usage is included. Renting a plain server still leaves those chores to you.', trade:'Expect a service bill or usage limits. It can’t read files on your sleeping laptop unless you’ve made copies available elsewhere.' }
+];
+---
+<div class="chooser">
+  <img src="/images/faq-agent-homes.webp" alt="Three possible homes for the same assistant: a laptop, a small computer on a shelf, and a remote server." width="1440" height="480" loading="lazy" />
+  <fieldset>
+    <legend>Where should mine live?</legend>
+    <p>Choose the description that sounds most like you.</p>
+    <div class="options">{paths.map((path,i) => <label><input type="radio" name="host-choice" value={path.id} checked={i === 0} />{path.choice}</label>)}</div>
+    {paths.map(path => <div class={'result ' + path.id}><h3>{path.title}</h3><p>{path.body}</p><p><strong>The trade-off:</strong> {path.trade}</p>{path.id === 'hosted' && <p>Before subscribing, ask the host to show you how to download your notes and cancel the plan.</p>}</div>)}
+  </fieldset>
+</div>
+<style>
+.chooser{background:#fefbf4;border:1px solid #d7cfbd;border-radius:1.1rem;overflow:hidden;margin:1.3rem 0}
+img{display:block;width:100%;height:auto}
+fieldset{min-width:0;margin:0;padding:0 clamp(1rem,3vw,1.6rem) 1.4rem}
+legend{font:700 1.65rem/1.15 'Space Grotesk',sans-serif;margin:1rem 0 .4rem;padding:0}
+fieldset>p{font-size:.9rem;color:#615448}.options{display:flex;flex-wrap:wrap;gap:.45rem;margin:1rem 0}
+label{display:flex;min-height:44px;align-items:center;gap:.4rem;border:1px solid #c6c5b4;border-radius:1.25rem;padding:.45rem .75rem;font-size:.86rem;cursor:pointer;background:white}
+label:has(:checked){background:#30271f;border-color:#30271f;color:white}input{accent-color:#6b5c4f}.result{padding:1rem;background:#f6f1e9;border-left:3px solid #877565}.result h3{font-size:1.1rem;font-weight:700}.result p{margin:.45rem 0;line-height:1.55}.result a{color:#342b24;text-decoration:underline}
+@supports selector(:has(*)){.result{display:none}.chooser:has([value=desk]:checked) .desk,.chooser:has([value=home]:checked) .home,.chooser:has([value=hosted]:checked) .hosted{display:block}}
+</style>

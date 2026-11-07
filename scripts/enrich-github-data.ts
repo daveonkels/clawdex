@@ -1,330 +1,152 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
+import { buildLeaderboard, calculateStarGrowth7d } from '../src/lib/metrics.js';
 
-// ── Paths ──────────────────────────────────────────────────────────────────────
-const PROJECTS_DIR = path.join(process.cwd(), 'src', 'data', 'projects');
-const GENERATED_DIR = path.join(process.cwd(), 'src', 'data', 'generated');
-const HISTORY_PATH = path.join(process.cwd(), '.enrichment-history.json');
+import { dailyStarActivity } from '../src/lib/star-activity.js';
 
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const GITHUB_API = 'https://api.github.com';
+const ACTIVITY_PATH = path.join(process.cwd(), 'src/data/star-activity.json');
+const PROJECTS_DIR = path.join(process.cwd(), 'src/data/projects');
+const HISTORY_PATH = path.join(process.cwd(), 'src/data/star-history.json');
+const LEADERBOARD_PATH = path.join(process.cwd(), 'src/data/generated/leaderboard.json');
+const DAY = 24 * 60 * 60 * 1000;
 
-// ── Types ──────────────────────────────────────────────────────────────────────
-interface GitHubData {
-  stars: number;
-  forks: number;
-  open_issues: number;
-  license: string | null;
-  topics: string[];
-  last_commit: string;
-  latest_release: string | null;
-  latest_release_date: string | null;
-  star_growth_7d: number | null;
-  last_enriched: string;
-}
-
-interface LeaderboardEntry {
-  rank: number;
-  name: string;
-  slug: string;
-  emoji: string;
-  language: string;
-  github: string;
-  stars: number;
-  forks: number;
-  open_issues: number;
-  star_growth_7d: number | null;
-  latest_release: string | null;
-  latest_release_date: string | null;
-  last_commit: string;
-  license: string | null;
-  health: {
-    issues_stars_ratio: number;
-    days_since_last_release: number | null;
-    days_since_last_commit: number;
-  };
-}
-
-interface HistorySnapshot {
-  stars: number;
-  date: string;
-}
-
-// ── Rate-limit tracking ────────────────────────────────────────────────────────
-let remainingRequests = 5000;
-let resetTime = 0;
-
-function apiHeaders(): Record<string, string> {
-  const h: Record<string, string> = {
-    'Accept': 'application/vnd.github.v3+json',
-    'User-Agent': 'shelldex-enrichment/1.0',
-  };
-  if (GITHUB_TOKEN) {
-    h['Authorization'] = `Bearer ${GITHUB_TOKEN}`;
-  }
-  return h;
-}
-
-async function githubFetch(endpoint: string): Promise<any> {
-  // Pause if approaching rate limit
-  if (remainingRequests <= 10 && resetTime > 0) {
-    const waitMs = Math.max(0, resetTime * 1000 - Date.now()) + 1000;
-    console.log(`  ⏳ Rate limit near — waiting ${Math.ceil(waitMs / 1000)}s...`);
-    await new Promise(r => setTimeout(r, waitMs));
-  }
-
-  const url = `${GITHUB_API}${endpoint}`;
-  const res = await fetch(url, { headers: apiHeaders() });
-
-  // Update rate-limit counters from response headers
-  const remaining = res.headers.get('x-ratelimit-remaining');
-  const reset = res.headers.get('x-ratelimit-reset');
-  if (remaining) remainingRequests = parseInt(remaining, 10);
-  if (reset) resetTime = parseInt(reset, 10);
-
-  if (res.status === 404) return null;
-
-  if (res.status === 403 && remainingRequests === 0) {
-    const waitMs = Math.max(0, resetTime * 1000 - Date.now()) + 1000;
-    console.log(`  ⛔ Rate limited — waiting ${Math.ceil(waitMs / 1000)}s then retrying...`);
-    await new Promise(r => setTimeout(r, waitMs));
-    return githubFetch(endpoint);
-  }
-
-  if (!res.ok) {
-    console.warn(`  ⚠ GitHub API ${res.status} for ${endpoint}`);
-    return null;
-  }
-
+async function githubFetch(endpoint, optional = false) {
+  const res = await fetch(`https://api.github.com${endpoint}`, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2026-03-10',
+      'User-Agent': 'shelldex-enrichment/1.0',
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+    },
+    signal: AbortSignal.timeout(30000),
+  });
+  if (optional && res.status === 404) return null;
+  if (!res.ok) throw new Error(`GitHub API ${res.status} for ${endpoint}; no project data was changed.`);
   return res.json();
 }
 
-// ── Star-growth history ────────────────────────────────────────────────────────
-function loadHistory(): Record<string, HistorySnapshot[]> {
-  try {
-    return JSON.parse(fs.readFileSync(HISTORY_PATH, 'utf-8'));
-  } catch {
-    return {};
+async function fetchStarWeeks(github) {
+  const weeks = [];
+  for (let page = 1; page <= 100; page++) {
+    const batch = await githubFetch(`/repos/${github}/stargazers/history?per_page=30&page=${page}`);
+    if (!Array.isArray(batch)) throw new Error(`Invalid star history for ${github}`);
+    weeks.push(...batch);
+    if (batch.length < 30) break;
+  }
+  return weeks;
+}
+
+function validateResponse(github, response) {
+  if (response?.error) throw new Error(`${github}: ${response.error}`);
+  const repo = response?.repo;
+  if (!repo || !['stargazers_count', 'forks_count', 'open_issues_count'].every(
+    (key) => Number.isSafeInteger(repo[key]) && repo[key] >= 0,
+  ) || !Number.isFinite(Date.parse(repo.pushed_at))) {
+    throw new Error(`Invalid or missing repository metrics for ${github}.`);
+  }
+  // null means GitHub returned 404 (no published release). Missing is an error.
+  if (response.release !== null && (!response.release?.tag_name || !Number.isFinite(Date.parse(response.release.published_at)))) {
+    throw new Error(`Invalid or missing release response for ${github}.`);
   }
 }
 
-function saveHistory(history: Record<string, HistorySnapshot[]>): void {
-  fs.writeFileSync(HISTORY_PATH, JSON.stringify(history, null, 2));
-}
-
-function calculateStarGrowth7d(
-  snapshots: HistorySnapshot[],
-  currentStars: number,
-): number | null {
-  if (snapshots.length === 0) return null;
-
-  const now = Date.now();
-  const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
-
-  // Find snapshot closest to 7 days ago
-  let best: HistorySnapshot | null = null;
-  let bestDiff = Infinity;
-
-  for (const snap of snapshots) {
-    const t = new Date(snap.date).getTime();
-    const diff = Math.abs(t - sevenDaysAgo);
-    if (diff < bestDiff && t <= now) {
-      bestDiff = diff;
-      best = snap;
-    }
+async function main() {
+  const args = process.argv.slice(2).filter((arg) => arg !== '--');
+  if (args.length && (args.length !== 2 || args[0] !== '--snapshot')) {
+    throw new Error('Usage: pnpm run enrich [--snapshot FILE]');
   }
-
-  if (!best) return null;
-
-  // Only meaningful if snapshot is within 10 days of target window
-  if (bestDiff > 10 * 24 * 60 * 60 * 1000) return null;
-
-  return currentStars - best.stars;
-}
-
-// ── Helpers ────────────────────────────────────────────────────────────────────
-function daysSince(dateStr: string | null | undefined): number | null {
-  if (!dateStr) return null;
-  const ms = Date.now() - new Date(dateStr).getTime();
-  return Math.floor(ms / (24 * 60 * 60 * 1000));
-}
-
-// ── Enrich a single project ────────────────────────────────────────────────────
-async function enrichProject(
-  github: string,
-  history: Record<string, HistorySnapshot[]>,
-): Promise<GitHubData | null> {
-  console.log(`  Fetching /repos/${github} ...`);
-  const repo = await githubFetch(`/repos/${github}`);
-  if (!repo) return null;
-
-  console.log(`  Fetching /repos/${github}/releases/latest ...`);
-  const release = await githubFetch(`/repos/${github}/releases/latest`);
-
-  const stars: number = repo.stargazers_count ?? 0;
-  const today = new Date().toISOString().split('T')[0];
-
-  // Record today's snapshot
-  if (!history[github]) history[github] = [];
-  const existing = history[github].find((s: HistorySnapshot) => s.date === today);
-  if (existing) {
-    existing.stars = stars;
-  } else {
-    history[github].push({ stars, date: today });
+  const snapshot = args.length ? JSON.parse(fs.readFileSync(args[1], 'utf8')) : null;
+  if (!snapshot && !process.env.GITHUB_TOKEN) {
+    throw new Error('GITHUB_TOKEN is required. Agents should use pnpm run enrich:vault.');
   }
-
-  // Prune history older than 30 days
-  const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
-  history[github] = history[github].filter(
-    (s: HistorySnapshot) => new Date(s.date).getTime() >= cutoff,
-  );
-
-  return {
-    stars,
-    forks: repo.forks_count ?? 0,
-    open_issues: repo.open_issues_count ?? 0,
-    license: repo.license?.spdx_id ?? null,
-    topics: repo.topics ?? [],
-    last_commit: repo.pushed_at ?? '',
-    latest_release: release?.tag_name ?? null,
-    latest_release_date: release?.published_at ?? null,
-    star_growth_7d: calculateStarGrowth7d(history[github], stars),
-    last_enriched: new Date().toISOString(),
-  };
-}
-
-// ── Main ───────────────────────────────────────────────────────────────────────
-async function main(): Promise<void> {
-  console.log('Shelldex GitHub Data Enrichment');
-  console.log('================================\n');
-
-  if (!GITHUB_TOKEN) {
-    console.warn('⚠ No GITHUB_TOKEN set — rate limit is 60 req/hr.');
-    console.warn('  Set GITHUB_TOKEN for 5 000 req/hr.\n');
+  const now = snapshot ? new Date(snapshot.collected_at) : new Date();
+  if (!Number.isFinite(now.getTime()) || now.getTime() > Date.now() + 60000 || Date.now() - now.getTime() > DAY) {
+    throw new Error('The GitHub snapshot must have been collected within the last 24 hours.');
   }
+  const history = fs.existsSync(HISTORY_PATH) ? JSON.parse(fs.readFileSync(HISTORY_PATH, 'utf8')) : {};
+  const files = fs.readdirSync(PROJECTS_DIR).filter((file) => /\.ya?ml$/.test(file)).sort();
+  const activity = fs.existsSync(ACTIVITY_PATH) ? JSON.parse(fs.readFileSync(ACTIVITY_PATH, 'utf8')) : {};
+  const pending = new Map();
+  const projects = [];
+  const today = now.toISOString().slice(0, 10);
 
-  // Ensure output directory
-  fs.mkdirSync(GENERATED_DIR, { recursive: true });
-
-  const history = loadHistory();
-  const files = fs
-    .readdirSync(PROJECTS_DIR)
-    .filter((f: string) => f.endsWith('.yml') || f.endsWith('.yaml'));
-
-  console.log(`Found ${files.length} project files.\n`);
-
-  const leaderboard: LeaderboardEntry[] = [];
-
+  // Fetch and validate the complete batch before touching any saved data.
   for (const file of files) {
     const filePath = path.join(PROJECTS_DIR, file);
-    const raw = fs.readFileSync(filePath, 'utf-8');
-    const project = yaml.load(raw) as Record<string, any>;
-
-    console.log(`[${project.name}]`);
-
-    if (!project.github) {
-      console.log('  No github field — skipping.\n');
-      continue;
-    }
-
-    const data = await enrichProject(project.github, history);
-    if (!data) {
-      console.log('  Failed to fetch — skipping.\n');
-      continue;
-    }
-
-    // Write github_data back into the YAML
-    project.github_data = {
-      stars: data.stars,
-      forks: data.forks,
-      open_issues: data.open_issues,
-      license: data.license,
-      topics: data.topics,
-      last_commit: data.last_commit,
-      latest_release: data.latest_release,
-      latest_release_date: data.latest_release_date,
-      star_growth_7d: data.star_growth_7d,
-      last_enriched: data.last_enriched,
+    const project = yaml.load(fs.readFileSync(filePath, 'utf8'));
+    projects.push(project);
+    if (!project.github) continue;
+    if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(project.github)) throw new Error(`Invalid repository: ${project.github}`);
+    const response = snapshot ? snapshot.repositories?.[project.github] : {
+      repo: await githubFetch(`/repos/${project.github}`, true),
+      release: await githubFetch(`/repos/${project.github}/releases/latest`, true),
     };
-
-    const updatedYaml = yaml.dump(project, {
-      lineWidth: -1,
-      quotingType: '"',
-      forceQuotes: false,
-      noRefs: true,
-      sortKeys: false,
-    });
-    fs.writeFileSync(filePath, updatedYaml);
-
-    console.log(`  ★ ${data.stars} | Forks: ${data.forks} | Issues: ${data.open_issues}`);
-    if (data.latest_release) console.log(`  Release: ${data.latest_release}`);
-    if (data.star_growth_7d !== null) {
-      const sign = data.star_growth_7d > 0 ? '+' : '';
-      console.log(`  7d growth: ${sign}${data.star_growth_7d}`);
+    if (response?.repo === null && (response.repo_status === 404 || !snapshot)) {
+      if (!project.github_data?.last_enriched) throw new Error(`No historical metrics for unavailable repository ${project.github}.`);
+      project.github_data = { ...project.github_data, availability: 'unavailable', last_checked: now.toISOString(), star_growth_7d: null };
+      pending.set(filePath, yaml.dump(project, { lineWidth: -1, quotingType: '"', noRefs: true, sortKeys: false }));
+      console.log(`${project.slug}: unavailable on GitHub; retaining metrics dated ${project.github_data.last_enriched}`);
+      continue;
     }
-    console.log();
-
-    // Build leaderboard entry
-    const daysCommit = daysSince(data.last_commit) ?? 999;
-    const daysRelease = daysSince(data.latest_release_date);
-
-    leaderboard.push({
-      rank: 0,
-      name: project.name,
-      slug: project.slug,
-      emoji: project.emoji,
-      language: project.language,
-      github: project.github,
-      stars: data.stars,
-      forks: data.forks,
-      open_issues: data.open_issues,
-      star_growth_7d: data.star_growth_7d,
-      latest_release: data.latest_release,
-      latest_release_date: data.latest_release_date,
-      last_commit: data.last_commit,
-      license: data.license,
-      health: {
-        issues_stars_ratio: data.stars > 0
-          ? parseFloat((data.open_issues / data.stars).toFixed(4))
-          : 0,
-        days_since_last_release: daysRelease,
-        days_since_last_commit: daysCommit,
-      },
-    });
+    validateResponse(project.github, response);
+    const { repo, release } = response;
+    if (project.github_data?.repository_id && project.github_data.repository_id !== repo.id) {
+      throw new Error(`Repository identity changed for ${project.github}; verify a transfer or reused URL before refreshing.`);
+    }
+    const weeks = snapshot ? response.star_weeks : await fetchStarWeeks(project.github);
+    const dates = dailyStarActivity(weeks, now.toISOString(), repo.created_at);
+    if (!Object.keys(dates).length && repo.stargazers_count > 0 && repo.created_at?.slice(0, 10) < today) {
+      throw new Error(`Empty star history for ${project.github}`);
+    }
+    activity[repo.id] = dates;
+    const snapshots = history[project.github] ?? [];
+    const growth = calculateStarGrowth7d(snapshots, repo.stargazers_count, now);
+    history[project.github] = [
+      ...snapshots.filter((entry) => entry.date !== today),
+      { stars: repo.stargazers_count, date: today },
+    ].sort((a, b) => a.date.localeCompare(b.date));
+    project.github_data = {
+      repository_id: repo.id,
+      stars: repo.stargazers_count,
+      forks: repo.forks_count,
+      open_issues: repo.open_issues_count,
+      license: repo.license?.spdx_id ?? null,
+      topics: repo.topics ?? [],
+      last_commit: repo.pushed_at,
+      latest_release: release?.tag_name ?? null,
+      latest_release_date: release?.published_at ?? null,
+      star_growth_7d: growth,
+      last_enriched: now.toISOString(),
+      last_checked: now.toISOString(),
+      availability: 'available',
+    };
+    pending.set(filePath, yaml.dump(project, { lineWidth: -1, quotingType: '"', noRefs: true, sortKeys: false }));
+    console.log(`${project.slug}: ${repo.stargazers_count} stars`);
   }
-
-  // Sort by stars descending and assign ranks
-  leaderboard.sort((a, b) => b.stars - a.stars);
-  leaderboard.forEach((entry, i) => {
-    entry.rank = i + 1;
-  });
-
-  // Write leaderboard JSON
-  const leaderboardPath = path.join(GENERATED_DIR, 'leaderboard.json');
-  fs.writeFileSync(
-    leaderboardPath,
-    JSON.stringify(
-      {
-        generated: new Date().toISOString(),
-        count: leaderboard.length,
-        entries: leaderboard,
-      },
-      null,
-      2,
-    ),
-  );
-
-  // Persist star history
-  saveHistory(history);
-
-  console.log('================================');
-  console.log(`Enriched ${leaderboard.length} projects.`);
-  console.log(`Leaderboard → ${leaderboardPath}`);
-  console.log(`History    → ${HISTORY_PATH}`);
+  const leaderboard = buildLeaderboard(projects);
+  pending.set(ACTIVITY_PATH, JSON.stringify(activity, null, 2) + '\n');
+  pending.set(HISTORY_PATH, JSON.stringify(history, null, 2) + '\n');
+  pending.set(LEADERBOARD_PATH, JSON.stringify(leaderboard, null, 2) + '\n');
+  fs.mkdirSync(path.dirname(LEADERBOARD_PATH), { recursive: true });
+  const originals = new Map([...pending.keys()].map((file) => [file, fs.existsSync(file) ? fs.readFileSync(file) : null]));
+  try {
+    for (const [file, content] of pending) {
+      fs.writeFileSync(`${file}.tmp`, content);
+      fs.renameSync(`${file}.tmp`, file);
+    }
+  } catch (error) {
+    for (const [file, content] of originals) {
+      if (content === null) fs.rmSync(file, { force: true });
+      else fs.writeFileSync(file, content);
+      fs.rmSync(`${file}.tmp`, { force: true });
+    }
+    throw error;
+  }
+  console.log(`Enriched all ${leaderboard.count} projects; saved leaderboard and star history.`);
 }
 
-main().catch((err) => {
-  console.error('Enrichment failed:', err);
-  process.exit(1);
+main().catch((error) => {
+  console.error(`Enrichment failed: ${error.message}`);
+  process.exitCode = 1;
 });

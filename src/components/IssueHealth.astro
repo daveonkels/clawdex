@@ -1,0 +1,18 @@
+---
+import { issueBand, issueBands } from '../lib/leaderboard-display';
+interface Props { ratio?: number | null; available?: boolean; legend?: boolean; showSubject?: boolean }
+const { ratio, available = true, legend = false, showSubject = false } = Astro.props;
+const rating = issueBand(ratio, available);
+---
+{legend ? <div class="key">
+  <p><strong><a href="/methodology/#issue-load" class="underline">Issue load</a></strong> compares open issues and pull requests with stars. A lower percentage means fewer open items per star.</p>
+  <div class="bands">{issueBands.map(c => <span class="rating"><i class={c.tone} aria-hidden="true">{c.glyph}</i>{c.name} ({c.range})</span>)}</div>
+</div> : <span class="rating" title={rating.tone === 'unknown' ? 'Issue load unavailable' : 'Open issues and pull requests ÷ stars: ' + (ratio! * 100).toFixed(2) + '%'}>
+  <i class={rating.tone} aria-hidden="true">{rating.glyph}</i>{rating.name}<span class={showSubject ? '' : 'sr-only'}> issue load</span>
+</span>}
+<style>
+  .key{font-size:.875rem; color:theme('colors.ledger.muted'); margin:1rem 0}
+  .bands,.rating{display:flex;align-items:center;gap:.35rem}.bands{flex-wrap:wrap;gap:.35rem 1rem;margin-top:.4rem}
+  .rating{position:relative;display:inline-flex;white-space:nowrap;font-size:.8125rem;color:theme('colors.ledger.text')}.rating i{font-style:normal;font-size:.9rem}
+  .low{color:theme('colors.ledger.teal')}.moderate{color:theme('colors.ledger.ochre')}.high{color:theme('colors.ledger.rust')}.unknown{color:theme('colors.ledger.muted')}
+</style>

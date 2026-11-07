@@ -1,0 +1,49 @@
+name: OpenHuman
+slug: openhuman
+tagline: Local-first personal assistant for desktop or headless use
+description: Give OpenHuman a task and it can search connected information, recall local context and act through browser or desktop tools. Its Rust agent runs with a desktop interface or on a server.
+language: rust
+category:
+  - privacy
+  - productivity
+github: tinyhumansai/openhuman
+status: active
+tier: 3
+ecosystem_role: alternative
+highlight: Works with local memory across desktop and headless sessions.
+emoji: 🧑
+platform:
+  - desktop
+  - server
+  - cli
+requires_llm: true
+mcp_support: true
+added: "2026-11-07"
+github_data:
+  repository_id: 1161163182
+  stars: 42584
+  forks: 4214
+  open_issues: 324
+  license: GPL-3.0
+  topics:
+    - agent-orchestration
+    - ai-agents
+    - ai-assistant
+    - desktop
+    - llm
+    - local-first
+    - mcp
+    - personal-ai
+    - privacy
+    - rust
+    - second-brain
+    - tauri
+  last_commit: "2026-11-06T18:53:10Z"
+  latest_release: v0.64.15
+  latest_release_date: "2026-10-09T05:08:30Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/tinyhumansai/openhuman#install"
+first_task: "Give the desktop assistant one sample note containing two deadlines. Ask it to find both dates and point to their source before connecting any personal accounts."

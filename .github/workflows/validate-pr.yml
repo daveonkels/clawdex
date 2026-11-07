@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - 'src/data/projects/**'
+      - 'plans/catalog-review/retired/**'
+      - 'scripts/validate-projects.mjs'
+      - 'src/lib/project-languages.js'
 
 jobs:
   validate:

@@ -1,6 +1,6 @@
 name: Golem
 slug: golem
-tagline: Your AI agent, single binary, zero dependencies
+tagline: "A terminal assistant packaged as a Go binary"
 description: Terminal-first personal AI agent built in pure Go. Single binary deployment with TUI, multi-channel bot support, tool calling, long-term memory, skill packs, cron scheduling, and gateway API. No Python, Node, or Docker required.
 language: go
 category:
@@ -9,7 +9,7 @@ category:
   - developer-tools
 github: MEKXH/golem
 status: active
-tier: 2
+tier: 3
 highlight: Single binary, zero runtime dependencies — a full personal AI agent with TUI, channels, tools, memory, skills, and cron in one Go executable
 emoji: 🗿
 platform:
@@ -17,17 +17,21 @@ platform:
   - server
   - messaging
 requires_llm: true
-mcp_support: false
 ecosystem_role: alternative
 added: "2026-03-07"
 github_data:
-  stars: 188
-  forks: 15
-  open_issues: 90
+  repository_id: 1149893948
+  stars: 193
+  forks: 18
+  open_issues: 110
   license: MIT
   topics: []
-  last_commit: "2026-05-22T23:10:07Z"
+  last_commit: "2026-07-07T23:16:40Z"
   latest_release: v0.7.1
   latest_release_date: "2026-03-19T09:55:10Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:37.535Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/MEKXH/golem#quick-start"
+first_task: "In its terminal chat, tell it a made-up project nickname and ask it to remember it. Start a fresh conversation and ask what nickname you chose."

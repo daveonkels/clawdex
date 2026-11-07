@@ -4,7 +4,7 @@
     "title": "Shelldex Registry API",
     "version": "2026.05.23",
     "summary": "Read-only JSON API for the OpenClaw ecosystem registry at shelldex.com.",
-    "description": "Static JSON endpoints describing the OpenClaw ecosystem: personal AI agent frameworks, their GitHub health, and side-by-side comparisons. No authentication. No rate limit. All endpoints regenerate on each deploy. Slugs are lowercase, hyphen-separated. Comparison pair slugs must be alphabetical (e.g., `hermes-vs-openclaw`, never `openclaw-vs-hermes`).",
+    "description": "Static JSON endpoints describing the OpenClaw ecosystem: runnable personal AI agents, their public repository activity, and side-by-side comparisons. No authentication. All endpoints regenerate on each deploy. Slugs are lowercase, hyphen-separated. Comparison pair slugs must be alphabetical (e.g., `hermes-vs-openclaw`, never `openclaw-vs-hermes`).",
     "license": {
       "name": "CC-BY-4.0",
       "identifier": "CC-BY-4.0",
@@ -167,7 +167,10 @@
             "items": { "type": "string", "enum": ["browser", "cli", "cloud", "desktop", "edge", "embedded", "messaging", "mobile", "sdk", "server", "serverless", "web"] }
           },
           "requires_llm": { "type": ["boolean", "null"] },
-          "mcp_support": { "type": "boolean" },
+          "mcp_support": { "type": ["boolean", "null"], "description": "Null means unverified." },
+          "quick_start": { "type": ["string", "null"], "format": "uri" },
+          "first_task": { "type": ["string", "null"] },
+          "model_options": { "type": "string" },
           "integration_count": { "type": ["integer", "null"] },
           "perf": {
             "type": ["object", "null"],
@@ -179,7 +182,7 @@
           },
           "ecosystem_role": {
             "type": ["string", "null"],
-            "enum": ["reference", "fork", "reimplementation", "derivative", "infrastructure", "alternative", null]
+            "enum": ["reference", "fork", "reimplementation", "derivative", "alternative", null]
           },
           "stars": { "type": ["integer", "null"] },
           "github_data": { "$ref": "#/components/schemas/GitHubData" },
@@ -191,10 +194,10 @@
         "properties": {
           "stars": { "type": "integer" },
           "forks": { "type": "integer" },
-          "open_issues": { "type": "integer" },
+          "open_issues": { "type": "integer", "description": "Open GitHub issues and pull requests combined." },
           "license": { "type": ["string", "null"] },
           "topics": { "type": "array", "items": { "type": "string" } },
-          "last_commit": { "type": "string", "format": "date-time" },
+          "last_commit": { "description": "Legacy field name for the last repository push (GitHub pushed_at).", "type": "string", "format": "date-time" },
           "latest_release": { "type": ["string", "null"] },
           "latest_release_date": { "type": ["string", "null"], "format": "date-time" },
           "star_growth_7d": { "type": ["integer", "null"] },
@@ -227,13 +230,18 @@
           "generated": { "type": "string", "format": "date-time" },
           "source": { "type": "string", "format": "uri" },
           "license": { "type": "string" },
+          "daily_star_additions": {
+            "description": "GitHub stars still present on the collection date, grouped by day of creation. Excludes the collection day. Null when daily history is unavailable.",
+            "type": ["object", "null"],
+            "additionalProperties": { "type": "integer", "minimum": 0 }
+          },
           "project": { "$ref": "#/components/schemas/Project" }
         }
       },
       "LeaderboardEntry": {
         "type": "object",
         "properties": {
-          "rank": { "type": "integer" },
+          "rank": { "type": ["integer", "null"], "description": "Null for historical repositories." },
           "name": { "type": "string" },
           "slug": { "type": "string" },
           "emoji": { "type": "string" },
@@ -241,17 +249,17 @@
           "github": { "type": "string" },
           "stars": { "type": "integer" },
           "forks": { "type": "integer" },
-          "open_issues": { "type": "integer" },
+          "open_issues": { "type": "integer", "description": "Open GitHub issues and pull requests combined." },
           "star_growth_7d": { "type": ["integer", "null"] },
           "latest_release": { "type": ["string", "null"] },
           "latest_release_date": { "type": ["string", "null"] },
-          "last_commit": { "type": "string" },
+          "last_commit": { "description": "Legacy field name for the last repository push (GitHub pushed_at).", "type": "string" },
           "license": { "type": ["string", "null"] },
-          "health_score": { "type": "integer", "minimum": 0, "maximum": 100 },
+          "health_score": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
           "health": {
             "type": "object",
             "properties": {
-              "issues_stars_ratio": { "type": "number" },
+              "issues_stars_ratio": { "type": ["number", "null"] },
               "days_since_last_release": { "type": ["integer", "null"] },
               "days_since_last_commit": { "type": "integer" }
             }

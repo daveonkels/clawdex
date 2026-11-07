@@ -6,7 +6,7 @@ language: python
 category:
   - minimal
   - lightweight
-github: princezuda/safeclaw
+github: princezuda/safestclaw
 status: active
 tier: 1
 highlight: No LLM required — deterministic, rule-based, zero token costs
@@ -18,8 +18,9 @@ mcp_support: false
 ecosystem_role: alternative
 added: 2026-02-27T00:00:00.000Z
 github_data:
-  stars: 276
-  forks: 35
+  repository_id: 1148395300
+  stars: 282
+  forks: 32
   open_issues: 2
   license: MIT
   topics:
@@ -31,8 +32,10 @@ github_data:
     - openclaw
     - safe
     - safeai
-  last_commit: "2026-05-18T06:47:12Z"
-  latest_release: 4.2.4
-  latest_release_date: "2026-05-09T13:40:00Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:56.126Z"
+  last_commit: "2026-09-22T17:36:08Z"
+  latest_release: 4.2.5
+  latest_release_date: "2026-09-22T17:36:08Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-01T15:59:51.845Z"
+  last_checked: "2026-11-01T15:59:51.845Z"
+  availability: available

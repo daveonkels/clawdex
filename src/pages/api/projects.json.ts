@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { loadProjects } from '../../lib/projects';
 
+import { modelAccess, quickStartUrl } from '../../lib/agent-choice';
+
 export const GET: APIRoute = async () => {
   const projects = await loadProjects();
   const body = {
@@ -26,7 +28,10 @@ export const GET: APIRoute = async () => {
       website: p.website ?? null,
       platform: p.platform ?? [],
       requires_llm: p.requires_llm ?? null,
-      mcp_support: p.mcp_support ?? false,
+      mcp_support: p.mcp_support ?? null,
+      quick_start: quickStartUrl(p),
+      first_task: p.first_task ?? null,
+      model_options: modelAccess(p),
       integration_count: p.integration_count ?? null,
       perf: p.perf ?? null,
       ecosystem_role: p.ecosystem_role ?? null,

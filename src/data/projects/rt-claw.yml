@@ -1,39 +1,36 @@
 name: RT-Claw
 slug: rt-claw
-tagline: Making AI assistants cheap again
-description: A C-based agent runtime built for minimal cost and maximum efficiency. Systems-language approach targeting the low-cost, local-first segment of the ecosystem.
+tagline: "A C assistant for small devices"
+description: "RT-Claw is a C assistant for supported embedded devices. Check the hardware list and toolchain before starting."
 language: c
 category:
   - lightweight
   - local-first
-github: zevorn/rt-claw
+github: gevico/rt-claw
 website: https://www.rt-claw.com
 status: active
-tier: 2
+tier: 3
 highlight: Written in C, $0/low-cost angle
 emoji: 💰
 platform:
   - server
   - embedded
 requires_llm: true
-mcp_support: false
 ecosystem_role: alternative
 added: 2026-03-28T00:00:00.000Z
 github_data:
-  stars: 650
-  forks: 48
-  open_issues: 4
+  repository_id: 1179025718
+  stars: 13
+  forks: 3
+  open_issues: 12
   license: MIT
-  topics:
-    - ai
-    - assistant
-    - cheap
-    - clawdbot
-    - ironclaw
-    - openclaw
-    - picoclaw
-  last_commit: "2026-05-13T17:32:45Z"
+  topics: []
+  last_commit: "2026-06-04T01:50:12Z"
   latest_release: v0.2.0
   latest_release_date: "2026-03-21T01:16:41Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:55.235Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/gevico/rt-claw#quick-start"
+first_task: "Using its supported emulator or test board, ask it to store a harmless nickname in memory, then ask it to list its saved memories and find the nickname."

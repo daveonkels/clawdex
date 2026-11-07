@@ -1,0 +1,36 @@
+name: ESP-Claw
+slug: esp-claw
+tagline: A conversational agent for ESP32 devices
+description: Espressif reimplements the OpenClaw concept in C. Its agent can use connected sensors and peripherals to turn a request into actions on the device.
+language: c
+category:
+  - iot
+  - embedded
+github: espressif/esp-claw
+status: active
+tier: 1
+ecosystem_role: reimplementation
+highlight: The agent can sense and act on the same microcontroller.
+emoji: 🔌
+platform:
+  - embedded
+  - edge
+requires_llm: true
+mcp_support: true
+added: "2026-11-07"
+github_data:
+  repository_id: 1213212865
+  stars: 2360
+  forks: 516
+  open_issues: 87
+  license: Apache-2.0
+  topics: []
+  last_commit: "2026-11-01T07:57:28Z"
+  latest_release: v0.1.0
+  latest_release_date: "2026-06-12T12:11:00Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/espressif/esp-claw#-quick-start"
+first_task: "On a supported board with a sensor already connected, ask for one reading and its unit. Check the value before asking the device to control anything."

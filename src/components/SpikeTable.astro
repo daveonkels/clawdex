@@ -1,0 +1,38 @@
+---
+import type { EditionRow } from '../lib/spike-edition';
+interface Props { rows: EditionRow[]; caption: string }
+const { rows, caption } = Astro.props;
+const shade = (value: number, peak: number) => ['#e8e4dc', '#c3e0d8', '#86b7a9', '#46907e', '#0a6b5a'][value ? Math.ceil(4 * value / peak) : 0];
+---
+<table>
+  <caption>{caption}</caption>
+  <thead><tr><th scope="col">Agent</th><th scope="col">Oct 8 – Nov 6</th><th scope="col">Stars</th><th scope="col">Top 3 days</th></tr></thead>
+  <tbody>{rows.map(row => {
+    const peak = Math.max(...row.days.map(d => d.count));
+    const weeks = Array.from({length: 5}, (_, i) => row.days.slice(i * 7, (i + 1) * 7));
+    const averages = weeks.map(week => week.reduce((sum, d) => sum + d.count, 0) / week.length);
+    return <tr>
+      <th scope="row">{row.linked ? <a href={'/projects/' + row.slug + '/'}>{row.name}</a> : row.name}</th>
+      <td>
+        <svg class="days" viewBox="0 0 120 8" preserveAspectRatio="none" role="img" aria-label={row.name + ': daily star additions, peak ' + peak + ' in one day.'}>
+          {row.days.map((day, i) => <rect x={i * 4} width="3.5" height="8" rx=".6" fill={shade(day.count, peak)}><title>{day.date} · {day.count} additions</title></rect>)}
+        </svg>
+        <span class="weeks" role="img" aria-label={row.name + ', average daily additions in five periods: ' + averages.map(n => n.toFixed(1)).join(', ')}>
+          {averages.map((n, i) => <i style={{backgroundColor:shade(n, Math.max(...averages))}} title={weeks[i][0].date + ' to ' + weeks[i].at(-1)!.date + ': ' + n.toFixed(1) + ' per day'} />)}
+        </span>
+        <small>Daily peak {peak.toLocaleString('en-US')}</small>
+      </td>
+      <td>{row.total.toLocaleString('en-US')}</td><td>{row.total ? row.share.toFixed(1) + '%' : '—'}</td>
+    </tr>
+  })}</tbody>
+</table>
+<style>
+  table{width:100%;border-collapse:collapse;font-size:.875rem}
+  caption{text-align:left;color:#574e45;font-size:.85rem;padding:.75rem 0}
+  th,td{padding:.5rem .25rem;border-bottom:1px solid #ddd4c8;text-align:left}
+  thead th,small{font-size:.75rem;color:#574e45}th:first-child{width:25%;padding-left:0;overflow-wrap:anywhere}
+  td:nth-child(2){width:42%}.days{width:100%;height:.8rem;display:block}.weeks{display:none}
+  :is(td,th):nth-child(n+3){text-align:right;font-variant-numeric:tabular-nums}td:nth-child(n+3){font-family:monospace;white-space:nowrap}
+  a{text-decoration:underline;text-underline-offset:.17em}
+  @media(max-width:480px){.days{display:none}.weeks{display:grid;grid-template-columns:repeat(5,minmax(12px,1fr));gap:2px}.weeks i{height:.8rem;border-radius:2px}td:nth-child(2){width:33%}table{font-size:.8rem}}
+</style>

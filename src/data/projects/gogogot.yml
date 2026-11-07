@@ -9,19 +9,19 @@ category:
 github: aspasskiy/GoGogot
 website: https://go-go-got.com/
 status: active
-tier: 1
+tier: 3
 highlight: Single 15 MB Go binary — 4,500 lines of code, runs on a $4/mo VPS
 emoji: 🏃
 platform:
   - server
 requires_llm: true
-mcp_support: false
 ecosystem_role: derivative
 added: 2026-03-05T00:00:00.000Z
 github_data:
-  stars: 121
-  forks: 9
-  open_issues: 2
+  repository_id: 1164725227
+  stars: 264
+  forks: 17
+  open_issues: 4
   license: MIT
   topics:
     - agentic
@@ -41,8 +41,12 @@ github_data:
     - personal-assistant
     - productivity
     - self-hosted
-  last_commit: "2026-03-21T17:15:25Z"
-  latest_release: v0.1.0
-  latest_release_date: "2026-03-21T17:27:11Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:37.037Z"
+  last_commit: "2026-10-28T06:44:37Z"
+  latest_release: v0.1.1
+  latest_release_date: "2026-10-28T05:54:31Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/aspasskiy/GoGogot#quick-start"
+first_task: "Give it a small workspace with two versions of a list. Ask it to read both and show the items that were added or removed without changing either file."

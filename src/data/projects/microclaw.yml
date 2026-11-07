@@ -8,28 +8,33 @@ category:
   - security
 github: microclaw/microclaw
 status: active
-tier: 1
+tier: 3
 highlight: Rust-native chat agent with NanoClaw-inspired security model
 emoji: 🦀
 platform:
   - server
   - messaging
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: derivative
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 702
-  forks: 128
-  open_issues: 1
+  repository_id: 1152019564
+  stars: 754
+  forks: 141
+  open_issues: 2
   license: MIT
   topics:
     - bot
     - nanoclaw
     - openclaw
     - rust
-  last_commit: "2026-05-22T15:35:34Z"
-  latest_release: v0.1.58
-  latest_release_date: "2026-05-22T05:48:21Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:43.142Z"
+  last_commit: "2026-11-07T00:48:20Z"
+  latest_release: v0.26.0
+  latest_release_date: "2026-11-07T00:31:55Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/microclaw/microclaw#quick-start"
+first_task: "In a private chat, paste two versions of an event notice. Ask the assistant to draft a correction using only the changed time and place."

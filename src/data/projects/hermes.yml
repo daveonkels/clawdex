@@ -2,8 +2,8 @@ name: Hermes Agent
 slug: hermes
 slug_aliases:
   - hermes-agent
-tagline: The agent that grows with you
-description: Persistent personal AI agent by Nous Research with multi-level growing memory, self-authored skills, and multi-platform messaging. Learns your projects and builds reusable knowledge over time.
+tagline: "An assistant that remembers preferences and writes reusable skills"
+description: "Hermes Agent can remember preferences across sessions, write reusable skills after completing a task, and deliver scheduled results to a connected chat."
 language: python
 category:
   - memory
@@ -11,8 +11,8 @@ category:
   - multi-platform
 github: NousResearch/hermes-agent
 status: active
-tier: 1
-highlight: Self-improving skill system — agent writes reusable SKILL.md docs as it solves problems, building a personal knowledge base over time
+tier: 3
+highlight: "A recurring task can send its result back to a configured messaging channel."
 emoji: 🧠
 platform:
   - server
@@ -22,9 +22,10 @@ mcp_support: true
 ecosystem_role: alternative
 added: "2026-02-28"
 github_data:
-  stars: 163318
-  forks: 26728
-  open_issues: 13265
+  repository_id: 1024554267
+  stars: 261391
+  forks: 57914
+  open_issues: 53539
   license: MIT
   topics:
     - ai
@@ -34,17 +35,18 @@ github_data:
     - chatgpt
     - claude
     - claude-code
-    - clawdbot
     - codex
     - hermes
     - hermes-agent
     - llm
-    - moltbot
     - nous-research
     - openai
-    - openclaw
-  last_commit: "2026-05-23T03:15:11Z"
-  latest_release: v2026.5.16
-  latest_release_date: "2026-05-16T09:59:15Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:38.655Z"
+  last_commit: "2026-11-07T14:38:57Z"
+  latest_release: v0.23.0
+  latest_release_date: "2026-11-05T21:32:33Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/NousResearch/hermes-agent#getting-started"
+first_task: "Ask it to remember a harmless preference, such as using Celsius in weather summaries. Start a fresh conversation and ask which unit it should use."

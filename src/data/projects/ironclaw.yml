@@ -1,7 +1,7 @@
 name: IronClaw
 slug: ironclaw
-tagline: Rust-hardened privacy fortress
-description: Rust implementation focused on privacy and security. When your agent needs armor plating.
+tagline: "An assistant with isolated tool execution"
+description: "IronClaw describes an assistant that runs tools in isolated environments and controls their access to credentials and network destinations."
 language: rust
 category:
   - privacy
@@ -9,18 +9,19 @@ category:
 github: nearai/ironclaw
 status: active
 tier: 1
-highlight: Rust implementation focused on privacy and security
+highlight: "Its project documentation explains the permissions an individual tool receives."
 emoji: 🛡️
 platform:
   - server
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: reimplementation
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 12322
-  forks: 1432
-  open_issues: 970
+  repository_id: 1148615527
+  stars: 12714
+  forks: 1488
+  open_issues: 1571
   license: Apache-2.0
   topics:
     - codeact
@@ -28,8 +29,12 @@ github_data:
     - rlm
     - rust
     - wasm
-  last_commit: "2026-05-23T04:08:32Z"
-  latest_release: ironclaw-v0.28.2
-  latest_release_date: "2026-05-15T06:34:43Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:39.439Z"
+  last_commit: "2026-11-04T10:34:59Z"
+  latest_release: ironclaw-v1.4.1
+  latest_release_date: "2026-09-29T20:40:32Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/nearai/ironclaw#quick-start"
+first_task: "In a private chat, give it the text of a sample invoice. Ask it to extract the amount and due date while keeping email, payments and outside connections disabled."

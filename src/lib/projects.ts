@@ -14,7 +14,7 @@ export type Platform =
   | 'serverless'
   | 'web';
 
-export type EcosystemRole = 'reference' | 'fork' | 'reimplementation' | 'derivative' | 'infrastructure' | 'alternative';
+export type EcosystemRole = 'reference' | 'fork' | 'reimplementation' | 'derivative' | 'alternative';
 
 export interface PerfProfile {
   binary_size?: string;
@@ -37,6 +37,7 @@ export interface Mention {
 }
 
 export interface GitHubData {
+  repository_id?: number;
   stars: number;
   forks: number;
   open_issues: number;
@@ -47,11 +48,15 @@ export interface GitHubData {
   latest_release_date: string | null;
   star_growth_7d: number | null;
   last_enriched: string;
+  last_checked?: string;
+  availability?: 'available' | 'unavailable';
 }
 
 export interface Project {
   name: string;
   slug: string;
+  quick_start?: string;
+  first_task?: string;
   tagline: string;
   description: string;
   language: string;
@@ -70,7 +75,7 @@ export interface Project {
   mcp_support?: boolean;
   integration_count?: number;
   perf?: PerfProfile;
-  ecosystem_role?: EcosystemRole;
+  ecosystem_role: EcosystemRole;
   mentions?: Mention[];
   slug_aliases?: string[];
 }
@@ -96,6 +101,7 @@ export function getUniqueStatuses(projects: Project[]): string[] {
 }
 
 export function formatStars(stars: number): string {
-  if (stars >= 1000) return `${(stars / 1000).toFixed(stars >= 10000 ? 0 : 1)}k`;
+  if (stars >= 1_000_000) return `${Number((stars / 1_000_000).toFixed(2))}M`;
+  if (stars >= 1000) return `${Number((stars / 1000).toFixed(stars >= 100000 ? 0 : 1))}k`;
   return String(stars);
 }

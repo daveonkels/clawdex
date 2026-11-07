@@ -27,13 +27,24 @@ mcp_support: false
 ecosystem_role: fork
 added: 2026-03-19T00:00:00.000Z
 github_data:
-  stars: 20606
-  forks: 2720
-  open_issues: 469
+  repository_id: 1182547092
+  stars: 22904
+  forks: 3187
+  open_issues: 804
   license: Apache-2.0
-  topics: []
-  last_commit: "2026-05-23T04:04:29Z"
+  topics:
+    - ai-agents
+    - deep-agents
+    - hermes
+    - nvidia
+    - openclaw
+    - openshell
+    - sandboxing
+    - typescript
+  last_commit: "2026-11-01T15:41:42Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:47.094Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-01T15:59:51.845Z"
+  last_checked: "2026-11-01T15:59:51.845Z"
+  availability: available

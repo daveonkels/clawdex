@@ -1,0 +1,53 @@
+name: LobsterAI
+slug: lobsterai
+tagline: A desktop agent with a bundled OpenClaw runtime
+description: NetEase Youdao’s desktop assistant uses a pinned OpenClaw gateway to work with files, create documents and carry out tasks requested from a connected chat app.
+language: typescript
+category:
+  - desktop
+  - productivity
+github: netease-youdao/LobsterAI
+status: active
+tier: 3
+ecosystem_role: derivative
+highlight: The desktop app manages task permissions and saves the resulting artifacts locally.
+emoji: 🦞
+platform:
+  - desktop
+  - messaging
+requires_llm: true
+mcp_support: true
+added: "2026-11-07"
+github_data:
+  repository_id: 1156137396
+  stars: 6174
+  forks: 977
+  open_issues: 177
+  license: MIT
+  topics:
+    - agent
+    - ai-agent
+    - ai-assistant
+    - automation
+    - autonomous-agents
+    - chatbot
+    - copilot
+    - cross-platform
+    - desktop-app
+    - electron
+    - llm
+    - mcp
+    - office-automation
+    - openclaw
+    - productivity
+    - react
+    - tyepscript
+  last_commit: "2026-11-07T14:47:25Z"
+  latest_release: 2026.11.6
+  latest_release_date: "2026-11-06T15:29:01Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/netease-youdao/LobsterAI#quick-start"
+first_task: "Give the desktop assistant a test folder with three short text files. Ask for a one-sentence summary of each file, with its original name beside the summary."

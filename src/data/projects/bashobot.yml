@@ -1,6 +1,6 @@
 name: BashoBot
 slug: bashobot
-tagline: An OpenClaw inspired personal assistant in 100% Bash 🦞
+tagline: "A personal assistant written in Bash"
 description: Personal AI assistant built entirely in bash (compatible with bash 3.2+). Uses only standard Unix utilities (curl, jq, base64, etc.) with no Node.js or other runtimes. Modular architecture using named pipes.
 language: bash
 category:
@@ -16,12 +16,12 @@ platform:
   - server
   - embedded
 requires_llm: true
-mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-02-26T00:00:00.000Z
 github_data:
+  repository_id: 1152413373
   stars: 6
-  forks: 0
+  forks: 1
   open_issues: 4
   license: MIT
   topics:
@@ -37,5 +37,9 @@ github_data:
   last_commit: "2026-02-20T15:57:36Z"
   latest_release: 0.9.0
   latest_release_date: "2026-02-12T17:15:49Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:30.157Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/uraimo/bashobot#quick-start"
+first_task: "In its terminal chat, give it a sample shopping list with duplicate entries. Ask it to count the unique items and show which ones it combined."

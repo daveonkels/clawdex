@@ -1,31 +1,36 @@
 name: Picobot
 slug: picobot
-tagline: AI agent that runs anywhere — even on a $5 VPS
-description: Single ~9MB Go binary with persistent memory, tool calling, skills, and Telegram/Discord integration. Zero dependencies, boots in milliseconds, idles at 10MB RAM.
+tagline: "A Go assistant with memory and messaging support"
+description: "Picobot is a Go assistant with memory, skills and messaging integrations."
 language: go
 category:
   - lightweight
   - edge
 github: louisho5/picobot
 status: active
-tier: 2
+tier: 3
 highlight: 9MB binary, 10MB RAM, runs on a $5 VPS or Raspberry Pi
 emoji: 🤖
 platform:
   - server
   - edge
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: alternative
 added: 2026-03-20T00:00:00.000Z
 github_data:
-  stars: 1242
-  forks: 158
-  open_issues: 13
+  repository_id: 1152268833
+  stars: 1345
+  forks: 168
+  open_issues: 19
   license: MIT
   topics: []
-  last_commit: "2026-03-28T15:42:55Z"
-  latest_release: v0.2.0
-  latest_release_date: "2026-03-18T18:34:38Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:53.629Z"
+  last_commit: "2026-09-17T18:22:18Z"
+  latest_release: v0.3.0
+  latest_release_date: "2026-09-17T18:11:38Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/louisho5/picobot#quick-start--30-seconds"
+first_task: "In your private bot chat, ask it to remember a made-up packing preference. Return later and ask it to use that preference in a three-item packing list."

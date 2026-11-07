@@ -1,7 +1,7 @@
 name: OpenFang
 slug: openfang
-tagline: The Agent Operating System
-description: Production-grade agent OS built in Rust. 137K LOC, 1,767+ tests, single 32MB binary. Autonomous agents that work for you 24/7.
+tagline: "A Rust agent that can run recurring tasks"
+description: "OpenFang runs agents that can carry out scheduled work with connected tools."
 language: rust
 category:
   - agent-os
@@ -9,8 +9,8 @@ category:
   - autonomous
 github: RightNow-AI/openfang
 status: active
-tier: 1
-highlight: Built in Rust from scratch — 137K LOC, 1,767+ tests. One binary, one command, agents live. Not a chatbot wrapper. An actual OS for autonomous agents.
+tier: 3
+highlight: "Its project guide describes configuring a model and choosing the work an agent can do."
 emoji: ⚙️
 platform:
   - server
@@ -21,9 +21,10 @@ perf:
   binary_size: 32MB
 added: "2026-02-25"
 github_data:
-  stars: 17623
-  forks: 2251
-  open_issues: 72
+  repository_id: 1166139870
+  stars: 18242
+  forks: 2283
+  open_issues: 132
   license: Apache-2.0
   topics:
     - agent-framework
@@ -34,8 +35,12 @@ github_data:
     - openclaw
     - operating-system
     - rust
-  last_commit: "2026-05-14T08:28:37Z"
+  last_commit: "2026-07-02T08:13:12Z"
   latest_release: v0.6.9
   latest_release_date: "2026-05-12T18:42:42Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:50.960Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/RightNow-AI/openfang#quick-start"
+first_task: "Ask the assistant to research a public project using its official documentation, then list two facts with source links. Open both links before scheduling a recurring report."

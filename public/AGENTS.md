@@ -1,6 +1,6 @@
 # AGENTS.md — Shelldex machine-readable index
 
-> Shelldex is the registry of the OpenClaw ecosystem. This file is the directory of every agent-facing resource the site exposes. If you are an AI agent, start here.
+> Shelldex lists runnable AI agents like OpenClaw and Hermes Agent. Tools that extend, host or manage other agents are excluded. This file is the directory of every agent-facing resource the site exposes. If you are an AI agent, start here.
 
 Human homepage: <https://shelldex.com/>
 Source: <https://github.com/daveonkels/clawdex>

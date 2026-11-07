@@ -1,7 +1,7 @@
 name: ZeroClaw
 slug: zeroclaw
-tagline: Zero overhead, zero compromise
-description: Rust-based AI agent runtime built for speed and efficiency. Sub-10ms startup in a 3.4MB binary.
+tagline: "A Rust assistant with a choice of model providers"
+description: "ZeroClaw packages a personal assistant as a Rust binary. It supports multiple model providers and messaging channels."
 language: rust
 category:
   - performance
@@ -9,7 +9,7 @@ category:
 github: zeroclaw-labs/zeroclaw
 status: active
 tier: 1
-highlight: Sub-10ms startup, 3.4MB binary, <5MB RAM
+highlight: "Its setup guide covers macOS, Windows and Linux."
 emoji: 🦀
 mentions:
   - type: tweet
@@ -37,15 +37,12 @@ platform:
 requires_llm: true
 mcp_support: true
 ecosystem_role: reimplementation
-perf:
-  binary_size: 3.4MB
-  startup_time: <10ms
-  ram: <5MB
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 31535
-  forks: 4647
-  open_issues: 509
+  repository_id: 1156956890
+  stars: 33153
+  forks: 4998
+  open_issues: 1160
   license: Apache-2.0
   topics:
     - agent
@@ -56,8 +53,12 @@ github_data:
     - openclaw
     - os
     - zeroclaw
-  last_commit: "2026-05-23T04:09:17Z"
-  latest_release: v0.7.5
-  latest_release_date: "2026-05-08T05:12:49Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:59.404Z"
+  last_commit: "2026-11-06T23:38:31Z"
+  latest_release: v0.8.7
+  latest_release_date: "2026-10-27T22:50:03Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/zeroclaw-labs/zeroclaw#quick-start"
+first_task: "Give the assistant a short list of sample chores with one missing date. Ask it for a dated plan that flags the missing detail, then check it before scheduling anything."

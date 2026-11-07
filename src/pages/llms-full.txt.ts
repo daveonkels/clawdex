@@ -2,6 +2,8 @@ import type { APIRoute } from 'astro';
 import { loadProjects, formatStars } from '../lib/projects';
 import { loadLeaderboard, getIndexableComparePairs } from '../lib/compare';
 
+import { modelAccess, quickStartUrl } from '../lib/agent-choice';
+
 export const GET: APIRoute = async () => {
   const projects = await loadProjects();
   const leaderboard = loadLeaderboard();
@@ -21,7 +23,7 @@ export const GET: APIRoute = async () => {
   lines.push('');
   lines.push(`- Projects tracked: ${projects.length}`);
   const totalStars = projects.reduce((s, p) => s + (p.stars ?? 0), 0);
-  lines.push(`- Combined GitHub stars: ${totalStars.toLocaleString()}`);
+  lines.push(`- Combined GitHub stars (including historical snapshots): ${totalStars.toLocaleString()}`);
   const languages = [...new Set(projects.map(p => p.language))].sort();
   lines.push(`- Languages represented: ${languages.join(', ')}`);
   lines.push(`- Indexable comparison pairs: ${pairs.length}`);
@@ -39,7 +41,7 @@ export const GET: APIRoute = async () => {
     lines.push(`- URL: https://shelldex.com/projects/${p.slug}/`);
     lines.push(`- JSON: https://shelldex.com/api/projects/${p.slug}.json`);
     lines.push(`- Markdown: https://shelldex.com/md/projects/${p.slug}.md`);
-    if (p.github) lines.push(`- GitHub: https://github.com/${p.github}`);
+    if (p.github && p.github_data?.availability !== 'unavailable') lines.push(`- GitHub: https://github.com/${p.github}`);
     if (p.website) lines.push(`- Website: ${p.website}`);
     lines.push(`- Language: ${p.language}`);
     lines.push(`- Status: ${p.status}`);
@@ -47,18 +49,21 @@ export const GET: APIRoute = async () => {
     if (p.category?.length) lines.push(`- Categories: ${p.category.join(', ')}`);
     if (p.platform?.length) lines.push(`- Platforms: ${p.platform.join(', ')}`);
     if (p.mcp_support) lines.push(`- MCP support: yes`);
-    if (p.requires_llm !== undefined) lines.push(`- Requires external LLM: ${p.requires_llm ? 'yes' : 'no'}`);
+    lines.push(`- Model options: ${modelAccess(p)}`);
+    if (quickStartUrl(p)) lines.push(`- Getting started: ${quickStartUrl(p)}`);
+    if (p.first_task) lines.push(`- First task: ${p.first_task}`);
     const gd = p.github_data;
+    if (gd?.availability === 'unavailable') lines.push(`- Historical record: repository unavailable. Last known metrics: ${gd.last_enriched}.`);
     const stars = gd?.stars ?? p.stars;
     if (stars != null) lines.push(`- Stars: ${formatStars(stars)} (${stars.toLocaleString()})`);
     if (gd?.forks != null) lines.push(`- Forks: ${gd.forks.toLocaleString()}`);
-    if (gd?.open_issues != null) lines.push(`- Open issues: ${gd.open_issues.toLocaleString()}`);
+    if (gd?.open_issues != null) lines.push(`- Open issues and pull requests: ${gd.open_issues.toLocaleString()}`);
     if (gd?.license) lines.push(`- License: ${gd.license}`);
-    if (gd?.last_commit) lines.push(`- Last commit: ${gd.last_commit}`);
+    if (gd?.last_commit) lines.push(`- Last push: ${gd.last_commit}`);
     if (gd?.star_growth_7d != null) lines.push(`- Star growth (7d): ${gd.star_growth_7d >= 0 ? '+' : ''}${gd.star_growth_7d}`);
-    if (p.perf?.binary_size) lines.push(`- Binary size: ${p.perf.binary_size}`);
-    if (p.perf?.startup_time) lines.push(`- Startup time: ${p.perf.startup_time}`);
-    if (p.perf?.ram) lines.push(`- RAM: ${p.perf.ram}`);
+    if (p.perf?.binary_size) lines.push(`- Project-reported binary size: ${p.perf.binary_size}`);
+    if (p.perf?.startup_time) lines.push(`- Project-reported startup time: ${p.perf.startup_time}`);
+    if (p.perf?.ram) lines.push(`- Project-reported RAM: ${p.perf.ram}`);
     if (p.added) lines.push(`- Added to registry: ${p.added}`);
     lines.push('');
     if (p.description) {
@@ -75,7 +80,7 @@ export const GET: APIRoute = async () => {
 
   lines.push('## Leaderboard (by stars)');
   lines.push('');
-  for (const entry of leaderboard.entries.slice(0, 50)) {
+  for (const entry of leaderboard.entries.filter(e => e.rank != null)) {
     lines.push(`${entry.rank}. ${entry.name} — ${entry.stars.toLocaleString()} stars, ${entry.language}, license: ${entry.license ?? 'unspecified'}`);
   }
   lines.push('');

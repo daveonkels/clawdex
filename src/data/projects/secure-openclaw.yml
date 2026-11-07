@@ -1,28 +1,28 @@
 name: Secure-OpenClaw
 slug: secure-openclaw
-tagline: Security-hardened OpenClaw by Composio
-description: 24/7 AI assistant on WhatsApp, Telegram, Signal, iMessage with full tool access, persistent memory, and 500+ app integrations
+tagline: Messaging assistant with connected app access
+description: "Secure-OpenClaw runs a personal assistant through a terminal or supported messaging apps, with memory and tools that can act on connected accounts."
 language: typescript
 category:
   - security
   - messaging
-github: ComposioHQ/secure-openclaw
+github: composio-community/secure-openclaw
 status: active
-tier: 1
-highlight: Composio's hardened fork with 500+ app integrations out of the box
+tier: 3
+highlight: An always-on messaging assistant with persistent memory and scheduled tasks
 emoji: 🔒
 platform:
   - server
   - messaging
 requires_llm: true
-mcp_support: true
 integration_count: 500
-ecosystem_role: fork
+ecosystem_role: alternative
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 1209
+  repository_id: 1152654395
+  stars: 1191
   forks: 168
-  open_issues: 4
+  open_issues: 6
   license: MIT
   topics:
     - clawdbot
@@ -34,8 +34,12 @@ github_data:
     - openclaw-security
     - openclaw-skills
     - openclawd
-  last_commit: "2026-05-08T01:24:30Z"
+  last_commit: "2026-07-25T09:48:32Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:56.787Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/composio-community/secure-openclaw#quick-start"
+first_task: "In your own test chat, give the assistant the text of a sample invitation. Ask for a draft reply you can copy yourself, with your email account disconnected."

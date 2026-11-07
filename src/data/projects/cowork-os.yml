@@ -1,6 +1,6 @@
 name: CoWork-OS
 slug: cowork-os
-tagline: Security-first operating system for personal AI agents
+tagline: "A desktop assistant with a choice of local or hosted models"
 description: Multi-channel (WhatsApp, Telegram, Discord, Slack, iMessage), multi-provider (Claude, GPT, Gemini, Ollama) personal AI agent OS. Fully self-hosted with a security-first architecture. TypeScript, MIT licensed.
 language: typescript
 category:
@@ -9,20 +9,20 @@ category:
   - security
 github: CoWork-OS/CoWork-OS
 status: active
-tier: 2
+tier: 3
 highlight: Security-first design with native iMessage support and multi-provider routing
 emoji: 🏢
 platform:
   - server
   - messaging
 requires_llm: true
-mcp_support: false
 ecosystem_role: alternative
 added: "2026-03-15"
 github_data:
-  stars: 318
-  forks: 52
-  open_issues: 6
+  repository_id: 1141469144
+  stars: 538
+  forks: 100
+  open_issues: 17
   license: MIT
   topics:
     - ai-assistants
@@ -45,8 +45,12 @@ github_data:
     - slack-bot
     - telegram
     - whatsapp-bot
-  last_commit: "2026-05-22T09:25:09Z"
-  latest_release: v0.5.47
-  latest_release_date: "2026-05-21T20:07:46Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:34.640Z"
+  last_commit: "2026-11-07T13:25:30Z"
+  latest_release: v0.5.62
+  latest_release_date: "2026-10-31T09:45:57Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/CoWork-OS/CoWork-OS#getting-started"
+first_task: "Choose a test workspace containing a draft agenda and some meeting notes. Ask for agenda items still missing a decision, with the source file beside each one."

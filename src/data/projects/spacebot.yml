@@ -1,7 +1,7 @@
 name: Spacebot
 slug: spacebot
 tagline: Concurrent multi-process AI agent for communities and teams
-description: Rust-based AI agent built for multi-user environments — Discord servers, Slack workspaces, Telegram groups. Splits the monolith into five specialized processes (Channel, Branch, Worker, Compactor, Cortex) that run concurrently so the agent is never blocked. Typed memory graph (SQLite + LanceDB), cron jobs, MCP support, headless browser, OpenCode integration, and OpenClaw-compatible skills. Single binary, no server dependencies. FSL-1.1-ALv2 license, converting to Apache 2.0 after two years.
+description: "Spacebot runs conversations and background work in separate processes. Workers can use external tools through MCP. Its README identifies its license as FSL-1.1-ALv2."
 language: rust
 category:
   - multi-user
@@ -9,14 +9,17 @@ category:
   - rust
 github: spacedriveapp/spacebot
 status: active
-tier: 1
-highlight: Concurrent Channel/Branch/Worker/Cortex architecture — 50 users at once without blocking
+ecosystem_role: alternative
+tier: 3
+highlight: "Designed for shared messaging spaces where background work can continue during a conversation."
 emoji: 🚀
+mcp_support: true
 added: 2026-03-04T00:00:00.000Z
 github_data:
-  stars: 2240
-  forks: 344
-  open_issues: 198
+  repository_id: 1155816493
+  stars: 2428
+  forks: 367
+  open_issues: 186
   license: NOASSERTION
   topics:
     - agent
@@ -26,8 +29,12 @@ github_data:
     - developer-tools
     - enterprise
     - messaging
-  last_commit: "2026-05-09T21:44:04Z"
+  last_commit: "2026-09-25T07:10:47Z"
   latest_release: v0.5.0
   latest_release_date: "2026-05-07T06:55:33Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:57.300Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/spacedriveapp/spacebot#quick-start"
+first_task: "In a private chat, give it a mock conference schedule and ask for a shortlist of non-overlapping sessions. Check each choice against the supplied times."

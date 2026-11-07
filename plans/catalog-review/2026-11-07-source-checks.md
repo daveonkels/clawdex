@@ -1,0 +1,22 @@
+# Catalog evidence, November 7, 2026
+
+Read the default-branch READMEs of the 50 repositories available at the November 7 check. Reviewed public text and linked documentation only. Feature descriptions are claims in upstream documentation. This review did not install agents, test security guarantees or benchmark their performance. Repository links below point to maintained documentation and may change after this review.
+
+## Does the project ship an agent?
+
+| Project | Documented way to run it and give it work |
+| --- | --- |
+| [LobsterAI](https://github.com/netease-youdao/LobsterAI#quick-start) | Install the desktop release, select a model and start a task. Its assistant can use a working folder to produce documents. Bundling OpenClaw supplies the runtime inside this product. |
+| [Poco Agent](https://github.com/poco-ai/poco-agent#quick-start) | Its setup starts the services and opens a project chat in a browser. A user can mention an agent to turn a message into a tracked task and inspect the resulting files. |
+| [AionUi](https://github.com/iOfficeAI/AionUi/wiki/Getting-Started) | Select the built-in agent, configure a model and open a folder. It can process files independently of separately installed coding agents. |
+| [GitAgent](https://github.com/open-gitagent/gitagent#use) | The README gives a concrete task to the published program in a repository and receives its summary. The current implementation is Rust. Keep the established Shelldex URL under gitclaw. |
+| [OpenLegion](https://github.com/openlegion-ai/openlegion#quick-start) | Start the service and open an interactive session. The built-in operator agent is created automatically. The project also documents creating agents and giving them tasks through chat. |
+
+## Model, tool and license corrections
+
+- Atomic Agent documents its local llama.cpp service and hosted model providers. Hermes documents a local model setup. EdgeClaw routes some requests locally according to policy. A local model option is a narrower claim than saying that the entire workflow is offline or free. [Atomic Agent README](https://github.com/AtomicBot-ai/atomic-agent#readme) · [Hermes local setup](https://hermes-agent.nousresearch.com/docs/guides/local-ollama-setup) · [EdgeClaw README](https://github.com/OpenBMB/EdgeClaw#readme).
+- For the MCP badge, look for the ability to use tools through the Model Context Protocol. In particular, NanoClaw documents MCP tools in agent templates, PicoClaw documents MCP server configuration, Nanobot lists MCP tools, and Spacebot describes workers calling MCP servers. OpenClaw documents its inbound and outbound roles separately. A server endpoint for an external client to manage a product, an internal debug server, and a roadmap alone do not establish that a user can attach a tool to its agent. Missing evidence stays unknown. [NanoClaw](https://github.com/nanocoai/nanoclaw#readme) · [PicoClaw](https://github.com/sipeed/picoclaw#readme) · [Nanobot](https://github.com/HKUDS/nanobot#readme) · [Spacebot](https://github.com/spacedriveapp/spacebot#mcp-integration) · [OpenClaw MCP](https://docs.openclaw.ai/tools/mcp).
+- GitHub reports some licenses as NOASSERTION. Spacebot gives its terms as FSL-1.1-ALv2 in its own license section. Other unrecognized licenses point readers to the repository terms. [Spacebot license](https://github.com/spacedriveapp/spacebot#license).
+- NullClaw publishes its 678 KB and under-2 ms results for its own build. ZeroClaw’s current README does not substantiate the previously cataloged build figures. zclaw’s 888 KiB number is a maximum firmware target. [NullClaw](https://github.com/nullclaw/nullclaw#readme) · [ZeroClaw](https://github.com/zeroclaw-labs/zeroclaw#readme) · [zclaw](https://github.com/tnm/zclaw#readme).
+- Carapace describes a signed plugin runtime and restricted access to configured directories. Secure-OpenClaw describes an assistant that can act through connected accounts. CashClaw describes bidding for paid work on an onchain marketplace. No comparative security ranking or earnings assurance follows from these descriptions. [Carapace](https://github.com/puremachinery/carapace#readme) · [Secure-OpenClaw](https://github.com/composio-community/secure-openclaw#readme) · [CashClaw](https://github.com/moltlaunch/cashclaw#readme).
+- ApexClaw’s repository was unavailable. Retain the profile and dated metrics for existing links. The source could not establish a current tool count or install path. It receives no current recommendation, star rank or score.

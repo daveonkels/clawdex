@@ -1,55 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { loadProjects } from '../lib/projects';
-
-const projects = await loadProjects();
-const tracked = projects.filter(p => p.slug !== 'openclaw' && p.github);
+import CopySnippet from '../components/CopySnippet.astro';
+import {loadProjects} from '../lib/projects';
+const projects=(await loadProjects()).filter(p=>p.github_data?.availability!=='unavailable').sort((a,b)=>a.name.localeCompare(b.name));
+const snippet=(slug:string)=>`[![Listed on Shelldex](https://shelldex.com/badges/shelldex-badge.svg)](https://shelldex.com/projects/${slug}/)`;
 ---
-
-<Layout title="Shelldex Badges — Add a Badge to Your README" description="Add a Shelldex badge to your project's README. Show visitors where to find your project profile, comparisons, and ecosystem context." robots="noindex, follow">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="font-display text-4xl font-bold text-ledger-text mb-4">Shelldex Badges</h1>
-    <p class="text-lg text-ledger-faint mb-10">Add a badge to your project's README to help users discover your Shelldex profile, comparisons, and ecosystem context.</p>
-
-    <!-- Generic badge -->
-    <section class="mb-12">
-      <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Generic Badge</h2>
-      <div class="bg-ledger-surface border border-ledger-border rounded-xl p-5 space-y-4">
-        <div>
-          <p class="text-xs text-ledger-faint mb-2">Preview:</p>
-          <img src="/badges/shelldex-badge.svg" alt="Listed on Shelldex" class="h-5" />
-        </div>
-        <div>
-          <p class="text-xs text-ledger-faint mb-2">Markdown:</p>
-          <div class="bg-ledger-border/60 rounded-lg px-4 py-3 font-mono text-xs text-ledger-muted overflow-x-auto select-all">
-            [![Listed on Shelldex](https://shelldex.com/badges/shelldex-badge.svg)](https://shelldex.com/projects/YOUR-SLUG/)
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Per-project snippets -->
-    <section>
-      <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Per-Project Snippets</h2>
-      <p class="text-sm text-ledger-faint mb-6">Copy the markdown for your project:</p>
-      <div class="space-y-3">
-        {tracked.map(p => (
-          <details class="group rounded-xl border border-ledger-border bg-ledger-surface">
-            <summary class="flex items-center justify-between cursor-pointer px-5 py-3 text-ledger-text text-sm hover:text-ledger-red transition-colors">
-              <span class="flex items-center gap-2">
-                <span>{p.emoji}</span>
-                <span class="font-medium">{p.name}</span>
-              </span>
-              <svg class="w-4 h-4 text-ledger-faint group-open:rotate-180 transition-transform flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-            </summary>
-            <div class="px-5 pb-4 border-t border-ledger-border pt-3">
-              <div class="bg-ledger-border/60 rounded-lg px-4 py-3 font-mono text-xs text-ledger-muted overflow-x-auto select-all">
-                [![Listed on Shelldex](https://shelldex.com/badges/shelldex-badge.svg)](https://shelldex.com/projects/{p.slug}/)
-              </div>
-            </div>
-          </details>
-        ))}
-      </div>
-    </section>
-  </div>
-</Layout>
+<Layout title="README badges — Shelldex" description="Get the badge that links directly to your agent’s Shelldex profile." robots="noindex, follow">
+<div class="max-w-[72rem] mx-auto px-5 sm:px-8 py-12"><section class="max-w-3xl">
+<p class="font-mono text-sm text-ledger-red">FOR MAINTAINERS</p><h1 class="mt-4 mb-4">A badge for your README<span class="text-ledger-red">.</span></h1>
+<p class="text-lg">Choose your agent and copy its Markdown into your README. The badge takes readers straight to its profile.</p>
+<img src="/badges/shelldex-badge.svg" alt="Listed on Shelldex" class="h-5 my-6" />
+<div id="badge-filter" hidden><label for="badge-name" class="block font-semibold">Find your agent</label><input type="search" id="badge-name" placeholder="Agent name" class="my-2 rounded-lg border border-ledger-border-strong p-3 w-full" /><p id="badge-count" role="status" class="text-sm text-ledger-muted"></p></div>
+<div class="mt-5 space-y-2">{projects.map(p=><details data-project={p.name.toLowerCase()} class="rounded-lg bg-white border border-ledger-border px-5"><summary class="cursor-pointer py-3"><span aria-hidden="true">{p.emoji}</span> {p.name}</summary><CopySnippet value={snippet(p.slug)} label={p.name+' badge'} /></details>)}</div>
+</section></div></Layout>
+<script>
+  const filter=document.querySelector<HTMLElement>('#badge-filter')!;
+  filter.hidden=false;
+  const field=document.querySelector<HTMLInputElement>('#badge-name')!;
+  field.addEventListener('input',()=>{let n=0; const q=field.value.trim().toLowerCase(); for(const row of document.querySelectorAll<HTMLElement>('[data-project]')){row.hidden=!row.dataset.project!.includes(q); if(!row.hidden)n++;}document.querySelector('#badge-count')!.textContent=n ? n+' matches' : 'No matches. Try another name.';});
+</script>

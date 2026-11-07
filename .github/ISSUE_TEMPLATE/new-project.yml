@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for suggesting a project! If you can, we'd prefer you submit a PR with the YAML file directly — but this form works too.
+        Share an agent someone can run. We check its setup guide and example task before listing it.
   - type: input
     id: name
     attributes:
@@ -36,32 +36,38 @@ body:
         - Python
         - Go
         - C
+        - Bash
+        - JavaScript
+        - Kotlin
+        - Zig
         - Multi / Other
     validations:
       required: true
-  - type: dropdown
-    id: tier
+  - type: textarea
+    id: quick_start
     attributes:
-      label: Tier
-      description: How closely related to OpenClaw?
-      options:
-        - "1 — Direct clone or reimplementation"
-        - "2 — Ecosystem tool (built for/around OpenClaw)"
-        - "3 — Inspired by (independent but similar vision)"
+      label: Upstream setup guide
+      description: Link to the instructions a newcomer can follow.
+    validations:
+      required: true
+  - type: textarea
+    id: first_task
+    attributes:
+      label: Give us one task the agent can carry out
     validations:
       required: true
   - type: input
     id: tagline
     attributes:
       label: Tagline
-      description: One short catchy line
-      placeholder: "Zero overhead, zero compromise"
+      description: What can someone ask the agent to do?
+      placeholder: "Organize notes in a local folder"
     validations:
       required: true
   - type: textarea
     id: highlight
     attributes:
       label: What makes it unique?
-      placeholder: "Sub-10ms startup, 3.4MB binary, runs on a Raspberry Pi"
+      placeholder: "Links to the source notes so you can check its work"
     validations:
       required: true

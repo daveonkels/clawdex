@@ -1,6 +1,9 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
+import activityByRepo from '../../../data/star-activity.json';
 import { loadProjects } from '../../../lib/projects';
 import { loadLeaderboard, computeHealthScore } from '../../../lib/compare';
+
+import { modelAccess, quickStartUrl } from '../../../lib/agent-choice';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const projects = await loadProjects();
@@ -20,6 +23,7 @@ export const GET: APIRoute = async ({ props }) => {
     generated: new Date().toISOString(),
     source: `https://shelldex.com/projects/${project.slug}/`,
     license: 'CC-BY-4.0',
+    daily_star_additions: (activityByRepo as Record<string, Record<string, number>>)[project.github_data?.repository_id] ?? null,
     project: {
       name: project.name,
       slug: project.slug,
@@ -37,7 +41,10 @@ export const GET: APIRoute = async ({ props }) => {
       website: project.website ?? null,
       platform: project.platform ?? [],
       requires_llm: project.requires_llm ?? null,
-      mcp_support: project.mcp_support ?? false,
+      mcp_support: project.mcp_support ?? null,
+      quick_start: quickStartUrl(project),
+      first_task: project.first_task ?? null,
+      model_options: modelAccess(project),
       integration_count: project.integration_count ?? null,
       perf: project.perf ?? null,
       ecosystem_role: project.ecosystem_role ?? null,

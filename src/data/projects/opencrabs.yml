@@ -1,27 +1,28 @@
 name: OpenCrabs
 slug: opencrabs
 tagline: Autonomous, self-improving Rust agent
-description: Single Rust binary with multi-channel support, local TTS/STT via whisper.cpp, SQLite memory, and zero network listeners. Keys zeroized from RAM on drop. Inspired by OpenClaw.
+description: "OpenCrabs packages an assistant with memory, voice features and messaging connections in a Rust binary."
 language: rust
 category:
   - security
   - privacy
-github: adolfousier/opencrabs
+github: opencrabs/opencrabs
 status: active
-tier: 2
+tier: 1
 highlight: Zero network listeners, RAM-zeroized API keys, built-in local voice (whisper.cpp)
 emoji: 🦀
 platform:
   - desktop
   - server
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: reimplementation
 added: 2026-03-20T00:00:00.000Z
 github_data:
-  stars: 756
-  forks: 71
-  open_issues: 0
+  repository_id: 1157543432
+  stars: 1026
+  forks: 107
+  open_issues: 42
   license: MIT
   topics:
     - agent-orchestration
@@ -37,8 +38,12 @@ github_data:
     - rsi
     - self-healing
     - self-learning
-  last_commit: "2026-05-23T01:34:16Z"
-  latest_release: v0.3.27
-  latest_release_date: "2026-05-23T01:17:43Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:50.335Z"
+  last_commit: "2026-11-07T08:08:31Z"
+  latest_release: v0.5.15
+  latest_release_date: "2026-10-27T03:40:25Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://docs.opencrabs.com/getting-started/installation.html"
+first_task: "In the terminal conversation, paste sample shift notes. Ask for a handoff checklist with the unfinished items first. Verify each item against the notes before passing it on."

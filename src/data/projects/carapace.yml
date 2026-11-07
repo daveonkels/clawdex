@@ -1,26 +1,26 @@
 name: Carapace
 slug: carapace
-tagline: Hardened Rust shell for autonomous agents
-description: Security-first Rust alternative to OpenClaw/Clawdbot with signed WASM plugins and strict local-first defaults.
+tagline: "A Rust assistant with signed plugins"
+description: Carapace describes a signed plugin runtime. Its filesystem tools can be limited to directories you explicitly select.
 language: rust
 category:
   - security
   - privacy
 github: puremachinery/carapace
 status: experimental
-tier: 1
-highlight: Hardened Rust core, signed WASM plugins, strict local-first defaults
+tier: 3
+highlight: Signature checks and explicit directory permissions for tools
 emoji: 🛡️
 platform:
   - server
 requires_llm: true
-mcp_support: false
 ecosystem_role: alternative
 added: 2026-02-27T00:00:00.000Z
 github_data:
-  stars: 45
-  forks: 7
-  open_issues: 16
+  repository_id: 1143047754
+  stars: 48
+  forks: 8
+  open_issues: 18
   license: Apache-2.0
   topics:
     - ai-assistant
@@ -43,8 +43,12 @@ github_data:
     - vertex-ai
     - wasm
     - wasm-plugin
-  last_commit: "2026-05-23T04:07:32Z"
+  last_commit: "2026-11-05T11:26:06Z"
   latest_release: v0.8.0
   latest_release_date: "2026-05-01T22:18:48Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:30.689Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/puremachinery/carapace#quick-start"
+first_task: "Choose local chat in the setup guide. Paste two sample appointments and ask for a chronological checklist, including any detail you still need to supply."

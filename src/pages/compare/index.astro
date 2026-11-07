@@ -1,8 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { loadProjects, formatStars } from '../../lib/projects';
-import { computeHealthScore, getFeaturedComparePairs, getIndexableComparePairs, loadLeaderboard } from '../../lib/compare';
-import { languageLabel } from '../../lib/constants';
+import DataStamp from '../../components/DataStamp.astro';
+import { archiveNotice } from '../../lib/agent-choice';
+import { loadProjects } from '../../lib/projects';
+import { comparisonRows, getFeaturedComparePairs, getIndexableComparePairs, loadLeaderboard } from '../../lib/compare';
 
 const projects = await loadProjects();
 const projectMap = new Map(projects.map((project) => [project.slug, project]));
@@ -14,10 +15,9 @@ const editorialPairs = featuredPairs.filter((pair) => pair.slugA !== 'openclaw' 
 // All remaining indexable pairs not in featured sections (for the full directory)
 const featuredSlugs = new Set([...openclawPairs, ...editorialPairs].map(p => p.canonical));
 const remainingPairs = indexablePairs.filter(p => !featuredSlugs.has(p.canonical));
-const projectedMatchups = Math.round(projects.length * (projects.length - 1) / 2);
 
-const { entries: leaderboard } = loadLeaderboard();
-const healthBySlug = new Map(leaderboard.map((entry) => [entry.slug, computeHealthScore(entry)]));
+const { entries: leaderboard, generated } = loadLeaderboard();
+const entries = new Map(leaderboard.map(e => [e.slug,e]));
 const indexableCompareSlugs = new Set(indexablePairs.map((pair) => pair.canonical));
 
 function pairLabel(slugA: string, slugB: string): string {
@@ -32,26 +32,16 @@ const clientProjects = Object.fromEntries(
       name: project.name,
       emoji: project.emoji,
       tagline: project.tagline,
-      language: languageLabel[project.language] ?? project.language,
-      stars: project.github_data?.stars ?? project.stars ?? 0,
-      growth: project.github_data?.star_growth_7d ?? null,
-      forks: project.github_data?.forks ?? null,
-      issues: project.github_data?.open_issues ?? null,
-      health: healthBySlug.get(project.slug) ?? 0,
-      requiresLlm: project.requires_llm,
-      mcpSupport: project.mcp_support,
-      platform: project.platform ?? [],
-      categories: project.category,
-      license: project.github_data?.license ?? null,
-      lastCommit: project.github_data?.last_commit ?? null,
-      latestRelease: project.github_data?.latest_release ?? null,
+      archive: archiveNotice(project),
+      rows: comparisonRows(project, project, entries.get(project.slug) || null, entries.get(project.slug) || null)
+        .map(r=>({label:r.label, detail:r.detail, value:r.values[0]})),
     },
   ]),
 );
 
 const year = new Date().getFullYear();
 const pageTitle = `Compare OpenClaw Alternatives Side by Side (${year}) — Curated Matchups & Tool | Shelldex`;
-const pageDescription = `Compare any two projects in the OpenClaw ecosystem. Shelldex publishes ${indexablePairs.length} curated comparison landing pages and provides an on-page tool for every other matchup across ${projects.length} tracked projects.`;
+const pageDescription = `Compare any two projects in the OpenClaw ecosystem. Shelldex publishes ${indexablePairs.length} featured comparisons and provides an on-page tool for every other matchup across ${projects.length} tracked projects.`;
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -71,10 +61,10 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
     },
   })} />
 
-  <script id="compare-project-data" type="application/json" set:html={JSON.stringify(clientProjects)} />
+  <script id="compare-project-data" type="application/json" set:html={JSON.stringify(clientProjects).replace(/</g, '\\u003c')} />
   <script id="compare-indexable-slugs" type="application/json" set:html={JSON.stringify([...indexableCompareSlugs])} />
 
-  <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <section class="compare-hub relative z-10 max-w-[72rem] mx-auto px-5 sm:px-8 py-12">
     <nav class="flex items-center gap-2 text-sm text-ledger-whisper mb-10" aria-label="Breadcrumb">
       <a href="/" class="hover:text-ledger-red transition-colors">Shelldex</a>
       <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
@@ -83,46 +73,20 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
 
     <header class="mb-10">
       <div class="flex items-center gap-3 mb-4">
-        <span class="text-3xl">⚖️</span>
-        <h1 class="text-3xl sm:text-4xl font-display font-bold text-ledger-text">Compare Projects</h1>
+
+        <h1 class="text-ledger-text">Compare agents</h1>
       </div>
-      <div class="space-y-4 max-w-3xl text-ledger-faint leading-relaxed">
-        <p>
-          Shelldex now publishes a curated set of <strong class="text-ledger-text">{indexablePairs.length} comparison landing pages</strong> instead of exposing every possible pairwise permutation to search engines. That keeps the indexed compare library focused on the matchups users actually care about.
-        </p>
-        <p>
-          You can still compare any two projects here. High-signal matchups open dedicated pages; everything else renders as an on-page comparison tool without creating another low-value crawl target.
-        </p>
-      </div>
+      <p class="text-lg text-ledger-muted max-w-3xl">Pick two agents to see what they do, where they run and how their repositories compare. You can also browse {indexablePairs.length} featured comparisons.</p>
+      <DataStamp date={generated} />
     </header>
-
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-      <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
-        <p class="text-xs uppercase tracking-wider text-ledger-faint mb-1">Tracked Projects</p>
-        <p class="text-3xl font-mono text-ledger-text">{projects.length}</p>
-      </div>
-      <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
-        <p class="text-xs uppercase tracking-wider text-ledger-faint mb-1">Possible Matchups</p>
-        <p class="text-3xl font-mono text-ledger-text">{projectedMatchups}</p>
-      </div>
-      <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
-        <p class="text-xs uppercase tracking-wider text-ledger-faint mb-1">Indexed Matchups</p>
-        <p class="text-3xl font-mono text-ledger-red">{indexablePairs.length}</p>
-      </div>
-      <div class="rounded-xl border border-ledger-border bg-ledger-surface p-5">
-        <p class="text-xs uppercase tracking-wider text-ledger-faint mb-1">Editorial Ratio</p>
-        <p class="text-3xl font-mono text-ledger-text">{Math.round((indexablePairs.length / projectedMatchups) * 100)}%</p>
-      </div>
-    </div>
-
     <div class="rounded-2xl border border-ledger-border bg-ledger-surface p-6 mb-12">
-      <h2 class="font-display text-xl font-semibold text-ledger-text mb-4">Quick Compare</h2>
+      <h2 class="text-ledger-text mb-4">Quick Compare</h2>
       <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-4">
         <div class="flex-1">
           <label for="compare-a" class="block text-sm text-ledger-faint mb-1.5">Project A</label>
           <select
             id="compare-a"
-            class="w-full bg-ledger-surfaceer border border-ledger-border text-ledger-muted text-sm rounded-lg px-3 py-2.5 focus:border-ledger-red/50 focus:outline-none"
+            class="w-full bg-ledger-surface border border-ledger-border text-ledger-muted text-sm rounded-lg px-3 py-2.5 focus:border-ledger-red/50 focus:outline-none"
           >
             <option value="">Select a project...</option>
             {projects.map((project) => (
@@ -135,7 +99,7 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
           <label for="compare-b" class="block text-sm text-ledger-faint mb-1.5">Project B</label>
           <select
             id="compare-b"
-            class="w-full bg-ledger-surfaceer border border-ledger-border text-ledger-muted text-sm rounded-lg px-3 py-2.5 focus:border-ledger-red/50 focus:outline-none"
+            class="w-full bg-ledger-surface border border-ledger-border text-ledger-muted text-sm rounded-lg px-3 py-2.5 focus:border-ledger-red/50 focus:outline-none"
           >
             <option value="">Select a project...</option>
             {projects.map((project) => (
@@ -145,14 +109,14 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
         </div>
         <button
           id="compare-btn"
-          class="px-6 py-2.5 bg-ledger-red-bg border border-ledger-red/30 text-ledger-red font-semibold rounded-lg hover:bg-ledger-red-bg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          class="sd-primary"
           disabled
         >
           Compare
         </button>
       </div>
       <p id="compare-hint" class="text-sm text-ledger-faint mt-3">
-        Dedicated pages exist for editorially selected matchups. Everything else stays inside this tool.
+        Select two different agents.
       </p>
     </div>
 
@@ -161,8 +125,8 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
     <section class="mb-12">
       <div class="flex items-center justify-between gap-4 mb-6">
         <div>
-          <h2 class="font-display text-2xl font-bold text-ledger-text">OpenClaw Matchups</h2>
-          <p class="text-sm text-ledger-faint mt-1">The highest-intent comparison pages in the ecosystem.</p>
+          <h2 class="text-ledger-text">OpenClaw Matchups</h2>
+          <p class="text-sm text-ledger-faint mt-1">See how the original assistant compares with other options.</p>
         </div>
         <a href="/best-alternatives/" class="text-sm text-ledger-faint hover:text-ledger-red transition-colors">See the ranked alternatives guide →</a>
       </div>
@@ -184,8 +148,8 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
       <section class="mb-12">
         <div class="flex items-center justify-between gap-4 mb-6">
           <div>
-            <h2 class="font-display text-2xl font-bold text-ledger-text">Featured Head-to-Heads</h2>
-            <p class="text-sm text-ledger-faint mt-1">Useful cross-ecosystem matchups that earned dedicated landing pages.</p>
+            <h2 class="text-ledger-text">Featured Head-to-Heads</h2>
+            <p class="text-sm text-ledger-faint mt-1">Compare two alternatives that serve related needs.</p>
           </div>
           <span class="text-xs uppercase tracking-wider text-ledger-whisper">{editorialPairs.length} editorial pages</span>
         </div>
@@ -208,7 +172,7 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
       <section class="mb-12">
         <div class="flex items-center justify-between gap-4 mb-6">
           <div>
-            <h2 class="font-display text-2xl font-bold text-ledger-text">All Indexed Comparisons</h2>
+            <h2 class="text-ledger-text">More comparisons</h2>
             <p class="text-sm text-ledger-faint mt-1">Every curated matchup in the Shelldex comparison library — {indexablePairs.length} total pages.</p>
           </div>
         </div>
@@ -261,58 +225,13 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
         return '/compare/?a=' + encodeURIComponent(a) + '&b=' + encodeURIComponent(b);
       }
 
-      function formatCount(value) {
-        if (value === null || value === undefined) return '—';
-        if (Math.abs(value) >= 10000) return Math.round(value / 1000) + 'k';
-        if (Math.abs(value) >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-        return String(value);
-      }
-
-      function daysSince(dateString) {
-        if (!dateString) return '—';
-        var days = Math.floor((Date.now() - new Date(dateString).getTime()) / 86400000);
-        return days + 'd ago';
-      }
-
-      function summaryLines(a, b) {
-        var lines = [];
-        if (a.stars > 0 && b.stars > 0) {
-          if (a.stars > b.stars * 2) {
-            lines.push(a.name + ' has the larger community footprint (' + formatCount(a.stars) + ' vs ' + formatCount(b.stars) + ' stars).');
-          } else if (b.stars > a.stars * 2) {
-            lines.push(b.name + ' has the larger community footprint (' + formatCount(b.stars) + ' vs ' + formatCount(a.stars) + ' stars).');
-          }
-        }
-        if (a.language !== b.language) {
-          lines.push(a.name + ' is built in ' + a.language + ' while ' + b.name + ' uses ' + b.language + '.');
-        }
-        if (a.requiresLlm === false && b.requiresLlm !== false) {
-          lines.push(a.name + ' can run without recurring LLM API spend.');
-        } else if (b.requiresLlm === false && a.requiresLlm !== false) {
-          lines.push(b.name + ' can run without recurring LLM API spend.');
-        }
-        if (a.mcpSupport === true && b.mcpSupport !== true) {
-          lines.push(a.name + ' includes MCP support while ' + b.name + ' does not.');
-        } else if (b.mcpSupport === true && a.mcpSupport !== true) {
-          lines.push(b.name + ' includes MCP support while ' + a.name + ' does not.');
-        }
-        if (a.health > b.health + 15) {
-          lines.push(a.name + ' currently shows stronger maintenance health signals.');
-        } else if (b.health > a.health + 15) {
-          lines.push(b.name + ' currently shows stronger maintenance health signals.');
-        }
-        return lines.slice(0, 4);
-      }
-
       function metrics(a, b) {
-        return [
-          ['Stars', formatCount(a.stars), formatCount(b.stars)],
-          ['7d Growth', a.growth === null ? '—' : (a.growth > 0 ? '+' : '') + formatCount(a.growth), b.growth === null ? '—' : (b.growth > 0 ? '+' : '') + formatCount(b.growth)],
-          ['Health', a.health + '/100', b.health + '/100'],
-          ['MCP', a.mcpSupport === undefined ? '—' : (a.mcpSupport ? 'Yes' : 'No'), b.mcpSupport === undefined ? '—' : (b.mcpSupport ? 'Yes' : 'No')],
-          ['LLM Required', a.requiresLlm === undefined ? '—' : (a.requiresLlm ? 'Yes' : 'No'), b.requiresLlm === undefined ? '—' : (b.requiresLlm ? 'Yes' : 'No')],
-          ['Last Commit', daysSince(a.lastCommit), daysSince(b.lastCommit)],
-        ];
+        var labels = Array.from(new Set(a.rows.concat(b.rows).map(row => row.label)));
+        return labels.map(label => {
+          var left = a.rows.find(row => row.label === label);
+          var right = b.rows.find(row => row.label === label);
+          return [label, left?.value || '—', right?.value || '—'];
+        });
       }
 
       function renderComparison(aSlug, bSlug) {
@@ -326,12 +245,15 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
 
         var pair = canonical(aSlug, bSlug);
         var hasLandingPage = indexableSlugs.has(pair);
-        var lines = summaryLines(a, b);
+        var archives = [a.archive, b.archive].filter(Boolean).map(function (notice) {
+          return '<p class="text-sm font-medium my-2">' + esc(notice) + '</p>';
+        }).join('');
+        var lines = [a, b].filter(project => !project.archive).map(project => project.name + " — " + project.tagline);
         var rows = metrics(a, b).map(function (row) {
           return '<tr class="border-b border-ledger-border">' +
             '<td class="px-4 py-3 text-ledger-faint">' + esc(row[0]) + '</td>' +
-            '<td class="px-4 py-3 text-center text-ledger-muted font-mono">' + esc(row[1]) + '</td>' +
-            '<td class="px-4 py-3 text-center text-ledger-muted font-mono">' + esc(row[2]) + '</td>' +
+            '<td class="px-2 py-3 text-center text-ledger-muted">' + esc(row[1]) + '</td>' +
+            '<td class="px-2 py-3 text-center text-ledger-muted">' + esc(row[2]) + '</td>' +
           '</tr>';
         }).join('');
 
@@ -339,35 +261,28 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
           ? '<ul class="space-y-2">' + lines.map(function (line) {
               return '<li class="flex items-start gap-2 text-sm text-ledger-muted"><span class="text-ledger-red mt-0.5">+</span><span>' + esc(line) + '</span></li>';
             }).join('') + '</ul>'
-          : '<p class="text-sm text-ledger-faint">These two projects are close enough that your preferred stack and workflow fit will matter more than any single headline metric.</p>';
-
-        var notice = hasLandingPage
-          ? '<p class="text-sm text-ledger-red">This matchup has a dedicated comparison page because it is part of the curated indexable library.</p>'
-          : '<p class="text-sm text-ledger-faint">This is an on-page comparison only. Shelldex no longer publishes a separate indexable page for every long-tail pair.</p>';
+          : '<p class="text-sm text-ledger-faint">Both entries are historical.</p>';
 
         results.innerHTML =
           '<div class="rounded-2xl border border-ledger-border bg-ledger-surface p-6 sm:p-8">' +
             '<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">' +
               '<div>' +
-                '<h2 class="font-display text-2xl font-bold text-ledger-text mb-2">' + esc(a.emoji + ' ' + a.name + ' vs ' + b.name + ' ' + b.emoji) + '</h2>' +
-                '<p class="text-ledger-faint text-sm max-w-2xl">' + esc(a.tagline) + ' | ' + esc(b.tagline) + '</p>' +
+                '<h2 class="text-ledger-text mb-2">' + esc(a.name + ' vs ' + b.name) + '</h2>' + archives +
               '</div>' +
-              '<a href="' + compareHref(aSlug, bSlug) + '" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-ledger-red/30 bg-ledger-red-bg text-ledger-red font-semibold hover:bg-ledger-red-bg transition-colors">' +
-                (hasLandingPage ? 'Open dedicated page' : 'Share this comparison') +
+              '<a href="' + compareHref(aSlug, bSlug) + '" class="sd-secondary">' +
+                (hasLandingPage ? 'View full comparison' : 'Share this comparison') +
               '</a>' +
             '</div>' +
-            '<div class="mb-5">' + notice + '</div>' +
             '<div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-5">' +
-              '<div class="rounded-xl border border-ledger-border overflow-hidden">' +
-                '<div class="grid grid-cols-3 border-b border-ledger-border text-sm">' +
-                  '<div class="px-4 py-3 text-ledger-faint font-medium">Metric</div>' +
-                  '<div class="px-4 py-3 text-center text-ledger-text font-semibold">' + esc(a.name) + '</div>' +
-                  '<div class="px-4 py-3 text-center text-ledger-text font-semibold">' + esc(b.name) + '</div>' +
-                '</div>' +
-                '<table class="w-full text-sm"><tbody>' + rows + '</tbody></table>' +
+              '<div class="rounded-xl border border-ledger-border overflow-x-auto">' +
+                '<table class="w-full text-sm text-left"><thead><tr>' +
+                  '<th scope="col" class="px-2 py-3">Measure</th>' +
+                  '<th scope="col" class="px-2 py-3 text-center">' + esc(a.name) + '</th>' +
+                  '<th scope="col" class="px-2 py-3 text-center">' + esc(b.name) + '</th>' +
+                '</tr></thead><tbody>' + rows + '</tbody></table>' +
               '</div>' +
               '<div class="rounded-xl border border-ledger-border bg-ledger-border/30 p-5">' +
-                '<h3 class="font-display text-lg font-bold text-ledger-text mb-3">What stands out</h3>' +
+                '<h3 class="text-ledger-text mb-3">What stands out</h3>' +
                 summary +
               '</div>' +
             '</div>' +
@@ -383,17 +298,17 @@ const pageDescription = `Compare any two projects in the OpenClaw ecosystem. She
         btn.disabled = !valid;
         if (!valid) {
           btn.textContent = 'Compare';
-          hint.textContent = 'Dedicated pages exist for editorially selected matchups. Everything else stays inside this tool.';
+          hint.textContent = 'Select two different agents.';
           return;
         }
 
         var pair = canonical(a, b);
         if (indexableSlugs.has(pair)) {
           btn.textContent = 'Open comparison page';
-          hint.textContent = 'This pair has a dedicated landing page and will open as its own canonical comparison.';
+          hint.textContent = 'Open the comparison to see the main differences.';
         } else {
           btn.textContent = 'Compare on this page';
-          hint.textContent = 'This pair stays in the compare tool instead of creating another long-tail crawl target.';
+          hint.textContent = 'Your comparison will appear below.';
         }
       }
 

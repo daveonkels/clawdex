@@ -4,17 +4,22 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
-    "build:refresh": "pnpm run enrich && astro build",
-    "deploy": "pnpm run build && env -u CF_API_TOKEN -u CLOUDFLARE_API_TOKEN wrangler deploy",
+    "build": "node scripts/build-leaderboard.mjs && astro build",
+    "build:refresh": "pnpm run enrich && pnpm run build",
+    "test": "node --test scripts/metrics.test.mjs && tsx --test scripts/editorial.test.ts",
+    "enrich:vault": "python3 scripts/refresh-vault.py",
+    "deploy": "pnpm run validate && pnpm run test && pnpm run build && pnpm run check:sitemap && pnpm run check:editorial && pnpm run check:links && env -u CF_API_TOKEN -u CLOUDFLARE_API_TOKEN wrangler deploy",
     "deploy:dry-run": "pnpm run build && env -u CF_API_TOKEN -u CLOUDFLARE_API_TOKEN wrangler deploy --dry-run",
-    "deploy:refresh": "pnpm run build:refresh && env -u CF_API_TOKEN -u CLOUDFLARE_API_TOKEN wrangler deploy",
+    "deploy:refresh": "pnpm run enrich && pnpm run deploy",
+    "deploy:redirect": "pnpm run test && env -u CF_API_TOKEN -u CLOUDFLARE_API_TOKEN wrangler deploy --config redirect/wrangler.jsonc",
     "preview": "astro preview",
     "astro": "astro",
     "validate": "node scripts/validate-projects.mjs",
     "check:sitemap": "node scripts/check-sitemap-noindex.mjs",
     "enrich": "tsx scripts/enrich-github-data.ts",
-    "generate-images": "tsx scripts/generate-images.ts"
+    "generate-images": "tsx scripts/generate-images.ts",
+    "check:editorial": "tsx scripts/check-editorial.ts",
+    "check:links": "python3 scripts/check-links.py"
   },
   "devDependencies": {
     "@fal-ai/client": "^1.2.0",

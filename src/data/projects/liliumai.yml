@@ -1,6 +1,6 @@
 name: Lilium AI
 slug: liliumai
-tagline: AI co-pilot for total computer automation
+tagline: "An assistant for browser and desktop tasks"
 description: Personal AI agent framework for autonomous computer control. Features browser automation, shell execution, sub-agent spawning, voice-to-action via Whisper, and omni-channel support including WeChat, Feishu, DingTalk, Telegram, WhatsApp, and Discord. RAG knowledge base with SQLite/LanceDB memory.
 language: javascript
 category:
@@ -9,19 +9,19 @@ category:
   - multi-platform
 github: beidald/liliumai
 status: active
-tier: 2
-highlight: Omni-channel computer automation — browser driver, shell control, cron scheduling, voice commands, and the widest channel support including WeChat and DingTalk
+tier: 3
+highlight: Omni-channel computer automation — browser driver, shell control, cron scheduling, voice commands, and messaging support including WeChat and DingTalk
 emoji: 🌸
 platform:
   - server
   - messaging
 requires_llm: true
-mcp_support: false
 ecosystem_role: alternative
 added: "2026-03-07"
 github_data:
-  stars: 94
-  forks: 11
+  repository_id: 1158869187
+  stars: 93
+  forks: 12
   open_issues: 0
   license: MIT
   topics:
@@ -45,5 +45,9 @@ github_data:
   last_commit: "2026-02-25T13:42:57Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:41.491Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/beidald/liliumai#installation"
+first_task: "Open a public information page in a test browser. Ask the agent to read its heading and find the contact section, leaving forms and sign-ins untouched."

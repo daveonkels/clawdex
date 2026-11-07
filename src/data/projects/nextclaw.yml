@@ -1,7 +1,7 @@
 name: NextClaw
 slug: nextclaw
-tagline: Ultra-lightweight OpenClaw alternative with full plugin compatibility
-description: OpenClaw-inspired personal AI assistant at ~1/20 the codebase. 12+ AI providers, 10+ message channels (Discord, Telegram, Slack, WhatsApp, Feishu, DingTalk, and more), cron and heartbeat scheduling, browser UI configuration. Published on npm, runs locally.
+tagline: "A chat assistant with plugins and scheduled tasks"
+description: "NextClaw connects chat channels to an agent that can use local files, browser tools and scheduled tasks."
 language: typescript
 category:
   - self-hosted
@@ -10,7 +10,7 @@ category:
 github: Peiiii/nextclaw
 website: https://docs.nextclaw.io
 status: active
-tier: 2
+tier: 3
 highlight: Ultra-lightweight design (~1/20 codebase) with full OpenClaw plugin compatibility and 10+ channel integrations
 emoji: ⚡
 platform:
@@ -18,17 +18,35 @@ platform:
   - server
   - messaging
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: derivative
 added: "2026-03-15"
 github_data:
-  stars: 215
-  forks: 32
-  open_issues: 3
+  repository_id: 1154718152
+  stars: 263
+  forks: 48
+  open_issues: 36
   license: MIT
-  topics: []
-  last_commit: "2026-05-23T03:59:52Z"
-  latest_release: v0.19.14-desktop.1
-  latest_release_date: "2026-05-19T12:28:17Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:47.587Z"
+  topics:
+    - agentic-workflows
+    - ai-agent
+    - ai-assistant
+    - automation
+    - desktop-app
+    - feishu
+    - llm
+    - local-first
+    - mcp
+    - open-source
+    - self-hosted
+    - typescript
+    - wechat
+  last_commit: "2026-11-07T08:42:22Z"
+  latest_release: nextclaw@0.59.3
+  latest_release_date: "2026-10-19T18:42:00Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/Peiiii/nextclaw#install-nextclaw"
+first_task: "In a private test chat, give it three proposed meeting times, including one duplicate. Ask it to draft a poll with only the distinct choices."

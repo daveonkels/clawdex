@@ -1,7 +1,7 @@
 name: OwnPilot
 slug: ownpilot
-tagline: Privacy-first autonomous agent platform
-description: Privacy-first personal AI assistant platform with autonomous agents, tool orchestration, and multi-provider support.
+tagline: "A self-hosted personal assistant with connected tools"
+description: "OwnPilot runs a personal assistant with a choice of model providers, background tasks and connections to external tools."
 language: typescript
 category:
   - privacy
@@ -9,19 +9,20 @@ category:
   - autonomous
 github: ownpilot/OwnPilot
 status: active
-tier: 2
+tier: 3
 highlight: Privacy-first with multi-provider support and autonomous agent orchestration
 emoji: 🛡️
 platform:
   - server
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: alternative
 added: 2026-03-15T00:00:00.000Z
 github_data:
-  stars: 413
-  forks: 58
-  open_issues: 3
+  repository_id: 1144155526
+  stars: 429
+  forks: 62
+  open_issues: 5
   license: MIT
   topics:
     - ai
@@ -32,8 +33,12 @@ github_data:
     - autonomous-agents
     - personal-assistant
     - workflows
-  last_commit: "2026-05-22T10:12:51Z"
-  latest_release: v0.5.0
-  latest_release_date: "2026-05-21T23:56:52Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:53.126Z"
+  last_commit: "2026-09-08T18:33:01Z"
+  latest_release: v0.8.3
+  latest_release_date: "2026-06-23T10:09:24Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/ownpilot/OwnPilot#quick-start"
+first_task: "In its local chat, paste two mock menus and a dietary preference. Ask it to pick a dish from each and quote the ingredients it used to decide."

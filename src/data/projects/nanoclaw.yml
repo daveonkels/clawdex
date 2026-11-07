@@ -1,15 +1,15 @@
 name: NanoClaw
 slug: nanoclaw
-tagline: Security-first, radically minimal
-description: Five files, one process, OS-level container isolation. NanoClaw strips the agent down to its secure essentials.
+tagline: "An assistant that runs jobs in containers"
+description: "NanoClaw runs agent jobs in containers. Its documentation describes connecting chat channels and assigning tools to groups."
 language: typescript
 category:
   - security
   - lightweight
-github: qwibitai/nanoclaw
+github: nanocoai/nanoclaw
 status: active
 tier: 1
-highlight: 5 files, one process, OS-level container isolation
+highlight: "A group can have its own agent instructions and tools."
 emoji: 🔐
 mentions:
   - type: tweet
@@ -35,13 +35,14 @@ mentions:
 platform:
   - server
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: reimplementation
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 29286
-  forks: 12858
-  open_issues: 680
+  repository_id: 1146738089
+  stars: 31091
+  forks: 12667
+  open_issues: 1043
   license: MIT
   topics:
     - ai-agents
@@ -49,8 +50,12 @@ github_data:
     - claude-code
     - claude-skills
     - openclaw
-  last_commit: "2026-05-22T20:17:35Z"
-  latest_release: v2.0.64
-  latest_release_date: "2026-05-18T18:01:05Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:46.378Z"
+  last_commit: "2026-11-07T14:30:31Z"
+  latest_release: v2026.10.0
+  latest_release_date: "2026-10-09T11:26:13Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/nanocoai/nanoclaw#quick-start"
+first_task: "In a private test group, schedule a short greeting to that named group five minutes from now. Check the run log and whether the message actually appeared."

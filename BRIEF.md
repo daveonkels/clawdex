@@ -1,7 +1,7 @@
 # Clawdex — The OpenClaw Clone Directory
 
 ## What We're Building
-A beautiful, static website that catalogs every OpenClaw clone, fork, derivative, and inspired project in the ecosystem. Think "awesome-list meets Product Hunt" but with lobster energy.
+A beautiful, static website that catalogs runnable agents that are OpenClaw clones, forks, derivatives, or alternatives in the ecosystem. Think "awesome-list meets Product Hunt" but with lobster energy.
 
 GitHub PRs are the submission mechanism — contributors add their project via PR, it gets reviewed and merged, site rebuilds.
 
@@ -16,7 +16,7 @@ Runner-ups:
 ## Design Direction
 - **Theme:** Deep ocean / lobster den aesthetic. Dark background (#0a0f1a navy-black), warm accent colors (lobster red #d4432b, coral orange, bioluminescent blue-green)
 - **Personality:** Playful but informative. Each project gets a "species card" (like a Pokédex entry)
-- **Hero:** Big bold tagline like "Every shell in the sea" or "The complete registry of OpenClaw's extended family"
+- **Hero:** Big bold tagline like "Every shell in the sea" or "A curated directory of runnable AI agents"
 - **Cards:** Each project shown as a card with: name, tagline, language badge, GitHub stars, category tag, key differentiator
 - **Categories:** Filter by: Language (Rust/Python/Go/C/TypeScript), Focus (Security/Lightweight/IoT/Cloud/Social), Status (Active/Experimental/Archived)
 - **Easter eggs:** Lobster emoji rain on click, "molt counter" showing how many times OpenClaw changed names
@@ -36,22 +36,8 @@ Runner-ups:
 | **Moltis** | Rust | Audit/Security | moltis-org/moltis | Zero unsafe Rust, built-in voice I/O, MCP support |
 | **Nanobot** | Python | Research | HKUDS/nanobot | 4,000 lines of Python. Research-friendly, ultra-minimal |
 
-### Tier 2: Ecosystem Projects
-| Name | Language | Focus | Description |
-|------|----------|-------|-------------|
-| **Moltworker** | TypeScript | Cloud/Serverless | Cloudflare's official adaptation. Runs on Workers |
-| **TrustClaw** | - | Managed/Cloud | OAuth + sandboxed execution platform |
-| **Moltbook** | TypeScript | Social | Social network for AI agents. Home of Crustafarianism 🦞 |
-| **memU Bot** | Python | Memory | Proactive assistant with persistent memory engine |
-| **ClawHub** | TypeScript | Skills | Skill marketplace for OpenClaw ecosystem |
-
-### Tier 3: Broader Ecosystem (inspired by, not direct clones)
-| Name | Focus | Description |
-|------|-------|-------------|
-| **SuperAGI** | Multi-agent | Extensible framework for building/running AI agents |
-| **AnythingLLM** | RAG/Multi-model | Self-hosted LLM platform for document ingestion |
-| **CrewAI** | Team agents | Role-based agent teams |
-| **AutoGen** | Multi-agent conversations | Microsoft Research's multi-agent framework |
+### Other runnable agents
+Independent or derived agents qualify if users can give the shipped assistant a task and it takes actions for them. Exclude companion tools, even official OpenClaw projects. See CONTRIBUTING.md for the current submission rules.
 
 ## Technical Stack
 - **Static site generator:** Astro (fast, modern, great for content sites)
@@ -71,7 +57,7 @@ category: [performance, lightweight]
 github: zeroclaw-labs/zeroclaw
 website: https://zeroclaw.dev
 status: active # active | experimental | archived
-tier: 1 # 1=direct clone, 2=ecosystem, 3=inspired
+ecosystem_role: reimplementation
 highlight: "Sub-10ms startup, 3.4MB binary"
 emoji: 🦀
 added: 2026-02-25

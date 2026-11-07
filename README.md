@@ -1,12 +1,14 @@
 # 🦞 Shelldex
 
-**Every shell in the sea.** The complete directory of OpenClaw clones, forks, derivatives, and inspired projects.
+**Every shell in the sea.** A curated directory of runnable AI agents like OpenClaw and Hermes Agent.
 
 🌐 **[shelldex.com](https://shelldex.com)**
 
 ## What Is This?
 
 A community-maintained directory cataloging the growing ecosystem of projects inspired by [OpenClaw](https://github.com/openclaw/openclaw) — the self-hosted AI super-agent formerly known as Clawdbot and Moltbot.
+
+Only runnable AI agents belong in Shelldex. A user must be able to give the shipped assistant a goal and have it choose and carry out actions. OpenClaw and Hermes Agent qualify. Tools for other agents never qualify, including plugins, memory libraries, registries, dashboards, orchestration layers and deployment wrappers.
 
 ## Adding a Project
 
@@ -29,7 +31,7 @@ category:
 github: owner/repo
 website: https://example.com  # optional
 status: active  # active | experimental | archived
-tier: 1  # 1 = clone, 2 = ecosystem, 3 = inspired
+ecosystem_role: reimplementation
 highlight: "What makes it unique"
 emoji: 🦀
 added: 2026-02-25
@@ -45,10 +47,12 @@ added: 2026-02-25
 ## Development
 
 ```bash
-pnpm install --frozen-lockfile
+sfw pnpm install --frozen-lockfile
 pnpm run dev     # http://localhost:4321
 pnpm run build   # builds to dist/
 ```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the Agent Vault metrics refresh, validation, and Cloudflare publication workflow. Ordinary builds use saved data; refreshes are explicit and are not currently scheduled.
 
 ## License
 

@@ -1,0 +1,35 @@
+name: EdgeClaw
+slug: edgeclaw
+tagline: OpenClaw fork that routes tasks between local and cloud models
+description: EdgeClaw can read project files, run shell commands and recall work from earlier sessions. Its router uses task complexity and privacy settings to decide which model handles a request.
+language: typescript
+category:
+  - self-hosted
+  - privacy
+github: OpenBMB/EdgeClaw
+status: active
+tier: 1
+ecosystem_role: fork
+highlight: Privacy settings let the agent process sensitive requests locally or redact details before sending a request to a cloud model.
+emoji: 🛰️
+platform:
+  - cli
+  - server
+requires_llm: true
+added: "2026-11-07"
+github_data:
+  repository_id: 1156790075
+  stars: 1186
+  forks: 70
+  open_issues: 1
+  license: MIT
+  topics: []
+  last_commit: "2026-04-15T09:25:35Z"
+  latest_release: null
+  latest_release_date: null
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/OpenBMB/EdgeClaw#-quick-start"
+first_task: "Point it at a spare project folder containing a short README. Ask it to identify the setup steps and quote the lines where it found them. Leave the files unchanged."

@@ -1,7 +1,7 @@
 name: Nanobot
 slug: nanobot
-tagline: 4,000 lines of pure research
-description: Ultra-minimal Python implementation designed for research and experimentation. When you need to understand, not just use.
+tagline: "A Python assistant for chat, tools and scheduled tasks"
+description: "Nanobot is a self-hosted Python assistant. It supports a web interface, messaging channels, scheduled tasks and connections to external tools."
 language: python
 category:
   - research
@@ -9,7 +9,7 @@ category:
 github: HKUDS/nanobot
 status: active
 tier: 1
-highlight: 4,000 lines of Python. Research-friendly, ultra-minimal
+highlight: "The quick start includes hosted and local model options."
 emoji: 🔬
 mentions:
   - type: tweet
@@ -35,30 +35,42 @@ mentions:
 platform:
   - server
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: reimplementation
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 43011
-  forks: 7575
-  open_issues: 861
+  repository_id: 1147094660
+  stars: 49901
+  forks: 8717
+  open_issues: 868
   license: MIT
   topics:
-    - ai
+    - agent-framework
     - ai-agent
     - ai-agents
-    - anthropic
-    - chatgpt
-    - claude
-    - claude-code
-    - codex
-    - codex-cli
-    - llm
-    - nanobot
-    - openai
+    - chatbot
+    - chatops
+    - discord-bot
+    - llm-agents
+    - llms
+    - local-llm
+    - mcp
+    - model-context-protocol
+    - multi-agent
+    - openai-compatible
     - openclaw
-  last_commit: "2026-05-22T18:16:19Z"
-  latest_release: v0.2.0
-  latest_release_date: "2026-05-16T13:53:26Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:45.412Z"
+    - personal-ai-assistant
+    - python
+    - self-hosted
+    - telegram-bot-ai-assistant
+    - webui
+    - workflow-automation
+  last_commit: "2026-11-07T14:52:16Z"
+  latest_release: v0.4.1
+  latest_release_date: "2026-11-06T15:55:22Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/HKUDS/nanobot#-quick-start"
+first_task: "In its web or private chat interface, ask for a one-time reminder five minutes from now. Verify the reminder arrives in the same place you asked for it."

@@ -1,0 +1,22 @@
+---
+interface Props { value: string; label: string }
+const { value, label } = Astro.props;
+---
+<div class="snippet">
+  <pre tabindex="0" aria-label={label}><code>{value}</code></pre>
+  <button type="button" hidden data-copy>Copy {label}</button><span aria-live="polite"></span>
+</div>
+<script>
+  for(const button of document.querySelectorAll<HTMLButtonElement>('button[data-copy]')){
+    button.hidden=false;
+    button.addEventListener('click',async()=>{
+      const code=button.parentElement!.querySelector('code')!;
+      const message=button.nextElementSibling!;
+      try{await navigator.clipboard.writeText(code.textContent || '');message.textContent='Copied.';}
+      catch{const selection=window.getSelection();const range=document.createRange();range.selectNodeContents(code);selection?.removeAllRanges();selection?.addRange(range);message.textContent='Text selected. Use your Copy command.';}
+    });
+  }
+</script>
+<style>
+.snippet{min-width:0}pre{overflow:auto;background:#f8f4ed;padding:1rem;border-radius:.5rem;font:.82rem/1.65 'JetBrains Mono',monospace}button{color:#1c1410;text-decoration:underline;text-underline-offset:.2em;min-height:44px}span{font-size:.85rem;margin-left:.75rem}
+</style>

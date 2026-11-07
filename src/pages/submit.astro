@@ -1,124 +1,31 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import CopySnippet from '../components/CopySnippet.astro';
+import { VALID_LANGUAGES } from '../lib/project-languages.js';
+const sample = `name: Your Agent
+slug: your-agent
+tagline: "An assistant that organizes your notes"
+description: "Give it a folder of notes and ask for a reading list."
+language: python
+category: [personal-assistant]
+github: owner/repo
+quick_start: https://example.com/getting-started
+first_task: "Ask it to list the topics in a sample folder of notes."
+status: active
+ecosystem_role: alternative
+highlight: "Lets you review the list before saving it"
+emoji: "🦀"
+added: "${new Date().toISOString().slice(0,10)}"`;
 ---
-
-<Layout title="Submit a Project — Shelldex" description="Submit an OpenClaw clone, fork, or derivative to the Shelldex directory. Add your project via GitHub PR with a simple YAML file." robots="noindex, follow">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="font-display text-4xl font-bold text-ledger-text mb-4">Submit a Project</h1>
-    <p class="text-lg text-ledger-faint mb-12">Know of an OpenClaw clone, fork, or derivative we're missing? Add it via GitHub PR.</p>
-
-    <div class="space-y-10">
-      <!-- Steps -->
-      <div class="space-y-6">
-        <div class="flex gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-ledger-red-bg border border-ledger-red/30 flex items-center justify-center">
-            <span class="text-sm font-bold text-ledger-red">1</span>
-          </div>
-          <div>
-            <h3 class="font-display font-bold text-ledger-text mb-1">Fork the repo</h3>
-            <p class="text-ledger-faint text-sm">Fork <a href="https://github.com/daveonkels/clawdex" class="text-ledger-red hover:text-ledger-coral">openclaw/clawdex</a> on GitHub.</p>
-          </div>
-        </div>
-
-        <div class="flex gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-ledger-red-bg border border-ledger-red/30 flex items-center justify-center">
-            <span class="text-sm font-bold text-ledger-red">2</span>
-          </div>
-          <div>
-            <h3 class="font-display font-bold text-ledger-text mb-1">Create a YAML file</h3>
-            <p class="text-ledger-faint text-sm mb-3">Add a new file to <code class="text-ledger-red bg-ledger-red-bg px-1.5 py-0.5 rounded text-xs font-mono">src/data/projects/your-project.yml</code></p>
-          </div>
-        </div>
-
-        <div class="flex gap-4">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-ledger-red-bg border border-ledger-red/30 flex items-center justify-center">
-            <span class="text-sm font-bold text-ledger-red">3</span>
-          </div>
-          <div>
-            <h3 class="font-display font-bold text-ledger-text mb-1">Open a PR</h3>
-            <p class="text-ledger-faint text-sm">Submit a pull request. CI validates the YAML schema. A human reviews and merges.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Template -->
-      <div>
-        <h2 class="font-display text-xl font-bold text-ledger-text mb-4">YAML Template</h2>
-        <div class="bg-ledger-surface border border-ledger-border rounded-xl p-6 overflow-x-auto">
-          <pre class="text-sm font-mono text-ledger-muted leading-relaxed"><code><span class="text-ledger-red">name</span>: Your Project Name
-<span class="text-ledger-red">slug</span>: your-project-name
-<span class="text-ledger-red">tagline</span>: "A short catchy description"
-<span class="text-ledger-red">description</span>: "A longer description of what this project does"
-<span class="text-ledger-red">language</span>: rust  <span class="text-ledger-whisper"># typescript | rust | python | go | c | multi</span>
-<span class="text-ledger-red">category</span>:
-  - security
-  - lightweight
-<span class="text-ledger-red">github</span>: owner/repo  <span class="text-ledger-whisper"># optional</span>
-<span class="text-ledger-red">website</span>: https://example.com  <span class="text-ledger-whisper"># optional</span>
-<span class="text-ledger-red">status</span>: active  <span class="text-ledger-whisper"># active | experimental | archived</span>
-<span class="text-ledger-red">highlight</span>: "The one thing that makes this project stand out"
-<span class="text-ledger-red">emoji</span>: 🦀
-<span class="text-ledger-red">added</span>: 2026-02-25</code></pre>
-        </div>
-      </div>
-
-      <!-- Guidelines -->
-      <div>
-        <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Guidelines</h2>
-        <ul class="space-y-3 text-ledger-faint text-sm">
-          <li class="flex gap-2">
-            <span class="text-ledger-red">✓</span>
-            <span>Project must be related to the OpenClaw ecosystem (clone, fork, derivative, or clearly inspired by)</span>
-          </li>
-          <li class="flex gap-2">
-            <span class="text-ledger-red">✓</span>
-            <span>Must have a public repository or website</span>
-          </li>
-          <li class="flex gap-2">
-            <span class="text-ledger-red">✓</span>
-            <span>Must be a real project with actual code (not just an idea or README)</span>
-          </li>
-          <li class="flex gap-2">
-            <span class="text-lobster">✗</span>
-            <span>No paid services or commercial-only products</span>
-          </li>
-          <li class="flex gap-2">
-            <span class="text-lobster">✗</span>
-            <span>No duplicate submissions</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Badge -->
-      <div>
-        <h2 class="font-display text-xl font-bold text-ledger-text mb-4">Add a Shelldex Badge</h2>
-        <p class="text-ledger-faint text-sm mb-4">Help others discover your project by adding a Shelldex badge to your README:</p>
-        <div class="bg-ledger-surface border border-ledger-border rounded-xl p-5 space-y-4">
-          <div>
-            <p class="text-xs text-ledger-faint mb-2">Preview:</p>
-            <img src="/badges/shelldex-badge.svg" alt="Listed on Shelldex" class="h-5" />
-          </div>
-          <div>
-            <p class="text-xs text-ledger-faint mb-2">Markdown (replace <code class="text-ledger-red font-mono">your-slug</code> with your project slug):</p>
-            <div class="bg-ledger-border/60 rounded-lg px-4 py-3 font-mono text-xs text-ledger-muted overflow-x-auto">
-              [![Listed on Shelldex](https://shelldex.com/badges/shelldex-badge.svg)](https://shelldex.com/projects/your-slug/)
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CTA -->
-      <div class="pt-4">
-        <a
-          href="https://github.com/daveonkels/clawdex/new/main/src/data/projects"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-6 py-3 bg-ledger-red text-ledger-surface font-semibold rounded-lg hover:bg-ledger-coral transition-all duration-200 shadow-lg shadow-ledger-red/20"
-        >
-          Create YAML File on GitHub
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-        </a>
-      </div>
-    </div>
-  </div>
-</Layout>
+<Layout title="Suggest an agent — Shelldex" description="Tell us about an open-source agent you've used. Share its setup guide and a task it can carry out." robots="noindex, follow">
+<div class="mx-auto max-w-[72rem] px-5 sm:px-8 py-12"><article class="max-w-3xl space-y-8">
+<header><p class="font-mono text-sm text-ledger-red">CONTRIBUTE</p><h1 class="my-4">Suggest an agent<span class="text-ledger-red">.</span></h1><p class="text-lg">What can you ask it to do? Send us the project, a link that shows how to run it, and one task a newcomer can try.</p></header>
+<a class="sd-primary" href="https://github.com/daveonkels/clawdex/issues/new?template=new-project.yml">Suggest an agent on GitHub →</a>
+<p>No code changes are needed. The form requires a GitHub account. A human checks each suggestion before adding it.</p>
+<section><h2 class="mb-2">Does it belong here?</h2><p>You must be able to give the shipped assistant a goal and have it take actions. OpenClaw and Hermes Agent qualify. A library, dashboard, deployment wrapper or plugin for another agent doesn’t. We look for public, runnable code. Paid-only services, duplicates and README-only proposals don’t qualify.</p></section>
+<details class="p-5 border border-ledger-border rounded-xl bg-white"><summary class="font-semibold cursor-pointer py-3">Contributing a catalog entry yourself?</summary>
+<p class="my-4">Fork <a class="underline" href="https://github.com/daveonkels/clawdex">the repository</a>, add <code>src/data/projects/your-agent.yml</code> and open a pull request. Use a concrete example and an upstream setup link. The validator accepts these languages: {VALID_LANGUAGES.join(', ')}.</p>
+<CopySnippet value={sample} label="YAML template" />
+<a class="underline" href="https://github.com/daveonkels/clawdex/blob/main/CONTRIBUTING.md">Full contributor guide →</a></details>
+<p>Already listed? <a class="underline" href="/badges/">Get a badge for your README</a> or <a class="underline" href="/methodology/#corrections">suggest a correction</a>.</p>
+</article></div></Layout>

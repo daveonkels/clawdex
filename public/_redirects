@@ -1,2 +1,5 @@
 /api/projects/  /api/projects.json  301
 /api/compare/   /api/compare.json   301
+/favicon.ico    /favicon.svg        301
+/research/star-bursts/  /analysis/#after-the-spike  301
+/research/  /analysis/  301

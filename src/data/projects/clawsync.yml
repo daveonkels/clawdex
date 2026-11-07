@@ -9,7 +9,7 @@ category:
   - self-hosted
 github: waynesutton/clawsync
 status: active
-tier: 2
+tier: 3
 highlight: Cloud-first OpenClaw — multi-agent with shared soul documents, agent-to-agent delegation, public chat UI, SyncBoard admin dashboard, and Convex-powered persistence
 emoji: ☁️
 platform:
@@ -20,9 +20,10 @@ mcp_support: true
 ecosystem_role: alternative
 added: "2026-03-07"
 github_data:
-  stars: 70
-  forks: 20
-  open_issues: 1
+  repository_id: 1152432331
+  stars: 71
+  forks: 19
+  open_issues: 0
   license: MIT
   topics:
     - ai
@@ -33,5 +34,9 @@ github_data:
   last_commit: "2026-02-11T06:41:54Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:33.576Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/waynesutton/clawsync#quick-start"
+first_task: "In a private chat, give one assistant a mock event brief. Ask for an ordered plan with the unanswered questions first. Check it before involving a second assistant."

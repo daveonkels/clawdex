@@ -1,10 +1,6 @@
 ---
+import { reportedDays } from '../lib/leaderboard-display';
 import { formatStars } from '../lib/projects';
-import {
-  getMomentumRatio,
-  getProjectMomentum,
-  getProjectMomentumSnapshots,
-} from '../lib/momentum.js';
 
 interface Props {
   project: any;
@@ -12,157 +8,65 @@ interface Props {
   compact?: boolean;
   inline?: boolean;
   label?: string;
+  asOf?: string;
 }
-
-const {
-  project,
-  averageGrowth7d = 0,
-  compact = false,
-  inline = false,
-  label = compact ? 'Momentum' : 'Momentum vs ecosystem average',
-} = Astro.props;
-
-const snapshots = getProjectMomentumSnapshots(project, undefined, compact ? 10 : 12);
-const growth7d = getProjectMomentum(project);
-const ratio = getMomentumRatio(project, averageGrowth7d);
-
+const { project, compact = false, inline = false, label = 'Star activity', asOf } = Astro.props;
+const data = project.github_data;
+const days = reportedDays(project, asOf ?? data?.last_enriched, compact ? 7 : 30);
 const width = inline ? 84 : compact ? 88 : 136;
 const height = inline ? 18 : compact ? 26 : 40;
-const padding = inline ? 2 : compact ? 3 : 4;
-const values = snapshots.length > 0
-  ? snapshots.map((snapshot) => snapshot.stars)
-  : [project?.github_data?.stars ?? project?.stars ?? 0];
-const minValue = Math.min(...values);
-const maxValue = Math.max(...values);
-const range = Math.max(maxValue - minValue, 1);
-
-function pointY(value: number): number {
-  return height - padding - ((value - minValue) / range) * (height - padding * 2);
+const pad = inline ? 2 : compact ? 3 : 4;
+const dayMs = 86_400_000;
+const first = days[0];
+const last = days.at(-1);
+const peak = Math.max(0, ...days.map(day => day.stars));
+const total = days.reduce((sum, day) => sum + day.stars, 0);
+const span = first && last ? (Date.parse(last.date) - Date.parse(first.date)) / dayMs : 0;
+const points = days.map(({ date, stars }) => ({
+  date, stars,
+  x: span ? pad + (Date.parse(date) - Date.parse(first.date)) / dayMs / span * (width - 2 * pad) : width / 2,
+  y: height - pad - stars / Math.max(peak, 1) * (height - 2 * pad)
+}));
+const segments: (typeof points)[] = [];
+for (const [i, point] of points.entries()) {
+  if (i === 0 || Date.parse(point.date) - Date.parse(points[i - 1].date) !== dayMs) segments.push([]);
+  segments[segments.length - 1].push(point);
 }
-
-const points = values.map((value, index) => {
-  const x = values.length === 1
-    ? width / 2
-    : padding + (index * (width - padding * 2)) / (values.length - 1);
-  return `${x},${pointY(value)}`;
-});
-
-const linePoints = points.join(' ');
-const areaPoints = [
-  `${padding},${height - padding}`,
-  ...points,
-  `${width - padding},${height - padding}`,
-].join(' ');
-const lastPoint = points[points.length - 1]?.split(',').map(Number) ?? [width - padding, height / 2];
-
-const paceTone = ratio === null
-  ? 'muted'
-  : ratio >= 1.25
-    ? 'hot'
-    : ratio >= 0.85
-      ? 'steady'
-      : 'cool';
-
-const paceLabel = ratio === null
-  ? compact ? 'No lift' : 'No recent 7d lift'
-  : ratio >= 1.25
-    ? compact ? `${ratio.toFixed(ratio >= 10 ? 0 : 1)}x avg` : `${ratio.toFixed(ratio >= 10 ? 0 : 1)}x ecosystem avg`
-    : ratio >= 0.85
-      ? compact ? 'Near avg' : 'Tracking near avg'
-      : compact ? `${Math.round(ratio * 100)}% avg` : `${Math.round(ratio * 100)}% of avg`;
-
-const metaClass = paceTone === 'hot'
-  ? 'text-ledger-red'
-  : paceTone === 'steady'
-    ? 'text-amber-700'
-    : 'text-ledger-faint';
-const stroke = paceTone === 'hot'
-  ? '#dc2626'
-  : paceTone === 'steady'
-    ? '#b45309'
-    : '#9ca3af';
-const fill = paceTone === 'hot'
-  ? 'rgba(220, 38, 38, 0.12)'
-  : paceTone === 'steady'
-    ? 'rgba(180, 83, 9, 0.10)'
-    : 'rgba(156, 163, 175, 0.08)';
+const stroke = '#0a6b5a';
+const noun = total === 1 ? 'star' : 'stars';
+const caption = first && last ? `${project.name} daily GitHub stars, ${first.date} to ${last.date}. ${total.toLocaleString('en-US')} ${noun} still present from ${days.length} reported days. Peak: ${peak.toLocaleString('en-US')} in one day.` : 'Daily star history unavailable';
+const growth = data?.star_growth_7d;
 ---
-
-{!inline ? (
-<div class={`flex items-center ${compact ? 'gap-2' : 'gap-4'} min-w-0`}>
-  <div class="min-w-0">
-    <p class={`font-mono uppercase tracking-[0.2em] ${compact ? 'text-[9px]' : 'text-[10px]'} text-ledger-whisper`}>
-      {label}
-    </p>
-    <div class={`flex items-baseline mt-1 ${compact ? 'gap-1.5 whitespace-nowrap' : 'gap-2'}`}>
-      <span class={`font-mono ${compact ? 'text-sm' : 'text-lg'} ${growth7d > 0 ? 'text-ledger-text' : 'text-ledger-faint'}`}>
-        {growth7d > 0 ? `+${formatStars(growth7d)}` : '0'}
-      </span>
-      <span class={`shrink-0 ${compact ? 'text-[11px]' : 'text-xs'} ${metaClass}`}>{paceLabel}</span>
+<div class={`flex items-center ${inline ? '' : compact ? 'gap-2' : 'gap-4'} min-w-0`}>
+  {!inline && (
+    <div class="min-w-0">
+      <p class="font-mono uppercase tracking-[0.18em] text-xs text-ledger-muted">{label}</p>
+      {compact ? (
+        <p class="font-mono text-sm text-ledger-text">{growth == null ? '—' : `${growth > 0 ? '+' : ''}${formatStars(growth)}`} net stars</p>
+      ) : first && last && (
+        <>
+          <p class="text-sm text-ledger-text">{total.toLocaleString('en-US')} {noun} added across {days.length} days</p>
+          <p class="text-xs text-ledger-whisper mt-1">Daily additions for stars still present · {first.date} to {last.date}</p>
+        </>
+      )}
     </div>
-    {!compact && snapshots.length > 1 && (
-      <p class="text-xs text-ledger-whisper mt-1">
-        {snapshots[0].date} to {snapshots[snapshots.length - 1].date}
-      </p>
-    )}
-  </div>
-
-  <svg
-    width={width}
-    height={height}
-    viewBox={`0 0 ${width} ${height}`}
-    class="shrink-0 overflow-visible"
-    role="img"
-    aria-label={`${project?.name ?? 'Project'} momentum sparkline`}
-  >
-    <polygon
-      points={areaPoints}
-      fill={fill}
-      stroke="none"
-    />
-    <polyline
-      points={linePoints}
-      fill="none"
-      stroke={stroke}
-      stroke-width={compact ? '2' : '2.4'}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <circle
-      cx={lastPoint[0]}
-      cy={lastPoint[1]}
-      r={compact ? '2.4' : '3'}
-      fill={stroke}
-    />
-  </svg>
+  )}
+  {inline && points.length > 0 && <span class="text-xs font-mono text-ledger-muted whitespace-nowrap mr-2" >+{formatStars(total)} / {days.length}d</span>}
+  {points.length ? (
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} class="shrink-0 overflow-visible"
+      role="img" aria-label={caption} data-star-days={points.length}>
+      <title>{caption}</title>
+      {segments.map(segment => segment.length === 1
+        ? <circle cx={segment[0].x} cy={segment[0].y} r="2" fill={stroke} />
+        : <polyline points={segment.map(p => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ')}
+            fill="none" stroke={stroke} stroke-width={inline ? 1.8 : 2} stroke-linecap="round" stroke-linejoin="round" />)}
+      {points.length > 1 && <circle cx={points[points.length - 1].x} cy={points[points.length - 1].y} r="2" fill={stroke} />}
+      {!inline && points.map(point => {
+        const step = (width - 2 * pad) / Math.max(1, span);
+        return <rect x={point.x - step / 2} y="0" width={step} height={height} fill="transparent">
+          <title>{point.date} · {point.stars.toLocaleString('en-US')} stars</title>
+        </rect>;
+      })}
+    </svg>
+  ) : <span class="text-xs text-ledger-faint" title={caption} aria-label={caption}>{inline ? 'No daily history' : caption}</span>}
 </div>
- ) : (
-<svg
-  width={width}
-  height={height}
-  viewBox={`0 0 ${width} ${height}`}
-  class="shrink-0 overflow-visible"
-  role="img"
-  aria-label={`${project?.name ?? 'Project'} momentum sparkline`}
->
-  <polygon
-    points={areaPoints}
-    fill={fill}
-    stroke="none"
-  />
-  <polyline
-    points={linePoints}
-    fill="none"
-    stroke={stroke}
-    stroke-width="1.8"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
-  <circle
-    cx={lastPoint[0]}
-    cy={lastPoint[1]}
-    r="2.2"
-    fill={stroke}
-  />
-</svg>
-)}

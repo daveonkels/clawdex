@@ -1,7 +1,7 @@
-name: MimicLaw
+name: MimiClaw
 slug: mimiclaw
-tagline: Bare metal AI on a $5 chip
-description: Pure C running directly on an ESP32-S3 chip. No operating system needed. The most primal claw.
+tagline: "A personal assistant that runs on an ESP32-S3 board"
+description: "MimiClaw runs on an ESP32-S3 and connects to a model service to process requests."
 language: c
 category:
   - embedded
@@ -9,18 +9,18 @@ category:
 github: memovai/mimiclaw
 status: experimental
 tier: 1
-highlight: Pure C on ESP32-S3 ($5). No OS needed
+highlight: "The project lists the supported hardware and setup steps."
 emoji: 🦾
 platform:
   - embedded
 requires_llm: true
-mcp_support: false
 ecosystem_role: reimplementation
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 5425
-  forks: 796
-  open_issues: 102
+  repository_id: 1149403151
+  stars: 5820
+  forks: 894
+  open_issues: 110
   license: MIT
   topics:
     - ai
@@ -28,9 +28,15 @@ github_data:
     - clawdbot
     - edge-ai-agents
     - memory
+    - muse
     - openclaw
-  last_commit: "2026-04-21T17:37:01Z"
+    - personal-agent
+  last_commit: "2026-10-04T06:40:28Z"
   latest_release: v0.1.1
   latest_release_date: "2026-03-17T04:25:41Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:43.687Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/memovai/mimiclaw#quick-start"
+first_task: "In your own Telegram chat with the board, ask it to remember a made-up label such as “fern bench.” Start another conversation and ask it to recall the label."

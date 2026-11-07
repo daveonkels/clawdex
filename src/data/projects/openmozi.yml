@@ -9,20 +9,20 @@ category:
   - chinese-ecosystem
 github: oujingzhou/openmozi
 status: active
-tier: 2
+tier: 3
 highlight: Chinese ecosystem first — native QQ, Feishu, DingTalk, WeCom channels with DeepSeek, Doubao, Qwen, Kimi, and Zhipu AI providers, all in 16K lines of code
 emoji: 🏮
 platform:
   - server
   - messaging
 requires_llm: true
-mcp_support: false
 ecosystem_role: alternative
 added: "2026-03-07"
 github_data:
-  stars: 184
-  forks: 27
-  open_issues: 15
+  repository_id: 1143434749
+  stars: 189
+  forks: 24
+  open_issues: 13
   license: Apache-2.0
   topics:
     - agent
@@ -37,8 +37,12 @@ github_data:
     - openclaw
     - qq
     - qqbot
-  last_commit: "2026-05-21T11:06:53Z"
+  last_commit: "2026-10-31T08:32:19Z"
   latest_release: 1.11.1
   latest_release_date: "2026-03-16T10:47:15Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:52.511Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/oujingzhou/openmozi#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"
+first_task: "In a private test conversation, paste a short event notice in Chinese. Ask it to extract the time and location and draft a bilingual invitation for you to review."

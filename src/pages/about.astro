@@ -1,159 +1,36 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const title = 'About Shelldex: who edits the directory and how it works';
+const description = 'Learn what qualifies as a runnable agent, how Shelldex checks the numbers, and how OpenClaw got its name.';
+const jsonLd = {
+  '@context': 'https://schema.org', '@type': 'AboutPage', name: 'About Shelldex', description,
+  url: 'https://shelldex.com/about/', author: {'@type':'Person', name:'Dave Onkels', url:'https://onk.io'}
+};
 ---
-
-<Layout title="About — Shelldex | OpenClaw Ecosystem Tracker" description="Shelldex catalogs the OpenClaw ecosystem — inspired agentic projects, not workflows or tutorials. Compare projects by stars, language, and activity.">
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    "name": "About Shelldex",
-    "description": "Shelldex is a community-maintained directory of every project in the OpenClaw ecosystem — clones, forks, reimplementations, and inspired projects.",
-    "url": "https://shelldex.com/about/",
-    "mainEntity": {
-      "@type": "WebSite",
-      "name": "Shelldex",
-      "url": "https://shelldex.com"
-    },
-    "author": {
-      "@type": "Person",
-      "name": "Dave Onkels",
-      "url": "https://onk.io"
-    }
-  })} />
-  <!-- Hero image -->
-  <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-4">
-    <div class="relative rounded-2xl overflow-hidden h-64 sm:h-80">
-      <img
-        src="/images/og-about.webp"
-        alt="Cross-sectioned nautilus shell with bioluminescent teal glow — the ancestor shell"
-        class="w-full h-full object-cover object-center"
-        width="1200"
-        height="630"
-        loading="eager"
-        fetchpriority="high"
-      />
-      <div class="absolute inset-0 bg-gradient-to-t from-ledger-bg via-ledger-bg/20 to-transparent"></div>
-    </div>
-  </div>
-
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <h1 class="font-display text-4xl font-bold text-ledger-text mb-8">About Shelldex</h1>
-
-    <div class="prose prose-invert prose-gray max-w-none space-y-6 text-ledger-muted leading-relaxed">
-      <p class="text-lg">
-        <strong class="text-ledger-text">Shelldex</strong> is a community-maintained directory of every project in the OpenClaw ecosystem — clones, forks, reimplementations, and inspired projects.
-      </p>
-
-      <p>
-        What started as one project has become an entire species. Rust rewrites, Go ports, bare-metal C on $5 chips, social networks for AI agents, and managed cloud platforms — the crustacean family tree is getting complicated. Clawdex exists to map it all.
-      </p>
-
-      <h2 class="font-display text-2xl font-bold text-ledger-text mt-12 mb-6">The Naming Timeline</h2>
-
-      <div class="relative border-l-2 border-ledger-red/30 ml-4 space-y-8 pl-8">
-        <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
-          <p class="text-sm text-ledger-red font-mono mb-1">November 2025</p>
-          <h3 class="font-display text-lg font-bold text-ledger-text">📱 WhatsApp Relay</h3>
-          <p class="text-ledger-faint text-sm">The primordial soup. Peter Steinberger builds a WhatsApp bot. Nobody knows what's about to happen.</p>
-        </div>
-
-        <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
-          <p class="text-sm text-ledger-red font-mono mb-1">November 2025</p>
-          <h3 class="font-display text-lg font-bold text-ledger-text">🥚 Clawd</h3>
-          <p class="text-ledger-faint text-sm">Gets a real name — a portmanteau of "claw" and "Claude." The lobster identity begins.</p>
-        </div>
-
-        <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
-          <p class="text-sm text-ledger-red font-mono mb-1">December 2025</p>
-          <h3 class="font-display text-lg font-bold text-ledger-text">🐚 Clawdis</h3>
-          <p class="text-ledger-faint text-sm">A brief identity. Most people missed this one entirely.</p>
-        </div>
-
-        <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
-          <p class="text-sm text-ledger-red font-mono mb-1">January 2026</p>
-          <h3 class="font-display text-lg font-bold text-ledger-text">🤖 Clawdbot</h3>
-          <p class="text-ledger-faint text-sm">The name that caught fire on GitHub. Then Anthropic's lawyers noticed "Clawd" sounds a lot like "Claude."</p>
-        </div>
-
-        <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
-          <p class="text-sm text-ledger-red font-mono mb-1">January 27, 2026</p>
-          <h3 class="font-display text-lg font-bold text-ledger-text">🐣 Moltbot</h3>
-          <p class="text-ledger-faint text-sm">The trademark-compliant name. Lasted 72 hours. Peter admitted it "never quite rolled off the tongue."</p>
-        </div>
-
-        <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-lobster/20 border-2 border-lobster"></div>
-          <p class="text-sm text-lobster font-mono mb-1">January 30, 2026</p>
-          <h3 class="font-display text-lg font-bold text-ledger-text">🦞 OpenClaw</h3>
-          <p class="text-ledger-faint text-sm">The final form. Open-source identity, claw heritage intact. 228k+ stars and counting.</p>
-        </div>
-
-        <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-coral/20 border-2 border-coral"></div>
-          <p class="text-sm text-coral font-mono mb-1">February 2026</p>
-          <h3 class="font-display text-lg font-bold text-ledger-text">🌊 The Ecosystem Explodes</h3>
-          <p class="text-ledger-faint text-sm">NanoClaw, ZeroClaw, PicoClaw, IronClaw, MimicLaw, Moltis... the clones arrive. Clawdex is born to track them all.</p>
-        </div>
-
-        <div class="relative">
-          <div class="absolute -left-[2.55rem] top-1 w-4 h-4 rounded-full bg-ledger-red-bg border-2 border-ledger-red"></div>
-          <p class="text-sm text-ledger-red font-mono mb-1">February 27, 2026</p>
-          <h3 class="font-display text-lg font-bold text-ledger-text">🐚 Shelldex</h3>
-          <p class="text-ledger-faint text-sm">Clawdex molts. The directory finds its name — <em>shell</em> for the crustacean lineage, <em>dex</em> for the index. Formerly at theclawdex.com.</p>
-        </div>
-      </div>
-
-      <blockquote class="border-l-4 border-lobster/40 pl-4 mt-8 italic text-ledger-faint">
-        "Five name changes in three months. The lobster molts fast." So do directories, apparently.
-      </blockquote>
-
-      <h2 class="font-display text-2xl font-bold text-ledger-text mt-12 mb-4">How It Works</h2>
-      <p>
-        Every project in the directory is a YAML file in our <a href="https://github.com/daveonkels/clawdex" class="text-ledger-red hover:text-ledger-coral">GitHub repo</a>. Want to add a project? Open a PR. A human reviews it, merges it, and the site rebuilds automatically.
-      </p>
-      <p>
-        No forms, no accounts, no approval committees. Just git.
-      </p>
-
-      <h2 class="font-display text-2xl font-bold text-ledger-text mt-12 mb-4">What This Is (and Isn't)</h2>
-      <p>
-        The OpenClaw ecosystem has spawned a lot of adjacent projects. Here's how Shelldex fits relative to a few you may have seen:
-      </p>
-      <div class="mt-6 space-y-4">
-        <div class="rounded-lg border border-ledger-border bg-ledger-red-bg/30 p-4">
-          <div class="flex items-start gap-3">
-            <span class="text-xl mt-0.5">✅</span>
-            <div>
-              <p class="font-semibold text-ledger-text">Shelldex <span class="text-ledger-faint font-normal text-sm">(shelldex.com — you are here)</span></p>
-              <p class="text-sm text-ledger-faint mt-1">A catalog of <strong class="text-ledger-text">OpenClaw-inspired agentic projects</strong>. Tracks personal AI agent frameworks, clones, forks, and alternatives — comparing them by GitHub stars, language, and activity. Think of it as the map for the OpenClaw ecosystem.</p>
-            </div>
-          </div>
-        </div>
-        <div class="rounded-lg border border-ledger-border bg-ledger-red-bg/30 p-4">
-          <div class="flex items-start gap-3">
-            <span class="text-xl mt-0.5">❌</span>
-            <div>
-              <p class="font-semibold text-ledger-text">Workflow galleries <span class="text-ledger-faint font-normal text-sm">(e.g. clawdex.io)</span></p>
-              <p class="text-sm text-ledger-faint mt-1">Sites that catalog <strong class="text-ledger-text">what you can do</strong> with OpenClaw — use case recipes, automation examples, workflow templates. Useful, but a different thing entirely. We track what the frameworks <em>are</em>, not what users do with them.</p>
-            </div>
-          </div>
-        </div>
-        <div class="rounded-lg border border-ledger-border bg-ledger-red-bg/30 p-4">
-          <div class="flex items-start gap-3">
-            <span class="text-xl mt-0.5">❌</span>
-            <div>
-              <p class="font-semibold text-ledger-text">Security scanners <span class="text-ledger-faint font-normal text-sm">(e.g. clawdex.koi.security)</span></p>
-              <p class="text-sm text-ledger-faint mt-1">Tools that scan OpenClaw skills for malicious content before installation. Entirely separate from this directory — we track frameworks, not skill safety verdicts.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
+<Layout {title} {description} {jsonLd}>
+  <div class="max-w-[72rem] mx-auto px-5 sm:px-8"><article>
+    <header><div><h1>About Shelldex<span aria-hidden="true">.</span></h1>
+      <p>Shelldex is an independent directory of personal AI agents. It helps you choose one by the job you want to give it, the computer it needs, and the access you would have to grant.</p></div>
+      <img src="/images/faq-agent-homes.webp" width="1440" height="480" alt="An illustrated laptop, home computer and remote server show three places an assistant can run." />
+    </header>
+    <section><h2>What qualifies for the directory?</h2><p>You must be able to run the assistant, give it a goal and let it choose and carry out actions. OpenClaw and Hermes Agent are examples. Other entries may be forks, independently built alternatives or assistants for a particular device. Being listed alongside OpenClaw does not establish that a project uses its code.</p>
+      <p>A submission needs the project’s own instructions for starting the agent and an example task. An extension, a library, a hosting plan or a dashboard on its own falls outside the directory. Readers can propose an addition or correction for editorial review. <a href="/submit/">Suggest a project</a>.</p></section>
+    <section id="how-we-measure"><h2>How we measure</h2><p>A star is a GitHub bookmark. The leaderboard sorts available, non-archived projects by their public star totals at the posted check date. A project whose repository disappears can retain a historical profile, with its older date shown.</p>
+      <p>Issue load divides GitHub’s combined open issues and pull requests by stars. Below 1% is low, 1% to under 5% is moderate, and 5% or above is high. The separate maintenance score combines issue load, the last repository push, release activity and measured changes in stars. Neither tells you whether an agent will do your job well.</p>
+      <p><a href="/methodology/#star-history">How the star charts work</a> · <a href="/methodology/#health-score">How the score is calculated</a> · <a href="/methodology/#corrections">How to correct an entry</a></p></section>
+    <section id="timeline"><h2>How OpenClaw got its name</h2><p>If an older guide mentions Clawdbot or Moltbot, these milestones explain the names. Dates and descriptions below follow the project’s and founder’s own accounts.</p>
+      <ol class="timeline">
+        <li><time datetime="2025-11">November 2025</time><h3>A WhatsApp assistant</h3><p>Peter Steinberger describes starting with a personal project that could take requests from his phone. The project’s history traces the early WhatsApp relay and the name Clawd. <a href="https://docs.openclaw.ai/lore">OpenClaw’s project history</a></p></li>
+        <li><time datetime="2026-01">January 2026</time><h3>Clawdbot, Moltbot, then OpenClaw</h3><p>Steinberger’s announcement explains the move from Clawdbot to Moltbot following a trademark request, then to OpenClaw. <a href="https://openclaw.ai/blog/introducing-openclaw">Read the naming announcement</a>.</p></li>
+        <li><time datetime="2026-02-14">February 14, 2026</time><h3>Independent stewardship</h3><p>Steinberger announced he was joining OpenAI and that OpenClaw would move to a foundation and remain independent and open. <a href="https://steipete.me/posts/2026/openclaw">Read his announcement</a>.</p></li>
+        <li><time datetime="2026-09">September 2026</time><h3>A choice for missed reminders</h3><p>OpenClaw’s September release documented a setting that skips missed recurring jobs after downtime. It gives people who run agents on a sleeping laptop a choice about receiving stale reminders. <a href="https://docs.openclaw.ai/releases/2026.9.1">See the release notes</a>.</p></li>
+      </ol>
+    </section>
+    <p>New to personal agents? <a href="/faq/#first-task">Try the field guide’s first task</a>.</p>
+  </article></div>
 </Layout>
+<style>
+  article{max-width:48rem;padding:3rem 0;color:#392f28}header img{width:100%;height:auto;border:1px solid #ded4c6;border-radius:1rem;margin:1.5rem 0}section{margin:3rem 0;scroll-margin-top:6rem}
+  h1,h2,h3{color:#1c1410}h1 span,time{color:#a93119}
+  p{line-height:1.65;margin:.75rem 0;max-width:73ch}header p{font-size:1.15rem}a{color:#342b24;text-decoration:underline;text-underline-offset:.2em}a:hover{color:#aa311d}.timeline{border-left:2px solid #d4b6a3;padding-left:1.4rem;margin:1.3rem 0}.timeline li{position:relative;margin:1.4rem 0}.timeline li:before{content:'';position:absolute;left:-1.73rem;top:.43rem;width:.55rem;height:.55rem;background:#b73720;border-radius:50%}time{display:block;font:600 .8rem/1.5 monospace;margin:.3rem 0}
+</style>

@@ -1,28 +1,29 @@
-name: Gitclaw
+name: "GitAgent"
 slug: gitclaw
-tagline: Your agent lives inside a git repo
-description: A universal git-native AI agent framework where identity, rules, memory, tools, and skills are all version-controlled files. Fork an agent, branch a personality, git log its memory. Supports CLI, SDK, and remote repo modes.
-language: typescript
+tagline: "A terminal agent with version-controlled instructions"
+description: "GitAgent ships a Rust command-line program. Give it a task in a folder and it can read and edit files, run commands and report the result. Agent instructions and skills can be kept in version control."
+language: "rust"
 category:
   - framework
   - self-hosted
   - developer-tools
-github: open-gitagent/gitclaw
+github: open-gitagent/gitagent
 status: active
-tier: 2
-highlight: Agent-as-repo architecture — agent.yaml, SOUL.md, RULES.md, memory/, tools/, skills/ are all git-committed files you can fork, branch, and diff
+tier: 3
+highlight: "The project README includes a runnable example for a task in a folder."
 emoji: 🐙
 platform:
   - cli
   - sdk
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: alternative
 added: "2026-03-06"
 github_data:
-  stars: 396
-  forks: 77
-  open_issues: 17
+  repository_id: 1172540122
+  stars: 744
+  forks: 145
+  open_issues: 61
   license: MIT
   topics:
     - ai-agents
@@ -31,8 +32,12 @@ github_data:
     - llm
     - openclaw
     - personal
-  last_commit: "2026-05-13T12:59:29Z"
-  latest_release: v1.4.3
-  latest_release_date: "2026-04-22T13:56:38Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:36.573Z"
+  last_commit: "2026-11-03T17:40:23Z"
+  latest_release: v2.2.0
+  latest_release_date: "2026-08-20T06:54:09Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/open-gitagent/gitagent#install"
+first_task: "In a temporary folder with a README and sample notes, ask which file explains how to start the project. Ask for the filename and supporting line with no edits."

@@ -1,7 +1,7 @@
 name: PicoClaw
 slug: picoclaw
-tagline: AI agents on a $10 board
-description: Runs on $10 RISC-V boards with less than 10MB of RAM. One-second boot time. The tiniest claw in the sea.
+tagline: "An assistant for small single-board computers"
+description: "PicoClaw runs a personal assistant on supported single-board computers and can connect to messaging apps."
 language: go
 category:
   - iot
@@ -10,7 +10,7 @@ category:
 github: sipeed/picoclaw
 status: active
 tier: 1
-highlight: Runs on $10 RISC-V boards, <10MB RAM, 1s boot
+highlight: "Check the project’s hardware list before buying a board."
 emoji: 💡
 mentions:
   - type: tweet
@@ -35,20 +35,25 @@ mentions:
 platform:
   - embedded
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: reimplementation
 perf:
   ram: <10MB
-  startup_time: 1s
+  startup_time: <1s (project test)
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 29133
-  forks: 4175
-  open_issues: 93
+  repository_id: 1149707767
+  stars: 30106
+  forks: 4421
+  open_issues: 36
   license: MIT
   topics: []
-  last_commit: "2026-05-23T01:21:08Z"
-  latest_release: v0.2.8
-  latest_release_date: "2026-04-30T15:15:51Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:54.191Z"
+  last_commit: "2026-11-05T17:14:26Z"
+  latest_release: v0.3.1
+  latest_release_date: "2026-07-03T07:37:06Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/sipeed/picoclaw#-quick-start-guide"
+first_task: "On your test board or computer, give the assistant two sample weather readings in chat. Ask it to calculate the change and explain which reading was warmer."

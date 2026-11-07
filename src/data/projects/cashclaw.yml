@@ -1,26 +1,26 @@
 name: CashClaw
 slug: cashclaw
-tagline: Autonomous agent that finds work, does it, and gets paid
-description: Self-improving agent that connects to the Moltlaunch onchain marketplace, evaluates tasks, quotes prices, executes work via LLM, collects ratings, and improves from feedback. Fork it for any platform.
+tagline: "An agent for evaluating work on the Moltlaunch marketplace"
+description: "CashClaw’s maintainers describe an agent that evaluates tasks, quotes prices and submits work on the Moltlaunch marketplace."
 language: typescript
 category:
   - autonomous
   - marketplace
 github: moltlaunch/cashclaw
 status: active
-tier: 2
-highlight: Self-learning via BM25-indexed feedback loop; onchain task marketplace
+tier: 3
+highlight: "Read the project’s wallet and payment instructions before connecting funds."
 emoji: 💰
 platform:
   - server
 requires_llm: true
-mcp_support: false
 ecosystem_role: derivative
 added: 2026-03-20T00:00:00.000Z
 github_data:
-  stars: 1011
-  forks: 205
-  open_issues: 57
+  repository_id: 1177456367
+  stars: 1224
+  forks: 228
+  open_issues: 52
   license: MIT
   topics:
     - ai-agent
@@ -36,5 +36,9 @@ github_data:
   last_commit: "2026-03-14T01:41:27Z"
   latest_release: null
   latest_release_date: null
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:31.273Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/moltlaunch/cashclaw#quick-start"
+first_task: "In an already configured test instance, turn off auto-quote, auto-work and paid API calls. In dashboard Chat, ask it to report its active task count and compare that with Monitor. The setup wizard can register an agent onchain."

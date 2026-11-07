@@ -1,0 +1,36 @@
+/* One hierarchy across the directory, editorial pages and generated profiles. */
+:root {
+  --sd-title: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem);
+  --sd-section: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --sd-card: clamp(1.125rem, 1.05rem + .35vw, 1.3125rem);
+  --sd-action: #bd3b1f;
+  --sd-action-hover: #982e16;
+  --sd-ink: #241b16;
+}
+#main-content :is(h1,h2,h3) {
+  font-family: 'Space Grotesk',system-ui,sans-serif;
+  font-weight: 700;
+  letter-spacing: -.035em;
+  text-transform: none;
+  overflow-wrap: break-word;
+}
+#main-content h1 { font-size: var(--sd-title); line-height: 1.03; }
+#main-content h2 { font-size: var(--sd-section); line-height: 1.14; }
+#main-content :is(h3,[data-heading="card"]) { font-size: var(--sd-card); line-height: 1.24; letter-spacing: -.02em; }
+#main-content [data-heading="label"] { font: 600 .8125rem/1.45 Inter,system-ui,sans-serif;letter-spacing:0; }
+/* Orange initiates the page's main action. Navigation and selection stay neutral.
+   Green indicates observed data/status; it never indicates which button to click. */
+#main-content .sd-primary {
+  display:inline-flex; align-items:center; justify-content:center; gap:.55rem;
+  min-height:44px; padding:.65rem 1.1rem; border:1px solid transparent;
+  border-radius:.5rem; background:var(--sd-action); color:white;
+  font:650 .9375rem/1.35 Inter,system-ui,sans-serif; text-decoration:none;
+}
+#main-content .sd-primary:hover { background:var(--sd-action-hover); }
+#main-content .sd-primary:disabled { background:#e8dfd5;border-color:#d4c8ba;color:#67594e;opacity:1;cursor:not-allowed; }
+#main-content .sd-secondary {
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem; min-height:44px;
+  padding:.55rem 1rem; border:1px solid #bdafa1; border-radius:.5rem; background:white;
+  color:var(--sd-ink); font:600 .9rem/1.4 Inter,system-ui,sans-serif; text-decoration:none;
+}
+#main-content .sd-secondary:hover { border-color:var(--sd-ink); background:#faf6f0; }

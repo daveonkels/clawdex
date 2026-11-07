@@ -1,0 +1,15 @@
+---
+interface Props { date: string }
+const { date } = Astro.props;
+const valid = Number.isFinite(Date.parse(date));
+const day = valid ? new Intl.DateTimeFormat('en-US',{timeZone:'UTC',month:'short',day:'numeric',year:'numeric'}).format(new Date(date)) : '';
+---
+<div class="data-stamp">
+  <p>{valid ? <>Metrics checked <time datetime={date}>{day}</time></> : 'Metrics date unavailable'} · <a href="/methodology/">How we measure</a></p>
+  {Astro.slots.has('default') && <div class="stamp-note"><slot /></div>}
+</div>
+<style>
+.data-stamp{font: 500 .8125rem/1.55 'JetBrains Mono',monospace;color:#6b5c4f}
+a{color:#1c1410;text-decoration:underline;text-underline-offset:.18em} a:hover{color:#a82f18}
+.stamp-note{font:normal .875rem/1.5 Inter,sans-serif;margin-top:.25rem}
+</style>

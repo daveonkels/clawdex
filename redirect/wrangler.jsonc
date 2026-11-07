@@ -1,0 +1,11 @@
+{
+  "name": "shelldex-legacy-redirect",
+  "main": "./worker.js",
+  "compatibility_date": "2026-07-18",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "theclawdex.com/*", "zone_name": "theclawdex.com" },
+    { "pattern": "www.theclawdex.com/*", "zone_name": "theclawdex.com" }
+  ]
+}

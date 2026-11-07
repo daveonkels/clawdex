@@ -1,0 +1,55 @@
+name: Atomic Agent
+slug: atomic-agent
+tagline: Personal agent that can run open-weight models on your computer
+description: Atomic Agent works from a terminal or desktop app. Give it a task and it can work with files, browse the web and schedule follow-up work. It can run a model locally through llama.cpp.
+language: typescript
+category:
+  - self-hosted
+  - productivity
+github: AtomicBot-ai/atomic-agent
+status: active
+tier: 3
+ecosystem_role: alternative
+highlight: The built-in importer brings over OpenClaw sessions and scheduled jobs.
+emoji: ⚛️
+platform:
+  - cli
+  - desktop
+requires_llm: true
+mcp_support: true
+added: "2026-11-07"
+github_data:
+  repository_id: 1217416768
+  stars: 3355
+  forks: 278
+  open_issues: 156
+  license: MIT
+  topics:
+    - agents
+    - ai-agent
+    - browser-automation
+    - cli
+    - gbnf
+    - gguf
+    - hermes-agent
+    - llama-cpp
+    - llm
+    - local-ai-agent
+    - local-first
+    - local-llm
+    - mcp
+    - nodejs
+    - openai
+    - openclaw
+    - playwright
+    - tui
+    - typescript
+  last_commit: "2026-11-06T14:29:19Z"
+  latest_release: v0.6.13
+  latest_release_date: "2026-10-28T18:55:03Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/AtomicBot-ai/atomic-agent#quick-install"
+first_task: "Using the local model option, give it a folder with two short notes. Ask which note mentions a deadline and have it quote the supporting line."

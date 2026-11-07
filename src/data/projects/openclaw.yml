@@ -1,7 +1,7 @@
 name: OpenClaw
 slug: openclaw
-tagline: The OG self-hosted AI super-agent
-description: The original. Self-hosted AI super-agent platform. Formerly Clawdbot, then Moltbot. The project that started it all.
+tagline: "Personal assistant you can reach from a chat app"
+description: "OpenClaw runs a personal assistant on a computer you control. You can give it tasks through supported chat apps or a browser."
 language: typescript
 category:
   - reference
@@ -9,7 +9,7 @@ category:
 github: openclaw/openclaw
 status: active
 tier: 1
-highlight: On a rocket ship full of stars. The one that started the molt.
+highlight: "Choose which messaging accounts and tools the assistant can access."
 emoji: 🦞
 mentions:
   - type: tweet
@@ -34,14 +34,17 @@ mentions:
     source: TechCrunch
 platform:
   - server
+  - messaging
+  - cli
 requires_llm: true
 mcp_support: true
 ecosystem_role: reference
 added: 2026-02-25T00:00:00.000Z
 github_data:
-  stars: 374030
-  forks: 77738
-  open_issues: 7284
+  repository_id: 1103012935
+  stars: 394108
+  forks: 82817
+  open_issues: 7655
   license: MIT
   topics:
     - ai
@@ -51,8 +54,12 @@ github_data:
     - openclaw
     - own-your-data
     - personal
-  last_commit: "2026-05-23T04:10:21Z"
-  latest_release: v2026.5.20
-  latest_release_date: "2026-05-21T20:44:50Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:49.830Z"
+  last_commit: "2026-11-07T14:52:13Z"
+  latest_release: v2026.11.1
+  latest_release_date: "2026-11-05T09:48:37Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/openclaw/openclaw#quick-start"
+first_task: "From your own chat, schedule a short test briefing five minutes from now and name the destination. Check its job history and whether your phone actually received it."

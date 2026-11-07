@@ -1,7 +1,7 @@
 name: Kai
 slug: kai
-tagline: OpenClaw alternative in your pocket
-description: A mobile-first OpenClaw alternative built with Kotlin Multiplatform and Jetpack Compose. Runs on Android and iOS with any OpenAI-compatible endpoint. The first mobile-native entry in the OpenClaw ecosystem.
+tagline: "A personal assistant for phones, desktops and browsers"
+description: "Kai is a personal assistant with apps for phones and computers. It supports memory, reminders and connecting external tools."
 language: kotlin
 category:
   - mobile
@@ -9,19 +9,20 @@ category:
 github: SimonSchubert/Kai
 website: https://simonschubert.github.io/Kai/
 status: active
-tier: 1
+tier: 3
 highlight: First mobile-native OpenClaw alternative — Kotlin Multiplatform for Android and iOS
 emoji: 📱
 platform:
   - mobile
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: derivative
 added: 2026-03-05T00:00:00.000Z
 github_data:
-  stars: 833
-  forks: 110
-  open_issues: 57
+  repository_id: 909717778
+  stars: 1341
+  forks: 214
+  open_issues: 133
   license: Apache-2.0
   topics:
     - ai
@@ -35,8 +36,12 @@ github_data:
     - litert
     - openai-compatible
     - openclaw
-  last_commit: "2026-05-22T22:58:39Z"
-  latest_release: v2.6.2
-  latest_release_date: "2026-05-20T22:58:18Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:39.926Z"
+  last_commit: "2026-11-07T06:09:19Z"
+  latest_release: v3.3.0
+  latest_release_date: "2026-10-02T20:43:15Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/SimonSchubert/Kai#installation"
+first_task: "Ask Kai to make a three-question quiz about a short paragraph you paste into chat. Tap through the answers and compare its scoring with the paragraph."

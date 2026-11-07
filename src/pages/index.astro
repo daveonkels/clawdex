@@ -1,474 +1,252 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import DataStamp from '../components/DataStamp.astro';
 import MomentumSparkline from '../components/MomentumSparkline.astro';
+import { verifiedSetup } from '../lib/agent-choice';
+import { languageLabel } from '../lib/constants';
 import { loadProjects, getUniqueLanguages, formatStars } from '../lib/projects';
 import { loadLeaderboard, getIndexableComparePairs } from '../lib/compare';
-import { getAverageGrowth7d } from '../lib/momentum.js';
-import fs from 'node:fs';
 
 const projects = await loadProjects();
+const { generated } = loadLeaderboard();
+const available = projects.filter(p => p.github_data?.availability !== 'unavailable' && p.status !== 'archived');
+const unavailable = projects.filter(p => p.github_data?.availability === 'unavailable' || p.status === 'archived');
+const directory = [...available, ...unavailable];
 const languages = getUniqueLanguages(projects);
-
-// Momentum ticker data
-const leaderboard = loadLeaderboard();
-const movers = leaderboard.entries
-  .filter(e => e.star_growth_7d && e.star_growth_7d > 0)
-  .sort((a, b) => (b.star_growth_7d ?? 0) - (a.star_growth_7d ?? 0));
-const averageGrowth7d = getAverageGrowth7d(leaderboard.entries);
-const lbRaw = JSON.parse(fs.readFileSync('src/data/generated/leaderboard.json', 'utf-8'));
-const generatedDate = new Date(lbRaw.generated);
-
-// Top comparison pairs
-const indexablePairs = getIndexableComparePairs(projects);
-const projectMap = new Map(projects.map(p => [p.slug, p]));
-const topOpenClawPairs = indexablePairs
-  .filter((pair) => pair.slugA === 'openclaw' || pair.slugB === 'openclaw')
-  .slice(0, 6);
-const topEditorialPairs = indexablePairs
-  .filter((pair) => pair.slugA !== 'openclaw' && pair.slugB !== 'openclaw')
-  .slice(0, 6);
-const topComparePairs = [...topOpenClawPairs, ...topEditorialPairs];
-
-// Homepage sections
-const featured = projects.slice(0, 5);
-const directory = projects;
-
-// Stats for hero
-const totalStars = projects.reduce((sum, p) => sum + (p.stars ?? 0), 0);
-const uniqueLangs = new Set(projects.map(p => p.language)).size;
-const topGrowth = movers[0];
-const homepageTitle = `OpenClaw Alternatives, Forks & Comparisons (${projects.length} Projects) | Shelldex`;
-const homepageDescription = `Compare ${projects.length} OpenClaw alternatives, forks, and inspired projects by stars, growth, language, and health. Find the best OpenClaw alternative for self-hosted agents, including Hermes Agent, AstrBot, ZeroClaw, and more.`;
-
-const homepageJsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    '@id': 'https://shelldex.com/#website',
-    url: 'https://shelldex.com/',
-    name: 'Shelldex',
-    alternateName: 'The OpenClaw Ecosystem Registry',
-    description: homepageDescription,
-    inLanguage: 'en',
-    publisher: { '@type': 'Person', name: 'Dave Onkels', url: 'https://onk.io' },
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: 'https://shelldex.com/?q={search_term_string}',
-      'query-input': 'required name=search_term_string',
-    },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Dataset',
-    '@id': 'https://shelldex.com/#dataset',
-    name: 'Shelldex — OpenClaw Ecosystem Registry',
-    description: `Registry of ${projects.length} personal AI agent frameworks derived from or alternative to OpenClaw, with GitHub metadata, health metrics, and 7-day star growth.`,
-    url: 'https://shelldex.com/',
-    license: 'https://creativecommons.org/licenses/by/4.0/',
-    creator: { '@type': 'Person', name: 'Dave Onkels', url: 'https://onk.io' },
-    keywords: ['OpenClaw', 'agents', 'AI', 'personal AI', 'self-hosted', 'registry'],
-    distribution: [
-      { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: 'https://shelldex.com/api/projects.json' },
-      { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: 'https://shelldex.com/api/leaderboard.json' },
-      { '@type': 'DataDownload', encodingFormat: 'text/plain', contentUrl: 'https://shelldex.com/llms-full.txt' },
-      { '@type': 'DataDownload', encodingFormat: 'text/markdown', contentUrl: 'https://shelldex.com/md/index.md' },
-    ],
-    variableMeasured: ['stars', 'forks', 'open_issues', 'star_growth_7d', 'last_commit', 'license', 'language'],
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'Top OpenClaw projects by stars',
-    numberOfItems: Math.min(10, projects.length),
-    itemListOrder: 'https://schema.org/ItemListOrderDescending',
-    itemListElement: projects.slice(0, 10).map((p, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      url: `https://shelldex.com/projects/${p.slug}/`,
-      name: p.name,
-    })),
-  },
+const totalStars = available.reduce((sum, p) => sum + (p.stars ?? 0), 0);
+const projectMap = new Map(available.map(p => [p.slug, p]));
+const comparisons = getIndexableComparePairs(projects);
+const featuredPairs = ['hermes-vs-openclaw','astrbot-vs-openclaw','nullclaw-vs-zeroclaw']
+  .map(id => comparisons.find(pair => pair.canonical === id))
+  .filter(pair => pair && projectMap.has(pair.slugA) && projectMap.has(pair.slugB));
+const situations = [
+  { key: 'desk', label:'At my desk', platforms:['desktop','browser','cli'] },
+  { key: 'always-on', label:'On an always-on computer', platforms:['server','serverless','cloud'] },
+  { key: 'phone', label:'On my phone', platforms:['mobile'] },
+  { key: 'chat', label:'In a chat app', platforms:['messaging'] },
+  { key: 'tiny', label:'On tiny hardware', platforms:['embedded','edge'] },
 ];
-const growthShortcutPairs = [
-  { slug: 'hermes-vs-openclaw', label: 'Hermes Agent vs OpenClaw' },
-  { slug: 'astrbot-vs-openclaw', label: 'AstrBot vs OpenClaw' },
-  { slug: 'nanoclaw-vs-nemoclaw', label: 'NanoClaw vs NemoClaw' },
-  { slug: 'openclaw-vs-openfang', label: 'OpenClaw vs OpenFang' },
-].filter((entry) => indexablePairs.some((pair) => pair.canonical === entry.slug));
-
-// Updated label
-const now = new Date();
-const diffMs = now.getTime() - generatedDate.getTime();
-const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-const updatedLabel = diffHours < 1 ? 'just now' : diffHours < 24 ? `${diffHours}h ago` : `${Math.floor(diffMs / (1000 * 60 * 60 * 24))}d ago`;
-
-// Language dot colors
-const langDot: Record<string, string> = {
-  typescript: 'bg-blue-500',
-  rust: 'bg-orange-500',
-  python: 'bg-yellow-500',
-  go: 'bg-cyan-600',
-  c: 'bg-gray-500',
-  bash: 'bg-green-600',
-  zig: 'bg-amber-500',
-  javascript: 'bg-yellow-400',
-  kotlin: 'bg-purple-500',
-  multi: 'bg-ledger-faint',
-};
+const setupsBySlug = new Map(projects.map(p => [p.slug, verifiedSetup(p)]));
+const usesBySlug = new Map(projects.map(p => {
+  const setup = setupsBySlug.get(p.slug)?.setup;
+  const uses = situations.filter(s =>
+    p.platform?.some(platform => s.platforms.includes(platform)) ||
+    (s.key === 'desk' && (setup === 'Desktop installer' || setup === 'Command line')));
+  return [p.slug, uses.map(s => s.key)];
+}));
+const title = 'Find a personal AI agent: OpenClaw, Hermes and alternatives | Shelldex';
+const description = 'Find a runnable personal AI agent for your computer, phone or chat app. Compare how agents run, see their activity and try a first task.';
+const json = [
+  {'@context':'https://schema.org','@type':'WebSite','@id':'https://shelldex.com/#website',name:'Shelldex',url:'https://shelldex.com/',description,
+    potentialAction:{'@type':'SearchAction',target:'https://shelldex.com/?q={search_term_string}#directory','query-input':'required name=search_term_string'}},
+  {'@context':'https://schema.org','@type':'Dataset','@id':'https://shelldex.com/#dataset',name:'Shelldex agent directory',description,
+    url:'https://shelldex.com/',license:'https://creativecommons.org/licenses/by/4.0/',creator:{'@type':'Person',name:'Dave Onkels',url:'https://onk.io'},
+    distribution:[{ '@type':'DataDownload',encodingFormat:'application/json',contentUrl:'https://shelldex.com/api/projects.json' },
+      { '@type':'DataDownload',encodingFormat:'application/json',contentUrl:'https://shelldex.com/api/leaderboard.json' }]},
+];
 ---
-
-<Layout
-  title={homepageTitle}
-  description={homepageDescription}
-  markdownUrl="https://shelldex.com/md/index.md"
-  jsonUrl="https://shelldex.com/api/projects.json"
-  jsonLd={homepageJsonLd}
->
-
-  {/* ── Trending Bar ── */}
-  {movers.length > 0 && (
-    <div class="border-b border-ledger-border bg-ledger-surface">
-      <div class="max-w-[72rem] mx-auto px-5 sm:px-8 py-4">
-        <div class="flex items-end justify-between gap-4 mb-3">
-          <div>
-            <p class="text-[10px] font-mono uppercase tracking-[0.24em] text-ledger-faint">Momentum Watch</p>
-            <p class="text-sm text-ledger-whisper mt-1">7-day GitHub star velocity against the ecosystem average.</p>
-          </div>
-          <span class="text-[10px] font-mono uppercase tracking-[0.18em] text-ledger-whisper hidden sm:inline">Updated {updatedLabel}</span>
-        </div>
-        <div class="relative min-w-0">
-          <div class="absolute inset-y-0 right-0 w-12 z-10 pointer-events-none bg-gradient-to-l from-ledger-surface to-transparent"></div>
-          <div class="flex gap-3 overflow-x-auto trending-scroll pr-12 pb-1">
-            {movers.slice(0, 8).map((m) => {
-              const proj = projectMap.get(m.slug);
-              if (!proj) return null;
-
-              return (
-                <a
-                  href={`/projects/${proj.slug}/`}
-                  class="shrink-0 w-[250px] rounded-2xl border border-ledger-border bg-white/70 px-4 py-3 hover:border-ledger-red/20 hover:bg-ledger-red-bg transition-colors"
-                >
-                  <div class="flex items-center gap-2 min-w-0">
-                    <span class="text-xl">{proj.emoji}</span>
-                    <div class="min-w-0">
-                      <p class="font-semibold text-ledger-text truncate">{proj.name}</p>
-                      <p class="text-xs text-ledger-faint truncate">{proj.tagline}</p>
-                    </div>
-                  </div>
-                  <div class="mt-3">
-                    <MomentumSparkline project={proj} averageGrowth7d={averageGrowth7d} compact={true} label="7d pace" />
-                  </div>
-                </a>
-              );
-            })}
-          </div>
-        </div>
+<Layout title={title} description={description} markdownUrl="https://shelldex.com/md/index.md" jsonUrl="https://shelldex.com/api/projects.json" jsonLd={json}>
+  <section class="wrap hero">
+    <div>
+      <h1>Every shell<br/>in the sea<span class="text-ledger-red">.</span></h1>
+      <p class="intro">Find a personal AI agent that works where you do. Start with your computer, phone or favorite chat app.</p>
+      <div class="actions">
+        <a class="sd-primary" href="#directory">Find an agent ↓</a>
       </div>
     </div>
-  )}
-
-  {/* ── Hero ── */}
-  <section class="max-w-[72rem] mx-auto px-5 sm:px-8 pt-12 sm:pt-20 pb-10 sm:pb-16">
-    <div class="grid lg:grid-cols-[1fr_280px] gap-8 lg:gap-16 items-start">
-      <div>
-        <h1 class="font-display text-[clamp(2.8rem,7vw,5.5rem)] font-bold leading-[0.92] tracking-[-0.03em] text-ledger-text mb-6">
-          Every shell<br/>in the sea<span class="text-ledger-red">.</span>
-        </h1>
-        <p class="text-lg sm:text-xl text-ledger-muted max-w-lg leading-relaxed mb-8">
-          The complete registry of OpenClaw clones, forks, and alternatives. {projects.length} projects tracked by stars, growth, and health.
-        </p>
-        {growthShortcutPairs.length > 0 && (
-          <div class="mb-8">
-            <p class="text-xs font-mono uppercase tracking-[0.22em] text-ledger-faint mb-3">Most searched comparisons</p>
-            <div class="flex flex-wrap gap-2.5">
-              {growthShortcutPairs.map((pair) => (
-                <a
-                  href={`/compare/${pair.slug}/`}
-                  class="inline-flex items-center gap-2 rounded-full border border-ledger-border bg-ledger-surface px-3 py-1.5 text-sm text-ledger-faint hover:text-ledger-red hover:border-ledger-red/20 transition-all"
-                >
-                  {pair.label}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-        <div class="flex flex-wrap items-center gap-3">
-          <a
-            href="#directory"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-ledger-red text-ledger-surface font-semibold rounded-md hover:bg-ledger-red-hover transition-colors text-sm"
-          >
-            Browse the registry
-            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-          </a>
-          <a href="/submit/" class="text-sm text-ledger-faint hover:text-ledger-red transition-colors">
-            Submit a project &rarr;
-          </a>
-        </div>
-      </div>
-      <aside class="lg:mt-6">
-        <div class="grid grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-5">
-          <div>
-            <div class="font-mono text-3xl sm:text-4xl font-bold text-ledger-text tracking-tight">{projects.length}</div>
-            <div class="text-xs text-ledger-faint uppercase tracking-wider mt-0.5">Projects tracked</div>
-          </div>
-          <div>
-            <div class="font-mono text-3xl sm:text-4xl font-bold text-ledger-text tracking-tight">{formatStars(totalStars)}</div>
-            <div class="text-xs text-ledger-faint uppercase tracking-wider mt-0.5">Combined stars</div>
-          </div>
-          <div>
-            <div class="font-mono text-3xl sm:text-4xl font-bold text-ledger-text tracking-tight">{uniqueLangs}</div>
-            <div class="text-xs text-ledger-faint uppercase tracking-wider mt-0.5">Languages</div>
-          </div>
-          {topGrowth && (
-            <div>
-              <div class="font-mono text-3xl sm:text-4xl font-bold text-ledger-red tracking-tight">+{topGrowth.star_growth_7d?.toLocaleString()}</div>
-              <div class="text-xs text-ledger-faint uppercase tracking-wider mt-0.5">{topGrowth.name} this week</div>
-            </div>
-          )}
-        </div>
-      </aside>
-    </div>
+    <aside class="numbers">
+      <dl>
+        <div><dt>Available agents</dt><dd>{available.length}</dd></div>
+        <div><dt>GitHub stars</dt><dd>{formatStars(totalStars)}</dd></div>
+        <div><dt>Languages</dt><dd>{getUniqueLanguages(available).length}</dd></div>
+      </dl>
+      <p>Stars measure interest in the available projects. One person can star several agents.</p>
+      {generated && <DataStamp date={generated} />}
+    </aside>
   </section>
 
-  {/* ── Headliners ── */}
-  <section class="max-w-[72rem] mx-auto px-5 sm:px-8 pb-14">
-    <div class="flex items-center gap-4 mb-10">
-      <span class="text-xs tracking-[0.25em] uppercase font-bold text-ledger-red whitespace-nowrap">Headliners</span>
-      <div class="flex-1 h-[3px] bg-ledger-red"></div>
+  <section id="directory" class="wrap directory" aria-labelledby="directory-title">
+    <header class="section-head">
+      <h2 id="directory-title">Agent directory</h2>
+    </header>
+    <fieldset id="use-filters" class="filters">
+      <legend>Where do you want to use it?</legend>
+      <div class="chip-strip">{[{key:'all',label:'Anywhere'}, ...situations].map(s =>
+        <button type="button" class="chip" data-use={s.key} aria-pressed={s.key === 'all' ? 'true' : 'false'}><span class="check" aria-hidden="true">✓</span>{s.label}</button>
+      )}</div>
+    </fieldset>
+    <div class="search-controls">
+      <label>Search agents<input type="search" id="v2-search" placeholder="Name or feature, e.g. memory" /></label>
+      <label>Setup<select id="setup-filter">
+        <option value="all">Any setup</option>
+        <option value="Desktop installer">Desktop installer</option>
+        <option value="Command line">Command line</option>
+        <option value="Docker">Docker</option>
+      </select></label>
+      <label>Model<select id="model-filter"><option value="all">Any model option</option><option value="local">Can run a model locally</option></select></label>
+      <label>Sort by<select id="v2-sort"><option value="stars">Most stars</option><option value="name">Name A–Z</option><option value="recent">Recently added</option></select></label>
     </div>
-
-    <div class="space-y-0">
-      {featured.map((p, i) => {
-        const rank = String(i + 1).padStart(2, '0');
-        const growth = movers.find(m => m.slug === p.slug);
-        return (
-          <a href={`/projects/${p.slug}/`} class="group flex items-center gap-4 sm:gap-6 py-6 border-b-2 border-ledger-border hover:bg-ledger-hover transition-colors">
-            <span class="text-[3rem] sm:text-[4rem] font-mono font-bold text-ledger-red/20 leading-none group-hover:text-ledger-red transition-colors w-16 sm:w-24 text-right shrink-0">
-              {rank}
-            </span>
-            <span class="text-3xl sm:text-4xl shrink-0">{p.emoji}</span>
-            <div class="flex-1 min-w-0">
-              <div class="font-display text-xl sm:text-2xl font-bold text-ledger-text">{p.name}</div>
-              <div class="text-ledger-faint text-sm truncate">{p.tagline}</div>
-            </div>
-            <div class="text-right shrink-0">
-              <div class="font-mono text-2xl sm:text-3xl font-bold text-ledger-text tabular-nums">{formatStars(p.stars ?? 0)}</div>
-              {growth?.star_growth_7d && growth.star_growth_7d > 0 && (
-                <div class="text-ledger-red text-xs font-mono">+{formatStars(growth.star_growth_7d)} /wk</div>
-              )}
-            </div>
-          </a>
-        );
+    <details class="language-options"><summary>Filter by programming language</summary>
+      <div class="chip-strip" id="v2-lang-filters" role="group" aria-label="Language">{['all', ...languages].map(lang =>
+        <button class="chip" type="button" data-lang={lang} aria-pressed={lang === 'all' ? 'true' : 'false'}>
+          <span class="check" aria-hidden="true">✓</span>{lang === 'all' ? 'All languages' : languageLabel[lang] ?? lang}
+          <span class="chip-count">{lang === 'all' ? projects.length : projects.filter(p => p.language === lang).length}</span>
+        </button>
+      )}</div>
+    </details>
+    <p class="filter-help" id="filter-help" hidden>Setup and local-model filters show options documented in the profiles. An agent may support other setups.</p>
+    <div class="list-context"><strong id="v2-results-count" aria-live="polite">{directory.length} projects</strong>
+      <span>Each line shows one agent’s daily star additions over the last 30 complete days.</span>
+      <button id="clear-filters" type="button" hidden>Clear filters</button>
+    </div>
+    <div class="project-list" id="v2-project-list">
+      {directory.map(p => {
+        const historical = p.github_data?.availability === 'unavailable' || p.status === 'archived';
+        const setup = setupsBySlug.get(p.slug);
+        const tagline = p.tagline;
+        return <a href={`/projects/${p.slug}/`} class="v2-row"
+          data-language={p.language} data-name={p.name} data-stars={p.stars ?? 0} data-added={p.added}
+          data-unavailable={String(historical)} data-uses={usesBySlug.get(p.slug)?.join(' ')}
+          data-setup={setup?.setup ?? ''} data-cli={p.platform?.includes('cli') ? 'yes' : 'no'} data-local={setup?.localModel ? 'yes' : 'no'}
+          data-search={[p.name, p.slug, p.description, p.tagline, languageLabel[p.language], setup?.setup, setup?.localModel, p.mcp_support ? 'MCP Model Context Protocol' : '', ...(p.platform ?? []), ...(p.category ?? [])].join(' ').toLowerCase()}>
+          <span class="agent-name"><span aria-hidden="true">{p.emoji}</span><strong>{p.name}</strong></span>
+          <span class="agent-note">{historical ? (p.github_data?.availability === 'unavailable' ? 'Unavailable · last checked ' : 'Archived · last checked ') + (p.github_data?.last_checked ?? p.github_data?.last_enriched)?.slice(0,10) : <><span class="sr-only">Project summary: </span>{tagline}</>}</span>
+          <span class="language">{languageLabel[p.language] ?? p.language}{p.mcp_support && <abbr title="Model Context Protocol connects agents to other software">MCP</abbr>}</span>
+          <span class="activity">{historical ? 'Historical record' : <MomentumSparkline project={p} asOf={generated} inline />}</span>
+          <span class="stars" title={(p.stars ?? 0).toLocaleString('en-US') + ' GitHub stars'}>{formatStars(p.stars ?? 0)} <span aria-hidden="true">★</span><span class="sr-only"> stars</span></span>
+        </a>;
       })}
     </div>
+    <p id="directory-empty" hidden>No agents match those choices. Clear a filter or try a different search.</p>
   </section>
 
-  {/* ── Full Registry ── */}
-  <section id="directory" class="max-w-[72rem] mx-auto px-5 sm:px-8 pb-16">
-    <div class="flex items-baseline gap-3 mb-5">
-      <h2 class="font-display text-sm font-bold text-ledger-red uppercase tracking-widest">Full Registry</h2>
-      <span class="text-xs text-ledger-faint font-mono" id="v2-results-count">{directory.length}</span>
-      <div class="flex-1 border-t border-ledger-border"></div>
-    </div>
-
-    {/* Filters: single row */}
-    <div class="flex flex-col sm:flex-row gap-3 mb-6" id="v2-filter-bar">
-      <div class="relative flex-1 max-w-sm">
-        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ledger-whisper" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input
-          type="text"
-          id="v2-search"
-          placeholder="Search..."
-          class="w-full pl-9 pr-3 py-2 bg-ledger-surface border border-ledger-border rounded-md text-sm text-ledger-text placeholder-ledger-whisper focus:outline-none focus:border-ledger-red/40 focus:ring-1 focus:ring-ledger-red/20 transition-all"
-        />
-      </div>
-      <div class="flex flex-wrap items-center gap-1.5" id="v2-lang-filters">
-        <button class="v2-lang-btn v2-lang-active" data-lang="all">All</button>
-        {languages.map(lang => (
-          <button class="v2-lang-btn" data-lang={lang}>
-            <span class={`inline-block w-1.5 h-1.5 rounded-full ${langDot[lang] || 'bg-ledger-faint'} mr-1`}></span>
-            {lang}
-          </button>
-        ))}
-      </div>
-      <select id="v2-sort" aria-label="Sort" class="bg-ledger-surface border border-ledger-border rounded-md text-sm text-ledger-muted px-2.5 py-2 focus:outline-none focus:border-ledger-red/40 cursor-pointer">
-        <option value="stars">Stars</option>
-        <option value="name">A-Z</option>
-        <option value="recent">Recent</option>
-      </select>
-    </div>
-
-    {/* Compact list */}
-    <div class="border border-ledger-border rounded-lg bg-ledger-surface overflow-hidden" id="v2-project-list">
-      {directory.map((p, i) => {
-        const growth = movers.find(m => m.slug === p.slug);
-        return (
-          <a
-            href={`/projects/${p.slug}/`}
-            class={`v2-row group flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-3.5 hover:bg-ledger-hover transition-colors ${i < directory.length - 1 ? 'border-b border-ledger-border/60' : ''}`}
-            data-language={p.language}
-            data-status={p.status}
-            data-stars={p.stars ?? 0}
-            data-name={p.name}
-            data-added={p.added ?? ''}
-          >
-            <span class="text-xl sm:text-2xl shrink-0 w-8 text-center">{p.emoji}</span>
-            <div class="flex-1 min-w-0 flex items-center gap-3 sm:gap-4">
-              <div class="min-w-0 flex-1 flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-3">
-                <span class="font-display font-semibold text-ledger-text group-hover:text-ledger-red transition-colors whitespace-nowrap">{p.name}</span>
-                <span class="text-sm text-ledger-faint truncate hidden sm:inline">{p.tagline}</span>
-              </div>
-              <div class="shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
-                <MomentumSparkline project={p} averageGrowth7d={averageGrowth7d} inline={true} />
-              </div>
-            </div>
-            <div class="flex items-center gap-3 sm:gap-4 shrink-0">
-              {p.mcp_support && (
-                <span class="text-[10px] font-bold text-ledger-teal uppercase tracking-wider hidden sm:inline">MCP</span>
-              )}
-              <span class="inline-flex items-center gap-1 text-xs font-mono text-ledger-faint">
-                <span class={`w-1.5 h-1.5 rounded-full ${langDot[p.language] || 'bg-ledger-faint'}`}></span>
-                <span class="hidden sm:inline">{p.language}</span>
-              </span>
-              {growth && growth.star_growth_7d && growth.star_growth_7d > 0 && (
-                <span class="font-mono text-[11px] text-ledger-red tabular-nums hidden md:inline">+{growth.star_growth_7d.toLocaleString()}</span>
-              )}
-              <span class="font-mono text-sm text-ledger-text tabular-nums w-14 text-right">{formatStars(p.stars ?? 0)} <span class="text-ledger-coral text-xs">&#9733;</span></span>
-            </div>
-          </a>
-        );
-      })}
+  <section class="wrap explore">
+    <div class="section-head"><h2>Compare two agents</h2><a href="/compare/">Choose a pair →</a></div>
+    <div class="pairs">{featuredPairs.map(pair => pair && <a href={`/compare/${pair.canonical}/`}>{projectMap.get(pair.slugA)?.name} vs {projectMap.get(pair.slugB)?.name} →</a>)}</div>
+    <div class="links">
+      <a href="/analysis/#after-the-spike"><strong>After the spike</strong><span>Which agents drew steady interest, and which saw a sudden rush?</span></a>
+      <a href="/leaderboard/"><strong>Leaderboard</strong><span>Compare stars, recent activity and issue load.</span></a>
+      <a href="/best-alternatives/"><strong>Alternatives to OpenClaw</strong><span>Pick a shortlist for the task you have in mind.</span></a>
     </div>
   </section>
-
-  {/* ── Popular Comparisons ── */}
-  <section class="max-w-[72rem] mx-auto px-5 sm:px-8 pb-12">
-    <div class="flex items-baseline gap-3 mb-5">
-      <h2 class="font-display text-sm font-bold text-ledger-red uppercase tracking-widest">Comparisons</h2>
-      <a href="/compare/" class="text-xs text-ledger-faint hover:text-ledger-red transition-colors ml-auto">
-        All {indexablePairs.length} comparisons &rarr;
-      </a>
-      <div class="flex-1 border-t border-ledger-border max-w-[30%]"></div>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-      {topComparePairs.map((pair) => (
-        <a
-          href={`/compare/${pair.canonical}/`}
-          class="flex items-center gap-2 rounded-md border border-ledger-border bg-ledger-surface px-3 py-2.5 text-sm text-ledger-muted hover:text-ledger-red hover:border-ledger-red/20 hover:bg-ledger-red-bg transition-all"
-        >
-          <span class="shrink-0">{projectMap.get(pair.slugA)?.emoji}</span>
-          <span class="truncate">{projectMap.get(pair.slugA)?.name} vs {projectMap.get(pair.slugB)?.name}</span>
-          <span class="shrink-0">{projectMap.get(pair.slugB)?.emoji}</span>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  {/* ── Explore ── */}
-  <section class="max-w-[72rem] mx-auto px-5 sm:px-8 pb-8">
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-      <a href="/compare/" class="group rounded-md border border-ledger-border bg-ledger-surface p-4 hover:border-ledger-red/30 hover:bg-ledger-red-bg transition-all">
-        <p class="font-display font-semibold text-sm text-ledger-text group-hover:text-ledger-red transition-colors">Compare</p>
-        <p class="text-xs text-ledger-faint mt-0.5">{Math.round(projects.length * (projects.length - 1) / 2)}+ pairs</p>
-      </a>
-      <a href="/leaderboard/" class="group rounded-md border border-ledger-border bg-ledger-surface p-4 hover:border-ledger-red/30 hover:bg-ledger-red-bg transition-all">
-        <p class="font-display font-semibold text-sm text-ledger-text group-hover:text-ledger-red transition-colors">Leaderboard</p>
-        <p class="text-xs text-ledger-faint mt-0.5">Stars, growth, health</p>
-      </a>
-      <a href="/best-alternatives/" class="group rounded-md border border-ledger-border bg-ledger-surface p-4 hover:border-ledger-red/30 hover:bg-ledger-red-bg transition-all">
-        <p class="font-display font-semibold text-sm text-ledger-text group-hover:text-ledger-red transition-colors">Alternatives</p>
-        <p class="text-xs text-ledger-faint mt-0.5">Ranked with pros & cons</p>
-      </a>
-      <a href="/analysis/" class="group rounded-md border border-ledger-border bg-ledger-surface p-4 hover:border-ledger-red/30 hover:bg-ledger-red-bg transition-all">
-        <p class="font-display font-semibold text-sm text-ledger-text group-hover:text-ledger-red transition-colors">Analysis</p>
-        <p class="text-xs text-ledger-faint mt-0.5">Trends & distribution</p>
-      </a>
-    </div>
-  </section>
-
 </Layout>
-
 <style>
-  .v2-lang-btn {
-    @apply inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium transition-all border border-transparent;
-    color: theme('colors.ledger.faint');
+  .wrap{width:100%;max-width:72rem;margin-inline:auto;padding-inline:1.25rem}
+  .hero{display:grid;gap:2rem;padding-block:3rem}
+  .intro{font-size:1.1rem;line-height:1.5;color:theme('colors.ledger.muted');max-width:36rem;margin:1rem 0}
+  .actions,.section-head,.list-context,.chip-strip,.pairs,.links{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+  .actions a,.section-head a,.pairs a{display:inline-flex;align-items:center;min-height:44px}
+  .section-head a,.pairs a,.list-context button{color:theme('colors.ledger.text');text-decoration:underline;text-underline-offset:.22em}
+  .actions a:hover,.section-head a:hover,.pairs a:hover,.links a:hover strong{text-decoration:underline}
+  .numbers{border-block:1px solid theme('colors.ledger.border');padding:1rem 0}.numbers dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.35rem}
+  .numbers dl div{display:flex;flex-direction:column-reverse;justify-content:flex-end}.numbers dt{font-size:.8125rem;color:theme('colors.ledger.muted')}
+  .numbers dd,.stars,.language,.chip-count,.list-context strong{font-family:theme('fontFamily.mono');font-variant-numeric:tabular-nums}
+  .numbers dd{font-size:clamp(1.35rem,3.4vw,2rem);font-weight:650}.numbers>p{font-size:.8125rem;color:theme('colors.ledger.muted');margin-top:.65rem}
+  .directory{scroll-margin-top:5rem;padding-bottom:2.5rem}.section-head{justify-content:space-between;border-bottom:2px solid theme('colors.ledger.border');margin-bottom:1rem}
+
+  .filters,.language-options{min-width:0}.filters legend,.search-controls label{font-size:.875rem;font-weight:600}
+  .chip-strip{flex-wrap:nowrap;overflow:auto;padding:.4rem .25rem .5rem;gap:.375rem;scrollbar-width:thin}
+  .chip-strip.more-right{mask-image:linear-gradient(to right,#000 calc(100% - 1.2rem),transparent)}
+  .chip{border:1px solid theme('colors.ledger.border');background:theme('colors.ledger.surface');border-radius:2rem;flex:none;padding:.4rem .7rem;min-height:44px;font-size:.8125rem;color:theme('colors.ledger.muted')}
+  .chip[aria-pressed=true]{border-color:theme('colors.ledger.text');color:theme('colors.ledger.text');background:theme('colors.ledger.hover');font-weight:650}
+  .chip .check{display:none}.chip[aria-pressed=true] .check{display:inline;margin-right:.3rem}.chip-count{margin-left:.3rem}
+  .search-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;margin:.75rem 0}
+  .search-controls label{display:flex;flex-direction:column;gap:.3rem;min-width:0}.search-controls input,.search-controls select{width:100%;min-width:0;min-height:44px;border-radius:.4rem;border:1px solid theme('colors.ledger.border');background:theme('colors.ledger.surface');color:theme('colors.ledger.text');padding:.4rem .6rem;font-weight:400}
+  .language-options summary{width:fit-content;padding:.7rem 0;min-height:44px;cursor:pointer;font-size:.875rem;text-decoration:underline;text-underline-offset:.18em}
+  .list-context,.filter-help{font-size:.8125rem;color:theme('colors.ledger.muted')}.list-context{gap:.35rem 1rem;margin:.6rem 0}.list-context button{min-height:44px}
+  .project-list{background:theme('colors.ledger.surface');border:1px solid theme('colors.ledger.border');border-radius:.75rem;overflow:hidden}
+  .v2-row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name stars" "note note" "lang activity";align-items:center;gap:.3rem .55rem;padding:.8rem;border-bottom:1px solid theme('colors.ledger.border')}
+  .v2-row:last-child{border:none}.v2-row:hover{background:theme('colors.ledger.hover')}.v2-row:focus-visible{outline-offset:-3px}
+  .agent-name{grid-area:name;display:flex;align-items:center;gap:.5rem;min-width:0;font-family:theme('fontFamily.display');font-size:1rem}
+  .agent-name strong,.agent-note{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.agent-name strong{min-width:0}.agent-note{grid-area:note;color:theme('colors.ledger.muted');font-size:.8125rem}
+  .language{grid-area:lang;display:flex;align-items:center;flex-wrap:wrap;gap:.3rem;color:theme('colors.ledger.muted');font-size:.8125rem}
+  abbr{font-family:theme('fontFamily.body');font-size:.75rem}.activity{grid-area:activity;justify-self:end;font-size:.8125rem;color:theme('colors.ledger.muted')}.stars{grid-area:stars;text-align:right;white-space:nowrap;font-size:.875rem;font-weight:600}
+  .v2-row[data-unavailable=true] .agent-note{font-weight:600}.v2-row[hidden]{display:none}
+  #directory-empty{padding:1.25rem;background:theme('colors.ledger.surface');border-radius:.5rem}
+  .explore{padding-bottom:3rem}.pairs{gap:.25rem 1.1rem}.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));margin-top:1rem}
+  .links a{align-self:stretch;display:grid;align-content:start;gap:.3rem;padding:1rem;border:1px solid theme('colors.ledger.border');border-radius:.65rem;background:theme('colors.ledger.surface')}
+  .links span{color:theme('colors.ledger.muted');font-size:.875rem}
+  @media(min-width:640px){.wrap{padding-inline:2rem}.search-controls{grid-template-columns:2fr repeat(3,minmax(0,1fr))}.hero{padding-block:3.5rem 2.5rem}}
+  @media(min-width:860px){.hero{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:center;gap:3rem}
+    .v2-row{grid-template-areas:"name note lang activity stars";grid-template-columns:minmax(7.5rem,1.1fr) minmax(5rem,1.6fr) minmax(5.8rem,.75fr) minmax(11rem,auto) 4.7rem;gap:1rem;padding:1rem}
   }
-  .v2-lang-btn:hover {
-    color: theme('colors.ledger.red');
-    background: theme('colors.ledger.red-bg');
-  }
-  .trending-scroll {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  .trending-scroll::-webkit-scrollbar {
-    display: none;
-  }
-  .v2-lang-active {
-    color: theme('colors.ledger.red') !important;
-    background: theme('colors.ledger.red-bg');
-    border-color: theme('colors.ledger.red / 20%');
-  }
+  @media(max-width:380px){.activity :global(svg){width:50px}}
 </style>
-
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('v2-search') as HTMLInputElement;
-    const sortSelect = document.getElementById('v2-sort') as HTMLSelectElement;
-    const rows = document.querySelectorAll<HTMLElement>('.v2-row');
-    const langBtns = document.querySelectorAll<HTMLButtonElement>('.v2-lang-btn');
-    const countEl = document.getElementById('v2-results-count');
-
-    let activeLang = 'all';
-    let searchQuery = '';
-
-    function applyFilters() {
-      let visible = 0;
-      rows.forEach(row => {
-        const lang = row.dataset.language || '';
-        const text = row.textContent?.toLowerCase() || '';
-        const matchLang = activeLang === 'all' || lang === activeLang;
-        const matchSearch = !searchQuery || text.includes(searchQuery.toLowerCase());
-        const show = matchLang && matchSearch;
-        row.style.display = show ? '' : 'none';
-        if (show) visible++;
-      });
-      if (countEl) countEl.textContent = String(visible);
+  const search = document.querySelector<HTMLInputElement>('#v2-search')!;
+  const setup = document.querySelector<HTMLSelectElement>('#setup-filter')!;
+  const model = document.querySelector<HTMLSelectElement>('#model-filter')!;
+  const sort = document.querySelector<HTMLSelectElement>('#v2-sort')!;
+  const list = document.querySelector<HTMLElement>('#v2-project-list')!;
+  const rows = Array.from(list.querySelectorAll<HTMLElement>('.v2-row'));
+  const reset = document.querySelector<HTMLButtonElement>('#clear-filters')!;
+  const count = document.querySelector('#v2-results-count')!;
+  const uses = Array.from(document.querySelectorAll<HTMLButtonElement>('button[data-use]'));
+  const langs = Array.from(document.querySelectorAll<HTMLButtonElement>('button[data-lang]'));
+  let use = 'all', lang = 'all';
+  // Encode reader choices so a filtered shortlist can be bookmarked or shared.
+  function render(writeUrl = true) {
+    const query = search.value.trim().toLowerCase();
+    for (const button of uses) button.setAttribute('aria-pressed', String(button.dataset.use === use));
+    for (const button of langs) button.setAttribute('aria-pressed', String(button.dataset.lang === lang));
+    const filtered = query || lang !== 'all' || use !== 'all' || setup.value !== 'all' || model.value !== 'all';
+    let visible = 0;
+    for (const row of rows) {
+      const data = row.dataset;
+      const matchSetup = setup.value === 'all' || data.setup === setup.value || (setup.value === 'Command line' && data.cli === 'yes');
+      row.hidden = !((data.search ?? '').includes(query) && (lang === 'all' || lang === data.language) &&
+        (use === 'all' || (data.uses ?? '').split(' ').includes(use)) && matchSetup && (model.value === 'all' || data.local === 'yes'));
+      if (!row.hidden) visible++;
     }
-
-    function sortRows() {
-      const list = document.getElementById('v2-project-list')!;
-      const sorted = Array.from(rows).sort((a, b) => {
-        switch (sortSelect?.value) {
-          case 'stars':
-            return (parseInt(b.dataset.stars || '0')) - (parseInt(a.dataset.stars || '0'));
-          case 'name':
-            return (a.dataset.name || '').localeCompare(b.dataset.name || '');
-          case 'recent':
-            return (b.dataset.added || '').localeCompare(a.dataset.added || '');
-          default:
-            return 0;
-        }
-      });
-      sorted.forEach(r => list.appendChild(r));
+    count.textContent = visible + (visible === 1 ? ' project' : ' projects');
+    reset.hidden = !filtered;
+    document.querySelector<HTMLElement>('#directory-empty')!.hidden = visible !== 0;
+    document.querySelector<HTMLElement>('#filter-help')!.hidden = setup.value === 'all' && model.value === 'all';
+    if (writeUrl) {
+      const url = new URL(location.href);
+      for (const [key,value] of Object.entries({q:search.value.trim(),use,lang,setup:setup.value,model:model.value,sort:sort.value})) {
+        if (value && value !== 'all' && !(key === 'sort' && value === 'stars')) url.searchParams.set(key,value);
+        else url.searchParams.delete(key);
+      }
+      history.replaceState(null,'',url);
     }
-
-    langBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        langBtns.forEach(b => b.classList.remove('v2-lang-active'));
-        btn.classList.add('v2-lang-active');
-        activeLang = btn.dataset.lang || 'all';
-        applyFilters();
-      });
+  }
+  function order() {
+    const sorted = [...rows].sort((a,b) => {
+      const unavailable = Number(a.dataset.unavailable === 'true') - Number(b.dataset.unavailable === 'true');
+      if (unavailable) return unavailable;
+      if (sort.value === 'recent') return b.dataset.added!.localeCompare(a.dataset.added!) || a.dataset.name!.localeCompare(b.dataset.name!);
+      if (sort.value === 'stars' && a.dataset.stars !== b.dataset.stars) return Number(b.dataset.stars) - Number(a.dataset.stars);
+      return a.dataset.name!.localeCompare(b.dataset.name!);
     });
-
-    searchInput?.addEventListener('input', () => {
-      searchQuery = searchInput.value;
-      applyFilters();
-    });
-
-    sortSelect?.addEventListener('change', () => {
-      sortRows();
-    });
+    list.append(...sorted);
+  }
+  function restore() {
+    const params = new URLSearchParams(location.search);
+    search.value = params.get('q') || '';
+    use = uses.find(b => b.dataset.use === params.get('use'))?.dataset.use || 'all';
+    lang = langs.find(b => b.dataset.lang === params.get('lang'))?.dataset.lang || 'all';
+    if (lang !== 'all') document.querySelector<HTMLDetailsElement>('.language-options')!.open = true;
+    for (const [select,key] of [[setup,'setup'],[model,'model'],[sort,'sort']] as const) {
+      const value = params.get(key);
+      select.value = Array.from(select.options).some(o => o.value === value) ? value! : select.options[0].value;
+    }
+    order();render(false);
+  }
+  for (const button of uses) button.addEventListener('click', () => { use = button.dataset.use!; render(); });
+  for (const button of langs) button.addEventListener('click', () => { lang = button.dataset.lang!; render(); });
+  [setup,model].forEach(el => el.addEventListener('change', () => render()));
+  sort.addEventListener('change', () => {order();render()});
+  search.addEventListener('input', () => render());
+  reset.addEventListener('click', () => {
+    use = lang = setup.value = model.value = 'all'; search.value = ''; render();search.focus();
   });
+  for (const strip of document.querySelectorAll<HTMLElement>('.chip-strip')) {
+    const indicateOverflow = () => strip.classList.toggle('more-right',
+      strip.clientWidth > 0 && strip.scrollWidth - strip.clientWidth - strip.scrollLeft > 2);
+    strip.addEventListener('scroll', indicateOverflow, { passive: true });
+    new ResizeObserver(indicateOverflow).observe(strip);
+  }
+  window.addEventListener('popstate', restore);
+  restore();
 </script>

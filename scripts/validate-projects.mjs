@@ -2,15 +2,22 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 
-const REQUIRED_FIELDS = ['name', 'slug', 'tagline', 'description', 'language', 'category', 'status', 'highlight', 'emoji', 'added'];
-const VALID_LANGUAGES = ['typescript', 'rust', 'python', 'go', 'c', 'bash', 'zig', 'javascript', 'kotlin', 'multi'];
+const REQUIRED_FIELDS = ['name', 'slug', 'tagline', 'description', 'language', 'category', 'status', 'highlight', 'emoji', 'added', 'ecosystem_role'];
+import { VALID_LANGUAGES } from '../src/lib/project-languages.js';
 const VALID_STATUSES = ['active', 'experimental', 'archived'];
 const VALID_PLATFORMS = ['browser', 'cli', 'cloud', 'desktop', 'edge', 'embedded', 'messaging', 'mobile', 'sdk', 'server', 'serverless', 'web'];
-const VALID_ECOSYSTEM_ROLES = ['reference', 'fork', 'reimplementation', 'derivative', 'infrastructure', 'alternative'];
+const VALID_ECOSYSTEM_ROLES = ['reference', 'fork', 'reimplementation', 'derivative', 'alternative'];
 const VALID_MENTION_TYPES = ['tweet', 'article', 'video', 'post'];
 
 const dir = path.join(process.cwd(), 'src', 'data', 'projects');
 const files = fs.readdirSync(dir).filter(f => f.endsWith('.yml') || f.endsWith('.yaml'));
+
+// Retain the identity of reviewed exclusions so a rename cannot silently restore a tool.
+const retiredDir = new URL('../plans/catalog-review/retired/', import.meta.url);
+const retired = fs.readdirSync(retiredDir).filter(name => name.endsWith('.yml'))
+  .map(name => yaml.load(fs.readFileSync(new URL(name, retiredDir), 'utf8')));
+const excludedRepos = new Set(retired.map(p => p.github.toLowerCase()));
+const excludedIds = new Set(retired.map(p => p.github_data?.repository_id).filter(Boolean));
 
 let errors = 0;
 
@@ -26,13 +33,27 @@ for (const file of files) {
     continue;
   }
 
-  for (const field of REQUIRED_FIELDS) {
+  if (excludedRepos.has(String(data.github).toLowerCase()) || excludedIds.has(data.github_data?.repository_id)) {
+    console.error(`❌ ${file}: this repository was reviewed and excluded from the agents-only catalog`);
+    errors++;
+  }
+
+  const isHistorical = data.status === 'archived' || data.github_data?.availability === 'unavailable';
+  for (const field of isHistorical ? REQUIRED_FIELDS : [...REQUIRED_FIELDS, 'quick_start', 'first_task']) {
     if (!data[field]) {
       console.error(`❌ ${file}: Missing required field "${field}"`);
       errors++;
     }
   }
 
+  if (data.quick_start !== undefined) {
+    try {
+      if (typeof data.quick_start !== 'string' || !['http:', 'https:'].includes(new URL(data.quick_start).protocol)) throw Error();
+    } catch { console.error(`❌ ${file}: quick_start must be a full HTTP(S) URL`); errors++; }
+  }
+  if (data.first_task !== undefined && (typeof data.first_task !== 'string' || !data.first_task.trim())) {
+    console.error(`❌ ${file}: first_task must describe a task`); errors++;
+  }
   if (data.language && !VALID_LANGUAGES.includes(data.language)) {
     console.error(`❌ ${file}: Invalid language "${data.language}" (must be: ${VALID_LANGUAGES.join(', ')})`);
     errors++;
@@ -45,6 +66,11 @@ for (const file of files) {
 
   if (!Array.isArray(data.category)) {
     console.error(`❌ ${file}: "category" must be an array`);
+    errors++;
+  }
+
+  if (data.tier !== undefined && ![1, 3].includes(data.tier)) {
+    console.error(`❌ ${file}: only agent tiers 1 and 3 are supported; ecosystem tools are excluded`);
     errors++;
   }
 

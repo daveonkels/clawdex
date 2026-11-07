@@ -1,332 +1,286 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import fs from 'node:fs';
-import path from 'node:path';
+import DataStamp from '../components/DataStamp.astro';
+import IssueHealth from '../components/IssueHealth.astro';
+import { loadLeaderboard } from '../lib/compare';
+import { languageLabel } from '../lib/constants';
+import { loadProjects, formatStars } from '../lib/projects';
+import { rankingSignals } from '../lib/leaderboard-display';
 
-const leaderboardPath = path.join(process.cwd(), 'src', 'data', 'generated', 'leaderboard.json');
-
-interface HealthIndicators {
-  issues_stars_ratio: number;
-  days_since_last_release: number | null;
-  days_since_last_commit: number;
-}
-
-interface Entry {
-  rank: number;
-  name: string;
-  slug: string;
-  emoji: string;
-  language: string;
-  github: string;
-  stars: number;
-  forks: number;
-  open_issues: number;
-  star_growth_7d: number | null;
-  latest_release: string | null;
-  latest_release_date: string | null;
-  last_commit: string;
-  license: string | null;
-  health: HealthIndicators;
-}
-
-interface Leaderboard {
-  generated: string;
-  count: number;
-  entries: Entry[];
-}
-
-let leaderboard: Leaderboard = { generated: '', count: 0, entries: [] };
-let hasData = false;
-
-try {
-  const raw = fs.readFileSync(leaderboardPath, 'utf-8');
-  leaderboard = JSON.parse(raw);
-  hasData = leaderboard.entries.length > 0;
-} catch {
-  // No leaderboard data yet — will show empty state
-}
-
-// ── Formatters ─────────────────────────────────────────────────────────────────
-function formatStars(n: number): string {
-  if (n >= 10000) return `${Math.round(n / 1000)}k`;
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
-  return String(n);
-}
-
-function formatGrowth(n: number | null): string {
-  if (n === null) return '\u2014';
-  if (n > 0) return `+${formatStars(n)}`;
-  if (n === 0) return '0';
-  return String(n);
-}
-
-function growthClass(n: number | null): string {
-  if (n === null) return 'text-ledger-whisper';
-  if (n > 0) return 'text-ledger-red';
-  if (n < 0) return 'text-lobster-light';
-  return 'text-ledger-faint';
-}
-
-function commitFreshness(days: number): string {
-  if (days <= 7) return 'text-ledger-red';
-  if (days <= 30) return 'text-ledger-muted';
-  return 'text-ledger-whisper';
-}
-
-function healthDot(ratio: number): string {
-  if (ratio < 0.01) return 'text-ledger-red';
-  if (ratio < 0.05) return 'text-amber-700';
-  return 'text-coral';
-}
-
-const langDot: Record<string, string> = {
-  typescript: 'bg-blue-500', rust: 'bg-orange-500', python: 'bg-yellow-500',
-  go: 'bg-cyan-600', c: 'bg-gray-500', bash: 'bg-green-600',
-  zig: 'bg-amber-500', javascript: 'bg-yellow-400', kotlin: 'bg-purple-500',
-  multi: 'bg-ledger-faint',
+const { entries, generated } = loadLeaderboard();
+const projects = await loadProjects();
+const historical = entries.filter(e => e.rank == null || e.availability === 'unavailable' || e.status === 'archived');
+const current = entries.filter(e => e.rank != null && e.availability !== 'unavailable' && e.status !== 'archived');
+const signals = rankingSignals(current, projects, generated);
+const ranked = current.map(e => ({...e, signal: signals.get(e.slug)}));
+const hasWeek = ranked.some(e => e.star_growth_7d != null);
+const hasMonth = signals.size > 0;
+const spotlights = ranked.filter(e => e.signal && e.signal.gap > 0 && e.signal.additions >= 100)
+  .sort((a,b) => b.signal!.gap - a.signal!.gap || b.signal!.additions - a.signal!.additions || a.slug.localeCompare(b.slug))
+  .slice(0, 3);
+const rangeEnd = new Date(generated);
+const rangeStart = new Date(generated);
+rangeEnd.setUTCDate(rangeEnd.getUTCDate() - 1);
+rangeStart.setUTCDate(rangeStart.getUTCDate() - 30);
+const calendarDate = (d:Date) => d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
+const signed = (n: number | null) => n == null ? '—' : n > 0 ? '+' + formatStars(n) : formatStars(n);
+const isoDay = (s?: string) => s?.slice(0, 10) || 'Unknown';
+const dateLabel = (s: string) => {
+  if (!s) return 'Unknown';
+  const days = Math.round((Date.parse(isoDay(generated)) - Date.parse(isoDay(s))) / 86_400_000);
+  if (days === 0) return 'Same day';
+  if (days === 1) return '1 day earlier';
+  if (days > 90) return isoDay(s);
+  return days > 0 ? days + ' days earlier' : isoDay(s);
 };
+const cols = [
+  {label:'Star rank', view:'all'}, {label:'Agent', key:'name', view:'all', order:'asc'},
+  {label:'Total stars', key:'stars', view:'all', order:'desc'},
+  ...(hasMonth ? [
+    {label:'30-day rank', key:'position', view:'interest', order:'asc'},
+    {label:'Added in 30d', key:'month', view:'interest', order:'desc'},
+    {label:'Days with additions', key:'days', view:'interest', order:'desc'},
+    {label:'Rank gap', key:'gap', view:'interest', order:'desc'},
+  ] : []),
+  ...(hasWeek ? [{label:'Net in 7d',key:'week',view:'interest',order:'desc'}] : []),
+  {label:'Forks',key:'forks',view:'maintenance',order:'desc'}, {label:'Release',view:'maintenance'},
+  {label:'Last push',key:'recent',view:'maintenance',order:'desc'},
+  {label:'Open items',key:'issues',view:'maintenance',order:'desc'},
+  {label:'Issue load',key:'load',view:'maintenance',order:'asc'}
+];
+const sorts = cols.filter(col => col.key);
+const gapLabel = (gap?: number) => gap == null ? '—' : gap > 0 ? '+' + gap : String(gap);
+const dataAttrs = (e: typeof ranked[number]) => ({
+  'data-name': e.name, 'data-stars': e.stars, 'data-month': e.signal?.additions, 'data-week': e.star_growth_7d,
+  'data-position': e.signal?.monthRank, 'data-gap': e.signal?.gap, 'data-days': e.signal?.daysWithAdditions,
+  'data-forks': e.forks, 'data-recent': e.last_commit ? Date.parse(e.last_commit) : null,
+  'data-load': e.stars > 0 ? e.health.issues_stars_ratio : null, 'data-issues': e.open_issues,
+});
+
 ---
-
-<Layout
-  title={`OpenClaw Alternatives Ranked by Stars, Growth & Health (${new Date().getFullYear()}) | Shelldex`}
-  description="GitHub stars leaderboard for OpenClaw ecosystem projects. Ranked by stars with growth trends and health indicators."
-  markdownUrl="https://shelldex.com/md/leaderboard.md"
-  jsonUrl="https://shelldex.com/api/leaderboard.json"
->
-  {hasData && (
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "OpenClaw Ecosystem Leaderboard",
-      "description": "GitHub stars leaderboard for OpenClaw ecosystem projects, ranked by popularity.",
-      "numberOfItems": leaderboard.count,
-      "itemListElement": leaderboard.entries.slice(0, 10).map((entry) => ({
-        "@type": "ListItem",
-        "position": entry.rank,
-        "name": entry.name,
-        "url": `https://shelldex.com/projects/${entry.slug}/`,
-      })),
-    })} />
-  )}
-  <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <!-- Header -->
-    <div class="mb-10">
-      <div class="flex items-center gap-3 mb-4">
-        <span class="text-3xl">🏆</span>
-        <h1 class="text-3xl sm:text-4xl font-display font-bold text-ledger-text">
-          Leaderboard
-        </h1>
+<Layout title="Personal AI agent leaderboard by stars and activity | Shelldex"
+  description="Compare runnable personal AI agents by GitHub stars, daily star additions, last push and open issues relative to stars."
+  markdownUrl="https://shelldex.com/md/leaderboard.md" jsonUrl="https://shelldex.com/api/leaderboard.json">
+  {ranked.length > 0 && <script type="application/ld+json" set:html={JSON.stringify({
+    '@context':'https://schema.org','@type':'ItemList',name:'Personal AI agents ranked by GitHub stars',
+    numberOfItems:ranked.length,itemListElement:ranked.slice(0,10).map(e => ({
+      '@type':'ListItem',position:e.rank,name:e.name,url:`https://shelldex.com/projects/${e.slug}/`
+    }))
+  })} />}
+  <section class="rankings max-w-[72rem] min-w-0 mx-auto px-5 sm:px-8 py-12">
+    <h1 class="font-display text-4xl sm:text-6xl font-bold tracking-tight">Leaderboard<span>.</span></h1>
+    <p class="lead">Which agents are drawing attention now? Compare the last 30 days with lifetime stars across {ranked.length} available agents, then check when each project last shipped a release.</p>
+    {generated && <DataStamp date={generated}>{historical.length > 0 && <a href="#historical">{historical.length} historical {historical.length === 1 ? 'project appears' : 'projects appear'} separately.</a>}</DataStamp>}
+    {ranked.length > 0 ? <>
+      {spotlights.length > 0 && <section class="spotlights" aria-labelledby="standout-title">
+        <div class="spotlight-intro">
+          <h2 id="standout-title">Ahead of their lifetime rank</h2>
+          <p>These agents ranked higher for new stars than for total stars. The biggest gaps appear first, among projects with at least 100 additions.</p>
+        </div>
+        <div class="signals-grid">{spotlights.map(e => e.signal && <a href={`/projects/${e.slug}/`} class="signal-card">
+          <strong>{e.name} <span aria-hidden="true">↗</span></strong>
+          <span class="rank-journey">#{e.signal.starRank} <span>lifetime</span> <i aria-hidden="true">/</i> <b>#{e.signal.monthRank}</b> <span>in 30d</span></span>
+          <span class="signal-detail">{e.signal.additions.toLocaleString('en-US')} stars added across {e.signal.daysWithAdditions} days</span>
+        </a>)}</div>
+      </section>}
+      <div class="ranking-sheet" id="ranking-sheet">
+        <div class="board-top">
+          <h2>Agent rankings</h2>
+          <fieldset class="views"><legend class="sr-only">Choose metrics</legend>
+            <label><input type="radio" name="rank-view" value="interest" checked />Star activity</label>
+            <label><input type="radio" name="rank-view" value="maintenance" />Repository activity</label>
+          </fieldset>
+        </div>
+        <div class="board-intro" data-view="interest">
+          {hasMonth ? <p><strong>{calendarDate(rangeStart)} – {calendarDate(rangeEnd)}.</strong> {signals.size} agents reported all 30 days. A positive rank gap means the agent placed higher for new stars than for total stars.</p> :
+            <p>Thirty-day rankings appear once at least one project has a complete month of daily observations.</p>}
+          {hasMonth && <details><summary>How to read the ranks</summary>
+            <p>Both ranks in the gap calculation use the same {signals.size} agents. Equal counts share a place. The star rank at the left covers all {ranked.length} available agents. Both positions describe this report. Changes since a previous report require two dated rankings.</p>
+            <p>“Added in 30d” counts new stars still present when we checked. “Days with additions” shows how many days contributed to the total. Net change also accounts for stars people removed.</p>
+          </details>}
+        </div>
+        <div class="board-intro" data-view="maintenance">
+          <p>The latest release is the last published version we found. The last push shows when someone last sent changes to the repository. Open items include issues and pull requests.</p>
+          <IssueHealth legend />
+        </div>
+        <div class="controls">
+          <label for="lb-sort">Sort by</label>
+          <select id="lb-sort">{sorts.map(s => <option value={s.key} data-view-option={s.view} data-order={s.order} selected={s.key === 'stars'}>{s.label}</option>)}</select>
+          <button id="lb-direction" type="button" aria-label="Sort order: descending. Switch to ascending.">Descending ↓</button>
+        </div>
+      <p id="lb-scroll-hint" hidden class="note mb-2">Scroll the table sideways for more columns →</p>
+      <div id="lb-scroll" class="table-frame hidden md:block" tabindex="0" role="region" aria-label="Agent rankings">
+        <table id="lb-table">
+          <caption class="sr-only">Available agents. Star rank is the project’s position by total stars. Last push is relative to the metrics check.</caption>
+          <thead><tr>{cols.map(col => <th scope="col" data-view={col.view} aria-sort={col.key === 'stars' ? 'descending' : undefined}>
+            {col.key ? <button type="button" data-sort={col.key}>{col.label}<span aria-hidden="true" class="arrow">{col.key === 'stars' ? ' ▼' : ''}</span></button> : col.label}
+          </th>)}</tr></thead>
+          <tbody id="lb-body">{ranked.map(e => <tr {...dataAttrs(e)}>
+            <td class="metric">{e.rank}</td>
+            <th scope="row"><a class="project-name" href={`/projects/${e.slug}/`}><span aria-hidden="true">{e.emoji}</span>{e.name}</a></th>
+            <td class="metric" title={String(e.stars)}>{formatStars(e.stars)}</td>
+            {hasMonth && <>
+              <td class="metric signal-rank" data-view="interest">{e.signal ? '#' + e.signal.monthRank : '—'}</td>
+              <td class="metric" data-view="interest">{signed(e.signal?.additions ?? null)}</td>
+              <td class="metric" data-view="interest">{e.signal ? e.signal.daysWithAdditions + ' / 30' : '—'}</td>
+              <td class="metric" data-view="interest"><span class:list={['gap-tag', {positive:(e.signal?.gap ?? 0) > 0}]}>{gapLabel(e.signal?.gap)}</span></td>
+            </>}
+            {hasWeek && <td class="metric" data-view="interest">{signed(e.star_growth_7d)}</td>}
+            <td class="metric" data-view="maintenance" title={String(e.forks)}>{formatStars(e.forks)}</td>
+            <td data-view="maintenance"><span class="version" title={e.latest_release ?? undefined}>{e.latest_release ?? '—'}</span></td>
+            <td class="when" data-view="maintenance"><time datetime={e.last_commit || undefined} title={isoDay(e.last_commit)}>{dateLabel(e.last_commit)}</time></td>
+            <td class="metric" data-view="maintenance" title={e.open_issues.toLocaleString('en-US') + ' open issues and pull requests'}>{formatStars(e.open_issues)}</td>
+            <td data-view="maintenance"><IssueHealth ratio={e.health.issues_stars_ratio} available={e.stars > 0} /></td>
+          </tr>)}</tbody>
+        </table>
       </div>
-      <p class="text-ledger-faint max-w-2xl">
-        OpenClaw ecosystem ranked by GitHub stars, with growth trends and project health indicators.
-      </p>
-      {hasData && (
-        <p class="text-xs text-ledger-whisper mt-2 font-mono">
-          Updated {new Date(leaderboard.generated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-          &middot; {leaderboard.count} projects
-        </p>
-      )}
-    </div>
-
-    {!hasData ? (
-      <!-- Empty state -->
-      <div class="text-center py-20 border border-ledger-border rounded-2xl bg-ledger-surface">
-        <span class="text-5xl mb-4 block">📊</span>
-        <h2 class="text-xl font-display font-semibold text-ledger-text mb-2">Leaderboard data is being refreshed</h2>
-        <p class="text-ledger-faint">Check back shortly — rankings update daily.</p>
+      <div class="card-list md:hidden" id="lb-cards">
+        {ranked.map(e => <a href={`/projects/${e.slug}/`} {...dataAttrs(e)} class="lb-card">
+          <div class="card-heading"><strong><small>#{e.rank}</small> <span aria-hidden="true">{e.emoji}</span> {e.name}</strong><b>{formatStars(e.stars)} ★</b></div>
+          <div class="card-line" data-view="maintenance"><IssueHealth ratio={e.health.issues_stars_ratio} available={e.stars > 0} showSubject /><span>{languageLabel[e.language] ?? e.language}</span></div>
+          {(hasMonth || hasWeek) && <div class="card-line" data-view="interest">
+            {hasMonth && (e.signal ? <>
+              <strong>#{e.signal.monthRank} in 30d</strong>
+              <span class:list={['gap-tag',{positive:e.signal.gap > 0}]}>{gapLabel(e.signal.gap)} gap</span>
+              <span>{signed(e.signal.additions)} stars on {e.signal.daysWithAdditions} of 30 days</span>
+            </> : <span>Incomplete daily history</span>)}
+            {hasWeek && e.star_growth_7d != null && <span>{signed(e.star_growth_7d)} net in 7d</span>}
+          </div>}
+          <div class="release-line" data-view="maintenance"><span class="version" title={e.latest_release ?? undefined}>{e.latest_release ?? 'No release listed'}</span><span>Push: {dateLabel(e.last_commit).toLowerCase()}</span></div>
+          <span class="extra" data-sort-value="forks" hidden>{formatStars(e.forks)} forks</span>
+          <span class="extra" data-sort-value="issues" hidden>{formatStars(e.open_issues)} open issues and pull requests</span>
+        </a>)}
       </div>
-    ) : (
-      <>
-        <!-- Sort controls -->
-        <div class="flex items-center gap-3 mb-6">
-          <label for="lb-sort" class="text-sm text-ledger-faint">Sort by:</label>
-          <select
-            id="lb-sort"
-            class="bg-ledger-surfaceer border border-ledger-border text-ledger-muted text-sm rounded-lg px-3 py-1.5 focus:border-ledger-red/50 focus:outline-none"
-          >
-            <option value="stars">Stars</option>
-            <option value="growth">7-day Growth</option>
-            <option value="name">Name A–Z</option>
-            <option value="forks">Forks</option>
-            <option value="issues">Open Issues</option>
-            <option value="recent">Last Commit</option>
-          </select>
-        </div>
-
-        <!-- ─── Desktop table ─────────────────────────────────────────────── -->
-        <div class="hidden md:block overflow-x-auto rounded-xl border border-ledger-border bg-ledger-surface/80">
-          <table class="w-full text-left" id="lb-table">
-            <thead>
-              <tr class="border-b border-ledger-border text-xs uppercase tracking-wider text-ledger-faint">
-                <th class="py-3 px-4 w-12">#</th>
-                <th class="py-3 px-4">Project</th>
-                <th class="py-3 px-4 text-right cursor-pointer hover:text-ledger-red transition-colors" data-sort="stars">Stars&nbsp;↕</th>
-                <th class="py-3 px-4 text-right cursor-pointer hover:text-ledger-red transition-colors" data-sort="growth">7d&nbsp;↕</th>
-                <th class="py-3 px-4">Lang</th>
-                <th class="py-3 px-4 text-right cursor-pointer hover:text-ledger-red transition-colors" data-sort="forks">Forks&nbsp;↕</th>
-                <th class="py-3 px-4">Release</th>
-                <th class="py-3 px-4 text-right cursor-pointer hover:text-ledger-red transition-colors" data-sort="recent">Commit&nbsp;↕</th>
-                <th class="py-3 px-4 text-center" title="Issues/Stars health ratio">Health</th>
-              </tr>
-            </thead>
-            <tbody id="lb-body">
-              {leaderboard.entries.map((e) => (
-                <tr
-                  class="border-b border-ledger-border hover:bg-ledger-surfaceer/50 transition-colors lb-row"
-                  data-stars={e.stars}
-                  data-growth={e.star_growth_7d ?? -999999}
-                  data-name={e.name.toLowerCase()}
-                  data-forks={e.forks}
-                  data-issues={e.open_issues}
-                  data-last-commit={e.last_commit || '1970-01-01'}
-                >
-                  <td class="py-3 px-4 text-ledger-faint font-mono text-sm lb-rank">{e.rank}</td>
-                  <td class="py-3 px-4">
-                    <a href={`/projects/${e.slug}/`} class="group flex items-center gap-2">
-                      <span class="text-lg">{e.emoji}</span>
-                      <span class="text-ledger-text font-medium group-hover:text-ledger-red transition-colors">{e.name}</span>
-                    </a>
-                  </td>
-                  <td class="py-3 px-4 text-right font-mono text-sm text-yellow-700">
-                    ★ {formatStars(e.stars)}
-                  </td>
-                  <td class={`py-3 px-4 text-right font-mono text-sm ${growthClass(e.star_growth_7d)}`}>
-                    {formatGrowth(e.star_growth_7d)}
-                  </td>
-                  <td class="py-3 px-4">
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text">
-                      <span class={`w-1.5 h-1.5 rounded-full ${langDot[e.language] || 'bg-ledger-faint'}`}></span>
-                      {e.language}
-                    </span>
-                  </td>
-                  <td class="py-3 px-4 text-right font-mono text-sm text-ledger-faint">
-                    {formatStars(e.forks)}
-                  </td>
-                  <td class="py-3 px-4 text-sm text-ledger-faint">
-                    {e.latest_release
-                      ? <span class="font-mono">{e.latest_release}</span>
-                      : <span class="text-ledger-whisper">&mdash;</span>}
-                  </td>
-                  <td class={`py-3 px-4 text-right text-sm ${commitFreshness(e.health.days_since_last_commit)}`}>
-                    {e.health.days_since_last_commit < 999
-                      ? `${e.health.days_since_last_commit}d ago`
-                      : '\u2014'}
-                  </td>
-                  <td class="py-3 px-4 text-center">
-                    <span
-                      class={`text-sm ${healthDot(e.health.issues_stars_ratio)}`}
-                      title={`Issues/Stars: ${e.health.issues_stars_ratio}`}
-                    >●</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ─── Mobile cards ──────────────────────────────────────────────── -->
-        <div class="md:hidden space-y-3" id="lb-cards">
-          {leaderboard.entries.map((e) => (
-            <a
-              href={`/projects/${e.slug}/`}
-              class="block bg-ledger-surface border border-ledger-border rounded-xl p-4 hover:border-ledger-red/20 transition-all lb-card"
-              data-stars={e.stars}
-              data-growth={e.star_growth_7d ?? -999999}
-              data-name={e.name.toLowerCase()}
-              data-forks={e.forks}
-              data-issues={e.open_issues}
-              data-last-commit={e.last_commit || '1970-01-01'}
-            >
-              <div class="flex items-center justify-between mb-2">
-                <div class="flex items-center gap-2">
-                  <span class="text-ledger-faint font-mono text-xs lb-rank">#{e.rank}</span>
-                  <span class="text-lg">{e.emoji}</span>
-                  <span class="text-ledger-text font-medium">{e.name}</span>
-                </div>
-                <span class="font-mono text-sm text-yellow-700">★ {formatStars(e.stars)}</span>
-              </div>
-              <div class="flex flex-wrap items-center gap-3 text-xs">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-ledger-surface border border-ledger-border text-xs font-medium text-ledger-text">
-                  <span class={`w-1.5 h-1.5 rounded-full ${langDot[e.language] || 'bg-ledger-faint'}`}></span>
-                  {e.language}
-                </span>
-                {e.star_growth_7d !== null && (
-                  <span class={`font-mono ${growthClass(e.star_growth_7d)}`}>
-                    {formatGrowth(e.star_growth_7d)} 7d
-                  </span>
-                )}
-                {e.latest_release && (
-                  <span class="text-ledger-faint font-mono">{e.latest_release}</span>
-                )}
-                <span class={`${commitFreshness(e.health.days_since_last_commit)}`}>
-                  {e.health.days_since_last_commit < 999
-                    ? `${e.health.days_since_last_commit}d ago`
-                    : ''}
-                </span>
-              </div>
-            </a>
-          ))}
-        </div>
-
-        <!-- Legend -->
-        <div class="mt-8 flex flex-wrap gap-6 text-xs text-ledger-faint">
-          <div class="flex items-center gap-1.5">
-            <span class="text-ledger-red">●</span> Healthy (&lt;1% issues/stars)
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="text-amber-700">●</span> Moderate (1–5%)
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="text-coral">●</span> Needs attention (&gt;5%)
-          </div>
-        </div>
-      </>
-    )}
+      </div>
+    </> : <p class="lead">Current rankings will appear after a complete GitHub check.</p>}
+    {historical.length > 0 && <section id="historical">
+      <h2 class="font-display text-2xl font-bold">Historical projects</h2>
+      <p class="note">Archived or unavailable repositories have no current rank. Their profiles preserve the last known figures.</p>
+      <ul>{historical.map(e => <li><a href={`/projects/${e.slug}/`}>{e.name}</a> · {e.availability === 'unavailable' ? 'Repository unavailable' : 'Archived'} · {formatStars(e.stars)} stars on {isoDay(e.last_enriched)} · last recorded push {isoDay(e.last_commit)}</li>)}</ul>
+    </section>}
+    <p class="next"><a href="/compare/">Compare two agents side by side →</a></p>
   </section>
-
-  <!-- Client-side sorting -->
-  <script is:inline>
-    (function () {
-      var select = document.getElementById('lb-sort');
-      var tbody = document.getElementById('lb-body');
-      var cardsBox = document.getElementById('lb-cards');
-      if (!select) return;
-
-      function reorder(container, sel, cmp) {
-        var items = Array.from(container.querySelectorAll(sel));
-        items.sort(cmp);
-        items.forEach(function (el, i) {
-          container.appendChild(el);
-          var rank = el.querySelector('.lb-rank');
-          if (rank) rank.textContent = sel === '.lb-row' ? String(i + 1) : '#' + (i + 1);
-        });
-      }
-
-      function comparator(key) {
-        switch (key) {
-          case 'stars':   return function (a, b) { return +b.dataset.stars - +a.dataset.stars; };
-          case 'growth':  return function (a, b) { return +b.dataset.growth - +a.dataset.growth; };
-          case 'name':    return function (a, b) { return a.dataset.name.localeCompare(b.dataset.name); };
-          case 'forks':   return function (a, b) { return +b.dataset.forks - +a.dataset.forks; };
-          case 'issues':  return function (a, b) { return +b.dataset.issues - +a.dataset.issues; };
-          case 'recent':  return function (a, b) { return new Date(b.dataset.lastCommit) - new Date(a.dataset.lastCommit); };
-          default:        return function (a, b) { return +b.dataset.stars - +a.dataset.stars; };
-        }
-      }
-
-      select.addEventListener('change', function () {
-        var cmp = comparator(this.value);
-        if (tbody) reorder(tbody, '.lb-row', cmp);
-        if (cardsBox) reorder(cardsBox, '.lb-card', cmp);
-      });
-
-      // Clickable column headers sync the dropdown
-      document.querySelectorAll('th[data-sort]').forEach(function (th) {
-        th.addEventListener('click', function () {
-          select.value = this.dataset.sort;
-          select.dispatchEvent(new Event('change'));
-        });
-      });
-    })();
-  </script>
 </Layout>
+<style>
+  .rankings {--board-ink:#253442;--board-line:#c5ccca;--board-paper:#fffdf8;--board-soft:#eeeee7;color:var(--board-ink)}
+  .spotlights{border-top:2px solid var(--board-ink);border-bottom:1px solid var(--board-line);margin:2.25rem 0;padding:1.25rem 0}
+  .spotlight-intro{display:flex;align-items:baseline;justify-content:space-between;gap:1.75rem;margin-bottom:1rem}
+  .spotlight-intro h2,.board-top h2{font-weight:700;font-family:theme('fontFamily.display');line-height:1.1}
+  .spotlight-intro p,.board-intro p{color:theme('colors.ledger.muted');font-size:.875rem;line-height:1.5}.spotlight-intro p{max-width:31rem}
+  .signals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));background:var(--board-paper);border:1px solid var(--board-line)}
+  .signal-card{display:grid;align-content:start;gap:.3rem;padding:.8rem 1rem;border-inline-end:1px solid var(--board-line)}
+  .signal-card:last-child{border:0}.signal-card strong{display:flex;justify-content:space-between;align-items:center}.signal-card:hover strong{text-decoration:underline}
+  .rank-journey{display:flex;align-items:baseline;gap:.35rem;font:650 1.32rem/1.4 theme('fontFamily.mono');font-variant-numeric:tabular-nums}
+  .rank-journey span,.signal-detail{font:normal .8125rem/1.5 theme('fontFamily.body');color:theme('colors.ledger.muted')}.rank-journey i{color:var(--board-line);font-style:normal}
+  .ranking-sheet{isolation:isolate;border:1px solid var(--board-line);background:var(--board-paper);border-radius:.65rem;overflow:clip}
+  .board-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1.25rem;background:var(--board-ink);color:var(--board-paper);padding:1rem 1.25rem}
+  .board-top h2{color:inherit}.views{display:flex;flex-wrap:wrap;gap:.35rem}
+  .views label{display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;padding:.4rem .8rem;min-height:44px;border:1px solid #8a999f;border-radius:.35rem;font-size:.875rem}
+  .views input{accent-color:var(--board-ink)}.views label:has(:checked){background:var(--board-paper);color:var(--board-ink);font-weight:650}
+  .views label:focus-within{outline:2px solid var(--board-paper);outline-offset:2px}
+  .board-intro{padding:1rem 1.25rem .3rem}.board-intro summary{cursor:pointer;text-decoration:underline;text-underline-offset:.2em;font-size:.8125rem;padding:.4rem 0}
+  .board-intro details p{max-width:46rem;margin:.35rem 0}
+  .ranking-sheet:has(input[value=interest]:checked) [data-view=maintenance],.ranking-sheet:has(input[value=maintenance]:checked) [data-view=interest]{display:none}
+  .ranking-sheet .controls{margin:0;padding:.5rem 1.25rem 1rem}
+  .ranking-sheet #lb-scroll-hint{padding-inline:1.25rem}.ranking-sheet .table-frame{border:0;border-radius:0}
+  thead tr{background:var(--board-soft)}tbody tr:nth-child(even){background:#f6f4ee}tbody tr:hover{background:#e9edeb}
+  tbody tr td:first-child{font-weight:700;color:var(--board-ink)}.signal-rank{font-weight:650}
+  .gap-tag{display:inline-block;min-width:2em;text-align:center;padding:.08rem .35rem;border:1px solid var(--board-line);border-radius:.2rem;font-family:theme('fontFamily.mono')}
+  .gap-tag.positive{color:#09533f;background:#e4f2e9;border-color:#96b9a6}
+  .ranking-sheet .lb-card{padding:.85rem 1rem}.lb-card:nth-child(even){background:#f6f4ee}.lb-card:hover{background:#e9edeb}
+  .next a{display:inline-flex;align-items:center;min-height:44px;padding:.55rem 1rem;background:theme('colors.ledger.red');color:white;text-decoration:none!important;border-radius:.4rem;font-weight:650}
+  @media(max-width:639px){.spotlight-intro{display:block}.spotlight-intro p{margin-top:.4rem}.signal-card{border-inline-end:0;border-bottom:1px solid var(--board-line)}.ranking-sheet .controls,.board-top,.board-intro{padding-inline:.8rem}}
+  .lead{max-width:46rem;font-size:1.06rem;line-height:1.65;margin:1rem 0;color:theme('colors.ledger.muted')}
+  .controls,.card-line,.release-line,.card-heading{display:flex;align-items:center;gap:.75rem}.controls{flex-wrap:wrap;margin:1.75rem 0 1rem;font-size:.875rem}
+  select,.controls button{padding:.55rem .85rem;background:theme('colors.ledger.surface');border:1px solid theme('colors.ledger.border');border-radius:.45rem;min-height:44px}
+  .note,.next,li{font-size:.875rem;line-height:1.55;color:theme('colors.ledger.muted')}.note+.note{margin-top:.25rem}
+  .table-frame{position:relative;isolation:isolate;max-width:100%;overflow:auto;border:1px solid theme('colors.ledger.border');border-radius:.75rem;background:theme('colors.ledger.surface')}
+  .table-frame.can-scroll{box-shadow:inset -12px 0 12px -12px theme('colors.ledger.muted')}
+  table{width:100%;font-size:.875rem;border-collapse:separate;border-spacing:0}
+  th,td{text-align:left;border-bottom:1px solid theme('colors.ledger.border');padding:.55rem .65rem}
+  th[scope=col]{font-size:.8rem;color:theme('colors.ledger.muted');white-space:nowrap}
+  th button{min-height:44px;font-weight:650}.arrow{font-size:.68rem}th[aria-sort] button{text-decoration:underline;text-underline-offset:.22em}
+  tbody th,.project-name{font-weight:600}.project-name{display:flex;align-items:center;gap:.4rem;min-height:44px}.project-name:hover{text-decoration:underline}
+  .can-scroll th:nth-child(2){position:sticky;left:0;background:theme('colors.ledger.surface');box-shadow:2px 0 3px #38241019;z-index:1}
+  .metric,.version,.when,b,small,.extra{font-family:theme('fontFamily.mono');font-variant-numeric:tabular-nums}.metric{text-align:right}.when,.metric,.version{white-space:nowrap}
+  .version{display:block;max-width:10rem;overflow:hidden;text-overflow:ellipsis}
+  tbody tr:last-child>*{border-bottom:0}.card-list{border-top:1px solid theme('colors.ledger.border')}
+  .lb-card{display:block;border-bottom:1px solid theme('colors.ledger.border');padding:.9rem .25rem}
+  .card-heading,.release-line{justify-content:space-between}.card-heading strong{min-width:0;overflow-wrap:anywhere}.card-heading b,.release-line>span:last-child{flex-shrink:0}
+  .card-line,.release-line,.extra{font-size:.8125rem;color:theme('colors.ledger.muted');margin-top:.3rem}.card-line{flex-wrap:wrap;gap:.3rem .9rem}
+  .release-line{min-width:0}.release-line .version{min-width:0}.extra:not([hidden]){display:block}
+  #historical{scroll-margin-top:6rem;margin-top:2.5rem}#historical li{margin:.45rem 0}.next{margin:2rem 0 0}
+  :is(#historical,.next) a{text-decoration:underline;text-underline-offset:.2em}
+</style>
+<script>
+  const menu = document.querySelector<HTMLSelectElement>('#lb-sort');
+  const directionButton = document.querySelector<HTMLButtonElement>('#lb-direction');
+  const body = document.querySelector('#lb-body');
+  const cards = document.querySelector('#lb-cards');
+  if (menu && directionButton && body && cards) {
+    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('button[data-sort]'));
+    let direction = 'desc';
+    function update() {
+      if (!menu || !directionButton) return;
+      const key = menu.value;
+      const ascending = direction === 'asc';
+      const description = ascending ? 'ascending' : 'descending';
+      directionButton.textContent = ascending ? 'Ascending ↑' : 'Descending ↓';
+      directionButton.setAttribute('aria-label', 'Sort order: ' + description + '. Switch to ' + (ascending ? 'descending.' : 'ascending.'));
+      for (const container of [body, cards]) {
+        if (!container) continue;
+        const items = Array.from(container.children) as HTMLElement[];
+        items.sort((a,b) => {
+          const av = a.dataset[key], bv = b.dataset[key];
+          if (av == null || bv == null) return Number(av == null) - Number(bv == null);
+          const result = key === 'name' ? av.localeCompare(bv) : Number(av) - Number(bv);
+          return (ascending ? result : -result) || a.dataset.name!.localeCompare(b.dataset.name!);
+        });
+        container.append(...items);
+      }
+      for (const btn of buttons) {
+        const active = btn.dataset.sort === key;
+        const th = btn.closest('th');
+        if (active) th?.setAttribute('aria-sort', description); else th?.removeAttribute('aria-sort');
+        btn.querySelector('.arrow')!.textContent = active ? (ascending ? ' ▲' : ' ▼') : '';
+      }
+      document.querySelectorAll<HTMLElement>('[data-sort-value]').forEach(el => el.hidden = el.dataset.sortValue !== key);
+    }
+    const views = document.querySelectorAll<HTMLInputElement>('input[name="rank-view"]');
+    function chooseView() {
+      const view = Array.from(views).find(input => input.checked)?.value;
+      for (const option of menu!.options) {
+        option.hidden = option.dataset.viewOption !== 'all' && option.dataset.viewOption !== view;
+        option.disabled = option.hidden;
+      }
+      if (menu!.selectedOptions[0].hidden) {
+        menu!.value = view === 'maintenance' ? 'recent' : (menu!.querySelector('option[value=month]') ? 'month' : 'stars');
+        direction = menu!.selectedOptions[0].dataset.order!;
+        update();
+      }
+    }
+    for (const input of views) input.addEventListener('change', chooseView);
+    chooseView();
+    menu.addEventListener('change', () => { direction = menu.selectedOptions[0].dataset.order!; update(); });
+    directionButton.addEventListener('click', () => { direction = direction === 'desc' ? 'asc' : 'desc'; update(); });
+    for (const btn of buttons) btn.addEventListener('click', () => {
+      if (menu.value === btn.dataset.sort) direction = direction === 'desc' ? 'asc' : 'desc';
+      else { menu.value = btn.dataset.sort!; direction = menu.selectedOptions[0].dataset.order!; }
+      update();
+    });
+  }
+  const frame = document.querySelector<HTMLElement>('#lb-scroll');
+  const hint = document.querySelector<HTMLElement>('#lb-scroll-hint');
+  if (frame && hint) {
+    const checkWidth = () => {
+      const overflows = frame.clientWidth > 0 && frame.scrollWidth > frame.clientWidth + 1;
+      frame.classList.toggle('can-scroll', overflows);
+      hint.hidden = !overflows;
+    };
+    const observer = new ResizeObserver(checkWidth);
+    observer.observe(frame);
+    const table = frame.querySelector('table');
+    if (table) observer.observe(table);
+    document.fonts.ready.then(checkWidth);
+  }
+</script>

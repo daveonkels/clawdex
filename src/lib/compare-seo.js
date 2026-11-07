@@ -21,20 +21,17 @@ const EXCLUDED_COMPARE_SLUGS = new Set([
 
 const PROMOTED_COMPARE_SLUGS = new Set(
   [
-    ['safeclaw', 'ironclaw'],
-    ['moltworker', 'aionui'],
+    // Search Console: keep recurring organic landing pages stable across refreshes.
+    ['hermes', 'nanobot'], ['nanobot', 'zeroclaw'], ['hermes', 'openclaw'], ['astrbot', 'hermes'],
     ['zeroclaw', 'nullclaw'],
     ['ironclaw', 'secure-openclaw'],
-    ['memu', 'memos'],
     ['ironclaw', 'moltis'],
     ['kai', 'secure-openclaw'],
     // GSC-validated exact-match pages that still need an editorial boost.
-    ['hermes', 'safeclaw'],            // 1,214 impressions — "hermes agent vs openclaw" (safeclaw-vs-hermes-agent URL)
     ['nullclaw', 'openclaw'],          // 118 impressions — "nullclaw vs openclaw"
     ['aionui', 'openbrowserclaw'],     // 54 impressions — "aionui vs openclaw"
     // GSC Page Indexing report, 2026-05-17: submitted URLs discovered but not crawled.
     // Promote them so they stay in the curated sitemap and get prominent hub links.
-    ['clawgo', 'openclaw'],
     ['clawsync', 'openclaw'],
     ['fastclaw', 'openclaw'],
     ['gogogot', 'openclaw'],
@@ -198,7 +195,7 @@ export function getIndexableComparePairs(projects) {
       .map((project) => project.slug),
   );
 
-  const scoredPairs = getCanonicalPairs(projects)
+  const scoredPairs = getCanonicalPairs(projects.filter(p => p.status !== 'archived' && p.github_data?.availability !== 'unavailable'))
     .map((pair) => scorePair(
       projectMap.get(pair.slugA),
       projectMap.get(pair.slugB),

@@ -1,0 +1,50 @@
+name: OpenClaw Chinese Community Edition
+slug: openclaw-cn
+tagline: OpenClaw fork for Chinese-language users and messaging services
+description: This community edition packages an OpenClaw agent with Chinese onboarding and support for services including DingTalk, WeCom and Feishu. Users can send the agent tasks directly from chat.
+language: typescript
+category:
+  - messaging
+  - localization
+github: mf-yang/openclaw-cn
+status: active
+tier: 1
+ecosystem_role: fork
+highlight: Chinese setup and chat-channel configuration ship alongside the runnable gateway.
+emoji: 🦐
+platform:
+  - messaging
+  - server
+  - cli
+requires_llm: true
+added: "2026-11-07"
+github_data:
+  repository_id: 1142662831
+  stars: 4682
+  forks: 374
+  open_issues: 98
+  license: MIT
+  topics:
+    - ai
+    - assistant
+    - chinese
+    - chinese-simplified
+    - clawd
+    - crustacean
+    - dingtalk
+    - feishu
+    - lark
+    - openclaw
+    - own-your-data
+    - personal
+    - qq
+    - wecom
+  last_commit: "2026-05-27T03:28:59Z"
+  latest_release: v0.2.0
+  latest_release_date: "2026-03-29T06:39:31Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/mf-yang/openclaw-cn#-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"
+first_task: "Send the assistant a private test message in your chosen language with two sample appointments. Ask for their order and a draft reminder without adding either to a real calendar."

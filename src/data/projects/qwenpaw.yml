@@ -1,0 +1,55 @@
+name: QwenPaw
+slug: qwenpaw
+slug_aliases:
+  - copaw
+tagline: A personal assistant for messaging and scheduled tasks
+description: Formerly CoPaw, QwenPaw is an AgentScope-based assistant. It can run tasks on a schedule, use tools and respond across messaging channels. Its persona design credits OpenClaw.
+language: python
+category:
+  - messaging
+  - productivity
+github: agentscope-ai/QwenPaw
+status: active
+tier: 3
+ecosystem_role: alternative
+highlight: Give the same assistant a task through its workspace or a connected chat channel.
+emoji: 🐾
+platform:
+  - messaging
+  - server
+  - desktop
+requires_llm: true
+mcp_support: true
+added: "2026-11-07"
+github_data:
+  repository_id: 1165324947
+  stars: 37452
+  forks: 3263
+  open_issues: 1114
+  license: Apache-2.0
+  topics:
+    - agent
+    - agent-harness
+    - agentscope
+    - ai-agent
+    - ai-agents
+    - chatbot
+    - harness-engineering
+    - llm-tools
+    - llms
+    - loop-engineering
+    - mcp
+    - personal-ai-assistant
+    - self-hosted
+    - skills
+    - super-agent
+    - webui
+  last_commit: "2026-11-06T10:39:00Z"
+  latest_release: v2.2.2.post1
+  latest_release_date: "2026-10-22T11:49:43Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/agentscope-ai/QwenPaw#quick-start"
+first_task: "Ask the assistant to schedule a single practice reminder and specify the time zone and destination. Check that it arrives before setting up a repeating job."

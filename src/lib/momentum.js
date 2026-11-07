@@ -1,26 +1,3 @@
-import fs from 'node:fs';
-import path from 'node:path';
-
-const HISTORY_PATH = path.join(process.cwd(), '.enrichment-history.json');
-
-/** @type {Record<string, { stars: number; date: string }[]> | null} */
-let historyCache = null;
-
-/**
- * @returns {Record<string, { stars: number; date: string }[]>}
- */
-export function loadMomentumHistory() {
-  if (historyCache) return historyCache;
-
-  try {
-    historyCache = JSON.parse(fs.readFileSync(HISTORY_PATH, 'utf-8'));
-  } catch {
-    historyCache = {};
-  }
-
-  return historyCache;
-}
-
 /**
  * @param {any} item
  * @returns {number}
@@ -52,47 +29,4 @@ export function getMomentumRatio(project, averageGrowth7d) {
   const growth = getProjectMomentum(project);
   if (growth <= 0 || averageGrowth7d <= 0) return null;
   return growth / averageGrowth7d;
-}
-
-/**
- * @param {any} project
- * @param {Record<string, { stars: number; date: string }[]>} [history]
- * @param {number} [limit]
- * @returns {{ stars: number; date: string }[]}
- */
-export function getProjectMomentumSnapshots(project, history = loadMomentumHistory(), limit = 12) {
-  if (!project?.github) return [];
-
-  const rawSnapshots = history[project.github] ?? [];
-  const normalized = rawSnapshots
-    .map((snapshot) => ({
-      stars: Number(snapshot?.stars ?? 0),
-      date: String(snapshot?.date ?? ''),
-    }))
-    .filter((snapshot) => snapshot.date)
-    .sort((left, right) => left.date.localeCompare(right.date));
-
-  const currentStars = project?.github_data?.stars ?? project?.stars ?? null;
-  const currentDate = project?.github_data?.last_enriched?.split('T')[0] ?? null;
-
-  if (currentStars !== null && currentDate) {
-    const last = normalized[normalized.length - 1];
-    if (!last || last.date !== currentDate) {
-      normalized.push({ stars: Number(currentStars), date: currentDate });
-    } else if (last.stars !== currentStars) {
-      last.stars = Number(currentStars);
-    }
-  }
-
-  const deduped = [];
-  const seenDates = new Set();
-
-  for (let i = normalized.length - 1; i >= 0; i--) {
-    const snapshot = normalized[i];
-    if (seenDates.has(snapshot.date)) continue;
-    seenDates.add(snapshot.date);
-    deduped.push(snapshot);
-  }
-
-  return deduped.reverse().slice(-limit);
 }

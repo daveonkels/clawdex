@@ -30,26 +30,28 @@ Shelldex is built for both humans and agents. All data is available as JSON, Mar
 ## Primary pages
 
 - [Homepage / Directory](https://shelldex.com/): Full registry of tracked projects
-- [Leaderboard](https://shelldex.com/leaderboard/): Ranked by GitHub stars with health scores
+- [Leaderboard](https://shelldex.com/leaderboard/): Current agents ranked by GitHub stars, alongside issue load
 - [Compare index](https://shelldex.com/compare/): All pairwise comparisons
 - [Analysis](https://shelldex.com/analysis/): Ecosystem trends, distributions, and narrative
 - [Best alternatives](https://shelldex.com/best-alternatives/): Curated picks with pros and cons
-- [FAQ](https://shelldex.com/faq/): Common questions about the ecosystem
+- [FAQ](https://shelldex.com/faq/): A first-time user’s guide to everyday tasks, hosting, cost, privacy and agent selection
+- [How we measure](https://shelldex.com/methodology/): Definitions, limitations and corrections
 - [About](https://shelldex.com/about/): Background, scope, and licensing
 - [Submit a project](https://shelldex.com/submit/): How to add a project to the registry
 
 ## What Shelldex tracks
 
-- OpenClaw clones, forks, reimplementations, and inspired projects
-- GitHub stars, forks, open issues, license, and topics
-- Commit activity, last release, and 7-day star growth
+- Runnable AI agents like OpenClaw and Hermes Agent
+- GitHub stars, forks, open issues and pull requests, license, and topics
+- Last repository push, published release, daily surviving star additions, and seven-day net change when both snapshots exist
 - Programming language (TypeScript, Rust, Python, Go, C, Bash, Zig, others)
-- Project status (active, experimental, archived) and ecosystem role (fork, reimplementation, derivative, alternative, reference, infrastructure)
+- Project status (active, experimental, archived) and ecosystem role (fork, reimplementation, derivative, alternative, reference)
 - Platform targets (server, browser, embedded, serverless, messaging, desktop)
-- MCP support, LLM requirements, performance profiles
+- Documented MCP support, model options, links to setup instructions and first tasks
 
 ## What Shelldex does NOT track
 
+- Tools, plugins, libraries, registries, deployment wrappers, and managers for other agents
 - Workflow galleries or use case recipes
 - Tutorials or guides
 - Security scanners for OpenClaw skills

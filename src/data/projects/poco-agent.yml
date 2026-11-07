@@ -1,7 +1,7 @@
 name: Poco Agent
 slug: poco-agent
-tagline: Beautiful Web UI alternative to OpenClaw with sandboxed runtime
-description: A more beautiful and easier-to-use alternative to OpenClaw featuring a polished Web UI, built-in IM support, and a sandboxed runtime for improved safety. Powered by a Claude Code-based agent under the hood.
+tagline: "A web-based agent with a sandbox for tasks"
+description: "Poco lets you give an agent a task in a project chat, then follow its progress and review the files it creates. The project supports mounting a working folder in its sandbox."
 language: typescript
 category:
   - self-hosted
@@ -9,18 +9,19 @@ category:
 github: poco-ai/poco-claw
 website: https://poco-ai.com
 status: active
-tier: 1
+tier: 3
 highlight: Polished Web UI with sandboxed agent runtime and built-in IM support
 emoji: 🎨
 platform:
   - server
 requires_llm: true
-mcp_support: false
+mcp_support: true
 ecosystem_role: derivative
 added: 2026-03-05T00:00:00.000Z
 github_data:
-  stars: 1326
-  forks: 122
+  repository_id: 1130325611
+  stars: 1358
+  forks: 129
   open_issues: 1
   license: MIT
   topics:
@@ -31,8 +32,12 @@ github_data:
     - clawdbot
     - manus
     - openclaw
-  last_commit: "2026-05-18T07:27:47Z"
-  latest_release: v0.5.2
-  latest_release_date: "2026-05-18T07:27:47Z"
-  star_growth_7d: 0
-  last_enriched: "2026-05-23T04:10:54.737Z"
+  last_commit: "2026-10-19T02:42:53Z"
+  latest_release: 0.5.7
+  latest_release_date: "2026-06-18T02:32:30Z"
+  star_growth_7d: null
+  last_enriched: "2026-11-07T14:55:12.883Z"
+  last_checked: "2026-11-07T14:55:12.883Z"
+  availability: available
+quick_start: "https://github.com/poco-ai/poco-claw#quick-start"
+first_task: "Open a test conversation in the web interface, give it a mock meeting transcript and ask for an action list with owners. Check the names against the transcript."
