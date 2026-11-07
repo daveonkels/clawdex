@@ -12,7 +12,15 @@ const editorial = buildEditorial(projects, entries, generated);
 const groups = agentFaq(editorial, projects.length);
 const title = 'Your first AI agent: setup, hosting, cost & privacy | Shelldex FAQ';
 const description = 'What should you ask an AI agent to do first? Try a small task, choose where it runs, and learn what it can see, send and spend.';
-const jsonLd = { '@context':'https://schema.org', '@type':'FAQPage', name:'Your first AI agent', description, url:'https://shelldex.com/faq/', mainEntity: groups.flatMap(group => group.items.map(item => ({
+const jsonLd = { '@context':'https://schema.org', '@type':'FAQPage', name:'Your first AI agent', description, url:'https://shelldex.com/faq/',
+  breadcrumb: {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Shelldex', item: 'https://shelldex.com/' },
+      { '@type': 'ListItem', position: 2, name: 'FAQ', item: 'https://shelldex.com/faq/' },
+    ],
+  },
+  mainEntity: groups.flatMap(group => group.items.map(item => ({
   '@type':'Question', name:item.q, url:'https://shelldex.com/faq/#'+item.id, acceptedAnswer:{'@type':'Answer',text:item.a}
 }))) };
 ---

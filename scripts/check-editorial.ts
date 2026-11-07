@@ -13,9 +13,18 @@ const copy = buildEditorial(projects, entries, generated);
 const decode = (s: string) => s.replace(/&#39;|&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&');
 const plain = (s: string) => decode(s.replace(/<[^>]+>/g, ' ')).replace(/\s+/g,' ').trim();
 const faq = fs.readFileSync('dist/faq/index.html', 'utf8');
-const schema = [...faq.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
-  .map(m => JSON.parse(m[1])).find(s => s['@type'] === 'FAQPage');
+function structuredData(html: string) {
+  return [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
+    .flatMap(match => JSON.parse(match[1]));
+}
+const schema = structuredData(faq).find(s => s['@type'] === 'FAQPage');
 assert(schema, 'FAQ structured data missing');
+assert.equal(schema.breadcrumb?.itemListElement?.at(-1)?.item, 'https://shelldex.com/faq/', 'FAQ breadcrumb missing');
+const homepage = fs.readFileSync('dist/index.html', 'utf8');
+const directory = structuredData(homepage).find(s => s['@type'] === 'ItemList');
+const topAgents = projects.filter(p => p.status !== 'archived' && p.github_data?.availability !== 'unavailable').slice(0, 10);
+assert.deepEqual(directory?.itemListElement.map((item: {url: string}) => item.url),
+  topAgents.map(p => `https://shelldex.com/projects/${p.slug}/`), 'Directory structured data drifted');
 const answers = agentFaq(copy, projects.length).flatMap(section => section.items);
 assert.equal(schema.mainEntity.length, answers.length);
 for (const item of answers) {
@@ -33,6 +42,8 @@ for (const page of ['faq', 'analysis', 'best-alternatives']) {
   assert.doesNotMatch(html, /second-most-starred|currently the fastest-growing|Rust is the second most popular|real-time rankings|has daily commits/);
 }
 const analysis = fs.readFileSync('dist/analysis/index.html', 'utf8');
+assert(structuredData(analysis).some(s => s['@type'] === 'WebPage' && s.url === 'https://shelldex.com/analysis/'),
+  'Analysis page metadata missing');
 const languageChart = plain(analysis.match(/<section[^>]*id="languages"[^>]*>([\s\S]*?)<\/section>/)?.[1] ?? '');
 for (const language of new Set(projects.map(p => p.language))) {
   const count = projects.filter(p => p.language === language).length;

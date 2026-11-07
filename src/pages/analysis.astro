@@ -31,8 +31,16 @@ const comparisons = [
 ];
 const title = 'After the spike: OpenClaw ecosystem analysis | Shelldex';
 const description = 'Which agents drew steady interest, and which saw a short burst? Explore daily GitHub star additions, then choose a first task for the agents you want to compare.';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description,
+  url: 'https://shelldex.com/analysis/',
+  publisher: { '@type': 'Organization', name: 'Shelldex', url: 'https://shelldex.com/' },
+};
 ---
-<Layout {title} {description}>
+<Layout {title} {description} {jsonLd}>
   <div class="max-w-[72rem] mx-auto px-5 sm:px-8">
     <article class="report">
       <nav aria-label="On this page" class="contents">

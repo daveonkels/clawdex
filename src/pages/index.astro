@@ -36,13 +36,28 @@ const usesBySlug = new Map(projects.map(p => {
 }));
 const title = 'Find a personal AI agent: OpenClaw, Hermes and alternatives | Shelldex';
 const description = 'Find a runnable personal AI agent for your computer, phone or chat app. Compare how agents run, see their activity and try a first task.';
+const topAgents = available.slice(0, 10);
 const json = [
   {'@context':'https://schema.org','@type':'WebSite','@id':'https://shelldex.com/#website',name:'Shelldex',url:'https://shelldex.com/',description,
     potentialAction:{'@type':'SearchAction',target:'https://shelldex.com/?q={search_term_string}#directory','query-input':'required name=search_term_string'}},
   {'@context':'https://schema.org','@type':'Dataset','@id':'https://shelldex.com/#dataset',name:'Shelldex agent directory',description,
     url:'https://shelldex.com/',license:'https://creativecommons.org/licenses/by/4.0/',creator:{'@type':'Person',name:'Dave Onkels',url:'https://onk.io'},
     distribution:[{ '@type':'DataDownload',encodingFormat:'application/json',contentUrl:'https://shelldex.com/api/projects.json' },
-      { '@type':'DataDownload',encodingFormat:'application/json',contentUrl:'https://shelldex.com/api/leaderboard.json' }]},
+      { '@type':'DataDownload',encodingFormat:'application/json',contentUrl:'https://shelldex.com/api/leaderboard.json' },
+      { '@type':'DataDownload',encodingFormat:'text/plain',contentUrl:'https://shelldex.com/llms-full.txt' },
+      { '@type':'DataDownload',encodingFormat:'text/markdown',contentUrl:'https://shelldex.com/md/index.md' }],
+    variableMeasured: ['stars', 'forks', 'open_issues', 'star_growth_7d', 'last_commit', 'license', 'language']},
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Personal AI agents with the most GitHub stars',
+    numberOfItems: topAgents.length,
+    itemListOrder: 'https://schema.org/ItemListOrderDescending',
+    itemListElement: topAgents.map((project, index) => ({
+      '@type': 'ListItem', position: index + 1, name: project.name,
+      url: `https://shelldex.com/projects/${project.slug}/`,
+    })),
+  },
 ];
 ---
 <Layout title={title} description={description} markdownUrl="https://shelldex.com/md/index.md" jsonUrl="https://shelldex.com/api/projects.json" jsonLd={json}>
