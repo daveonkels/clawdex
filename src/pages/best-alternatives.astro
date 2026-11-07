@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { loadProjects, formatStars } from '../lib/projects';
 import { loadLeaderboard, makeCanonicalSlug, getIndexableComparePairs } from '../lib/compare';
+import { invoiceComparison } from '../lib/alternatives-art';
 import TrialIllustration from '../components/TrialIllustration.astro';
 import WorkflowIcon from '../components/WorkflowIcon.astro';
 import DataStamp from '../components/DataStamp.astro';
@@ -21,12 +22,12 @@ const historical = projects.filter(p => p.slug !== 'openclaw' && archiveNotice(p
 const pageTitle = 'OpenClaw alternatives by use case and GitHub stars | Shelldex';
 const pageDescription = 'Find an agent for your phone, desktop files, chat or an always-on computer. Compare available OpenClaw alternatives and what you need to try them.';
 const pairSlugs = new Set(getIndexableComparePairs(projects).map(p=>p.canonical));
-const picks = [
+const picks = ([
   ['aionui', 'files', 'Working with files', 'Choose a folder of sample files and ask for a summary you can check.'],
   ['hermes', 'clock', 'A recurring briefing', 'Schedule a task and send its result to your own chat. The host needs to be awake.'],
   ['kai', 'phone', 'An assistant on your phone', 'Use the mobile app when a phone is the device you have with you.'],
   ['atomic-agent', 'chip', 'Using your own model', 'Run a model on your computer and try a task with copies of your files. Check hardware requirements first.'],
-].filter(([slug])=>alternatives.some(p=>p.slug === slug));
+] as const).filter(([slug])=>alternatives.some(p=>p.slug === slug));
 function compareHref(slug: string) {
   const pair = makeCanonicalSlug('openclaw',slug);
   return pairSlugs.has(pair) ? '/compare/'+pair+'/' : '/compare/?a=openclaw&b='+slug;
@@ -56,7 +57,7 @@ const breadcrumbJsonLd = {
 };
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} ogImage={new URL(invoiceComparison.src, 'https://shelldex.com').href} ogImageWidth={840} ogImageHeight={560} ogImageAlt={invoiceComparison.alt}>
   <script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 
@@ -74,7 +75,7 @@ const breadcrumbJsonLd = {
       <p class="text-lg text-ledger-muted max-w-3xl">Start with the job you have in mind. Then explore {alternatives.length} available alternatives in order of GitHub stars, a measure of how many people bookmarked the repository.</p>
       <nav aria-label="Explore OpenClaw alternatives" class="intro-actions"><a class="sd-primary" href="#workflows">Find an agent by task</a><a href="#rankings">Browse the rankings</a></nav>
       <DataStamp date={generated}>{editorial.snapshotNotice}</DataStamp></div>
-      <TrialIllustration />
+      <TrialIllustration art={invoiceComparison} />
     </header>
     <section id="workflows" class="mb-10 scroll-mt-20">
       <h2 class="font-display text-2xl font-semibold mb-4">What would you like to do?</h2>

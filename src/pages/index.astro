@@ -12,6 +12,7 @@ const { generated } = loadLeaderboard();
 const available = projects.filter(p => p.github_data?.availability !== 'unavailable' && p.status !== 'archived');
 const unavailable = projects.filter(p => p.github_data?.availability === 'unavailable' || p.status === 'archived');
 const directory = [...available, ...unavailable];
+const otherAgentCount = directory.filter(p => p.slug !== 'openclaw' && p.slug !== 'hermes').length;
 const languages = getUniqueLanguages(projects);
 const totalStars = available.reduce((sum, p) => sum + (p.stars ?? 0), 0);
 const projectMap = new Map(available.map(p => [p.slug, p]));
@@ -33,6 +34,15 @@ const usesBySlug = new Map(projects.map(p => {
     p.platform?.some(platform => s.platforms.includes(platform)) ||
     (s.key === 'desk' && (setup === 'Desktop installer' || setup === 'Command line')));
   return [p.slug, uses.map(s => s.key)];
+}));
+const chooserTiles = [
+  { key: 'desk', label: 'At my desk' },
+  { key: 'always-on', label: 'Always on' },
+  { key: 'chat', label: 'In a chat app' },
+  { key: 'tiny', label: 'Tiny hardware' },
+].map(tile => ({
+  ...tile,
+  count: directory.filter(project => usesBySlug.get(project.slug)?.includes(tile.key)).length,
 }));
 const title = 'Find a personal AI agent: OpenClaw, Hermes and alternatives | Shelldex';
 const description = 'Find a runnable personal AI agent for your computer, phone or chat app. Compare how agents run, see their activity and try a first task.';
@@ -61,23 +71,34 @@ const json = [
 ];
 ---
 <Layout title={title} description={description} markdownUrl="https://shelldex.com/md/index.md" jsonUrl="https://shelldex.com/api/projects.json" jsonLd={json}>
-  <section class="wrap hero">
-    <div>
-      <h1>Every shell<br/>in the sea<span class="text-ledger-red">.</span></h1>
-      <p class="intro">Find a personal AI agent that works where you do. Start with your computer, phone or favorite chat app.</p>
-      <div class="actions">
-        <a class="sd-primary" href="#directory">Find an agent ↓</a>
+  <section class="wrap hero" aria-labelledby="home-title">
+    <div class="hero-top">
+      <div class="hero-copy">
+        <p class="eyebrow">Every shell in the sea</p>
+        <h1 id="home-title">Compare OpenClaw, Hermes, and {otherAgentCount} other AI agents<span class="text-ledger-red">.</span></h1>
+        <p class="intro">A comprehensive directory of personal, self-hosted AI agents for nearly every use case.</p>
+        <div class="hero-metrics">
+          <span>{formatStars(totalStars)} GitHub stars across {available.length} available agents</span>
+          <span>{getUniqueLanguages(available).length} languages</span>
+          {generated && <DataStamp date={generated} />}
+        </div>
       </div>
+      <img class="hero-art" src="/images/home/tide-table.webp"
+        srcset="/images/home/tide-table-small.webp 560w, /images/home/tide-table.webp 1120w"
+        sizes="(max-width: 639px) calc(100vw - 40px), (max-width: 1152px) 49vw, 550px"
+        width="1120" height="560" fetchpriority="high"
+        alt="The lobster archivist arranges three shell specimens beside an open field notebook at the shore." />
     </div>
-    <aside class="numbers">
-      <dl>
-        <div><dt>Available agents</dt><dd>{available.length}</dd></div>
-        <div><dt>GitHub stars</dt><dd>{formatStars(totalStars)}</dd></div>
-        <div><dt>Languages</dt><dd>{getUniqueLanguages(available).length}</dd></div>
-      </dl>
-      <p>Stars measure interest in the available projects. One person can star several agents.</p>
-      {generated && <DataStamp date={generated} />}
-    </aside>
+    <nav class="chooser" aria-labelledby="chooser-title">
+      <h2 id="chooser-title">Where will yours live?</h2>
+      <div class="chooser-grid">
+        {chooserTiles.map(tile => <a class="place" href={'/?use=' + tile.key + '#directory'}>
+          <span class="place-art"><img src={'/images/home/' + tile.key + '.webp'} width="432" height="288" alt="" /></span>
+          <span class="place-copy"><strong>{tile.label}</strong><small>{tile.count} {tile.count === 1 ? 'agent' : 'agents'}</small></span>
+        </a>)}
+        <a class="browse-all" href="/#directory"><small>Not sure yet?</small><strong>Browse all {directory.length} <span aria-hidden="true">→</span></strong></a>
+      </div>
+    </nav>
   </section>
 
   <section id="directory" class="wrap directory" aria-labelledby="directory-title">
@@ -147,16 +168,34 @@ const json = [
 </Layout>
 <style>
   .wrap{width:100%;max-width:72rem;margin-inline:auto;padding-inline:1.25rem}
-  .hero{display:grid;gap:2rem;padding-block:3rem}
-  .intro{font-size:1.1rem;line-height:1.5;color:theme('colors.ledger.muted');max-width:36rem;margin:1rem 0}
-  .actions,.section-head,.list-context,.chip-strip,.pairs,.links{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
-  .actions a,.section-head a,.pairs a{display:inline-flex;align-items:center;min-height:44px}
+  .hero{padding-block:clamp(1rem,3vw,2.5rem) 2rem}
+  .hero-top{display:grid;gap:1rem}
+  .hero-copy{align-self:center}
+  .hero h1{text-wrap:balance}
+  .eyebrow,.hero-metrics,.place small,.browse-all small{font-family:theme('fontFamily.mono');font-variant-numeric:tabular-nums}
+  .eyebrow{font-size:.71rem;font-weight:650;letter-spacing:.07em;text-transform:uppercase;color:#8f3922;margin-bottom:.6rem}
+  .intro{font-size:1.07rem;line-height:1.5;color:theme('colors.ledger.muted');max-width:31rem;margin:.75rem 0}
+  .hero-metrics{display:flex;gap:.15rem .65rem;align-items:baseline;flex-wrap:wrap;color:#655747;font-size:.75rem;line-height:1.5}
+  .hero-metrics :global(.data-stamp){font-size:inherit}
+  .hero-art{display:block;width:100%;height:auto;aspect-ratio:2/1;border-radius:.7rem;border:1px solid #e5d6b8}
+  .chooser{margin-top:1.4rem}
+  .chooser h2{margin-bottom:.75rem}
+  .chooser-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.65rem}
+  .chooser-grid a{border:1px solid #d5c8b7;border-radius:.65rem;min-width:0;text-decoration:none}
+  .place{display:grid;grid-template-rows:auto 1fr;gap:.6rem;background:#fffdfa;padding:.45rem}
+  .place-art{display:grid;place-items:center;background:#f6e8cf;border-radius:.36rem;height:clamp(5rem,8vw,6.75rem);overflow:hidden}
+  .place-art img{width:100%;height:100%;min-height:0;object-fit:cover}
+  .place-copy{display:grid;align-content:start;padding:0 .25rem .25rem}
+  .place strong,.browse-all strong{font:700 1rem/1.2 theme('fontFamily.display')}
+  .place small,.browse-all small{font-size:.73rem;margin-top:.2rem;color:#655747}
+  .browse-all{display:flex;flex-direction:column;justify-content:center;gap:.45rem;padding:1rem;color:#fffaf3;background:#342820}
+  .browse-all small{color:#e4d3bc}.chooser-grid a:hover strong{text-decoration:underline;text-underline-offset:.16em}
+  .chooser-grid a:hover{border-color:#9b7251}
+  .section-head,.list-context,.chip-strip,.pairs,.links{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+  .section-head a,.pairs a{display:inline-flex;align-items:center;min-height:44px}
   .section-head a,.pairs a,.list-context button{color:theme('colors.ledger.text');text-decoration:underline;text-underline-offset:.22em}
-  .actions a:hover,.section-head a:hover,.pairs a:hover,.links a:hover strong{text-decoration:underline}
-  .numbers{border-block:1px solid theme('colors.ledger.border');padding:1rem 0}.numbers dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.35rem}
-  .numbers dl div{display:flex;flex-direction:column-reverse;justify-content:flex-end}.numbers dt{font-size:.8125rem;color:theme('colors.ledger.muted')}
-  .numbers dd,.stars,.language,.chip-count,.list-context strong{font-family:theme('fontFamily.mono');font-variant-numeric:tabular-nums}
-  .numbers dd{font-size:clamp(1.35rem,3.4vw,2rem);font-weight:650}.numbers>p{font-size:.8125rem;color:theme('colors.ledger.muted');margin-top:.65rem}
+  .section-head a:hover,.pairs a:hover,.links a:hover strong{text-decoration:underline}
+  .stars,.language,.chip-count,.list-context strong{font-family:theme('fontFamily.mono');font-variant-numeric:tabular-nums}
   .directory{scroll-margin-top:5rem;padding-bottom:2.5rem}.section-head{justify-content:space-between;border-bottom:2px solid theme('colors.ledger.border');margin-bottom:1rem}
 
   .filters,.language-options{min-width:0}.filters legend,.search-controls label{font-size:.875rem;font-weight:600}
@@ -181,9 +220,18 @@ const json = [
   .explore{padding-bottom:3rem}.pairs{gap:.25rem 1.1rem}.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));margin-top:1rem}
   .links a{align-self:stretch;display:grid;align-content:start;gap:.3rem;padding:1rem;border:1px solid theme('colors.ledger.border');border-radius:.65rem;background:theme('colors.ledger.surface')}
   .links span{color:theme('colors.ledger.muted');font-size:.875rem}
-  @media(min-width:640px){.wrap{padding-inline:2rem}.search-controls{grid-template-columns:2fr repeat(3,minmax(0,1fr))}.hero{padding-block:3.5rem 2.5rem}}
-  @media(min-width:860px){.hero{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:center;gap:3rem}
+  @media(min-width:640px){.wrap{padding-inline:2rem}.search-controls{grid-template-columns:2fr repeat(3,minmax(0,1fr))}.hero-top{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;gap:2rem}}
+  @media(min-width:860px){
     .v2-row{grid-template-areas:"name note lang activity stars";grid-template-columns:minmax(7.5rem,1.1fr) minmax(5rem,1.6fr) minmax(5.8rem,.75fr) minmax(11rem,auto) 4.7rem;gap:1rem;padding:1rem}
+  }
+  @media(max-width:639px){
+    .hero-art{grid-row:1}
+    .chooser{margin-top:1rem}
+    .chooser-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem}
+    .place{grid-template:1fr / 2.75rem minmax(0,1fr);align-items:center;gap:.45rem}
+    .place-art{height:auto;aspect-ratio:3/2}.place-copy{padding:0}.place strong{font-size:.91rem}
+    .browse-all{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center;min-height:44px;padding:.55rem .85rem}
+    .browse-all small{margin:0}
   }
   @media(max-width:380px){.activity :global(svg){width:50px}}
 </style>

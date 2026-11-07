@@ -1,11 +1,7 @@
 ---
-interface Props { kind: string }
+type Kind = 'files' | 'clock' | 'phone' | 'chip';
+interface Props { kind: Kind }
 const { kind } = Astro.props;
 ---
-<svg viewBox="0 0 64 56" aria-hidden="true" focusable="false" fill="none" stroke="#4b392c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-  {kind === 'files' && <g><path d="M5 23h20l5 5h29l-5 20H9z" fill="#ead3b9"/><path d="M14 11h23l7 8v20H14z" fill="#fffaf0"/><path d="M37 11v8h7m-23 4h15m-15 5h12"/><path d="M4 29h20l4-5h31l-6 23H10z" fill="#dda078"/><path d="M10 33h15l5-5h25m-40 14h32" stroke-width=".8"/></g>}
-  {kind === 'clock' && <g><path d="M13 47h38m-34-4-4 5m32-5 5 5" /><circle cx="32" cy="29" r="19" fill="#e4b18c"/><circle cx="32" cy="29" r="15" fill="#fff8e9"/><path d="M32 19v10l8 4m-8-19v3m0 24v3m-15-15h3m24 0h3M8 17q-1-11 13-12l2 3zm33-9 2-3q14 1 13 12z" fill="#dd9b71"/></g>}
-  {kind === 'phone' && <g><rect x="17" y="4" width="29" height="47" rx="5" fill="#d3b394"/><rect x="20" y="8" width="23" height="37" rx="2" fill="#fffaf0"/><path d="M26 8h12m-9 39h5"/><path d="M24 17h16v11h-7l-5 4v-4h-4z" fill="#e8af8b"/><path d="M27 21h10m-10 3h6" stroke-width=".8"/></g>}
-  {kind === 'chip' && <g><path d="M15 12h36v32H15z" fill="#dbb18e"/><rect x="21" y="17" width="24" height="22" rx="2" fill="#fff7e7"/><path d="M25 23h16m-16 5h10m-10 5h13" stroke-width="1"/>{[20,28,36,44].map(x=><path d={'M'+x+' 12V6m0 38v6'}/>)}{[17,24,31,38].map(y=><path d={'M15 '+y+'H8m43 0h7'}/>)}<circle cx="18.5" cy="15.5" r=".7" fill="#4b392c"/></g>}
-</svg>
-<style>svg{display:block;width:3.4rem;height:3rem}</style>
+<img src={`/images/plates/${kind}.webp`} width="288" height="192" alt="" loading="lazy" />
+<style>img{display:block;width:6rem;height:auto;border-radius:.35rem}</style>

@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { loadProjects, formatStars } from '../../lib/projects';
+import { guideIllustrations } from '../../lib/alternatives-art';
 import TrialIllustration from '../../components/TrialIllustration.astro';
 import DataStamp from '../../components/DataStamp.astro';
 import { archiveNotice, sharedTraits } from '../../lib/agent-choice';
@@ -27,6 +28,7 @@ interface Props {
 
 const { project, allProjects } = Astro.props;
 const { name, slug } = project;
+const art = guideIllustrations[slug];
 const year = new Date().getFullYear();
 const { generated } = loadLeaderboard();
 
@@ -86,7 +88,7 @@ const breadcrumbJsonLd = {
 };
 ---
 
-<Layout title={pageTitle} description={pageDescription} robots="index, follow" canonicalUrl={`https://shelldex.com/alternatives/${slug}/`}>
+<Layout title={pageTitle} description={pageDescription} ogImage={art && new URL(art.src, 'https://shelldex.com').href} ogImageWidth={art && 840} ogImageHeight={art && 560} ogImageAlt={art?.alt} robots="index, follow" canonicalUrl={`https://shelldex.com/alternatives/${slug}/`}>
   <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 
@@ -113,7 +115,7 @@ const breadcrumbJsonLd = {
         <a class="sd-primary" href={topAlternatives.length ? '#matches' : '#other-projects'}>{topAlternatives.length ? 'Browse matching agents' : 'Browse other agents'}</a>
         <a href={'/compare/?a=' + slug}>Choose a pair to compare</a>
       </nav><DataStamp date={generated} /></div>
-      <div><TrialIllustration compact />
+      <div>{art && <TrialIllustration art={art} compact />}
         {project.first_task && <details class="sample-task"><summary>Try a sample task from {name}</summary><p>{project.first_task}</p></details>}
       </div>
     </header>

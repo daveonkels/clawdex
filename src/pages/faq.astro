@@ -24,15 +24,15 @@ const jsonLd = { '@context':'https://schema.org', '@type':'FAQPage', name:'Your 
   '@type':'Question', name:item.q, url:'https://shelldex.com/faq/#'+item.id, acceptedAnswer:{'@type':'Answer',text:item.a}
 }))) };
 ---
-<Layout {title} {description} {jsonLd} ogImage="https://shelldex.com/images/faq-first-task.webp" ogImageWidth={720} ogImageHeight={480} ogImageAlt="A lobster assistant sorts receipts while a person checks its work.">
+<Layout {title} {description} {jsonLd} ogImage="https://shelldex.com/images/faq-first-task.webp" ogImageWidth={720} ogImageHeight={480} ogImageAlt="A lobster agent holds two quotes and uses a stylus to tick a box on a tablet.">
   <div class="max-w-[72rem] mx-auto px-5 sm:px-8"><article class="guide">
     <header class="intro">
       <div><p class="kicker">Shelldex field guide · FAQ</p>
         <h1>Your first AI agent</h1>
-        <p class="lede">Start with a job you already know how to do. If an assistant can turn a pile of receipts into a list you can trust, then it’s worth asking what else you’d like it to handle.</p>
+        <p class="lede">Give your agent two quotes and ask what each price includes. Open the originals to check its answer. That’s a first task you can try with files you already understand.</p>
         <a class="sd-primary mt-4" href="#first-task">Try a first task <span aria-hidden="true">↓</span></a>
       </div>
-      <img src="/images/faq-first-task.webp" width="720" height="480" alt="A lobster assistant sorts receipts into a folder while a person checks one by hand." />
+      <img src="/images/faq-first-task.webp" width="720" height="480" alt="A lobster agent holds two quotes and uses a stylus to tick a box on a tablet." />
     </header>
     <nav class="chapters" aria-label="FAQ sections"><span>In this guide</span>{groups.map(g => <a href={'#'+g.id}>{g.label}</a>)}</nav>
     {groups.map((group,i) => <section id={group.id}>

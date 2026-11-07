@@ -16,3 +16,7 @@ Only runnable AI agents belong in Shelldex. A user must be able to give the ship
 - Astro 5 (static output), Tailwind CSS, vanilla JS
 - Data: YAML files in `src/data/projects/`; enrichment is an explicit refresh step, not part of routine builds
 - Hosting: Cloudflare Workers Static Assets at `shelldex.com`; `wrangler.jsonc` is the routing source of truth and `pnpm run deploy` validates, tests, builds, checks the sitemap, and publishes `dist/`
+
+## Illustration
+
+For editorial art, attach the original [Ideas archivist](public/images/ideas-recipe-box.webp) as the visual reference. Follow the [illustration guide and scene briefs](plans/illustration-style.md) for character, drawing technique, crops and review.

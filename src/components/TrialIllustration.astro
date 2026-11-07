@@ -1,46 +1,16 @@
 ---
-interface Props { compact?: boolean }
-const { compact = false } = Astro.props;
+import type { Illustration } from '../lib/alternatives-art';
+interface Props { art: Illustration; compact?: boolean }
+const { art, compact = false } = Astro.props;
 ---
 <figure class:list={['trial-plate', { compact }]}>
-  <svg viewBox="0 0 370 185" aria-hidden="true" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <defs>
-      <pattern id="trial-hatch" width="4" height="4" patternUnits="userSpaceOnUse">
-        <path d="M-1 1l2-2M0 4l4-4m-1 5l2-2" stroke="#917968" stroke-width=".5" />
-      </pattern>
-      <pattern id="trial-dots" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".65" fill="#b69c82" /></pattern>
-    </defs>
-    <!-- A single sample document splits into two matching sets, ready to check. -->
-    <ellipse cx="69" cy="147" rx="50" ry="6" fill="url(#trial-hatch)" />
-    <g transform="rotate(-7 68 94)" stroke="#42382e" stroke-width="1.6">
-      <path d="M27 60h28l7 8h39v70H27z" fill="#c39166"/><path d="M31 66h22l8 8h36v60H31z" fill="url(#trial-hatch)" />
-      <path d="M39 40h39l12 13v68H39z" fill="#fff9ec"/><path d="M78 40v13h12" />
-      <path d="M46 62h30m-30 7h32m-32 7h21" stroke-width="1"/>
-      <path d="M20 88h33l6-7h49l-8 54H29z" fill="#df965f"/><path d="M25 93h29l7-7h42m-71 43h65" stroke="#9d5634" stroke-width=".9"/>
-      <path d="M60 100h21v12H60z" fill="#fff6e4"/><path d="M65 105h11" stroke-width=".9"/>
-    </g>
-    <g stroke="#8e7361" stroke-width="1.3" stroke-dasharray="3 3"><path d="M114 104h11q8 0 8-9V62q0-10 10-10h19m-29 40v37q0 9 9 9h21"/></g>
-    <g stroke="#544435" stroke-width="1.6">
-      {[{y:26,letter:'A'}, {y:108,letter:'B'}].map(({y,letter}) => <g transform={'translate(169 ' + y + ')'}>
-        <path d="M4 4h61l9 8v42H4z" fill="url(#trial-hatch)"/><path d="M0 0h61l9 9v41H0z" fill="#fff9ec"/>
-        <path d="M61 0v9h9"/><rect x="7" y="9" width="15" height="15" rx="2" fill="#edceb0"/>
-        <text x="14.5" y="20.6" fill="#5b3424" stroke="none" font-family="monospace" font-size="11" text-anchor="middle">{letter}</text>
-        <path d="M28 12h24m-24 6h27M8 31h45M8 37h29" stroke-width="1.05"/>
-      </g>)}
-    </g>
-    <g stroke="#8e7361" stroke-width="1.3" stroke-dasharray="3 3"><path d="M247 52h8q8 0 8 10v22q0 9 10 9h6m-32 45h8q8 0 8-9v-22q0-9 10-9h6"/></g>
-    <g transform="rotate(9 315 95)" stroke="#40362c" stroke-width="1.5">
-      <path d="M286 66h52v73h-52z" fill="url(#trial-hatch)" /><rect x="282" y="62" width="52" height="73" rx="3" fill="#c28a61"/>
-      <path d="M287 68h42v60h-42z" fill="#fff7e7"/><rect x="296" y="57" width="24" height="12" rx="3" fill="#d8c6ad"/><path d="M303 58a5 5 0 0 1 10 0" />
-      <path d="M292 82l3 3 6-8m-9 20 3 3 6-8" stroke="#aa4221" stroke-width="2.2"/><path d="M305 82h17m-17 15h17m-29 13h29m-29 6h19" stroke-width="1"/>
-    </g>
-    <path d="M20 164h333" stroke="#cab9a4" stroke-width="1"/>
-  </svg>
-  <figcaption>Give two agents the same sample. Check each answer against the original.</figcaption>
+  <img src={art.src} width="840" height="560"
+    alt={art.alt} />
+  <figcaption>{art.caption}</figcaption>
 </figure>
 <style>
-  .trial-plate{padding:.9rem clamp(.65rem,2vw,1.5rem) 1.1rem;background:#f5ece0;border:1px solid #d6c5b4;border-radius:14px}
-  svg{display:block;width:100%;max-height:13rem}
-  figcaption{font-size:.85rem;line-height:1.5;color:#614d3e;text-align:center;max-width:38ch;margin:auto}
-  .compact svg{max-height:10.5rem}
+  .trial-plate{margin:0;overflow:hidden;background:#fffaf0;border:1px solid #d6c5b4;border-radius:14px}
+  img{display:block;width:100%;height:auto}
+  figcaption{font-size:.85rem;line-height:1.5;color:#614d3e;text-align:center;max-width:42ch;margin:auto;padding:.65rem .95rem}
+  .compact{max-width:26rem}
 </style>
