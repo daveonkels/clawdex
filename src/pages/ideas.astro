@@ -1,0 +1,128 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { ideas, categories, efforts, evidenceLabels } from '../lib/ideas';
+
+const title = 'Ideas for your AI agent: a practical recipe box | Shelldex';
+const description = `Browse ${ideas.length} sourced AI agent recipes. Find a job worth trying, see what to give your agent, copy a starter prompt and check its work.`;
+const pageUrl = 'https://shelldex.com/ideas/';
+const jsonLd = {
+  '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Ideas for your agent', description, url: pageUrl,
+  mainEntity: {
+    '@type': 'ItemList', numberOfItems: ideas.length,
+    itemListElement: ideas.map((idea, index) => ({
+      '@type': 'ListItem', position: index + 1, name: idea.title, url: pageUrl + '#' + idea.id,
+    })),
+  },
+};
+---
+<Layout {title} {description} {jsonLd} ogImage="https://shelldex.com/images/ideas-recipe-box.webp" ogImageWidth={900} ogImageHeight={600} ogImageAlt="A lobster archivist pulls a recipe card from a teal index box.">
+  <div class="ideas-wrap">
+    <header class="ideas-intro">
+      <div>
+        <p class="eyebrow">The Shelldex recipe box</p>
+        <h1>Ideas for your agent<span>.</span></h1>
+        <p class="lede">Rescue a handwritten recipe. Trace a suspicious bill. Turn a favorite hike into a relief map. Pick a job and see what to give your agent, what to ask for, and how to check its work.</p>
+        <a class="sd-primary" href="#recipes">Browse {ideas.length} recipes <span aria-hidden="true">↓</span></a>
+      </div>
+      <img src="/images/ideas-recipe-box.webp" width="900" height="600" alt="A lobster in reading glasses pulls a card from a recipe box beside a map and a reel of tape." fetchpriority="high" />
+    </header>
+    <section id="recipes" aria-labelledby="recipes-title">
+      <header class="shelf-header">
+        <h2 id="recipes-title">The recipes</h2>
+        <a href="#how-we-picked">How we picked them</a>
+      </header>
+      <form id="idea-filters" role="search" aria-label="Find an agent recipe" hidden>
+        <div class="filter-row">
+          <label class="query">Search recipes<input type="search" name="q" placeholder="Try “invoice”, “photo” or “calendar”" autocomplete="off" /></label>
+          <label>Setup<select name="effort"><option value="">Any setup</option>{efforts.map(e => <option>{e}</option>)}</select></label>
+          <label>Evidence<select name="evidence"><option value="">All evidence</option>
+            <optgroup label="Source type">{Object.entries(evidenceLabels).map(([key, text]) => <option value={key}>{text}</option>)}</optgroup>
+            <optgroup label="Public recognition"><option value="awards">Awards &amp; mentions</option><option value="reactions">Recorded reactions</option></optgroup>
+          </select></label>
+          <label>Sort by<select name="sort"><option value="">Highest rated</option><option value="hn">Hacker News points first</option><option value="effort">Easiest setup</option><option value="az">Title A–Z</option></select></label>
+        </div>
+        <fieldset class="topics"><legend class="sr-only">Topic</legend>
+          {['All topics', ...categories].map((name, index) => <label><input type="radio" name="topic" value={index ? name : ''} checked={index === 0} /><span>{name}</span></label>)}
+        </fieldset>
+      </form>
+      <div class="results-line"><p id="results-count" aria-live="polite">{ideas.length} recipes</p><button type="button" id="reset-ideas" hidden>Clear filters</button></div>
+      <p id="points-note" hidden>Recipes with recorded Hacker News points appear first. The rest follow in Shelldex rating order.</p>
+      <div id="idea-list">
+        {ideas.map((idea, order) => <details class="recipe" id={idea.id} data-topic={idea.category} data-effort={idea.effort} data-evidence={[idea.evidence, idea.recognition && 'awards', idea.signal && 'reactions'].filter(Boolean).join(' ')} data-order={order} data-hn={idea.signal?.hnPoints}>
+          <summary>
+            <span class="card-meta"><span class="topic-name">{idea.category}</span><span class="setup">{idea.effort} setup</span></span>
+            <h3>{idea.title}</h3><span class="task">{idea.task}</span>
+            <span class="card-foot"><span class="rating"><span aria-hidden="true">★</span> {idea.score}/5 <span class="byline">Shelldex</span>{idea.signal?.hnPoints && <span class="hn-count"> · {idea.signal.hnPoints} HN points</span>}</span><span class="open-label"><span class="when-closed">View recipe</span><span class="when-open">Close</span><i aria-hidden="true"></i></span></span>
+          </summary>
+          <div class="instructions">
+            <h4>What you need</h4><p>{idea.inputs}</p>
+            <h4>Ask your agent</h4><blockquote>{idea.prompt}</blockquote>
+            <h4>Check the result</h4><p>{idea.check}</p>
+            <div class="source-block"><span>{evidenceLabels[idea.evidence]}</span><a href={idea.source}>{idea.sourceLabel} ↗</a>
+              {idea.recognition && <a href={idea.recognitionUrl}>{idea.recognition} ↗</a>}
+              {idea.signal && <a href={idea.signal.url}>{idea.signal.label} ↗</a>}
+            </div>
+            <div class="actions"><button type="button" data-copy-prompt hidden>Copy prompt</button><a href={'#' + idea.id}>Recipe link</a></div>
+          </div>
+        </details>)}
+      </div>
+      <p id="empty-ideas" hidden>No recipes match those filters. Try a shorter search or clear the filters.</p>
+      <button id="more-ideas" class="sd-secondary" type="button" hidden>Show more recipes</button>
+      <p id="copy-status" class="sr-only" role="status"></p>
+    </section>
+    <aside id="how-we-picked"><h2>How we picked them</h2>
+      <p>Each recipe starts with a public example, from a maker’s forum post to a judge’s hackathon write-up. Open the source to see what was actually done. The prompt and the check are Shelldex’s adaptation for a first trial. Some need an agent connected to a particular app or device.</p>
+      <dl><div><dt>Shelldex rating</dt><dd>Four out of five means the example has a worthwhile outcome, clear inputs and a concrete check. Five marks a particularly valuable result you can independently verify. These are editorial judgments. Where a source has a verified award or public reaction count, we show that separately.</dd></div>
+      <div><dt>Setup</dt><dd><b>Quick</b> starts with material you can hand over. <b>Guided</b> usually needs a connected app or a few preparation steps. <b>Advanced</b> involves specialist equipment, permissions or a technical environment.</dd></div></dl>
+      <p>Source reactions were checked November 7, 2026. They count responses to the original post. Choosing your first agent? <a href="/faq/#first-task">Try the first-task guide.</a></p>
+    </aside>
+  </div>
+</Layout>
+<script>
+  import '../lib/idea-browser';
+</script>
+<style>
+  .ideas-wrap{max-width:72rem;margin:auto;padding:0 2rem 4rem;color:#2c211b}
+  .ideas-intro{display:grid;grid-template-columns:1.14fr .86fr;align-items:center;gap:clamp(2rem,6vw,5.5rem);padding:3rem 0}
+  .eyebrow,.card-meta,.results-line,.source-block>span{font:600 .74rem/1.45 'JetBrains Mono',monospace}
+  .eyebrow{color:#775c46;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem}
+  .ideas-intro h1 span{color:var(--sd-action)}
+  .ideas-intro img{border-radius:.8rem;display:block;width:100%;height:auto}
+  .lede{font-size:1.075rem;line-height:1.65;color:#56473b;max-width:36rem;margin:1rem 0 1.25rem}
+  #recipes,#how-we-picked,.recipe{scroll-margin-top:5.5rem}
+  .shelf-header,.results-line,.card-meta,.card-foot,.actions{display:flex;align-items:center;justify-content:space-between;gap:.65rem}
+  .shelf-header{border-top:2px solid #352920;padding-top:1.25rem}
+  .shelf-header a,.instructions a,#how-we-picked a,.results-line button,.actions button{color:#653821;text-decoration:underline;text-underline-offset:.17em}
+  .shelf-header a{font-size:.875rem}
+  #idea-filters{margin-top:1.2rem}
+  .filter-row{display:grid;grid-template-columns:minmax(14rem,2.6fr) repeat(3,minmax(7rem,1fr));gap:.75rem}
+  .filter-row label,.instructions h4{font-weight:650;font-size:.82rem}
+  .filter-row select,.filter-row input{display:block;width:100%;height:2.8rem;margin-top:.28rem;border:1px solid #bbad9d;border-radius:.45rem;padding:0 .65rem;background:white;color:#34291f;font:400 .95rem/1.4 Inter,sans-serif}
+  .topics{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0 0}
+  .topics label{position:relative;cursor:pointer}.topics input{position:absolute;opacity:0;width:1px;height:1px}
+  .topics span{display:block;border-radius:2rem;padding:.48rem .8rem;font-size:.86rem;background:#f0ebe2;border:1px solid transparent}
+  .topics input:checked+span{background:#362c25;color:white}
+  .topics input:focus-visible+span{outline:3px solid #9a4d23;outline-offset:2px}
+  .results-line{color:#6c5948;min-height:3rem;justify-content:flex-start}
+  #idea-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:.85rem}
+  .recipe{background:#fffcf7;border:1px solid #d3c6b6;border-radius:.55rem;overflow:hidden}
+  .recipe[open]{border-color:#947a5d}
+  .recipe summary{display:block;padding:1.2rem 1.35rem;cursor:pointer}.recipe summary::-webkit-details-marker{display:none}
+  .recipe summary:focus-visible{outline-offset:-4px}.recipe summary:hover h3{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.17em}
+  .card-meta{margin-bottom:.7rem;font-size:.7rem;color:#66584c}.topic-name{text-transform:uppercase;letter-spacing:.09em;color:#165b4b}
+  .task{display:block;font-size:.94rem;line-height:1.55;color:#5a4a3e;margin:.45rem 0 1rem}
+  .card-foot{border-top:1px solid #dfd5c9;padding-top:.7rem;font-size:.8rem}.rating{font-weight:650;color:#245747}.byline{font-weight:400;color:#65564a}
+  .open-label{display:flex;align-items:center;gap:.55rem}.open-label i{width:.45rem;height:.45rem;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+  .hn-count{display:none}#idea-list[data-sort="hn"] .hn-count{display:inline}#points-note{margin-bottom:1rem;color:#65564a;font-size:.875rem}
+  .when-open,.recipe[open] .when-closed{display:none}.recipe[open] .when-open{display:inline}.recipe[open] i{transform:rotate(225deg)}
+  .instructions{padding:0 1.35rem 1.25rem;color:#42342a;font-size:.94rem;line-height:1.55}
+  .instructions h4{margin:.9rem 0 .25rem;color:#2f261f}.instructions blockquote{background:#f0ebdf;border-left:3px solid #a88d70;padding:.75rem .9rem}
+  .source-block{display:grid;margin:1rem 0;gap:.2rem}.source-block>span{color:#6e5c49}
+  .actions{justify-content:flex-start;gap:1.4rem;font-size:.85rem}.actions>*{min-height:2.25rem;align-content:center}
+  #more-ideas{margin:1.3rem auto 0;display:flex}#more-ideas[hidden],[hidden]{display:none!important}
+  #how-we-picked{margin-top:3.5rem;padding-top:1.4rem;border-top:1px solid #cbbcab}
+  #how-we-picked p,#how-we-picked dl{max-width:52rem;line-height:1.6;margin-top:.75rem}
+  #how-we-picked dl{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}#how-we-picked dt{font-weight:700}
+  @media(max-width:720px){.ideas-wrap{padding:0 1.25rem 3rem}.ideas-intro{grid-template-columns:1fr;gap:1.2rem;padding:1.75rem 0}.ideas-intro img{height:clamp(9rem,46vw,16rem);object-fit:cover;object-position:50% 42%}.filter-row{grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem}.filter-row .query{grid-column:1/-1}.filter-row select{font-size:.86rem;padding:0 .2rem}#idea-list,#how-we-picked dl{grid-template-columns:1fr}.topics{gap:.3rem}.topics span{padding:.42rem .55rem}.shelf-header{flex-wrap:wrap}.recipe summary{padding:1rem}}
+  @media(max-width:420px){.filter-row{grid-template-columns:1fr 1fr}.filter-row label:last-child{grid-column:1/-1}.filter-row select{padding:0 .5rem}}
+</style>

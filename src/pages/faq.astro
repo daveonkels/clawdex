@@ -43,6 +43,7 @@ const jsonLd = { '@context':'https://schema.org', '@type':'FAQPage', name:'Your 
         <summary>{item.q}</summary>
         <div class="answer"><p data-editorial={item.metric}>{item.a}</p>
           <div class="links">{item.link && <a href={item.link[1]}>{item.link[0]} <span aria-hidden="true">↗</span></a>}
+            {item.id === 'first-task' && <a href="/ideas/">Find a recipe for your own agent</a>}
             <a href={'#'+item.id} class="permalink" aria-label={'Link to: '+item.q}>Link to this answer</a>
           </div>
         </div>
